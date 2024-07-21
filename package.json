@@ -1,0 +1,29 @@
+{
+  "name": "rs2024-a",
+  "private": true,
+  "author": {    "name": "Rui Shi",
+    "email": "rshi@rshis.com"
+  },
+  "license": "MIT",
+  "description": "CF2Z RS 2024 2312-A",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rshis/rs2024-a.git"
+  },
+  "homepage": "https://github.com/rshis/rs2024-a.git",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.4.31",
+    "vue-router": "^4.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "vite": "^5.3.4"
+  }
+}
