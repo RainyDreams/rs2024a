@@ -1,7 +1,8 @@
 {
   "name": "rs2024-a",
   "private": true,
-  "author": {    "name": "Rui Shi",
+  "author": {
+    "name": "Rui Shi",
     "email": "rshi@rshis.com"
   },
   "license": "MIT",
@@ -19,11 +20,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@icon-park/vue-next": "^1.4.2",
+    "echarts": "^5.5.1",
+    "element-plus": "^2.7.7",
+    "js-cookie": "^3.0.5",
+    "mitt": "^3.0.1",
+    "sass": "^1.77.8",
     "vue": "^3.4.31",
+    "vue-echarts": "^6.7.3",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
+    "unplugin-auto-import": "^0.18.0",
+    "unplugin-vue-components": "^0.27.3",
     "vite": "^5.3.4"
   }
 }

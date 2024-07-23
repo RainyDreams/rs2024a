@@ -1,0 +1,94 @@
+$colorData: (
+  Crimson: #dc4437,
+  PomegranateRed: #C7666E,
+  TangerineBurst: #f15a23,
+  MochaBrown: #856b5a,
+  DarkBrown: #654321,
+  FlameOrange: #ff9700,
+  GoldenGlow: #fdc844,
+  OsmanthusYellow: #f9b300,
+  LemonYellow: #fdd72d,
+  PrairieGreen: #86bc52,
+  LivelyLime: #a7e278,
+  JadeGreen: #109d57,
+  EmeraldJungle: #1b8457,
+  FreshAfterRain: #73c8a9,
+  FreshMint: #48cfae,
+  AzureCoast: #00a6ac,
+  SeaBlue: #4f42b5,
+  AzureBreeze: #4fc0e8,
+  SlateGray: #607d8b,
+  SapphireBlue: #3e7cf3,
+  Lavender: #ac92ed,
+  RoyalPurple: #6950a1,
+  ElegantPurple: #ae81ff,
+  Violet: #8f50b5,
+  CottonCandy: #f7c2d2,
+  RoseQuartz: #fa7298,
+  PeachPink: #f391a8,
+  PeachRed: #f55b77
+);
+$themes: (
+  light: (
+    curTextColor:#333,
+    primary: #1762ee,
+    primary-bg:#c0d5f7,
+    secondary: #364d58,
+    secondary-bg:#d2e4ee,
+    success: #09843a,
+    success-bg:#b5f1cd,
+    curBgWhite:rgb(241, 246, 250),
+    curBgColor:rgba(239, 241, 245, 1),
+    curBdColor:rgba(212, 229, 244, 1),
+    curShadowWhite:rgba(255,255,255,0.6),
+    curShadowColor:rgba(191, 213, 235, 0.8),
+    contentBgColor:#f5fbff,
+  ),
+  dark: (
+    curTextColor:#f0f3fe,
+    primary: #afc4eb,
+    primary-bg:#1b4c95b5,
+    secondary: #a7c0cc,
+    secondary-bg:#484e51b1,
+    success: #bfd9c9,
+    success-bg:#3c5a48,
+    curBgWhite:rgb(56, 61, 63),
+    curBgColor:rgb(26, 30, 32),
+    curBdColor:rgb(35, 40, 44),
+    curShadowWhite:rgb(67, 73, 79),
+    curShadowColor:rgb(25, 27, 32),
+    contentBgColor:#3f4349,
+  )
+);
+$curTheme:light;
+@mixin useTheme(){
+  @each $key, $value in $themes {
+    $curTheme: $key !global;
+    [data-theme='#{$key}'] & {
+      @content;
+    }
+  }
+}
+@function gtv($paramName){
+  $themeMap : map-get($themes, $curTheme);
+  @return map-get($themeMap, $paramName);
+}
+@mixin transparent-color($color, $alpha) {
+  $transparent-color: mix(rgba(white, $alpha), $color, $alpha);
+  @content;
+}
+
+[data-theme='dark']{
+  .ic_light{
+    display: none;
+  }
+}
+[data-theme='light']{
+  .ic_dark{
+    display: none;
+  }
+}
+
+$small-screen-width: 768px;
+$medium-screen-width: 992px;
+$large-screen-width: 1200px;

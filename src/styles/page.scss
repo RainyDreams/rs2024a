@@ -1,0 +1,32 @@
+.commonPage{
+  padding-top: 24px;
+  padding-left: 16px;
+  padding-right: 24px;
+  padding-bottom: 16px;
+  .panel{
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 1);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    width: -moz-fit-content;
+    width: fit-content;
+    min-width: 600px;
+    ._header{
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+      .icon{
+        font-size: 0;
+        color:rgba(34, 98, 251, 1)
+      }
+      .title{
+        font-size: 16px;
+        font-weight: bold;
+        color:#5F6388;
+        margin-left: 8px;
+      }
+      
+    }
+  }
+}
