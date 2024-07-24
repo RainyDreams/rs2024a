@@ -1,10 +1,11 @@
 /*
 
 */
+import Cookies from 'js-cookie';
 
 class Auth {
   static async loginByPassword(username, password){
-    const response = await fetch('https://auth.chiziingiin.top/api/login', {
+    const response = await fetch('/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -14,6 +15,7 @@ class Auth {
     if (response.status === 200) {
       const data = await response.json();
       if(data.status == 'sus'){
+        console.log('[prtoken] success',data)
         Cookies.set('czigauth', `${(new Date().getTime()).toString(36)}`, { expires: new Date(data.content.expires),Domain:'.chiziingiin.top' });
       } else {
         return { status: 'error', content: data.content };
@@ -25,7 +27,10 @@ class Auth {
   static async logout(){ Cookies.remove('czigauth'); }
   static async checkAuth(){ return Cookies.get('czigauth') != null; }
   static async getPrtoken(){
-    const response = await fetch('https://auth.chiziingiin.top/api/prtoken', {
+    if(Cookies.get('czigauth_prtoken')){
+      return {status: 'exist', content: Cookies.get('czigauth_prtoken')};
+    }
+    const response = await fetch('/api/prtoken', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -34,16 +39,39 @@ class Auth {
     if (response.status === 200) {
       const data = await response.json();
       if(data.status == 'sus'){
-        Cookies.set('czigauth_prtoken', `${(new Date().getTime()).toString(36)}`, { expires: new Date(data.content.expires),Domain:'.chiziingiin.top' });
+        return Cookies.set('czigauth_prtoken', `${(new Date().getTime()).toString(36)}`, { expires: new Date(data.content.expires),Domain:'.chiziingiin.top' });
+      } else {
+        throw { status: 'error', content: data.content };
+      }
+    } else if(response.status === 401){
+      throw { status: 'invalid', content:response };
+    } else {
+      throw { status: 'error', content: response };
+    }
+  }
+  static async getTeamInfo(o){
+    const response = await fetch('/api/teamInfo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ uid:o.uid, pid:o.pid })
+    });
+    if (response.status === 200) {
+      const data = await response.json();
+      if(data.status == 'sus'){
+        return { status: 'sus', content: data.content };
       } else {
         return { status: 'error', content: data.content };
       }
+    } else if(response.status === 401){
+      return { status: 'invalid', content:response };
     } else {
-      return { status: 'error', content: response };
+      return { status: 'error', content:response  }
     }
   }
   static async getUserInfo(){
-    const response = await fetch('https://auth.chiziingiin.top/api/userinfo', {
+    const response = await fetch('/api/userinfo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,8 +84,10 @@ class Auth {
       } else {
         return { status: 'error', content: data.content };
       }
+    } else if(response.status === 401){
+      return { status: 'invalid', content:response };
     } else {
-      return { status: 'error', content: response };
+      return { status: 'error', content:response  }
     }
   }
 }

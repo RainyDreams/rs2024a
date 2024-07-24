@@ -15,10 +15,10 @@
             ref="ruleFormRef"
             status-icon
           >
-            <el-form-item label="项目名称">
+            <el-form-item label="项目名称" prop="name">
               <el-input v-model="form.name" autofocus />
             </el-form-item>
-            <el-form-item label="项目描述">
+            <el-form-item label="项目描述" prop="desc">
               <el-input
                 v-model="form.desc"
                 :autosize="{ minRows: 2, maxRows: 4 }"
@@ -28,16 +28,28 @@
                 placeholder="简单概括一下你们的项目"
               />
             </el-form-item>
-            <el-form-item label="参与团队">
-              <el-select v-model="form.team" placeholder="选择参与项目的团队">
-                <el-option label="Zone one" value="shanghai" />
-                <el-option label="Zone two" value="beijing" />
+            <el-form-item label="参与团队" prop="team">
+              <el-select 
+                v-model="form.team"
+                placeholder="选择参与项目的团队"
+                remote
+                remote-show-suffix
+                :remote-method="remoteMethod"
+                :loading="loading"
+                filterable
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-form-item>
-            <el-form-item label="Resources">
-              <el-radio-group v-model="form.resource">
-                <el-radio border value="Sponsor">公开可见</el-radio>
-                <el-radio border value="Venue">项目内部</el-radio>
+            <el-form-item label="可见性" prop="visibility">
+              <el-radio-group v-model="form.visibility">
+                <el-radio border value="public">公开可见</el-radio>
+                <el-radio border value="private">项目内部</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item>
@@ -53,28 +65,30 @@
 </template>
 
 <script setup>
+import { ref,onMounted,reactive } from 'vue'
 import { FileAddition } from '@icon-park/vue-next'; 
-import { reactive,ref } from 'vue'
 const ruleFormRef = ref(null);
-//自动生成form和rules
-const form = ref({
+const options = ref([]);
+const loading = ref(false);
+const form = reactive({
   name: '',
   desc: '',
   team: '',
   resource: ''
 });
-const rules = ref({
+const rules = reactive({
   name: [
     { required: true, message: '请输入项目名称', trigger: 'blur' },
-    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+    { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
   ],
   desc: [
-    { required: true, message: '请输入项目描述', trigger: 'blur' },    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+    { required: true, message: '请输入项目描述', trigger: 'blur' }, 
+    { min: 5, max: 30, message: '长度在 5 到 30 个字符', trigger: 'blur' }
   ],
   team: [
     { required: true, message: '请选择参与团队', trigger: 'change' }
   ],
-  resource: [
+  visibility: [
     { required: true, message: '请选择项目可见性', trigger: 'change' }
   ]
 })
@@ -88,6 +102,9 @@ const submitForm = (formEl) => {
       return false
     }
   })
+}
+async function remoteMethod(query) {
+  console.log(query)
 }
 </script>
 

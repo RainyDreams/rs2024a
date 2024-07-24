@@ -2,13 +2,21 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { emitter } from '../utils/emitter';
 import HomeIndex from '../views/Home/index.vue';
 import SettingsIndex from '../views/Settings/index.vue';
-import UserIndex from '../views/User/index.vue';
 import ProjectsCreate from '../views/Projects/create.vue';
 import ProjectsDashboard from '../views/Projects/dashboard.vue';
 import ProjectsList from '../views/Projects/list.vue';
 import ProjectsTodo from '../views/Projects/todo.vue';
-// import { useUserStore } from '../stores/user';
-// import LoginIndex from '../views/Login/index.vue';
+import TeamCreate from '../views/Team/create.vue';
+import TeamList from '../views/Team/list.vue';
+import TeamSettings from '../views/Team/settings.vue';
+import TeamInvite from '../views/Team/invite.vue';
+import UserIndex from '../views/User/index.vue';
+import UserLogin from '../views/User/login.vue';
+import UserRegister from '../views/User/register.vue';
+import UserSettings from '../views/User/settings.vue';
+
+
+
 import Error404 from '../views/Errors/404.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,12 +25,25 @@ const router = createRouter({
     { path: "/settings/", name: "Settings", component: SettingsIndex },
     { path: "/user/", name: "User", component: UserIndex },
     { path: "/projects/", name: "Projects", children: [
-      { path: "create", name: "Create", component: ProjectsCreate },
-      { path: "dashboard", name: "Dashboard", component: ProjectsDashboard },
-      { path: "list", name: "List", component: ProjectsList },
-      { path: "todo", name: "Todo", component: ProjectsTodo },
+      { path: "create", name: "ProjectsCreate", component: ProjectsCreate },
+      { path: "dashboard", name: "ProjectsDashboard", component: ProjectsDashboard },
+      { path: "list", name: "ProjectsList", component: ProjectsList },
+      { path: "todo", name: "ProjectsTodo", component: ProjectsTodo },
     ]},
-    // { path: "/login", name: "Login", component: LoginIndex,meta:{tabbarhide:true} },
+    { path: "/team/", name: "Team", children: [
+      { path: "create", name: "TeamCreate", component: TeamCreate },
+      { path: "list", name: "TeamList", component: TeamList },
+      { path: "settings", name: "TeamSettins", component: TeamSettings },
+      { path: "invite", name: "TeamInvite", component: TeamInvite,meta:{tabbarhide:true} },
+    ]},
+    { path: "/user/", name: "User", component: UserIndex, children:[
+      { path: "login", name: "UserLogin", component: UserLogin },
+      { path: "register", name: "UserRegister", component: UserRegister},
+      { path: "settings", name: "UserSettings", component: UserSettings },
+    ] },
+
+
+    
     { path: "/:catchAll(.*)", name: "NotFound", component: Error404 },
   ]
 });

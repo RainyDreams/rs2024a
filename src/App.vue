@@ -1,6 +1,5 @@
 <template >
   <div class="page" :data-theme="isDarkMode?'dark':'light'" >
-    <!-- <Loading mode="screen"></Loading> -->
     <div class="mainpage">
       <div class="header" v-if="!TabBarHide">
         <div class="navlist">
@@ -23,7 +22,9 @@
       </div>
     </div>
     <div v-if="!TabBarHide" class="tabbar" >
-      <div class="logo"></div>
+      <div class="logo">
+        <img src="/logo.svg" alt="赤子英金">
+      </div>
       <ul class="tablist">
         <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
           <router-link class="" :to="item.to" >
@@ -42,7 +43,7 @@
 <script setup>
 import { ref,markRaw } from 'vue';
 import { RouterLink, RouterView,useRouter } from 'vue-router'
-import { AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus } from '@icon-park/vue-next';
+import { AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
 import { ElConfigProvider } from 'element-plus'
 const router = useRouter();
@@ -72,7 +73,8 @@ const iconList = {
   EditName,
   Communication,
   EveryUser,
-  Plus
+  Plus,
+  Info
 }
 function getIcon(name){
   return iconList[name];
@@ -109,12 +111,18 @@ const configList = [
   },
   {
     name:'Team',
-    title:'我的团队',
+    title:'团队管理',
     icon:'EveryUser',
     to:"/team/list",
     tabs:[
       {
-        title:'成员列表',
+        title:'创建团队',
+        icon:'Plus',
+        to:'/team/create',
+        type:'primary'
+      },
+      {
+        title:'我的团队',
         icon:'AddressBook',
         to:'/team/list'
       },
@@ -139,7 +147,31 @@ const configList = [
       },
       
     ]
-  }
+  },
+  {
+    name:'About',
+    title:'关于软件',
+    icon:'Info',
+    to:"/about/info",
+    tabs:[
+      {
+        title:'软件信息',
+        icon:'Info',
+        to:'/about/info'
+      },
+      {
+        title:'创作历程',
+        icon:'Info',
+        to:'/about/progress'
+      },
+      {
+        title:'更新日志',
+        icon:'Info',
+        to:'/about/log'
+      },
+      
+    ]
+  },
 ];
 const tabbarList = ref(configList[0].tabs);
 
