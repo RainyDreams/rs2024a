@@ -36,7 +36,8 @@ const router = createRouter({
       { path: "settings", name: "TeamSettins", component: TeamSettings },
       { path: "invite", name: "TeamInvite", component: TeamInvite,meta:{tabbarhide:true} },
     ]},
-    { path: "/user/", name: "User", component: UserIndex, children:[
+    { path: "/user/", name: "User", children:[
+      { path: "profile", name: "UserProfile", component: UserIndex},
       { path: "login", name: "UserLogin", component: UserLogin },
       { path: "register", name: "UserRegister", component: UserRegister},
       { path: "settings", name: "UserSettings", component: UserSettings },

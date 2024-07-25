@@ -1,42 +1,44 @@
 <template>
   <div class="commonPage">
-    <div class="container">
-      <div class="panel">
-        <div class="_header">
-          <div class="icon"><Peoples theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
-          <div class="title">创建团队</div>
-        </div>
-        <div class="_content">
-          <el-alert type="info" show-icon :closable="false">
-            <p>团队创建成功后会生成分享链接，可以邀请团队成员加入。</p>
-          </el-alert>
-          <el-form 
-            :model="form" 
-            label-width="auto" 
-            style="max-width: 600px"
-            :rules="rules"
-            ref="ruleFormRef"
-            status-icon
-          >
-            <el-form-item label="团队名称" prop="name">
-              <el-input v-model="form.name" autofocus />
-            </el-form-item>
-            <el-form-item label="团队描述" prop="desc">
-              <el-input
-                v-model="form.desc"
-                :autosize="{ minRows: 2, maxRows: 4 }"
-                maxlength="30"
-                show-word-limit
-                type="textarea"
-                placeholder="简单概括一下你们的团队"
-              />
-            </el-form-item>
-            <el-form-item>
-              <el-button :loading="formloading" type="primary" @click="submitForm(ruleFormRef)">
-                创建团队
-              </el-button>
-            </el-form-item>
-          </el-form>
+    <div class="row">
+      <div class="col-md-12 col-lg-8">
+        <div class="panel">
+          <div class="_header">
+            <div class="icon"><Peoples theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
+            <div class="title">创建团队</div>
+          </div>
+          <div class="_content">
+            <el-alert type="info" show-icon :closable="false">
+              <p>团队创建成功后会生成分享链接，可以邀请团队成员加入。</p>
+            </el-alert>
+            <el-form 
+              :model="form" 
+              label-width="auto" 
+              style="max-width: 600px"
+              :rules="rules"
+              ref="ruleFormRef"
+              status-icon
+            >
+              <el-form-item label="团队名称" prop="name">
+                <el-input v-model="form.name" autofocus />
+              </el-form-item>
+              <el-form-item label="团队描述" prop="desc">
+                <el-input
+                  v-model="form.desc"
+                  :autosize="{ minRows: 2, maxRows: 4 }"
+                  maxlength="30"
+                  show-word-limit
+                  type="textarea"
+                  placeholder="简单概括一下你们的团队"
+                />
+              </el-form-item>
+              <el-form-item>
+                <el-button :loading="formloading" type="primary" @click="submitForm(ruleFormRef)">
+                  创建团队
+                </el-button>
+              </el-form-item>
+            </el-form>
+          </div>
         </div>
       </div>
     </div>
@@ -50,7 +52,6 @@
 import { ref,onMounted,reactive } from 'vue'
 import { Peoples } from '@icon-park/vue-next'; 
 import Auth from "../../utils/auth.js";
-const getPrtoken = Auth.getPrtoken;
 const inputRef = ref(null);
 const inputValue = ref('');
 const dialogTableVisible = ref(false)
@@ -95,7 +96,7 @@ const submitForm = (formEl) => {
   formloading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
-      try{await getPrtoken()}catch(e){
+      try{await Auth.getPrtoken()}catch(e){
         if(e.status == 'invalid'){
           ElMessage({
             message: '登录已过期，请重新登录',

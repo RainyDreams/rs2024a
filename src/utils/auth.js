@@ -4,91 +4,93 @@
 import Cookies from 'js-cookie';
 
 class Auth {
-  static async loginByPassword(username, password){
-    const response = await fetch('/api/login', {
+  static 
+  async basicAuth(url, body, { success = async () => {}, failed = async () => {} }) {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ username:username, password:password })
+      body: body
     });
     if (response.status === 200) {
       const data = await response.json();
-      if(data.status == 'sus'){
-        console.log('[prtoken] success',data)
-        Cookies.set('czigauth', `${(new Date().getTime()).toString(36)}`, { expires: new Date(data.content.expires),Domain:'.chiziingiin.top' });
+      if (data.status ==='sus') {
+        return { status:'sus', content: await success(data) };
       } else {
-        return { status: 'error', content: data.content };
+        return { status: 'error', content: await failed(response) };
       }
     } else {
-      return { status: 'error', content: response };
+      return { status: 'error', content: await failed(response) };
     }
   }
-  static async logout(){ Cookies.remove('czigauth'); }
-  static async checkAuth(){ return Cookies.get('czigauth') != null; }
-  static async getPrtoken(){
-    if(Cookies.get('czigauth_prtoken')){
-      return {status: 'exist', content: Cookies.get('czigauth_prtoken')};
-    }
-    const response = await fetch('/api/prtoken', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      }
+
+  static async loginByPassword(username, password) {
+    return this.basicAuth('/api/login', JSON.stringify({ username: username, password: password }), {
+      success: async (data) => data,
+      failed: async (response) => ({ status: 'error', content: data.content })
     });
-    if (response.status === 200) {
-      const data = await response.json();
-      if(data.status == 'sus'){
-        return Cookies.set('czigauth_prtoken', `${(new Date().getTime()).toString(36)}`, { expires: new Date(data.content.expires),Domain:'.chiziingiin.top' });
-      } else {
-        throw { status: 'error', content: data.content };
-      }
-    } else if(response.status === 401){
-      throw { status: 'invalid', content:response };
-    } else {
-      throw { status: 'error', content: response };
-    }
   }
-  static async getTeamInfo(o){
-    const response = await fetch('/api/teamInfo', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+
+  static async logout() {
+    Cookies.remove('czigauth');
+  }
+
+  static async checkAuth() {
+    return Cookies.get('czigauth')!= null;
+  }
+
+  static async getPrtoken() {
+    console.log(Cookies.get('czigauth'))
+    // debugger;
+    if (Cookies.get('czigauth')) {
+      return { status: 'exist', content: Cookies.get('czigauth') };
+    }
+    return this.basicAuth('/api/prtoken', '', {
+      success: async (data) => {
+        Cookies.set('czigauth', 'Already Authenticated', { expires: data.content.expires });
+        return { status: 'sus', content: data.content };
       },
-      body: JSON.stringify({ uid:o.uid, pid:o.pid })
-    });
-    if (response.status === 200) {
-      const data = await response.json();
-      if(data.status == 'sus'){
-        return { status: 'sus', content: data.content };
-      } else {
-        return { status: 'error', content: data.content };
+      failed: async (response) => {
+        throw { status: 'error', content: response };
       }
-    } else if(response.status === 401){
-      return { status: 'invalid', content:response };
-    } else {
-      return { status: 'error', content:response  }
-    }
+    });
   }
-  static async getUserInfo(){
-    const response = await fetch('/api/userinfo', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+
+  static async getTeamInfo(param) {
+    return this.basicAuth('/api/teamInfo', JSON.stringify({ uid: param.uid, pid: param.pid }), {
+      success: async (data) => data.content,
+      failed: async (response) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        }
+        return { status: 'error', content: response };
       }
     });
-    if (response.status === 200) {
-      const data = await response.json();
-      if(data.status == 'sus'){
-        return { status: 'sus', content: data.content };
-      } else {
-        return { status: 'error', content: data.content };
+  }
+
+  static async getTeamList(param){
+    return this.basicAuth('/api/teamList', JSON.stringify({ uid: param.uid||'default' }), {
+      success: async (data) => data,
+      failed: async (response) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        }
+        return { status: 'error', content: response };
       }
-    } else if(response.status === 401){
-      return { status: 'invalid', content:response };
-    } else {
-      return { status: 'error', content:response  }
-    }
+    });
+  }
+
+  static async getUserInfo() {
+    return this.basicAuth('/api/userinfo', '', {
+      success: async (data) => data,
+      failed: async (response) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        }
+        return { status: 'error', content: response };
+      }
+    });
   }
 }
 

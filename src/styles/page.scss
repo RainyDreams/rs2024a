@@ -11,7 +11,7 @@
     flex-direction: column;
     // width: -moz-fit-content;
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
     // min-width: 600px;
     ._header{
       display: flex;
@@ -19,7 +19,7 @@
       margin-bottom: 16px;
       .icon{
         font-size: 0;
-        color:rgba(34, 98, 251, 1)
+        color:rgb(34, 98, 251)
       }
       .title{
         font-size: 16px;
@@ -66,11 +66,6 @@
     padding: 36px;
     ._header{
       color:#5F6388;
-      font-size: 24px;
-      font-weight: 600;
-      .teamName{
-      color:#2d2e3f;
-      }
     }
     ._content{
       margin-top: 24px;
@@ -83,8 +78,18 @@
         }
       }
     }
+    .tips{
+      margin:16px 0;
+      font-size: 12px;
+      line-height: 1em;
+      color:#999;
+      a{
+        cursor: pointer;
+        color:rgb(34, 98, 251)
+      }
+    }
     ._footer{
-      margin-top: 16px;
+      margin-top: 8px;
       display: flex;
       justify-content: flex-end;
       height:16px;
@@ -93,6 +98,48 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: auto 100%;
+    }
+  }
+}
+
+
+.userPage{
+  min-height: unset !important;
+  .background{
+    padding-top: 16px;
+    height:240px;
+    background-image: url(../assets/bg1.png);
+    background-position: 0 16px;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+  }
+  .panel{
+    position: relative;
+  }
+  .userline{
+    height:70px;
+    padding:0 24px;
+    position: relative;
+    ._avatar{
+      position: absolute;
+      bottom:10px;
+      left:24px;
+      width:110px;
+      height:110px;
+      padding:5px;
+      border-radius: 55px;
+      background-color: #fff;
+    }
+    .content{
+      padding-left: 126px;
+      padding-top: 16px;
+      display: flex;
+      height:100%;
+      h2{
+        font-weight: 600;
+        font-size: 30px;
+        color:#5F6388;
+      }
     }
   }
 }
