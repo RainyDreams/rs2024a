@@ -48,7 +48,7 @@ class Auth {
     }
     return this.basicAuth('/api/prtoken', '', {
       success: async (data) => {
-        Cookies.set('czigauth', 'Already Authenticated', { expires: data.content.expires });
+        Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(data.content.expires) });
         return { status: 'sus', content: data.content };
       },
       failed: async (response) => {
