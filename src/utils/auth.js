@@ -1,32 +1,37 @@
 /*
 
 */
+const BASICURL = ''
 import Cookies from 'js-cookie';
 
 class Auth {
   static 
   async basicAuth(url, body, { success = async () => {}, failed = async () => {} }) {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: body
-    });
-    if (response.status === 200) {
-      const data = await response.json();
-      if (data.status ==='sus') {
-        return { status:'sus', content: await success(data) };
+    try { 
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: body
+      });
+      if (response.status === 200) {
+        const data = await response.json();
+        if (data.status ==='sus') {
+          return { status:'sus', content: await success(data) };
+        } else {
+          return await failed(response,0) ;
+        }
       } else {
-        return { status: 'error', content: await failed(response) };
+        return await failed(response,1) ;
       }
-    } else {
-      return { status: 'error', content: await failed(response) };
+    } catch(error) {
+      return await failed(error,2) ;
     }
   }
 
   static async loginByPassword(username, password) {
-    return this.basicAuth('/api/login', JSON.stringify({ username: username, password: password }), {
+    return this.basicAuth(BASICURL+'/api/login', JSON.stringify({ username: username, password: password }), {
       success: async (data) => data,
       failed: async (response) => ({ status: 'error', content: data.content })
     });
@@ -42,23 +47,34 @@ class Auth {
 
   static async getPrtoken() {
     console.log(Cookies.get('czigauth'))
-    // debugger;
     if (Cookies.get('czigauth')) {
       return { status: 'exist', content: Cookies.get('czigauth') };
     }
-    return this.basicAuth('/api/prtoken', '', {
+    return this.basicAuth(BASICURL+'/api/prtoken', '', {
       success: async (data) => {
         Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(data.content.expires) });
         return { status: 'sus', content: data.content };
       },
-      failed: async (response) => {
-        throw { status: 'error', content: response };
+      failed: async (response,code) => {
+        if(code<2 && response.status === 401)
+          return { status: 'invalid', content: response };
+        else return { status: 'error', content: response };
       }
     });
   }
-
-  static async getTeamInfo(param) {
-    return this.basicAuth('/api/teamInfo', JSON.stringify({ uid: param.uid, pid: param.pid }), {
+  static async createTeam(param) {
+    return this.basicAuth(BASICURL+'/api/createTeam', JSON.stringify({ name:param.name,desc:param.desc }), {
+      success: async (data) => data.content,
+      failed: async (response) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        }
+        return { status: 'error', content: response };
+      }
+    });
+  }
+  static async getTeamInfo(param={}) {
+    return this.basicAuth(BASICURL+'/api/teamInfo', JSON.stringify({ uid: param.uid||'', pid: param.pid }), {
       success: async (data) => data.content,
       failed: async (response) => {
         if (response.status === 401) {
@@ -69,12 +85,12 @@ class Auth {
     });
   }
 
-  static async getTeamList(param){
-    return this.basicAuth('/api/teamList', JSON.stringify({ uid: param.uid||'default' }), {
-      success: async (data) => data,
+  static async getTeamList(param={}){
+    return this.basicAuth(BASICURL+'/api/teamList', JSON.stringify({ uid: param.uid||'' }), {
+      success: async (data) => data.content,
       failed: async (response) => {
         if (response.status === 401) {
-          return { status: 'invalid', content: response };
+          return { status: 'invalid', content: response.content };
         }
         return { status: 'error', content: response };
       }
@@ -82,7 +98,7 @@ class Auth {
   }
 
   static async getUserInfo() {
-    return this.basicAuth('/api/userinfo', '', {
+    return this.basicAuth(BASICURL+'/api/userinfo', '', {
       success: async (data) => data,
       failed: async (response) => {
         if (response.status === 401) {

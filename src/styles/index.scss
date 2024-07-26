@@ -1,6 +1,23 @@
+
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': rgb(34, 98, 251),
+    ),
+  ),
+);
+@use "element-plus/theme-chalk/src/index.scss" as *;
+
 @import "./theme.scss";
 @import "./public.scss";
 @import "./page.scss";
+
+.el-message{
+  border-radius:20px;
+  background-color: #fff;
+  border:none;
+  box-shadow: 0px 2px 6px var(  --el-message-border-color);
+}
 // @import "./tabbar.scss"
 
 

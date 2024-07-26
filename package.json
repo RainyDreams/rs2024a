@@ -26,6 +26,7 @@
     "js-cookie": "^3.0.5",
     "mitt": "^3.0.1",
     "sass": "^1.77.8",
+    "unplugin-element-plus": "^0.8.0",
     "vue": "^3.4.31",
     "vue-echarts": "^6.7.3",
     "vue-router": "^4.4.0"

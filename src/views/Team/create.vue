@@ -96,61 +96,71 @@ const submitForm = (formEl) => {
   formloading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
-      try{await Auth.getPrtoken()}catch(e){
-        if(e.status == 'invalid'){
-          ElMessage({
-            message: '登录已过期，请重新登录',
-            type: 'error',
-          })
-          setTimeout(() => {
-            window.location.href = 'https://auth.chiziingiin.top/?url='+window.location.href
-          },1000)
-        }
-        return;
-      }
-      const response = await fetch( '/api/createTeam', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name:encodeURIComponent(form.name),
-          desc:encodeURIComponent(form.desc),
-        }),
-      });
-      if (response.status === 200) {
-        const data = await response.json();
-        if(data.status == 'sus'){
-          console.log('[team] create success',data);
-          inputValue.value = data.content.inviteurl;
-          dialogTableVisible.value = true;
-          form.name = '';
-          form.desc = '';
-          localStorage.setItem('teamInfo',{teamId:data.content.teamid,teamInviteurl:data.content.inviteurl});
-          ElMessage({
-            message: '创建成功！',
-            type: 'success',
-          });
-        } else {
-          console.log('[team] create error',data);
-          ElMessage({
-            message: '出现错误',
-            type: 'error',
-          });
-          return { status: 'error', content: data.content };
-        }
+      const prtoken = await Auth.getPrtoken();
+      const createTeam = await Auth.createTeam({
+        name:form.name,
+        desc:form.desc
+      })
+      if(createTeam.status == 'sus'){
+        inputValue.value = createTeam.content.inviteurl;
+        dialogTableVisible.value = true;
+        form.name = '';
+        form.desc = '';
+        // localStorage.setItem('teamInfo',{teamId:createTeam.content.teamid,teamInviteurl:createTeam.content.inviteurl});
+        ElMessage({
+          message: '创建成功',
+          type: 'success',
+        })
       } else {
         ElMessage({
-          message: '出现错误',
+          message: '创建失败',
           type: 'error',
-        });
-        return { status: 'error', content: response };
+        })
       }
+      
+      // const response = await fetch( '/api/createTeam', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     name:encodeURIComponent(form.name),
+      //     desc:encodeURIComponent(form.desc),
+      //   }),
+      // });
+      // if (response.status === 200) {
+      //   const data = await response.json();
+      //   if(data.status == 'sus'){
+      //     console.log('[team] create success',data);
+      //     inputValue.value = data.content.inviteurl;
+      //     dialogTableVisible.value = true;
+      //     form.name = '';
+      //     form.desc = '';
+      //     localStorage.setItem('teamInfo',{teamId:data.content.teamid,teamInviteurl:data.content.inviteurl});
+      //     ElMessage({
+      //       message: '创建成功！',
+      //       type: 'success',
+      //     });
+      //   } else {
+      //     console.log('[team] create error',data);
+      //     ElMessage({
+      //       message: '出现错误',
+      //       type: 'error',
+      //     });
+      //     return { status: 'error', content: data.content };
+      //   }
+      // } else {
+      //   ElMessage({
+      //     message: '出现错误',
+      //     type: 'error',
+      //   });
+      //   return { status: 'error', content: response };
+      // }
       formloading.value=false;
     } else {
       console.log('error submit!')
       formloading.value=false;
-      return false
+      return false;
     }
   })
 }
