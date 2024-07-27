@@ -2,20 +2,20 @@
   <div class="page" :data-theme="isDarkMode?'dark':'light'" >
     <div class="mainpage">
       <div class="header" v-if="!TabBarHide">
-        <div class="navlist" :show="showMenu">
-          <router-link v-for="(item,i) in configList" :class="{nav:1,'router-link-active':activeName==item.name}"  :key="item.name" :to="item.to">
+        <div :class="{navlist:1,show:showMenu}">
+          <a v-for="(item,i) in configList" :class="{nav:1,'router-link-active':activeName==item.name}" :key="item.name" @click="isM(item.to,item.name)">
             <div class="icon" ><component :is="getIcon(item.icon)" theme="outline" size="22"/></div>
             <p>{{ item.title }}</p>
-          </router-link>
+          </a>
           <div v-if="!TabBarHide" class="m tabbar" >
             <ul class="tablist">
               <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
-                <router-link class="" :to="item.to" >
+                <a class="" @click="toM(item.to)" >
                   <div class="icon">
                     <component :is="getIcon(item.icon)" theme="outline" size="22"/>
                   </div>
                   <p>{{ item.title }}</p>
-                </router-link>
+                </a>
               </li>
             </ul>
           </div>
@@ -86,9 +86,6 @@ const showMenu = ref(false)
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
-function bindHideMenu(){
-  showMenu.value=false;
-}
 router.beforeEach((to, from) => {
   // console.log(to)
   const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
@@ -106,6 +103,25 @@ router.beforeEach((to, from) => {
     TabBarHide.value = false;
   }
 });
+function isM(to,name){
+  if(window.innerWidth > 992){
+    router.push(to)
+  } else {
+    activeName.value = name;
+    const item = configList.find(i=>to.indexOf(i.to.split('/')[1])>-1) || 
+    rightList.find(i=>to.indexOf(i.to.split('/')[1])>-1);
+    if(item){
+      activeName.value = item.name;
+      tabbarList.value = item.tabs;
+    } else {
+      activeName.value = '';
+    }
+  }
+}
+function toM(path) {
+  router.push(path)
+  showMenu.value=false
+}
 const iconList = {
   AllApplication,
   DashboardOne,
