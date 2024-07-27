@@ -180,7 +180,7 @@
 }
 
 
-@media (max-width: $medium-screen-width) {
+@media (max-width: 880px) {
   .m{
     display: flex !important;
   }
@@ -230,7 +230,7 @@
         ul{
           width:100%;
           li{
-            height:60px;
+            height:50px;
             cursor: pointer;
           }
         }

@@ -136,6 +136,17 @@ class Auth {
       }
     });
   }
+  static async getProjectInfo(param={}) {
+    return this.basicAuth(BASICURL+'/api/projectInfo', JSON.stringify({ uid: param.uid||'', pid: param.pid }), {
+      success: async (data) => data.content,
+      failed: async (response) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        }
+        return { status: 'error', content: response };
+      }
+    });
+  }
   static async getProjectList(param={}) {
     return this.basicAuth(BASICURL+'/api/projectList', JSON.stringify({ uid: param.uid||'' }), {
       success: async (data) => data.content,
