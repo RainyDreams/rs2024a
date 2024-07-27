@@ -211,34 +211,36 @@
       flex-wrap: wrap;
       align-content: flex-start;
       background-color: rgb(226, 240, 254);
-
+      &>.nav{
+        width:fit-content;
+        height:60px;
+        cursor: pointer;
+        &::after{
+          display: none;
+        }
+        &.router-link-active{
+          background-color: rgba(34, 98, 251, 0.1);
+          color:rgba(34, 98, 251, 1);
+        }
+      }
+      &>.tabbar{
+        padding-top: 0;
+        width: 100%;
+        border-top:2px solid #5F638855;;
+        ul{
+          width:100%;
+          li{
+            height:60px;
+            cursor: pointer;
+          }
+        }
+      }
       &.show{
         display: flex !important;
         visibility: visible;
         opacity: 1;
         // justify-content: space-evenly;
-        &>a{
-          width:fit-content;
-          height:60px;
-          &::after{
-            display: none;
-          }
-          &.router-link-active{
-            background-color: rgba(34, 98, 251, 0.1);
-            color:rgba(34, 98, 251, 1);
-          }
-        }
-        &>.tabbar{
-          padding-top: 0;
-          width: 100%;
-          border-top:2px solid #5F638855;;
-          ul{
-            width:100%;
-            li{
-              height:60px;
-            }
-          }
-        }
+        
       }
     }
     .header{

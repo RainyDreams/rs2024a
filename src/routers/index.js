@@ -37,11 +37,8 @@ const router = createRouter({
       { path: "login", name: "UserLogin", component: UserLogin },
       { path: "register", name: "UserRegister", component: UserRegister},
       { path: "settings", name: "UserSettings", component: UserSettings },
-    ] },
+    ]},
     { path: "/settings/", name: "Settings", component: SettingsIndex },
-    { path: "/user/", name: "User", component: UserIndex },
-
-
     
     { path: "/:catchAll(.*)", name: "NotFound", component: Error404 },
   ]

@@ -10,12 +10,12 @@
           <div v-if="!TabBarHide" class="m tabbar" >
             <ul class="tablist">
               <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
-                <a class="" @click="toM(item.to)" >
+                <router-link class="" @click="toM(item.to)" :to="item.to" >
                   <div class="icon">
                     <component :is="getIcon(item.icon)" theme="outline" size="22"/>
                   </div>
                   <p>{{ item.title }}</p>
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -29,12 +29,12 @@
           <div class="btn">
             <remind theme="outline" size="20" fill="#5F6388" :strokewidth="5"  strokeLinejoin="bevel"/>
           </div>
-          <router-link class="btn _user" :to="`/user/profile`">
+          <a :class="`btn _user ${activeName=='User'?'router-link-active':''}`" @click="clickUser()">
             <el-avatar
               :size="35"
               src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
             />
-          </router-link>
+          </a>
         </div>
       </div>
       <div class="routerpage">
@@ -80,7 +80,7 @@ import { ref,markRaw, reactive } from 'vue';
 import { RouterLink, RouterView,useRouter } from 'vue-router'
 import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
-import { ElConfigProvider } from 'element-plus'
+import { ElConfigProvider,ElAvatar } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Auth from './utils/auth';
 const router = useRouter();
@@ -124,8 +124,14 @@ function isM(to,name){
   }
 }
 function toM(path) {
-  router.push(path)
+  // router.push(path)
   showMenu.value=false
+}
+function clickUser(){
+  // showMenu.value=false;
+  router.push('/user/profile');
+  activeName.value="User";
+  tabbarList.value = rightList[1].tabs;
 }
 const iconList = {
   AllApplication,
