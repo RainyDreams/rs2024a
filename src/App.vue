@@ -2,11 +2,28 @@
   <div class="page" :data-theme="isDarkMode?'dark':'light'" >
     <div class="mainpage">
       <div class="header" v-if="!TabBarHide">
-        <div class="navlist">
+        <div class="navlist" :show="showMenu">
           <router-link v-for="(item,i) in configList" :class="{nav:1,'router-link-active':activeName==item.name}"  :key="item.name" :to="item.to">
             <div class="icon" ><component :is="getIcon(item.icon)" theme="outline" size="22"/></div>
             <p>{{ item.title }}</p>
           </router-link>
+          <div v-if="!TabBarHide" class="m tabbar" >
+            <ul class="tablist">
+              <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
+                <router-link class="" :to="item.to" >
+                  <div class="icon">
+                    <component :is="getIcon(item.icon)" theme="outline" size="22"/>
+                  </div>
+                  <p>{{ item.title }}</p>
+                </router-link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="m navMenu" @click="bindShowMenu()">
+          <img src="/logo.svg" alt="赤子英金协作系统">
+          <MenuFoldOne theme="outline" size="22" fill="#5F6388" v-show="!showMenu"/>
+          <MenuUnfoldOne theme="outline" size="22" fill="#5F6388" v-show="showMenu"/>
         </div>
         <div class="btns">
           <div class="btn">
@@ -30,7 +47,7 @@
         </el-config-provider>
       </div>
     </div>
-    <div v-if="!TabBarHide" class="tabbar" >
+    <div v-if="!TabBarHide" class="tabbar pc" >
       <div class="logo">
         <img src="/logo.svg" alt="赤子英金协作系统">
       </div>
@@ -43,7 +60,7 @@
             <p>{{ item.title }}</p>
           </router-link>
         </li>
-      </ul>      
+      </ul>
     </div>
   </div>
 </template>
@@ -57,15 +74,21 @@ console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已�
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
 import { ref,markRaw, reactive } from 'vue';
 import { RouterLink, RouterView,useRouter } from 'vue-router'
-import { AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig } from '@icon-park/vue-next';
+import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
 import { ElConfigProvider } from 'element-plus'
-// import { zhCn } from 'element-plus/es/locale';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 const router = useRouter();
 const TabBarHide = ref(false);
 const isDarkMode = ref(0);
 const activeName = ref(0);
+const showMenu = ref(false)
+function bindShowMenu(){
+  showMenu.value=!showMenu.value;
+}
+function bindHideMenu(){
+  showMenu.value=false;
+}
 router.beforeEach((to, from) => {
   // console.log(to)
   const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 

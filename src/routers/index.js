@@ -19,9 +19,7 @@ import Error404 from '../views/Errors/404.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: "/", name: "Home", component: HomeIndex },
-    { path: "/settings/", name: "Settings", component: SettingsIndex },
-    { path: "/user/", name: "User", component: UserIndex },
+    
     { path: "/projects/", name: "Projects", children: [
       { path: "create", name: "ProjectsCreate", component: ProjectsCreate },
       { path: "dashboard", name: "ProjectsDashboard", component: ProjectsDashboard },
@@ -40,6 +38,9 @@ const router = createRouter({
       { path: "register", name: "UserRegister", component: UserRegister},
       { path: "settings", name: "UserSettings", component: UserSettings },
     ] },
+    // { path: "/", name: "Home", component: HomeIndex },
+    { path: "/settings/", name: "Settings", component: SettingsIndex },
+    { path: "/user/", name: "User", component: UserIndex },
 
 
     
