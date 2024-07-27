@@ -67,6 +67,10 @@
 
 
 <script setup>
+
+Auth.init()
+
+
 {console.log('%cRS2024-A%c\n%c赤峰二中2023级12班2024年研究性学习项目\r%c\n2024-07-25雨窗',
 'font-size:14px;background:#2262fb;color:#fff;font-family:Arial;padding:2px 4px;border-radius:4px;','','font-size:14px;background:#f00;color:#fff;font-family:Arial;padding:2px 4px;border-radius:4px;','font-size:16px;font-family:Arial;');
 console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已经掌握一定的技术能力，我很高兴我的软件能被你们所了解。\n但有以下几点需要注意：%c\n%c1. 我们是学生初创项目，请不要尝试攻击、毁坏或者以任何方式使它停止工作，我们感谢你的善举\n2. 如果你想要研究它的源码和创作历程，请关注“赤子英金”', 
@@ -78,6 +82,7 @@ import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignText
 import { Remind } from "@icon-park/vue-next";
 import { ElConfigProvider } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
+import Auth from './utils/auth';
 const router = useRouter();
 const TabBarHide = ref(false);
 const isDarkMode = ref(0);

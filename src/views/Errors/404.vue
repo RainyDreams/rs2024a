@@ -1,1 +1,5 @@
-<template>404</template>
+<template>
+  <div class="commonPage">
+    <h1>404 NOT FOUND</h1>
+  </div>
+</template>

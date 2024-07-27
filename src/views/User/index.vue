@@ -30,6 +30,7 @@
 <script setup>
 import { IdCardH } from '@icon-park/vue-next';
 import { onActivated, ref } from 'vue';
+import { ElAvatar } from 'element-plus';
 import Auth from '../../utils/auth';
 const profile = ref([])
 onActivated(async ()=>{

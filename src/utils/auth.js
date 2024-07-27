@@ -2,11 +2,16 @@
 
 */
 const BASICURL = ''
+const LOGINURL = 'https://auth.chiziingiin.top'
 import Cookies from 'js-cookie';
 
 class Auth {
-  static 
-  async basicAuth(url, body, { success = async () => {}, failed = async () => {} }) {
+  static async init(){
+    if ((await this.getPrtoken()).status == 'invalid') {
+      window.location.href = LOGINURL+'?url=' + encodeURI(window.location.href);
+    }
+  }
+  static async basicAuth(url, body, { success = async () => {}, failed = async () => {} }) {
     try { 
       const response = await fetch(url, {
         method: 'POST',

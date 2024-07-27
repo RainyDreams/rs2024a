@@ -1,7 +1,7 @@
 <template>
-  <v-chart ref="myChart" class="chart" :option="chartOption" />
+  <!-- <v-chart ref="myChart" class="chart" :option="chartOption" /> -->
 </template>
-
+<!-- 
 <script setup>
 import { ref, onMounted, getCurrentInstance } from 'vue';
 
@@ -67,4 +67,4 @@ onMounted(() => {
   width: 100%;
   height: 100px;
 }
-</style>
+</style> -->

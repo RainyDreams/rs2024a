@@ -39,6 +39,7 @@
 <script setup>
 import { AddressBook } from "@icon-park/vue-next";
 import { ref, onMounted } from "vue";
+import { ElAvatar } from "element-plus";
 import Auth from "../../utils/auth";
 const teamList = ref([]);
 onMounted(async ()=>{

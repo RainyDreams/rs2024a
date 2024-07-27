@@ -69,7 +69,7 @@
 import { ref,onMounted,reactive, onActivated } from 'vue'
 import { FileAddition } from '@icon-park/vue-next'; 
 import Auth from '../../utils/auth';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElForm, ElFormItem, ElInput, ElSelect, ElOption, ElButton, ElRadioGroup, ElRadio} from 'element-plus';
 const ruleFormRef = ref(null);
 const options = ref([]);
 const loading = ref(true);

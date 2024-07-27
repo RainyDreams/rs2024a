@@ -2,8 +2,8 @@
   "name": "rs2024-a",
   "private": true,
   "author": {
-    "name": "Rui Shi",
-    "email": "rshi@rshis.com"
+    "name": "Xinyue Zhang",
+    "email": "cfzxycn@163.com"
   },
   "license": "MIT",
   "description": "CF2Z RS 2024 2312-A",
@@ -26,15 +26,12 @@
     "js-cookie": "^3.0.5",
     "mitt": "^3.0.1",
     "sass": "^1.77.8",
-    "unplugin-element-plus": "^0.8.0",
     "vue": "^3.4.31",
     "vue-echarts": "^6.7.3",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
-    "unplugin-auto-import": "^0.18.0",
-    "unplugin-vue-components": "^0.27.3",
     "vite": "^5.3.4"
   }
 }

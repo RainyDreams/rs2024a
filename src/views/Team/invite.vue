@@ -50,7 +50,7 @@
 //检测网址传来的uid=xxx&pid=yyy然后请求服务器获取username和teamname
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading, ElAvatar, ElButton} from 'element-plus'
 import Auth from '../../utils/auth';
 const route = useRoute()
 const teamName = ref('')

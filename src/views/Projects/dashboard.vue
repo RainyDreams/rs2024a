@@ -57,6 +57,7 @@
 <script setup>
 import { ListView, MarketAnalysis, Order } from '@icon-park/vue-next';
 import { onMounted, reactive, ref } from 'vue';
+import { ElStatistic, ElTooltip, ElIcon, ElMessage, ElMessageBox } from 'element-plus';
 import Auth from '../../utils/auth';
 const dashboardList = ref([]);
 onMounted(async ()=>{
