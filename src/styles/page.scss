@@ -3,6 +3,21 @@
   padding-left: 16px;
   padding-right: 24px;
   padding-bottom: 16px;
+  .big_header{
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    .icon{
+      font-size: 0;
+      color:rgb(34, 98, 251)
+    }
+    .title{
+      font-size: 20px;
+      font-weight: bold;
+      color:#3c3e55;
+      margin-left: 8px;
+    }
+  }
   .panel{
     border-radius: 8px;
     background: rgba(255, 255, 255, 1);
@@ -14,7 +29,7 @@
     margin-bottom: 24px;
     overflow: hidden;
     // min-width: 600px;
-    ._header{
+    &>._header{
       display: flex;
       align-items: center;
       margin-bottom: 16px;
@@ -37,7 +52,13 @@
         //text-break
         word-break : normal;
         width:100%;
-
+        border:1px solid #ededed;
+        padding:8px 8px;
+        ._header{
+          font-size:18px;
+          font-weight: 600;
+          color: #5F6388;
+        }
       }
     }
     .cards{

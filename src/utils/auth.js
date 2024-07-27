@@ -53,7 +53,7 @@ class Auth {
     return this.basicAuth(BASICURL+'/api/prtoken', '', {
       success: async (data) => {
         Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(data.content.expires) });
-        return { status: 'sus', content: data.content };
+        return data.content;
       },
       failed: async (response,code) => {
         if(code<2 && response.status === 401)
@@ -84,7 +84,6 @@ class Auth {
       }
     });
   }
-
   static async getTeamList(param={}){
     return this.basicAuth(BASICURL+'/api/teamList', JSON.stringify({ uid: param.uid||'' }), {
       success: async (data) => data.content,
@@ -96,10 +95,67 @@ class Auth {
       }
     });
   }
-
-  static async getUserInfo() {
-    return this.basicAuth(BASICURL+'/api/userinfo', '', {
-      success: async (data) => data,
+  static async getJoinedTeamList(param={}){
+    return this.basicAuth(BASICURL+'/api/joinedTeamList', JSON.stringify({ uid: param.uid||'' }), {
+      success: async (data) => data.content,
+      failed: async (response) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response.content };
+        }
+        return { status: 'error', content: response };
+      }
+    })
+  }
+  static async getDashboard(){
+    return this.basicAuth(BASICURL+'/api/dashboard', '', {
+      success: async (data) => data.content,
+      failed: async (response) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        }
+        return { status: 'error', content: response };
+      }
+    })
+  }
+  static async createProject(param) {
+    return this.basicAuth(BASICURL+'/api/createProject', 
+      JSON.stringify({ 
+        ...param
+      }), {
+      success: async (data) => data.content,
+      failed: async (response) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        }
+        return { status: 'error', content: response };
+      }
+    });
+  }
+  static async getProjectList(param={}) {
+    return this.basicAuth(BASICURL+'/api/projectList', JSON.stringify({ uid: param.uid||'' }), {
+      success: async (data) => data.content,
+      failed: async (response) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        }
+        return { status: 'error', content: response };
+      }
+    });
+  }
+  static async getJoinedProjectList(param={}) {
+    return this.basicAuth(BASICURL+'/api/joinedProjectList', JSON.stringify({ uid: param.uid||'' }), {
+      success: async (data) => data.content,
+      failed: async (response) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        }
+        return { status: 'error', content: response };
+      }
+    })
+  }
+  static async getUserInfo(param={}) {
+    return this.basicAuth(BASICURL+'/api/userinfo', JSON.stringify({ uid: param.uid||'' }), {
+      success: async (data) => data.content,
       failed: async (response) => {
         if (response.status === 401) {
           return { status: 'invalid', content: response };

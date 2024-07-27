@@ -21,11 +21,22 @@
         <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
         <div class="title">基本信息</div>
       </div>
+      <div class="_content">
+        <div >{{ profile }}</div>
+      </div>
     </div>
   </div>
 </template>
 <script setup>
 import { IdCardH } from '@icon-park/vue-next';
+import { onActivated, ref } from 'vue';
+import Auth from '../../utils/auth';
+const profile = ref([])
+onActivated(async ()=>{
+  await Auth.getPrtoken();
+  const res = await Auth.getUserInfo();
+  profile.value = res;
+})
 </script>
 
 <!-- <script setup>

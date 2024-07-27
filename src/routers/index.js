@@ -15,8 +15,6 @@ import UserLogin from '../views/User/login.vue';
 import UserRegister from '../views/User/register.vue';
 import UserSettings from '../views/User/settings.vue';
 
-
-
 import Error404 from '../views/Errors/404.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

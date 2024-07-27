@@ -2,7 +2,7 @@
   <div class="commonPage">
     <div class="container">
       <div class="row">
-        <div class="col-md-12 col-lg-8">
+        <div class="col-md-12 col-xxl-8">
           <div class="panel">
             <div class="_header">
               <div class="icon"><file-addition theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
@@ -66,9 +66,10 @@
 </template>
 
 <script setup>
-import { ref,onMounted,reactive } from 'vue'
+import { ref,onMounted,reactive, onActivated } from 'vue'
 import { FileAddition } from '@icon-park/vue-next'; 
 import Auth from '../../utils/auth';
+import { ElMessage } from 'element-plus';
 const ruleFormRef = ref(null);
 const options = ref([]);
 const loading = ref(true);
@@ -96,10 +97,32 @@ const rules = reactive({
 })
 const submitForm = (formEl) => {
   if (!formEl) return
-  formEl.validate((valid) => {
+ formEl.validate(async (valid) => {
     if (valid) {
       // console.log('submit!')
-
+      await Auth.getPrtoken();
+      const createProject = await Auth.createProject({
+        name: form.name,
+        desc: form.desc,
+        team: form.team,
+        visibility: form.visibility
+      })
+      if(createProject.status == 'sus'){
+        ElMessage({
+          message: '创建成功',
+          type: 'success',
+        })
+        form.name = ''
+        form.desc = ''
+        form.team = ''
+        form.visibility = ''
+      } else {
+        ElMessage({
+          message: '创建失败',
+          type: 'error',
+        })
+      }
+      console.log(createProject)
     } else {
       console.log('error submit!')
       return false
@@ -107,10 +130,19 @@ const submitForm = (formEl) => {
   })
 }
 async function remoteMethod(query) {
-  const teamList  = await Auth.getTeamList({});
+  await Auth.getPrtoken();
+  const teamList  = (await Auth.getTeamList({})).content;
+  options.value = teamList.map(item => {
+    return {
+      value: item.id,
+      label: item.name
+    }
+  })
+  loading.value = false
+
   console.log(teamList)
 }
-onMounted(()=>{
+onActivated(()=>{
   remoteMethod()
 })
 </script>

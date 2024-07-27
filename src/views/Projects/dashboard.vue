@@ -11,7 +11,7 @@
             </div>
             <div class="_content">
               <div class="cards">
-                <div class="card" v-for="(item,i) in 8">
+                <div class="card" v-for="(item,i) in dashboardList">
                   <el-statistic :value="98500">
                     <template #title>
                       <div style="display: inline-flex; align-items: center">
@@ -56,4 +56,12 @@
 
 <script setup>
 import { ListView, MarketAnalysis, Order } from '@icon-park/vue-next';
+import { onMounted, reactive, ref } from 'vue';
+import Auth from '../../utils/auth';
+const dashboardList = ref([]);
+onMounted(async ()=>{
+  await Auth.getPrtoken();
+  const dashboardList = (await Auth.getDashboard()).content;
+})
+
 </script>

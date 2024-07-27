@@ -52,6 +52,7 @@
 import { ref,onMounted,reactive } from 'vue'
 import { Peoples } from '@icon-park/vue-next'; 
 import Auth from "../../utils/auth.js";
+import { ElMessage } from 'element-plus';
 const inputRef = ref(null);
 const inputValue = ref('');
 const dialogTableVisible = ref(false)

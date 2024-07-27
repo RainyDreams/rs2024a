@@ -23,21 +23,21 @@ export default defineConfig({
   // },
   plugins: [
     vue(),
-    Components({
-      resolvers: [
-        ElementPlusResolver({
-          importStyle: "sass",
-          // directives: true,
-          // version: "2.1.5",
-        }),
-      ],
-    }),
+    // Components({
+    //   resolvers: [
+    //     ElementPlusResolver({
+    //       importStyle: "sass",
+    //       // directives: true,
+    //       // version: "2.1.5",
+    //     }),
+    //   ],
+    // }),
     // ElementPlus({
     //   useSource: true,
     // }),
-    AutoImport({
-      resolvers: [ElementPlusResolver()],
-    }),
+    // AutoImport({
+    //   resolvers: [ElementPlusResolver()],
+    // }),
     // Components({
     //   resolvers: [ElementPlusResolver()],
     // }),
