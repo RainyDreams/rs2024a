@@ -9,7 +9,7 @@
           </a>
           <div v-if="!TabBarHide" class="m tabbar" >
             <ul class="tablist">
-              <li :class="`tab ${(item.type=='primary')?'primary':''} animate__animated ${showMenu?'animate__fadeInLeft':'animate__fadeOutLeft'}`" :style="(showMenu?`animation-duration:0.6s;`:'')+`animation-delay:${0.2+0.12*(i)}s`" v-for="(item,i) in tabbarList" :key="i">
+              <li :class="`tab ${(item.type=='primary')?'primary':''} animate__animated ${showMenu?'animate__fadeInLeft':'animate__fadeOutLeft'}`" :style="(showMenu?`animation-duration:0.6s;`:'')+`animation-delay:${0.12+0.12*(i)}s`" v-for="(item,i) in tabbarList" :key="i">
                 <router-link class="" @click="toM(item.to)" :to="item.to" >
                   <div class="icon">
                     <component :is="getIcon(item.icon)" theme="outline" size="22"/>
@@ -98,7 +98,10 @@ router.beforeEach((to, from) => {
   // console.log(to,from)
   if(item){
     activeName.value = item.name;
-    tabbarList.value = item.tabs;
+    tabbarList.value = [];
+    setTimeout(()=>{
+      tabbarList.value = item.tabs;
+    },10)
   } else {
     activeName.value = '';
   }
@@ -122,7 +125,10 @@ function isM(to,name){
     rightList.find(i=>to.indexOf(i.to.split('/')[1])>-1);
     if(item){
       activeName.value = item.name;
-      tabbarList.value = item.tabs;
+      tabbarList.value = [];
+      setTimeout(()=>{
+        tabbarList.value = item.tabs;
+      },10)
     } else {
       activeName.value = '';
     }
