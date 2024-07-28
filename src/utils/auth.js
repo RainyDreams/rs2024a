@@ -4,10 +4,28 @@
 const BASICURL = ''
 const LOGINURL = 'https://auth.chiziingiin.top'
 import Cookies from 'js-cookie';
+import { ElMessage, ElMessageBox } from 'element-plus'
 const defaultSuccess = async (data) => data.content;
 const defaultFailed = async (response) => {
   if (response.status === 401) {
     return { status: 'invalid', content: response };
+  } else {
+    ElMessage.error('服务器错误');
+    console.log(response)
+    try{
+      throw new Error(await response.text())
+    } catch (err){
+      console.error(err.stack)
+      ElMessageBox.alert('', '服务器错误', {
+        dangerouslyUseHTMLString:true,
+        message: 
+        `很抱歉我们的服务器出现了错误，请联系本RS2024A项目负责人张新越(赤峰二中202312班)<br/>
+        以下是可以提供的错误信息<br/><b>错误代码：${response.status}</b><br/><b>${err.stack}</b>`,
+        confirmButtonText: '我知道了',
+        'show-close':false,
+        type: 'error',
+      })
+    }
   }
   return { status: 'error', content: response };
 }
@@ -47,16 +65,8 @@ class Auth {
     }
   }
 
-  static async loginByPassword(username, password) {
-    return this.basicAuth(BASICURL+'/api/login', JSON.stringify({ username: username, password: password }));
-  }
-
-  static async logout() {
-    Cookies.remove('czigauth');
-  }
-
-  static async checkAuth() {
-    return Cookies.get('czigauth')!= null;
+  static async test(){
+    return this.basicAuth(BASICURL+'/api/test', );
   }
 
   static async getPrtoken() {

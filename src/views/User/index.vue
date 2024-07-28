@@ -37,5 +37,6 @@ onActivated(async ()=>{
   await Auth.getPrtoken();
   const res = await Auth.getUserInfo();
   profile.value = res;
+  await Auth.test()
 })
 </script>

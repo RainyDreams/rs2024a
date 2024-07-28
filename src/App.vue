@@ -102,7 +102,7 @@ router.beforeEach((to, from) => {
       tabbarList.value = [];
       setTimeout(()=>{
         tabbarList.value = item.tabs;
-      },10)
+      },5)
     } else {
       tabbarList.value = item.tabs;
     }
@@ -117,12 +117,14 @@ router.beforeEach((to, from) => {
   }
 });
 function M(str){
-  if(window.innerWidth <= 992){
+  console.log(str,window.innerWidth)
+  if(window.innerWidth <= 880){
     return str;
   }
+  return ''
 }
 function isM(to,name){
-  if(window.innerWidth > 992){
+  if(window.innerWidth > 880){
     router.push(to)
   } else {
     activeName.value = name;
@@ -131,14 +133,11 @@ function isM(to,name){
     if(item){
       activeName.value = item.name;
       tabbarList.value = [];
-      if(window.innerWidth <= 992){
-        tabbarList.value = [];
-        setTimeout(()=>{
-          tabbarList.value = item.tabs;
-        },10)
-      } else {
+      // if(window.innerWidth <= 880){
+      tabbarList.value = [];
+      setTimeout(()=>{
         tabbarList.value = item.tabs;
-      }
+      },5)
     } else {
       activeName.value = '';
     }
