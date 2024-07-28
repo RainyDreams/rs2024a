@@ -16,6 +16,7 @@ import UserLogin from '../views/User/login.vue';
 import UserRegister from '../views/User/register.vue';
 import UserSettings from '../views/User/settings.vue';
 
+import Test from '../views/Tests/test.vue';
 import Error404 from '../views/Errors/404.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,6 +42,7 @@ const router = createRouter({
       { path: "settings", name: "UserSettings", component: UserSettings },
     ]},
     { path: "/settings/", name: "Settings", component: SettingsIndex },
+    { path: "/test", name: "Tests", component: Test },
     
     { path: "/:catchAll(.*)", name: "NotFound", component: Error404 },
   ]

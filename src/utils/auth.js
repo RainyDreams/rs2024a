@@ -8,6 +8,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 const defaultSuccess = async (data) => data.content;
 const defaultFailed = async (response) => {
   if (response.status === 401) {
+    ElMessage.error('你没有认证权限');
     return { status: 'invalid', content: response };
   } else {
     ElMessage.error('服务器错误');
@@ -32,7 +33,10 @@ const defaultFailed = async (response) => {
 class Auth {
   static async init(){
     if ((await this.getPrtoken()).status == 'invalid') {
-      window.location.href = LOGINURL+'?url=' + encodeURI(window.location.href);
+      ElMessage.error('未登录，即将跳转登录页面');
+      setTimeout(()=>{
+        window.location.href = LOGINURL+'?url=' + encodeURI(window.location.href);
+      },500)
     }
   }
   static async basicAuth(url, body, {
@@ -79,11 +83,11 @@ class Auth {
         Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(data.content.expires) });
         return data.content;
       },
-      failed: async (response,code) => {
-        if(code<2 && response.status === 401)
-          return { status: 'invalid', content: response };
-        else return { status: 'error', content: response };
-      }
+      // failed: async (response,code) => {
+      //   if(code<2 && response.status === 401)
+      //     return { status: 'invalid', content: response };
+      //   else return { status: 'error', content: response };
+      // }
     });
   }
   static async createTeam(param) {
