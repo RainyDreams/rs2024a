@@ -11,8 +11,10 @@
 
 <script setup>
 import { ElEmpty,ElButton } from 'element-plus';
-function goBack(){
-  window.history.back()
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const goBack = () => {
+  router.go(-1)
 }
 </script>
 

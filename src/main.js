@@ -3,6 +3,7 @@ import { createApp } from 'vue'
 import router from './routers/index'
 import App from './App.vue'
 import './styles/index.scss'
+import 'animate.css'
 // import 'element-plus/dist/index.css'
 // import ECharts from 'vue-echarts';
 // import * as echarts from 'echarts';

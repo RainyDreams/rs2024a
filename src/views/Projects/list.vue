@@ -31,9 +31,9 @@
                     <div ></div>
                   </div>
                 </div>
-                <div class="col-md-6 col-lg-4" v-if="project.cards.description">
+                <div class="col-md-6 col-lg-4" v-if="project.cards.discussion">
                   <div class="card ">
-                    <div class="_title">{{ project.cards.description.title }}</div>
+                    <div class="_title">{{ project.cards.discussion.title }}</div>
                     <div class="content"></div>
                     <div ></div>
                   </div>
@@ -41,7 +41,7 @@
               </div>
             </el-collapse-item>
           </el-collapse>
-          <el-button size="large">查看详情</el-button>
+          <el-button size="large" @click="to(project.id)">查看详情</el-button>
         </div>
       </div>
     </div>
@@ -53,8 +53,10 @@ import {onActivated, onMounted, ref} from 'vue';
 import Auth from '../../utils/auth';
 import { WaterfallsH } from '@icon-park/vue-next';
 import { ElCollapse,ElCollapseItem,ElButton } from 'element-plus';
+import { useRouter } from 'vue-router';
 const projectList = ref([])
 const activeNames = '1'
+const router = useRouter()
 onActivated(async ()=>{
   await Auth.getPrtoken();
   const res = await Auth.getJoinedProjectList();
@@ -84,7 +86,7 @@ onActivated(async ()=>{
         title:"问题",
         content:null,
       },
-      description:{
+      discussion:{
         title:"讨论",
         content:null,
       },
@@ -99,4 +101,11 @@ onActivated(async ()=>{
   });
   projectList.value = tmp
 })
+
+function to(id){
+  // debugger;
+  router.push({
+    path: '/projects/detail/'+id,
+  })
+}
 </script>

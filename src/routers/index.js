@@ -6,6 +6,7 @@ import ProjectsCreate from '../views/Projects/create.vue';
 import ProjectsDashboard from '../views/Projects/dashboard.vue';
 import ProjectsList from '../views/Projects/list.vue';
 import ProjectsTodo from '../views/Projects/todo.vue';
+import ProjectsDetail from '../views/Projects/detail.vue';
 import TeamCreate from '../views/Team/create.vue';
 import TeamList from '../views/Team/list.vue';
 import TeamSettings from '../views/Team/settings.vue';
@@ -25,6 +26,7 @@ const router = createRouter({
       { path: "dashboard", name: "ProjectsDashboard", component: ProjectsDashboard },
       { path: "list", name: "ProjectsList", component: ProjectsList },
       { path: "todo", name: "ProjectsTodo", component: ProjectsTodo },
+      { path: "detail/:projectId", name: "ProjectsDetail", component: ProjectsDetail },
     ]},
     { path: "/team/", name: "Team", children: [
       { path: "create", name: "TeamCreate", component: TeamCreate },

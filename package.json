@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@icon-park/vue-next": "^1.4.2",
+    "animate.css": "^4.1.1",
     "echarts": "^5.5.1",
     "element-plus": "^2.7.7",
     "js-cookie": "^3.0.5",
