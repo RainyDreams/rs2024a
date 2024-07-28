@@ -98,10 +98,15 @@ router.beforeEach((to, from) => {
   // console.log(to,from)
   if(item){
     activeName.value = item.name;
-    tabbarList.value = [];
-    setTimeout(()=>{
+    if(window.innerWidth <= 992){
+      tabbarList.value = [];
+      setTimeout(()=>{
+        tabbarList.value = item.tabs;
+      },10)
+    } else {
       tabbarList.value = item.tabs;
-    },10)
+    }
+
   } else {
     activeName.value = '';
   }
@@ -126,9 +131,14 @@ function isM(to,name){
     if(item){
       activeName.value = item.name;
       tabbarList.value = [];
-      setTimeout(()=>{
+      if(window.innerWidth <= 992){
+        tabbarList.value = [];
+        setTimeout(()=>{
+          tabbarList.value = item.tabs;
+        },10)
+      } else {
         tabbarList.value = item.tabs;
-      },10)
+      }
     } else {
       activeName.value = '';
     }
