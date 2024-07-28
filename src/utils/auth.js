@@ -1,30 +1,61 @@
 /*
 
 */
-const BASICURL = ''
+function copyText(text) {
+  // 创建一个临时的文本输入元素
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  // 将文本输入元素添加到文档主体
+  document.body.appendChild(textarea);
+  // 选中输入框中的文本
+  textarea.select();
+  // 执行复制操作
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.error('复制操作失败', err);
+  }
+  // 从文档主体中移除临时的文本输入元素
+  document.body.removeChild(textarea);
+}
+const BASICURL = 'https://project.chiziingiin.top'
 const LOGINURL = 'https://auth.chiziingiin.top'
 import Cookies from 'js-cookie';
 import { ElMessage, ElMessageBox } from 'element-plus'
 const defaultSuccess = async (data) => data.content;
-const defaultFailed = async (response) => {
+const defaultFailed = async (response,code) => {
   if (response.status === 401) {
     ElMessage.error('你没有认证权限');
     return { status: 'invalid', content: response };
   } else {
     ElMessage.error('服务器错误');
-    console.log(response)
+    console.dir(response)
     try{
+      if(code==2)
+        throw response;
       throw new Error(await response.text())
     } catch (err){
       console.error(err.stack)
-      ElMessageBox.alert('', '服务器错误', {
+      ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
         dangerouslyUseHTMLString:true,
+        customClass:'czigerr',
         message: 
-        `很抱歉我们的服务器出现了错误，请联系本RS2024A项目负责人张新越(赤峰二中202312班)<br/>
-        以下是可以提供的错误信息<br/><b>错误代码：${response.status}</b><br/><b>${err.stack}</b>`,
-        confirmButtonText: '我知道了',
+        `本软件正在公测阶段，现遇到了程序、服务器错误，请联系本项目负责人张新越（赤峰二中202312班）<br/>
+        以下是可以提供的错误信息<br/><b>错误代码：<span style="color:red">${response.status||'未知(可能为CORS)'}</span></b><br/><b>${(err.stack+"").replace('at','</b><i>at')}</i>`,
+        confirmButtonText: '报告错误',
+        showCancelButton:true,
+        cancelButtonText:'忽略错误',
         'show-close':false,
-        type: 'error',
+        callback:(value,action)=>{
+          if(value=='confirm'){
+            copyText(`${response.status}:${err.stack+''}`)
+            ElMessageBox.alert('','已尝试复制错误信息，请发送给我',{
+              
+            })
+          }
+          action=null;
+        }
+        // type: 'error',
       })
     }
   }
