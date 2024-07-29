@@ -34,15 +34,13 @@ const defaultFailed = async (response,code) => {
     try{
       if(code==2)
         throw response;
-      const text = await response.json();
-      // console.dir(new Error(response.url+"<br/>" + text.content))
-      // (.read()).then((e)=>{console.log(e)})
-      // const reader = response.body.getReader()
-      // const read = async ()=>reader.read()
-      // const text = await read().then((e)=>e.value).then((e)=>new TextDecoder().decode(e))
-      // debugger
-      // throw
-      throw new Error(response.url+"<br/>" + text.content)
+      let text;
+      try{
+        text = (await response.json()).content;
+      }catch(e){
+        text = await response.text();
+      }
+      throw new Error(response.url+"<br/>" + text)
     } catch (err){
       // console.error(err.stack)
       ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
@@ -60,14 +58,13 @@ const defaultFailed = async (response,code) => {
             const ua = navigator.userAgent;
             const r = await Auth.reportErrlog(JSON.stringify({
               ua,
-              content:`${response.status}:${err.stack+''}`,
+              content:`${response.status}:${err.message+err.stack+''}`,
               time:new Date().getTime()
             }))
-            console.log(r)
+            console.info('[errId]',r)
             copyText(`${r.content.id}`)
             ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}`,'提示',{})
           }
-          action=null;
         }
         // type: 'error',
       })
