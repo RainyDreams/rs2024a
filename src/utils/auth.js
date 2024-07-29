@@ -34,12 +34,7 @@ const defaultFailed = async (response,code) => {
     try{
       if(code==2)
         throw response;
-      let text;
-      try{
-        text = (await response.json()).content;
-      }catch(e){
-        text = await response.text();
-      }
+      let text = await response.text()
       throw new Error(response.url+"<br/>" + text)
     } catch (err){
       // console.error(err.stack)
