@@ -18,7 +18,7 @@ function copyText(text) {
   // 从文档主体中移除临时的文本输入元素
   document.body.removeChild(textarea);
 }
-const BASICURL = 'https://project.chiziingiin.top'
+const BASICURL = ''
 const LOGINURL = 'https://auth.chiziingiin.top'
 import Cookies from 'js-cookie';
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -30,6 +30,7 @@ const defaultFailed = async (response,code) => {
   } else {
     ElMessage.error('服务器错误');
     console.dir(response)
+
     try{
       if(code==2)
         throw response;
@@ -48,8 +49,14 @@ const defaultFailed = async (response,code) => {
         'show-close':false,
         callback:(value,action)=>{
           if(value=='confirm'){
+            const ua = navigator.userAgent;
+            Auth.reportErrlog(JSON.stringify({
+              ua,
+              content:`${response.status}:${err.stack+''}`,
+              time:new Date().getTime()
+            }))
             copyText(`${response.status}:${err.stack+''}`)
-            ElMessageBox.alert('','已尝试复制错误信息，请发送给我',{
+            ElMessageBox.alert('已尝试复制错误信息','提示',{
               
             })
           }
@@ -102,6 +109,10 @@ class Auth {
 
   static async test(){
     return this.basicAuth(BASICURL+'/api/test', );
+  }
+
+  static async reportErrlog(content){
+    return this.basicAuth(BASICURL+'/api/reportErrlog', content);
   }
 
   static async getPrtoken() {
