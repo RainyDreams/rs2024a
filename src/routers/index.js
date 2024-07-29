@@ -16,6 +16,7 @@ import UserIndex from '../views/User/index.vue';
 import UserLogin from '../views/User/login.vue';
 import UserRegister from '../views/User/register.vue';
 import UserSettings from '../views/User/settings.vue';
+import AboutInfo from '../views/About/info.vue';
 
 import Test from '../views/Tests/test.vue';
 import Error404 from '../views/Errors/404.vue';
@@ -43,6 +44,7 @@ const router = createRouter({
       { path: "register", name: "UserRegister", component: UserRegister},
       { path: "settings", name: "UserSettings", component: UserSettings },
     ]},
+    { path: "/about/", name: "About", children: [{ path: "info", name: "AboutInfo", component: AboutInfo }] },
     { path: "/settings/", name: "Settings", component: SettingsIndex },
     { path: "/test", name: "Tests", component: Test },
     
