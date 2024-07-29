@@ -22,7 +22,7 @@ const BASICURL = ''
 const LOGINURL = 'https://auth.chiziingiin.top'
 import Cookies from 'js-cookie';
 import { ElMessage, ElMessageBox } from 'element-plus'
-const defaultSuccess = async (data) => data.content;
+const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async (response,code) => {
   if (response.status === 401) {
     ElMessage.error('你没有认证权限');
@@ -34,7 +34,9 @@ const defaultFailed = async (response,code) => {
     try{
       if(code==2)
         throw response;
-      throw new Error(await response.text())
+      const text = await response.text();
+      // throw
+      throw new Error(response.url + text)
     } catch (err){
       console.error(err.stack)
       ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
@@ -47,18 +49,17 @@ const defaultFailed = async (response,code) => {
         showCancelButton:true,
         cancelButtonText:'忽略错误',
         'show-close':false,
-        callback:(value,action)=>{
+        callback:async (value,action)=>{
           if(value=='confirm'){
             const ua = navigator.userAgent;
-            Auth.reportErrlog(JSON.stringify({
+            const r = await Auth.reportErrlog(JSON.stringify({
               ua,
               content:`${response.status}:${err.stack+''}`,
               time:new Date().getTime()
             }))
-            copyText(`${response.status}:${err.stack+''}`)
-            ElMessageBox.alert('已尝试复制错误信息','提示',{
-              
-            })
+            console.log(r)
+            copyText(`${r.content.id}`)
+            ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}`,'提示',{})
           }
           action=null;
         }
