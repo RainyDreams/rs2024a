@@ -34,9 +34,14 @@ const defaultFailed = async (response,code) => {
     try{
       if(code==2)
         throw response;
-      const text = await response.text();
+      const text = await response.json();
+      // (.read()).then((e)=>{console.log(e)})
+      // const reader = response.body.getReader()
+      // const read = async ()=>reader.read()
+      // const text = await read().then((e)=>e.value).then((e)=>new TextDecoder().decode(e))
+      // debugger
       // throw
-      throw new Error(response.url + text)
+      throw new Error(response.url+"<br/>" + text.content)
     } catch (err){
       console.error(err.stack)
       ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
