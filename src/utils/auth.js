@@ -35,6 +35,7 @@ const defaultFailed = async (response,code) => {
       if(code==2)
         throw response;
       const text = await response.json();
+      // console.dir(new Error(response.url+"<br/>" + text.content))
       // (.read()).then((e)=>{console.log(e)})
       // const reader = response.body.getReader()
       // const read = async ()=>reader.read()
@@ -43,13 +44,13 @@ const defaultFailed = async (response,code) => {
       // throw
       throw new Error(response.url+"<br/>" + text.content)
     } catch (err){
-      console.error(err.stack)
+      // console.error(err.stack)
       ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
         dangerouslyUseHTMLString:true,
         customClass:'czigerr',
         message: 
         `本软件正在公测阶段，现遇到了程序、服务器错误，请联系本项目负责人张新越（赤峰二中202312班）<br/>
-        以下是可以提供的错误信息<br/><b>错误代码：<span style="color:red">${response.status||'未知(可能为CORS)'}</span></b><br/><b>${(err.stack+"").replace('at','</b><i>at')}</i>`,
+        以下是可以提供的错误信息<br/><b>错误代码：<span style="color:red">${response.status||'未知(可能为CORS)'}</span></b><br/><b>${(err.message+"</b><i>"+err.stack+"")}</i>`,
         confirmButtonText: '报告错误',
         showCancelButton:true,
         cancelButtonText:'忽略错误',
