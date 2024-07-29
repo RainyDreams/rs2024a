@@ -34,7 +34,8 @@ const defaultFailed = async (response,code) => {
     try{
       if(code==2)
         throw response;
-      let text = await response.text()
+      let text = (await response.text());
+ 
       throw new Error(response.url+"<br/>" + text)
     } catch (err){
       // console.error(err.stack)
