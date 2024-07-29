@@ -49,8 +49,10 @@ const defaultFailed = async (response,code) => {
         showCancelButton:true,
         cancelButtonText:'忽略错误',
         'show-close':false,
-        callback:async (value,action)=>{
+        beforeClose:async (value,instance, done)=>{
           if(value=='confirm'){
+            instance.confirmButtonLoading = true
+            instance.confirmButtonText = '上传错误信息'
             const ua = navigator.userAgent;
             const r = await Auth.reportErrlog(JSON.stringify({
               ua,
@@ -59,8 +61,10 @@ const defaultFailed = async (response,code) => {
             }))
             console.info('[errId]',r)
             copyText(`${r.content.id}`)
-            ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}`,'提示',{})
+            
+            ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}\n可以将以上信息提供给我，便于分析处理错误`,'提示',{})
           }
+          done();
         }
         // type: 'error',
       })

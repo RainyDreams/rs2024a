@@ -117,7 +117,7 @@ router.beforeEach((to, from) => {
   }
 });
 function M(str){
-  console.log(str,window.innerWidth)
+  // console.log(str,window.innerWidth)
   if(window.innerWidth <= 880){
     return str;
   }

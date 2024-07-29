@@ -6,7 +6,10 @@
           <div class="icon"><address-book theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>
           <div class="title">我参与的项目</div>
         </div>
-        <div class="panel" v-for="project in projectList">
+        <div class="panel" v-show="loading">
+          <el-skeleton animated :rows="5" />
+        </div>
+        <div class="panel" v-show="!loading" v-for="project in projectList">
           <div class="commonHeader">
             <div class="title">
               <WaterfallsH class="icon" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
@@ -52,9 +55,10 @@
 import {onActivated, onMounted, ref} from 'vue';
 import Auth from '../../utils/auth';
 import { WaterfallsH } from '@icon-park/vue-next';
-import { ElCollapse,ElCollapseItem,ElButton } from 'element-plus';
+import { ElCollapse,ElCollapseItem,ElButton,ElSkeleton,ElSkeletonItem } from 'element-plus';
 import { useRouter } from 'vue-router';
 const projectList = ref([])
+const loading = ref(true);
 const activeNames = '1'
 const router = useRouter()
 onActivated(async ()=>{
@@ -68,14 +72,6 @@ onActivated(async ()=>{
     let cards = {
       news:{
         title:"近期动态",
-        content:null,
-      },
-      creator:{
-        title:"创建者",
-        content:null,
-      },
-      teams:{
-        title:"参与团队",
         content:null,
       },
       tasks:{
@@ -99,7 +95,8 @@ onActivated(async ()=>{
     }
     tmp.push(project)
   });
-  projectList.value = tmp
+  projectList.value = tmp;
+  loading.value = false
 })
 
 function to(id){

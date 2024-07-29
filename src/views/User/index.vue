@@ -16,7 +16,10 @@
     </div>
   </div>
   <div class="commonPage">
-    <div class="panel">
+    <div class="panel" v-show="loading">
+      <el-skeleton animated :rows="5" />
+    </div>
+    <div class="panel" v-show="!loading" >
       <div class="_header">
         <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
         <div class="title">基本信息</div>
@@ -30,12 +33,14 @@
 <script setup>
 import { IdCardH } from '@icon-park/vue-next';
 import { onActivated, ref } from 'vue';
-import { ElAvatar } from 'element-plus';
+import { ElAvatar,ElSkeleton } from 'element-plus';
 import Auth from '../../utils/auth';
 const profile = ref([])
+const loading = ref(true)
 onActivated(async ()=>{
   await Auth.getPrtoken();
   const res = await Auth.getUserInfo();
   profile.value = res;
+  loading.value=false;
 })
 </script>
