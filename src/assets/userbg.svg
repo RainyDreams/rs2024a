@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1440" height="1024" viewBox="0 0 1440 1024" fill="none">
+<g  clip-path="url(#clip-path-0_60)">
+<g filter="url(#filter_0_58)">
+<path d="M1199 945.467C1199 1257.23 946.265 1509.97 634.5 1509.97C322.735 1509.97 70 1257.23 70 945.467C70 803.373 122.5 641.254 209.161 506.88C312.641 346.427 464.829 225.533 634.5 225.533C801.313 225.533 758.417 507.922 861.759 664.339C951.558 800.258 1199 800.515 1199 945.467Z"   fill="#6AA6F9" >
+</path>
+</g>
+<g filter="url(#filter_0_59)">
+<circle cx="1431.25" cy="330.5" r="745.75"   fill="#EBF9E5" >
+</circle>
+</g>
+</g>
+<defs>
+<clipPath id="clip-path-0_60">
+<path d="M0 1024L1440 1024L1440 0L0 0L0 1024Z" fill="white"/>
+</clipPath>
+<filter id="filter_0_58" x="-350" y="-194.46694946289062" width="1969" height="2124.433868408203" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="feFloodId_0_58"/>
+<feBlend mode="normal" in="SourceGraphic" in2="feFloodId_0_58" result="shape"/>
+<feGaussianBlur result="gaussian_blur_0_58" stdDeviation="210"/>
+</filter>
+<filter id="filter_0_59" x="65.5" y="-1035.25" width="2731.5" height="2731.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="feFloodId_0_59"/>
+<feBlend mode="normal" in="SourceGraphic" in2="feFloodId_0_59" result="shape"/>
+<feGaussianBlur result="gaussian_blur_0_59" stdDeviation="310"/>
+</filter>
+</defs>
+</svg>

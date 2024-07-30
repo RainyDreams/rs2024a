@@ -81,15 +81,15 @@ class Auth {
       },500)
     }
   }
-  static async basicAuth(url, body, {
+  static async basicAuth(url=BASICURL, body='', {
     success = defaultSuccess,
     failed = defaultFailed
-  }={
+  } = {
     success : defaultSuccess, 
-    failed :defaultFailed
+    failed : defaultFailed
   }){
     try { 
-      const response = await fetch(url, {
+      const response = await fetch(BASICURL+url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -112,11 +112,11 @@ class Auth {
   }
 
   static async test(){
-    return this.basicAuth(BASICURL+'/api/test', );
+    return this.basicAuth('/api/test', );
   }
 
   static async reportErrlog(content){
-    return this.basicAuth(BASICURL+'/api/reportErrlog', content);
+    return this.basicAuth('/api/reportErrlog', content);
   }
 
   static async getPrtoken() {
@@ -124,7 +124,7 @@ class Auth {
     if (Cookies.get('czigauth')) {
       return { status: 'exist', content: Cookies.get('czigauth') };
     }
-    return this.basicAuth(BASICURL+'/api/prtoken', '', {
+    return this.basicAuth('/api/prtoken', '', {
       success: async (data) => {
         Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(data.content.expires) });
         return data.content;
@@ -137,34 +137,34 @@ class Auth {
     });
   }
   static async createTeam(param) {
-    return this.basicAuth(BASICURL+'/api/createTeam', JSON.stringify({ name:param.name,desc:param.desc }), );
+    return this.basicAuth('/api/createTeam', JSON.stringify({ name:param.name,desc:param.desc }), );
   }
   static async getTeamInfo(param={}) {
-    return this.basicAuth(BASICURL+'/api/teamInfo', JSON.stringify({ uid: param.uid||'', pid: param.pid }), );
+    return this.basicAuth('/api/teamInfo', JSON.stringify({ uid: param.uid||'', pid: param.pid }), );
   }
   static async getTeamList(param={}){
-    return this.basicAuth(BASICURL+'/api/teamList', JSON.stringify({ uid: param.uid||'' }), );
+    return this.basicAuth('/api/teamList', JSON.stringify({ uid: param.uid||'' }), );
   }
   static async getJoinedTeamList(param={}){
-    return this.basicAuth(BASICURL+'/api/joinedTeamList', JSON.stringify({ uid: param.uid||'' }), )
+    return this.basicAuth('/api/joinedTeamList', JSON.stringify({ uid: param.uid||'' }), )
   }
   static async getDashboard(){
-    return this.basicAuth(BASICURL+'/api/dashboard', '', )
+    return this.basicAuth('/api/dashboard', '', )
   }
   static async createProject(param) {
-    return this.basicAuth(BASICURL+'/api/createProject', JSON.stringify({ ...param }));
+    return this.basicAuth('/api/createProject', JSON.stringify({ ...param }));
   }
   static async getProjectDetail(param={}) {
-    return this.basicAuth(BASICURL+'/api/projectDetail', JSON.stringify({ projectid: param.id }), );
+    return this.basicAuth('/api/projectDetail', JSON.stringify({ projectid: param.id }), );
   }
   static async getProjectList(param={}) {
-    return this.basicAuth(BASICURL+'/api/projectList', JSON.stringify({ uid: param.uid||'' }), );
+    return this.basicAuth('/api/projectList', JSON.stringify({ uid: param.uid||'' }), );
   }
   static async getJoinedProjectList(param={}) {
-    return this.basicAuth(BASICURL+'/api/joinedProjectList', JSON.stringify({ uid: param.uid||'' }), )
+    return this.basicAuth('/api/joinedProjectList', JSON.stringify({ uid: param.uid||'' }), )
   }
   static async getUserInfo(param={}) {
-    return this.basicAuth(BASICURL+'/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
+    return this.basicAuth('/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
   }
 }
 

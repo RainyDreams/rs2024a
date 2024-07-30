@@ -10,7 +10,7 @@
           ></el-avatar>
         </div>
         <div class="content">
-          <h2>用户名</h2>
+          <h2>{{profile.nickname}}</h2>
         </div>
       </div>
     </div>
@@ -35,12 +35,15 @@ import { IdCardH } from '@icon-park/vue-next';
 import { onActivated, ref } from 'vue';
 import { ElAvatar,ElSkeleton } from 'element-plus';
 import Auth from '../../utils/auth';
-const profile = ref([])
+const profile = ref({
+  nickname: '加载中',
+  avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+})
 const loading = ref(true)
 onActivated(async ()=>{
   await Auth.getPrtoken();
   const res = await Auth.getUserInfo();
-  profile.value = res;
+  profile.value = res.content;
   loading.value=false;
 })
 </script>

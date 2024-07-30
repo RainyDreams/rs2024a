@@ -3,13 +3,25 @@
     <div class="container row">
       <div class="col-sm-12 col-md-12 col-xxl-8">
         <div class="big_header">
-          <div class="icon"><address-book theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>
+          <div class="icon"><form-one theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>
           <div class="title">我参与的项目</div>
         </div>
         <div class="panel" v-show="loading">
           <el-skeleton animated :rows="5" />
         </div>
-        <div class="panel" v-show="!loading" v-for="project in projectList">
+        <div class="panel" v-show="!loading && projectList.length==0">
+          <el-empty :image-size="150" >
+            <template #description>
+              <p>没有参与的项目</p>
+            </template>
+            <template #default>
+              <router-link to="/projects/create"><el-button type="primary">
+                去创建项目<el-icon class="el-icon--right"><Right /></el-icon>
+              </el-button></router-link>
+            </template>
+          </el-empty>
+        </div>
+        <div class="panel" v-show="!loading && projectList.length>0" v-for="project in projectList">
           <div class="commonHeader">
             <div class="title">
               <WaterfallsH class="icon" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
@@ -54,13 +66,13 @@
 <script setup>
 import {onActivated, onMounted, ref} from 'vue';
 import Auth from '../../utils/auth';
-import { WaterfallsH } from '@icon-park/vue-next';
-import { ElCollapse,ElCollapseItem,ElButton,ElSkeleton,ElSkeletonItem } from 'element-plus';
-import { useRouter } from 'vue-router';
+import { WaterfallsH,Right,FormOne } from '@icon-park/vue-next';
+import { ElCollapse,ElCollapseItem,ElButton,ElSkeleton,ElEmpty } from 'element-plus';
+import { useRouter,RouterLink } from 'vue-router';
 const projectList = ref([])
 const loading = ref(true);
 const activeNames = '1'
-const router = useRouter()
+const router = useRouter();
 onActivated(async ()=>{
   await Auth.getPrtoken();
   const res = await Auth.getJoinedProjectList();

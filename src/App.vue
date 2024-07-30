@@ -9,7 +9,7 @@
           </a>
           <div v-if="!TabBarHide" class="m tabbar" >
             <ul class="tablist">
-              <li :class="`tab ${(item.type=='primary')?'primary':''} animate__animated ${showMenu?'animate__fadeInLeft':'animate__fadeOutLeft'}`" :style="(showMenu?`animation-duration:0.6s;`:'')+`animation-delay:${0.12+0.12*(i)}s`" v-for="(item,i) in tabbarList" :key="i">
+              <li :class="`tab ${(item.type=='primary')?'primary':''} animate__animated ${showMenu?'animate__fadeInLeft':'animate__fadeOutLeft'}`" :style="(showMenu?`animation-duration:0.6s;`:'')+`animation-delay:${0+0.12*(i)}s`" v-for="(item,i) in tabbarList" :key="i">
                 <router-link class="" @click="toM(item.to)" :to="item.to" >
                   <div class="icon">
                     <component :is="getIcon(item.icon)" theme="outline" size="22"/>
@@ -76,11 +76,11 @@ Auth.init()
 console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已经掌握一定的技术能力，我很高兴我的软件能被你们所了解。\n但有以下几点需要注意：%c\n%c1. 我们是学生初创项目，请不要尝试攻击、毁坏或者以任何方式使它停止工作，我们感谢你的善举\n2. 如果你想要研究它的源码和创作历程，请关注“赤子英金”', 
 'font-size:18px;padding:4px;color:#fff;background:#f00;','','font-size:12px;line-height:16px;padding:2px;', '','padding:2px;line-height:16px;font-size:12px;'); 
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
-import { ref,markRaw, reactive } from 'vue';
+import { ref,markRaw, reactive, onMounted } from 'vue';
 import { RouterLink, RouterView,useRouter } from 'vue-router'
 import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
-import { ElConfigProvider,ElAvatar } from 'element-plus'
+import { ElConfigProvider,ElAvatar,ElNotification } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Auth from './utils/auth';
 const router = useRouter();
@@ -88,6 +88,14 @@ const TabBarHide = ref(false);
 const isDarkMode = ref(0);
 const activeName = ref(0);
 const showMenu = ref(false)
+onMounted(()=>{
+  ElNotification({
+    title: '提示',
+    message: "如果您对本项目有任何建议或遇到任何问题，可以点击导航栏“关于软件”联系我们",
+    position: 'bottom-right',
+    type: 'info',
+  })
+})
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
