@@ -173,8 +173,7 @@ onMounted(async ()=>{
   // loading.value = false;
   ElMessage.info('正在尝试使用访客身份登录，请稍等');
   await Auth.init()
-  // const fingerprint = await Auth.getUserFingerprint()
-  await send({fingerprint})
+  await send()
   // console.log(Fingerprint)
 })
 </script>
