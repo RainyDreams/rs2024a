@@ -178,7 +178,7 @@ class Auth {
   /* 实验性功能 */
   static async chatWithAI(list,param){
     const res = await this.basicAuth('/api/ai/send', JSON.stringify({ content:JSON.stringify(list) }) );
-    if(res.status==='sus' && res.content == 'sus'){
+    if(res.status==='sus'){
       const eventSource = new EventSource('/api/ai/stream', { withCredentials: true });
       eventSource.onmessage = (e) => param.onmessage(e, eventSource);
       eventSource.onerror = (e) => param.onerror(e, eventSource);
