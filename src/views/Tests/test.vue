@@ -3,6 +3,7 @@
     <div class="panel">
       <div class="chatList" style="min-height: 200px;">
         <div >
+          <p>赤子英金大模型内部测试版</p>
           <template v-for="(item,i) in chatList" class="chatList">
             <p class="user" v-if="item.role == 'user'">{{ item.content }}</p>
             <p class="assistant" v-if="item.role == 'assistant'">{{ item.content }}</p>
@@ -39,8 +40,7 @@ import { onActivated, onMounted, ref } from "vue"
 import Auth from "../../utils/auth";
 import { ElInput,ElButton,ElMessage } from "element-plus"; 
 const messages = ref([]);
-const chatList = ref([
-]);
+const chatList = ref([]);
 const input = ref("你好");
 const chatID = ref("")
 const loading = ref(true)
