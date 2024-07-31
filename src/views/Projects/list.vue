@@ -6,10 +6,10 @@
           <div class="icon"><form-one theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>
           <div class="title">我参与的项目</div>
         </div>
-        <div class="panel" v-show="loading">
+        <div class="panel" v-if="loading">
           <el-skeleton animated :rows="5" />
         </div>
-        <div class="panel" v-show="!loading && projectList.length==0">
+        <div class="panel" v-if="!loading && projectList.length==0">
           <el-empty :image-size="150" >
             <template #description>
               <p>没有参与的项目</p>
@@ -21,7 +21,7 @@
             </template>
           </el-empty>
         </div>
-        <div class="panel" v-show="!loading && projectList.length>0" v-for="project in projectList">
+        <div class="panel" v-if="!loading && projectList.length>0" v-for="project in projectList">
           <div class="commonHeader">
             <div class="title">
               <WaterfallsH class="icon" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>

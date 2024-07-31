@@ -16,10 +16,10 @@
     </div>
   </div>
   <div class="commonPage">
-    <div class="panel" v-show="loading">
+    <div class="panel" v-if="loading">
       <el-skeleton animated :rows="5" />
     </div>
-    <div class="panel" v-show="!loading" >
+    <div class="panel" v-if="!loading" >
       <div class="_header">
         <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
         <div class="title">基本信息</div>

@@ -1,10 +1,10 @@
 <template>
 
   <div class="commonPage">
-    <div class="panel" v-show="loading">
+    <div class="panel" v-if="loading">
       <el-skeleton animated :rows="5" />
     </div>
-    <div class="container row" v-show="!loading">
+    <div class="container row" v-if="!loading">
       <div class="col-md-12 col-lg-8">
         <div class="panel">
           <div class="_header">

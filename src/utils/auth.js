@@ -129,11 +129,6 @@ class Auth {
         Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(data.content.expires) });
         return data.content;
       },
-      // failed: async (response,code) => {
-      //   if(code<2 && response.status === 401)
-      //     return { status: 'invalid', content: response };
-      //   else return { status: 'error', content: response };
-      // }
     });
   }
   static async createTeam(param) {
@@ -165,6 +160,37 @@ class Auth {
   }
   static async getUserInfo(param={}) {
     return this.basicAuth('/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
+  }
+
+
+  /* 实验性功能 */
+  static async chatWithAI(list,param){
+    const res = await this.basicAuth('/api/ai/send', JSON.stringify({ content:JSON.stringify(list) }) );
+    if(res.status==='sus' && res.content == 'sus'){
+      const eventSource = new EventSource('/api/ai/stream', { withCredentials: true });
+      eventSource.onmessage = param.onmessage
+    
+      // 错误处理
+      eventSource.onerror = (error) => {
+        if (error.eventPhase === EventSource.CLOSED) {
+          console.error('EventSource connection closed:', error);
+        }
+        eventSource.close();
+      };
+    
+      // eventSource.onmessage = (event,eventSource) => {
+      //   param.onmessage(event,eventSource)
+      // }
+      // eventSource.onerror = (event) => {
+      //   // param.onerror(event)
+      //   eventSource.close()
+      // }
+      // eventSource.onopen = (event) => {
+      //   // param.onopen(event)      
+      // }
+      // Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(res.content.expires) });
+    }
+
   }
 }
 

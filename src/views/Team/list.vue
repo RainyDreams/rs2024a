@@ -6,10 +6,10 @@
           <div class="icon"><address-book theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>
           <div class="title">团队列表</div>
         </div>
-        <div class="panel" v-show="loading">
+        <div class="panel" v-if="loading">
           <el-skeleton animated :rows="5" />
         </div>
-        <div class="panel" v-show="!loading && teamList.length==0">
+        <div class="panel" v-if="!loading && teamList.length==0">
           <el-empty :image-size="150" >
             <template #description>
               <p>没有加入团队</p>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </div>
-        <!-- <div class="panel" v-show="!loading && teamList.length>0" v-for="(item,i) in teamList">
+        <!-- <div class="panel" v-if="!loading && teamList.length>0" v-for="(item,i) in teamList">
           <div class="_content">
             <el-row class="listbox">
               <el-col :span="12">
@@ -68,7 +68,7 @@
           </div>
         </div> -->
       </div>
-      <div v-show="!loading" class="col-sm-12 col-md-12 col-lg-12 col-xxl-4 ">
+      <div v-if="!loading" class="col-sm-12 col-md-12 col-lg-12 col-xxl-4 ">
         <div class="stikyPanel">
           <div class="big_header">
             <div class="icon"><Order theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>

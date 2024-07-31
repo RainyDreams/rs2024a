@@ -22,8 +22,8 @@
         </div>
         <div class="m navMenu" @click="bindShowMenu()">
           <img src="/logo.svg" alt="赤子英金协作系统">
-          <MenuFoldOne theme="outline" size="22" fill="#5F6388" v-show="!showMenu"/>
-          <MenuUnfoldOne theme="outline" size="22" fill="#5F6388" v-show="showMenu"/>
+          <MenuFoldOne theme="outline" size="22" fill="#5F6388" v-if="!showMenu"/>
+          <MenuUnfoldOne theme="outline" size="22" fill="#5F6388" v-if="showMenu"/>
         </div>
         <div class="btns">
           <div class="btn">
