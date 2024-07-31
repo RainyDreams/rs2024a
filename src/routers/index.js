@@ -20,7 +20,7 @@ import AboutInfo from '../views/About/info.vue';
 import AboutProgress from '../views/About/progress.vue';
 import AboutLog from '../views/About/log.vue';
 
-
+import DangerView from '../views/Tests/admin.vue'
 import Test from '../views/Tests/test.vue';
 import Error404 from '../views/Errors/404.vue';
 const router = createRouter({
@@ -54,6 +54,7 @@ const router = createRouter({
     ] },
     { path: "/settings/", name: "Settings", component: SettingsIndex },
     { path: "/test", name: "Tests", component: Test },
+    { path: "/danger/view", name: "DangerView", component: DangerView },
     
     { path: "/:catchAll(.*)", name: "NotFound", component: Error404 },
   ]

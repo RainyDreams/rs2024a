@@ -34,7 +34,7 @@
     </div>
   </div>
 </template>
-<style scoped>
+<style >
 .aichat{
   background-color: transparent !important;
   padding: 0px !important;
@@ -128,9 +128,9 @@ import { ElInput,ElButton,ElMessage,ElAvatar } from "element-plus";
 const messages = ref([]);
 const chatList = ref([]);
 const input = ref("你好");
-const chatID = ref("")
-const loading = ref(true)
-const send = async ()=>{
+const chatID = ref("");
+const loading = ref(true);
+const send = async (param)=>{
   if(input.value == '') {
     ElMessage.warning("请输入内容")
     return;
@@ -150,10 +150,10 @@ const send = async ()=>{
   },500)
 
   const index = chatList.value.length - 1;
+  const fingerprint = await Auth.getUserFingerprint()
   await Auth.chatWithAI(chatList.value,{
+    fingerprint:fingerprint,
     onmessage:(event,source) => {
-      // debugger;
-      // console.log(event.data,event.data == '[DONE]')
       if(event.data != '[DONE]'){
         chatList.value[index].content+=JSON.parse(event.data).response;
         document.getElementsByClassName('routerpage')[0].scrollTop=document.getElementsByClassName('routerpage')[0].scrollHeight
@@ -173,8 +173,8 @@ onMounted(async ()=>{
   // loading.value = false;
   ElMessage.info('正在尝试使用访客身份登录，请稍等');
   await Auth.init()
-  await send()
-  // chatID.value = await Auth.getChatID(
-  // chatID.value = await Auth.getChatID();
+  // const fingerprint = await Auth.getUserFingerprint()
+  await send({fingerprint})
+  // console.log(Fingerprint)
 })
 </script>

@@ -1,6 +1,7 @@
 /*
 
 */
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 function copyText(text) {
   // 创建一个临时的文本输入元素
   const textarea = document.createElement('textarea');
@@ -72,10 +73,11 @@ const defaultFailed = async (response,code) => {
 }
 class Auth {
   static async init(){
-    // if ((await this.getPrtoken()).status == 'invalid') {
-    const res = await this.guestLogin()
-    if(res.status == 'sus'){
-      ElMessage.success('以访客身份登录成功');
+    if ((await this.getPrtoken()).status == 'invalid') {
+      const res = await this.guestLogin()
+      if(res.status == 'sus'){
+        ElMessage.success('以访客身份登录成功');
+      }
     }
   }
   static async basicAuth(url=BASICURL, body='', {
@@ -177,20 +179,22 @@ class Auth {
 
   /* 实验性功能 */
   static async chatWithAI(list,param){
-    const res = await this.basicAuth('/api/ai/send', JSON.stringify({ content:JSON.stringify(list) }) );
+    const res = await this.basicAuth('/api/ai/send', JSON.stringify({ content:JSON.stringify(list),vf:param.fingerprint }) );
     if(res.status==='sus'){
       const eventSource = new EventSource('/api/ai/stream', { withCredentials: true });
       eventSource.onmessage = (e) => param.onmessage(e, eventSource);
       eventSource.onerror = (e) => param.onerror(e, eventSource);
-      //   // if (error.eventPhase === EventSource.CLOSED) {
-      //   //   console.error('EventSource connection closed:', error);
-      //   // }
-      //   // debugger;
-      //   // param.onerror(error, eventSource);
-      //   // eventSource.close();
-      // }
     }
-
+  }
+  static async getAIGuestList(){
+    await this.getPrtoken()
+    return this.basicAuth('/api/danger/viewAIGuest', );
+  }
+  static async getUserFingerprint() {
+    const fp = await FingerprintJS.load()
+    const result = await fp.get()
+    const visitorId = result.visitorId;
+    return visitorId
   }
 }
 
