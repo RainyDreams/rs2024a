@@ -25,7 +25,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async (response,code) => {
   if (response.status === 401) {
-    ElMessage.error('你没有认证权限');
+    await Auth.getPrtoken()
+    // ElMessage.error('网络错误，请重试');
     return { status: 'invalid', content: response };
   } else {
     ElMessage.error('服务器错误');
@@ -75,10 +76,11 @@ const defaultFailed = async (response,code) => {
 class Auth {
   static async init(){
     if ((await this.getPrtoken()).status == 'invalid') {
-      ElMessage.error('未登录，即将跳转登录页面');
-      setTimeout(()=>{
-        window.location.href = LOGINURL+'?url=' + encodeURI(window.location.href);
-      },500)
+      await this.guestLogin()
+      ElMessage.success('以访客身份登录成功');
+      // setTimeout(()=>{
+      //   window.location.href = LOGINURL+'?url=' + encodeURI(window.location.href);
+      // },500)
     }
   }
   static async basicAuth(url=BASICURL, body='', {
@@ -108,6 +110,19 @@ class Auth {
       }
     } catch(error) {
       return await failed(error,2) ;
+    }
+  }
+
+  static async guestLogin(param) {
+    const res = await this.basicAuth('/api/login', JSON.stringify({
+      username:'guest',
+      password:'34E20B52F5BD120DB806E57E27F47ED0'
+    }));
+    if (res.status == 'sus') {
+      const rt = await this.getPrtoken();
+      return rt
+    } else {
+      ElMessage.error('以访客身份登录：失败');
     }
   }
 
@@ -169,8 +184,6 @@ class Auth {
     if(res.status==='sus' && res.content == 'sus'){
       const eventSource = new EventSource('/api/ai/stream', { withCredentials: true });
       eventSource.onmessage = param.onmessage
-    
-      // 错误处理
       eventSource.onerror = (error) => {
         if (error.eventPhase === EventSource.CLOSED) {
           console.error('EventSource connection closed:', error);

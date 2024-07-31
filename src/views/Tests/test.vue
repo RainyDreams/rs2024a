@@ -3,7 +3,8 @@
     <div class="panel">
       <div class="chatList" style="min-height: 200px;">
         <div >
-          <p>赤子英金大模型内部测试版</p>
+          <p>赤子英金大模型公测</p>
+          <p>今天为了更好的测试，全量开放，所有人都可以访问。请及时反应使用大模型遇到的问题，方便我们改进。</p>
           <template v-for="(item,i) in chatList" class="chatList">
             <p class="user" v-if="item.role == 'user'">{{ item.content }}</p>
             <p class="assistant" v-if="item.role == 'assistant'">{{ item.content }}</p>
