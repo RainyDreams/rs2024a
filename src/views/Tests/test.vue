@@ -63,14 +63,19 @@ const send = async ()=>{
   const index = chatList.value.length - 1;
   await Auth.chatWithAI(chatList.value,{
     onmessage:(event,source) => {
-      console.log(event.data,event.data == '[DONE]')
+      // debugger;
+      // console.log(event.data,event.data == '[DONE]')
       if(event.data != '[DONE]'){
         chatList.value[index].content+=JSON.parse(event.data).response;
       } else {
         source.close();
+        loading.value = false;
       }
-      loading.value = false;
     },
+    onerror: (event,source)=>{
+      source.close();
+      loading.value = false;
+    }
   })
 }
 onMounted(async ()=>{

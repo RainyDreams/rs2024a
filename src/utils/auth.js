@@ -25,18 +25,15 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async (response,code) => {
   if (response.status === 401) {
-    await Auth.getPrtoken()
-    // ElMessage.error('网络错误，请重试');
+    return await Auth.getPrtoken('try')
     return { status: 'invalid', content: response };
   } else {
     ElMessage.error('服务器错误');
     console.dir(response)
-
     try{
       if(code==2)
         throw response;
       let text = (await response.text());
- 
       throw new Error(response.url+"<br/>" + text)
     } catch (err){
       // console.error(err.stack)
@@ -75,12 +72,10 @@ const defaultFailed = async (response,code) => {
 }
 class Auth {
   static async init(){
-    if ((await this.getPrtoken()).status == 'invalid') {
-      await this.guestLogin()
+    // if ((await this.getPrtoken()).status == 'invalid') {
+    const res = await this.guestLogin()
+    if(res.status == 'sus'){
       ElMessage.success('以访客身份登录成功');
-      // setTimeout(()=>{
-      //   window.location.href = LOGINURL+'?url=' + encodeURI(window.location.href);
-      // },500)
     }
   }
   static async basicAuth(url=BASICURL, body='', {
@@ -114,15 +109,13 @@ class Auth {
   }
 
   static async guestLogin(param) {
-    const res = await this.basicAuth('/api/login', JSON.stringify({
-      username:'guest',
-      password:'34E20B52F5BD120DB806E57E27F47ED0'
-    }));
+    const res = await this.basicAuth('/api/guestlogin', JSON.stringify({username:'guest'}));
     if (res.status == 'sus') {
       const rt = await this.getPrtoken();
       return rt
     } else {
       ElMessage.error('以访客身份登录：失败');
+      return { status: 'error', content: res.content };
     }
   }
 
@@ -134,7 +127,7 @@ class Auth {
     return this.basicAuth('/api/reportErrlog', content);
   }
 
-  static async getPrtoken() {
+  static async getPrtoken(mode) {
     console.log(Cookies.get('czigauth'))
     if (Cookies.get('czigauth')) {
       return { status: 'exist', content: Cookies.get('czigauth') };
@@ -144,6 +137,10 @@ class Auth {
         Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(data.content.expires) });
         return data.content;
       },
+      failed: mode!=='try' ? defaultFailed : async (response, type) => {
+        ElMessage.error('网络错误，请重试');
+        return { status: 'error', content: response };
+      }
     });
   }
   static async createTeam(param) {
@@ -183,25 +180,15 @@ class Auth {
     const res = await this.basicAuth('/api/ai/send', JSON.stringify({ content:JSON.stringify(list) }) );
     if(res.status==='sus' && res.content == 'sus'){
       const eventSource = new EventSource('/api/ai/stream', { withCredentials: true });
-      eventSource.onmessage = param.onmessage
-      eventSource.onerror = (error) => {
-        if (error.eventPhase === EventSource.CLOSED) {
-          console.error('EventSource connection closed:', error);
-        }
-        eventSource.close();
-      };
-    
-      // eventSource.onmessage = (event,eventSource) => {
-      //   param.onmessage(event,eventSource)
+      eventSource.onmessage = (e) => param.onmessage(e, eventSource);
+      eventSource.onerror = (e) => param.onerror(e, eventSource);
+      //   // if (error.eventPhase === EventSource.CLOSED) {
+      //   //   console.error('EventSource connection closed:', error);
+      //   // }
+      //   // debugger;
+      //   // param.onerror(error, eventSource);
+      //   // eventSource.close();
       // }
-      // eventSource.onerror = (event) => {
-      //   // param.onerror(event)
-      //   eventSource.close()
-      // }
-      // eventSource.onopen = (event) => {
-      //   // param.onopen(event)      
-      // }
-      // Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(res.content.expires) });
     }
 
   }
