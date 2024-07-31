@@ -12,9 +12,11 @@
           
         </div>
       </div>
-      <div class="input" style="display: flex;">
-        <el-input v-model="input" :disabled="loading"></el-input>
-        <el-button @click="send()" :loading="loading">发送</el-button>
+      <div class="input" style="display: flex;" >
+        <!-- <el-form-item> -->
+          <el-input v-model="input" :disabled="loading"></el-input>
+          <el-button @click="send()" :loading="loading">发送</el-button>
+        <!-- </el-form-item> -->
       </div>
     </div>
   </div>
@@ -26,6 +28,8 @@
 .chatList p{
   margin-bottom: 6px;
   font-size: 14px;
+  line-height: 1.45em;
+  color:#3c3e55;
 }
 .user::before{
   content: "用户：";
@@ -39,7 +43,7 @@
 <script setup>
 import { onActivated, onMounted, ref } from "vue"
 import Auth from "../../utils/auth";
-import { ElInput,ElButton,ElMessage } from "element-plus"; 
+import { ElInput,ElButton,ElMessage,ElForm } from "element-plus"; 
 const messages = ref([]);
 const chatList = ref([]);
 const input = ref("你好");
