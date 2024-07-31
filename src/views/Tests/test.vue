@@ -84,6 +84,7 @@ const send = async ()=>{
 }
 onMounted(async ()=>{
   // loading.value = false;
+  await Auth.init()
   await send()
   // chatID.value = await Auth.getChatID(
   // chatID.value = await Auth.getChatID();

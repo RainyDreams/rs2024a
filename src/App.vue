@@ -68,7 +68,6 @@
 
 <script setup>
 
-Auth.init()
 
 
 {console.log('%cRS2024-A%c\n%c赤峰二中2023级12班2024年研究性学习项目\r%c\n2024-07-25雨窗',
