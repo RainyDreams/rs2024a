@@ -69,7 +69,7 @@ import dayjs from 'dayjs';
 const _list = ref([])
 const paginatedList = ref([])
 const totalItems = ref(0)
-const pageSize = ref(10)
+const pageSize = ref(100)
 const currentPage = ref(1)
 const sortState = ref({
   key: 'time',
