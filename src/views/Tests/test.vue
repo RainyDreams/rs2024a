@@ -49,7 +49,7 @@
           @blur="onBlur"
           @keyup="onChange"
           @change="onChange"
-          placeholder="来和我聊天吧，你可以试着说 你好👋"
+          :placeholder="placeholder"
         ></el-input>
         <div class="_number">
           <span>{{ now }} / 1000</span>
@@ -76,6 +76,7 @@ import { throttle } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark } from "element-plus"; 
 const chatList = ref([]);
 const input = ref("");
+const placeholder = ref("来和我聊天吧，你可以试着说 你好👋");
 const loading = ref(true);
 const ainput = ref()
 const now = ref(0)
@@ -109,7 +110,8 @@ const send = async (param)=>{
     role: "assistant",
     content: ""
   })
-  input.value = ''
+  input.value = '';
+  placeholder.value = "正在回复中...";
   setTimeout(()=>{
     throttledScrollToBottom()
   },100)
@@ -122,6 +124,7 @@ const send = async (param)=>{
       if(event.data != '[DONE]'){
         chatList.value[index].content+=JSON.parse(event.data).response;
         throttledScrollToBottom()
+        placeholder.value = "还有什么想聊的";
       } else {
         source.close();
         loading.value = false;

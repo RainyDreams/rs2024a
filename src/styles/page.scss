@@ -1,3 +1,13 @@
+body{
+  --system--height:100vh;
+  overflow: hidden;
+}
+#app{
+  height:100vh !important;
+  padding-bottom: calc(100vh - var(--system--height)) !important;
+  background-color: rgba(226, 240, 254);
+  background-image: linear-gradient(to right bottom, rgb(244, 245, 231), rgb(215, 234, 253));
+}
 .commonPage{
   padding-top: 24px;
   padding-left: 16px;
@@ -491,10 +501,11 @@ a{
   // display: flex;
   // flex-direction: column;
   // height: 100%;
-  // overflow-y: auto;
-  // overflow-x: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   // transition: height 0.25s ease-in;
-  // scroll-behavior: smooth;
+  scroll-behavior: smooth;
+  max-height: 100%;
   flex: 1 1 0;
   &::-webkit-scrollbar {
     width:0;
