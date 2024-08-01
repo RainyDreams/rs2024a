@@ -368,6 +368,25 @@
     animation: 0.75s ease infinite spinner-grow;
     background-color: rgba(34, 98, 251, 0.5);
   }
+  .user{
+    display: flex;
+    margin-bottom: 24px;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .assistant{
+    display: flex;
+    margin-bottom: 24px;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .system{
+    display: flex;
+    margin-bottom: 24px;
+    align-items: flex-start;
+    width: 100%;
+  }
   
   .i-loading::before {
     content: 'loading';
@@ -391,58 +410,77 @@
       transform: none;
     }
   }
+  .chatList .system .el-avatar{
+    --el-avatar-bg-color:rgba(144, 77, 245,0.95) !important;
+    backdrop-filter: blur(8px);
+    margin-right:10px;
+  }
   .chatList .user .el-avatar{
     --el-avatar-bg-color:rgba(63, 124, 255, 0.95) !important;
     backdrop-filter: blur(8px);
+    margin-left: 10px;
   }
   .chatList .assistant .el-avatar{
     --el-avatar-bg-color:rgba(144, 77, 245,0.95) !important;
     backdrop-filter: blur(8px);
+    margin-right:10px;
   }
   .chatList{
-    padding-bottom: 16px;
+    // padding-bottom: 16px;
+    &>div>div{
+      width: calc(100% - 50px);
+    }
   }
   .chatList .chatcontent{
-    margin-bottom: 6px;
     font-size: 14px;
     line-height: 1.45em;
     color:#3c3e55;
     padding:16px;
     background-color: #fffd;
     border-radius: 12px;
-    margin-top:10px;
-    margin-bottom: 18px;
     min-height: 44.3px;
-  }
-  .chatList .chatcontent h1{
-    line-height: 1.45em;
-    font-size: 24px;
-    margin-top: 4px;
-    margin-bottom: 8px;
-  }
-  .chatList .chatcontent h2{
-    line-height: 1.45em;
-    font-size: 20px;
-    margin-top: 4px;
-    margin-bottom: 8px;
-  }
-  .chatList .chatcontent h3{
-    line-height: 1.45em;
-    font-size: 16px;
-    margin-top: 4px;
-    margin-bottom: 8px;
-  }
-  .chatList .chatcontent h4{
-    line-height: 1.45em;
-    font-size: 14px;
-    margin-top: 4px;
-    margin-bottom: 8px;
+    h1{
+      line-height: 1.45em;
+      font-size: 24px;
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    h2{
+      line-height: 1.45em;
+      font-size: 20px;
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    h3{
+      line-height: 1.45em;
+      font-size: 16px;
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    h4{
+      line-height: 1.45em;
+      font-size: 14px;
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    ol,ul{
+      padding-left: 8px;
+      border-left: 2px solid #ededed;
+    }
+    li{
+      margin-bottom: 6px;
+    }
+    p{
+      margin-bottom: 6px;
+    }
   }
 }
 .scroll{
   overflow-y: auto;
   overflow-x: hidden;
   transition: height 0.25s ease-in;
+  scroll-behavior: smooth;
+  
 }
 .ainput{
   padding-top:12px;

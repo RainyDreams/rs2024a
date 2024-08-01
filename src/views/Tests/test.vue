@@ -2,24 +2,27 @@
   <div class="commonPage" style="height:calc(100vh - 60px)">  
     <div class="scroll" :style="{height:height}">
       <div class="row" >
-        <div class="col-12 col-sm-12 col-md-6">
+        <div class="col-12 col-sm-12 col-md-6" style="margin-bottom: 0;">
           <div class="panel aichat " >
             <div class="chatList" style="min-height: 200px;">
-              <div class="chatcontent" style="font-size: 12px;">
-                <p>赤子英金大模型公测 编译版本20240801_1455</p>
-                <p>为了更好的测试，全量开放，所有人都可以访问。请及时反应使用大模型遇到的问题，方便我们改进。</p>
-                <p>大模型可能存在不准确信息</p>
+              <div class="system">
+                <el-avatar>小英</el-avatar>
+                <div class="chatcontent" style="font-size: 12px;">
+                  <p>赤子英金大模型公测 编译版本20240801_1455</p>
+                  <p>为了更好的测试，全量开放，所有人都可以访问。请及时反应使用大模型遇到的问题，方便我们改进。未来我们会将大模型融入到我们的产品中。</p>
+                  <p>* 大模型可能存在不准确信息，仅供参考学习。</p>
+                </div>
               </div>
               <template v-for="(item,i) in chatList" class="chatList">
                 <div class="user" v-if="item.role == 'user'">
                   <el-avatar>你</el-avatar>
-                  <el-watermark :font="font" :gap="[30,0]" :rotate="-12" :content="['用户文本', fingerprint]">
+                  <el-watermark :font="font" :gap="[0,0]" :rotate="-12" :content="['用户文本 用户文本 用户文本', fingerprint]">
                     <div class="chatcontent" v-html="md.render(item.content)"></div>
                   </el-watermark>
                 </div>
                 <div class="assistant" v-if="item.role == 'assistant'">
                   <el-avatar>小英</el-avatar>
-                  <el-watermark :font="font" :gap="[30,0]" :rotate="-12" :content="['赤子英金大模型', fingerprint]">
+                  <el-watermark :font="font" :gap="[0,0]" :rotate="-12" :content="['公测 赤子英金大模型 公测', fingerprint]">
                     <div class="chatcontent" v-html="md.render(item.content)"></div>
                   </el-watermark>
                 </div>
@@ -92,6 +95,9 @@ const onChange = () => {
   now.value = input.value.length
   height.value = `calc(100% - ${ainput.value.offsetHeight}px)`
 }
+const scrollToBottom = ()=>{
+  document.getElementsByClassName('scroll')[0].scrollTop=document.getElementsByClassName('scroll')[0].scrollHeight
+}
 const send = async (param)=>{
   if(input.value == '') {
     ElMessage.warning("请输入内容")
@@ -108,8 +114,8 @@ const send = async (param)=>{
   })
   input.value = ''
   setTimeout(()=>{
-    document.getElementsByClassName('routerpage')[0].scrollTop=document.getElementsByClassName('routerpage')[0].scrollHeight
-  },500)
+    scrollToBottom()
+  },100)
 
   const index = chatList.value.length - 1;
   fingerprint.value = await Auth.getUserFingerprint()
@@ -118,11 +124,11 @@ const send = async (param)=>{
     onmessage:(event,source) => {
       if(event.data != '[DONE]'){
         chatList.value[index].content+=JSON.parse(event.data).response;
-        document.getElementsByClassName('routerpage')[0].scrollTop=document.getElementsByClassName('routerpage')[0].scrollHeight
+        scrollToBottom()
       } else {
         source.close();
         loading.value = false;
-        document.getElementsByClassName('routerpage')[0].scrollTop=document.getElementsByClassName('routerpage')[0].scrollHeight
+        scrollToBottom()
       }
     },
     onerror: (event,source)=>{
