@@ -41,7 +41,7 @@ const profile = ref({
 })
 const loading = ref(true)
 onActivated(async ()=>{
-  await Auth.getPrtoken();
+  // // await // Auth.getPrtoken();
   const res = await Auth.getUserInfo();
   profile.value = res.content;
   loading.value=false;

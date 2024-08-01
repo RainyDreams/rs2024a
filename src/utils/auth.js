@@ -25,8 +25,17 @@ import Cookies from 'js-cookie';
 import { ElMessage, ElMessageBox } from 'element-plus'
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async (response,code) => {
+  // console.log('ss',code)
   if (response.status === 401) {
-    return await Auth.getPrtoken('try')
+    ElMessageBox.alert('登录已过期，请重新登录', '提示', {
+      confirmButtonText: '确定',
+      showCancelButton:false,
+      'show-close':false,
+      type: 'warning',
+      callback: async () => {
+        window.location.href = LOGINURL+'?url='+encodeURIComponent(window.location.href)
+      }
+    })
     return { status: 'invalid', content: response };
   } else {
     ElMessage.error('服务器错误');
@@ -141,50 +150,61 @@ class Auth {
         Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(data.content.expires) });
         return data.content;
       },
-      failed: mode!=='try' ? defaultFailed : async (response, type) => {
-        if (response.status === 401) {
-          return { status: 'invalid', content: response };
-        } else {
-          // ElMessage.error('网络错误，请重试');
-          return { status: 'error', content: response };
-        }
-      }
+      // failed: mode!=='try' ? defaultFailed : async (response, type) => {
+      //   if (response.status === 401) {
+      //     return { status: 'invalid', content: response };
+      //   } else {
+      //     // ElMessage.error('网络错误，请重试');
+      //     return { status: 'error', content: response };
+      //   }
+      // }
     });
   }
   static async createTeam(param) {
+    await this.getPrtoken();
     return this.basicAuth('/api/createTeam', JSON.stringify({ name:param.name,desc:param.desc }), );
   }
   static async getTeamInfo(param={}) {
+    await this.getPrtoken();
     return this.basicAuth('/api/teamInfo', JSON.stringify({ uid: param.uid||'', pid: param.pid }), );
   }
   static async getTeamList(param={}){
+    await this.getPrtoken();
     return this.basicAuth('/api/teamList', JSON.stringify({ uid: param.uid||'' }), );
   }
   static async getJoinedTeamList(param={}){
+    await this.getPrtoken();
     return this.basicAuth('/api/joinedTeamList', JSON.stringify({ uid: param.uid||'' }), )
   }
   static async getDashboard(){
+    await this.getPrtoken();
     return this.basicAuth('/api/dashboard', '', )
   }
   static async createProject(param) {
+    await this.getPrtoken();
     return this.basicAuth('/api/createProject', JSON.stringify({ ...param }));
   }
   static async getProjectDetail(param={}) {
+    await this.getPrtoken();
     return this.basicAuth('/api/projectDetail', JSON.stringify({ projectid: param.id }), );
   }
   static async getProjectList(param={}) {
+    await this.getPrtoken();
     return this.basicAuth('/api/projectList', JSON.stringify({ uid: param.uid||'' }), );
   }
   static async getJoinedProjectList(param={}) {
+    await this.getPrtoken();
     return this.basicAuth('/api/joinedProjectList', JSON.stringify({ uid: param.uid||'' }), )
   }
   static async getUserInfo(param={}) {
+    await this.getPrtoken();
     return this.basicAuth('/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
   }
 
 
   /* 实验性功能 */
   static async chatWithAI(list,param){
+    await this.getPrtoken();
     const res = await this.basicAuth('/api/ai/send', JSON.stringify({ content:JSON.stringify(list),vf:param.fingerprint }) );
     if(res.status==='sus'){
       const eventSource = new EventSource('/api/ai/stream', { withCredentials: true });

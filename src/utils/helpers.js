@@ -16,7 +16,6 @@ export function dateDiff(fd, sd) {
  * @returns 
  */
 export function getDateDiff(dt) {
-  // debugger;
   let now = new Date();
   let nowDay = now.getDay();
   let nowDate = now.getDate();
@@ -30,19 +29,7 @@ export function getDateDiff(dt) {
   let dateYear = date.getFullYear();
   let dateStr = dateYear + "-" + dateMonth + "-" + dateDate;
   let dateDiffRst = dateDiff(nowStr, dateStr);
-  // if (dateDiffRst === 0) {
-  //   return { str: '今天', show: true };
-  // } else if (dateDiffRst === 1) {
-  //   return { str: '明天', show: true };
-  // } else if (dateDiffRst === 2) {
-  //   return { str: '后天', show: true };
-  // } else if (dateDiffRst === -1) {
-  //   return { str: '昨天', show: true };
-  // } else if (dateDiffRst === -2) {
-  //   return { str: '前天', show: true };
-  // } else {
-    return { str: dateStr, show: false };
-  // }
+  return { str: dateStr, show: false };
 }
 
 /**
@@ -58,4 +45,36 @@ export function getRole(role){
     'member': '普通成员'
   }
   return roleMap[role] || '未知角色'
+}
+
+/**
+ * Description
+ * @param {any} func
+ * @param {any} wait
+ * @returns {any}
+ */
+export function throttle(func, wait) {
+  let timeout;
+  let previous = 0;
+  const later = function () {
+    previous = +new Date();
+    timeout = null;
+    return func.apply(this, arguments);
+  };
+  return function () {
+    const now = +new Date();
+    if (!previous) previous = now;
+    const remaining = wait - (now - previous);
+
+    if (remaining <= 0) {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+      previous = now;
+      func.apply(this, arguments);
+    } else if (!timeout) {
+      timeout = setTimeout(later, remaining);
+    }
+  };
 }

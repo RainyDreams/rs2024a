@@ -107,7 +107,7 @@ function toCreate(type){
   router.push(`/projects/detail-create/${type}/${projectId}`)
 }
 onActivated(async ()=>{
-  await Auth.getPrtoken();
+  // await // Auth.getPrtoken();
   const res = await Auth.getProjectDetail({id:projectId})
   console.log(res)
   if(res.status == 'sus'){

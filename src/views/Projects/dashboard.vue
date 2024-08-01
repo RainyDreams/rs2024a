@@ -63,7 +63,7 @@ import Auth from '../../utils/auth';
 const dashboardList = ref([]);
 const loading = ref(true)
 onMounted(async ()=>{
-  await Auth.getPrtoken();
+  // await // Auth.getPrtoken();
   // const dashboardList = (await Auth.getDashboard()).content;
   // loading.value = false
 

@@ -74,7 +74,7 @@ const loading = ref(true);
 const activeNames = '1'
 const router = useRouter();
 onActivated(async ()=>{
-  await Auth.getPrtoken();
+  // await // Auth.getPrtoken();
   const res = await Auth.getJoinedProjectList();
   // projectList.value = res.content
   // debugger

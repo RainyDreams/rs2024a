@@ -97,7 +97,7 @@ const submitForm = (formEl) => {
   formloading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
-      const prtoken = await Auth.getPrtoken();
+      // const prtoken = // await // Auth.getPrtoken();
       const createTeam = await Auth.createTeam({
         name:form.name,
         desc:form.desc

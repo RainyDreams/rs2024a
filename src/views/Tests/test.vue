@@ -1,5 +1,5 @@
 <template>
-  <div class="commonPage" style="height:calc(100vh - 60px);display: flex;flex-direction: column;">  
+  <div class="commonPage" style="height:calc(var(--system--height) - 60px);display: flex;flex-direction: column;">  
     <div class="scroll">
       <div class="row" >
         <div class="col-12 col-lg-8" style="margin-bottom: 0;">
@@ -42,14 +42,14 @@
           type="textarea"
           resize="none"
           size="large"
-          :autofocus="true"
+          autofocus
           class="_input"
           :maxlength="1000"
           @focus="onFocus"
           @blur="onBlur"
           @keyup="onChange"
           @change="onChange"
-          placeholder="请输入内容"
+          placeholder="来和我聊天吧，你可以试着说 你好👋"
         ></el-input>
         <div class="_number">
           <span>{{ now }} / 1000</span>
@@ -72,9 +72,10 @@ import markdownIt from 'markdown-it'
 const md = new markdownIt()
 import { onActivated, onMounted, ref,reactive } from "vue"
 import Auth from "../../utils/auth";
+import { throttle } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark } from "element-plus"; 
 const chatList = ref([]);
-const input = ref("你好");
+const input = ref("");
 const loading = ref(true);
 const ainput = ref()
 const now = ref(0)
@@ -89,37 +90,11 @@ const onBlur = () => {
 const onChange = () => {
   now.value = input.value.length
 }
-function throttle(func, wait) {
-  let timeout;
-  let previous = 0;
-  const later = function () {
-    previous = +new Date();
-    timeout = null;
-    return func.apply(this, arguments);
-  };
-  return function () {
-    const now = +new Date();
-    if (!previous) previous = now;
-    const remaining = wait - (now - previous);
-
-    if (remaining <= 0) {
-      if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-      }
-      previous = now;
-      func.apply(this, arguments);
-    } else if (!timeout) {
-      timeout = setTimeout(later, remaining);
-    }
-  };
-}
 const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
   scrollElement.scrollTop = scrollElement.scrollHeight;
 };
 const throttledScrollToBottom = throttle(scrollToBottom, 300); // 调整 300 为所需的毫秒数
-
 const send = async (param)=>{
   if(input.value == '') {
     ElMessage.warning("请输入内容")
@@ -159,12 +134,13 @@ const send = async (param)=>{
     }
   })
 }
-onMounted(async ()=>{
+onActivated(async ()=>{
   // loading.value = false;
   ElMessage.info('正在尝试使用访客身份登录，请稍等');
   onChange()
   await Auth.init()
-  await send()
+  // await send()
+  loading.value = false;
   // console.log(Fingerprint)
 })
 </script>

@@ -94,7 +94,7 @@ const submitForm = (formEl) => {
  formEl.validate(async (valid) => {
     if (valid) {
       // console.log('submit!')
-      await Auth.getPrtoken();
+      // await // Auth.getPrtoken();
       const createProject = await Auth.createProject({
         name: form.name,
         desc: form.desc,
@@ -124,7 +124,7 @@ const submitForm = (formEl) => {
   })
 }
 async function remoteMethod(query) {
-  await Auth.getPrtoken();
+  // await // Auth.getPrtoken();
   const teamList  = (await Auth.getTeamList({})).content;
   options.value = teamList.map(item => {
     return {

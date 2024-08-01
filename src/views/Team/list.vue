@@ -98,7 +98,7 @@ import { getDateDiff,getRole } from "../../utils/helpers";
 const teamList = ref([]);
 const loading=ref(true)
 onActivated(async ()=>{
-  await Auth.getPrtoken();
+  // await // Auth.getPrtoken();
   teamList.value = (await Auth.getJoinedTeamList({})).content.map((item)=>{
     const mine = item.persons.find(p=>item.myId==p.id)
     return {

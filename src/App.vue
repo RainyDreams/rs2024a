@@ -87,14 +87,22 @@ const TabBarHide = ref(false);
 const isDarkMode = ref(0);
 const activeName = ref(0);
 const showMenu = ref(false)
+import { throttle } from './utils/helpers'
+const throttleResize = throttle(()=>{
+  document.body.style.setProperty('--system--height', `${window.innerHeight}px`);
+},200)
 onMounted(()=>{
   ElNotification({
     title: '提示',
     message: "如果您对本项目有任何建议或遇到任何问题，可以点击导航栏“关于软件”联系我们",
     position: 'bottom-right',
     type: 'info',
-  })
+    offset: 125, 
+  });
+  throttleResize()
 })
+// window.onresize = throttleResize()
+
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
@@ -314,11 +322,6 @@ const rightList = [
 ]
 const tabbarList = ref(configList[0].tabs);
 
-// function switchTab(i){
-//   tabbarList.value = configList[i].tabs;
-//   router.push(configList[i].tabs[0].to);
-//   activeIndex.value=i
-// }
 </script>
 
 <style lang="scss" scoped>
