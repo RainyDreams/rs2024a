@@ -53,7 +53,7 @@ const router = createRouter({
       { path: "log", name: "AboutLog", component: AboutLog }
     ] },
     { path: "/settings/", name: "Settings", component: SettingsIndex },
-    { path: "/test", name: "Tests", component: Test },
+    { path: "/test/ai", name: "Tests", component: Test },
     { path: "/danger/view", name: "DangerView", component: DangerView },
     
     { path: "/:catchAll(.*)", name: "NotFound", component: Error404 },

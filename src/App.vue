@@ -77,7 +77,7 @@ console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已�
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
 import { ref,markRaw, reactive, onMounted } from 'vue';
 import { RouterLink, RouterView,useRouter } from 'vue-router'
-import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig } from '@icon-park/vue-next';
+import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
 import { ElConfigProvider,ElAvatar,ElNotification } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
@@ -173,7 +173,8 @@ const iconList = {
   Info,
   Remind,
   DocDetail,
-  SettingConfig
+  SettingConfig,
+  Tool
 }
 function getIcon(name){
   return iconList[name];
@@ -267,6 +268,19 @@ const configList = [
         title:'更新日志',
         icon:'Info',
         to:'/about/log'
+      },
+    ]
+  },
+  {
+    name:'Test',
+    title:'实验性功能',
+    icon:'Tool',
+    to:"/test/ai",
+    tabs:[
+      {
+        title:'AI公测',
+        icon:'Tool',
+        to:'/test/ai'
       },
     ]
   },
