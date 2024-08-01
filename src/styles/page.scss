@@ -417,31 +417,37 @@ a{
     --el-avatar-bg-color:rgba(144, 77, 245,0.95) !important;
     backdrop-filter: blur(8px);
     margin-right:10px;
+    flex: 0 0 auto;
   }
   .chatList .user .el-avatar{
     --el-avatar-bg-color:rgba(63, 124, 255, 0.95) !important;
     backdrop-filter: blur(8px);
     margin-left: 10px;
+    flex: 0 0 auto;
   }
   .chatList .assistant .el-avatar{
     --el-avatar-bg-color:rgba(144, 77, 245,0.95) !important;
     backdrop-filter: blur(8px);
     margin-right:10px;
+    flex: 0 0 auto;
   }
   .chatList{
     // padding-bottom: 16px;
     &>div>div{
       width: calc(100% - 50px);
+      width: fit-content;
+      max-width: 550px;
+      // min-width: 80px;
     }
   }
   .chatList .chatcontent{
     font-size: 14px;
     line-height: 1.45em;
     color:#3c3e55;
-    padding:16px;
+    padding:10px 16px;
     background-color: #fffd;
     border-radius: 12px;
-    min-height: 44.3px;
+    min-height: 40.3px;
     h1{
       line-height: 1.45em;
       font-size: 24px;
@@ -475,21 +481,30 @@ a{
     }
     p{
       margin-bottom: 6px;
+      &:last-child{
+        margin-bottom: 0;
+      }
     }
   }
 }
 .scroll{
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: height 0.25s ease-in;
-  scroll-behavior: smooth;
+  // display: flex;
+  // flex-direction: column;
+  // height: 100%;
+  // overflow-y: auto;
+  // overflow-x: hidden;
+  // transition: height 0.25s ease-in;
+  // scroll-behavior: smooth;
+  flex: 1 1 0;
   &::-webkit-scrollbar {
     width:0;
     height:0;
   }
 }
 .ainput{
+  flex: 0 0 0;
   padding-top:12px;
+  padding-top:18px;
   width: 100%;
   z-index: 10;
   .ainput__wrapper{
@@ -505,7 +520,7 @@ a{
     transition: all 0.25s ease;
   }
   .ainput__wrapper:hover{
-    box-shadow: 0 0 0 5px rgba(144, 77, 245,0.3);
+    border:2px solid rgba(144, 77, 245,1);
   }
   .ainput__wrapper.active{
     border:2px solid rgba(144, 77, 245,1);

@@ -1,9 +1,9 @@
 <template>
-  <div class="commonPage" style="height:calc(100vh - 60px)">  
-    <div class="scroll" :style="{height:height}">
+  <div class="commonPage" style="height:calc(100vh - 60px);display: flex;flex-direction: column;">  
+    <div class="scroll">
       <div class="row" >
-        <div class="col-12 col-sm-12 col-md-6" style="margin-bottom: 0;">
-          <div class="panel aichat " >
+        <div class="col-12 col-lg-8" style="margin-bottom: 0;">
+          <div class="panel aichat" >
             <div class="chatList" style="min-height: 200px;">
               <div class="system">
                 <el-avatar>小英</el-avatar>
@@ -11,25 +11,24 @@
                   <p>赤子英金大模型公测 编译版本20240801_1455</p>
                   <p>为了更好的测试，全量开放。请及时反应使用大模型遇到的问题，方便我们改进。未来我们会将大模型融入到我们的产品中。</p>
                   <p>大服务生成的所有内容均由人工智能模型生成，其生成内容的准确性和完整性无法保证，不代表我们的态度或观点，仅供参考学习。</p>
-                  <p>使用本软件即代表同意<a href="https://www.chiziingiin.top/lincense/ai">《赤子英金大模型使用协议》</a></p>
+                  <p>使用本软件即代表同意<a target="_blank" href="https://www.chiziingiin.top/license/ai">《赤子英金大模型使用协议》</a></p>
                 </div>
               </div>
               <template v-for="(item,i) in chatList" class="chatList">
                 <div class="user" v-if="item.role == 'user'">
                   <el-avatar>你</el-avatar>
-                  <el-watermark :font="font" :gap="[0,0]" :rotate="-12" :content="['用户文本 赤子英金大模型 公测', fingerprint]">
+                  <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,0]" :rotate="-12" :content="['用户文本 赤子英金大模型 公测', fingerprint]">
                     <div class="chatcontent" v-html="md.render(item.content)"></div>
                   </el-watermark>
                 </div>
                 <div class="assistant" v-if="item.role == 'assistant'">
                   <el-avatar>小英</el-avatar>
-                  <el-watermark :font="font" :gap="[0,-12]" :rotate="-12" :content="['公测 赤子英金大模型 公测', fingerprint]">
-                    <div class="chatcontent" v-html="md.render(item.content)"></div>
+                  <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12" :content="['公测 赤子英金大模型 公测', fingerprint]">
+                    <div class="chatcontent" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
                   </el-watermark>
                 </div>
               </template>
             </div>
-            
           </div>
         </div>
       </div>
@@ -79,10 +78,6 @@ const input = ref("你好");
 const loading = ref(true);
 const ainput = ref()
 const now = ref(0)
-const font = reactive({
-  color: 'rgba(0, 0, 0, .05)',
-})
-const height = ref('0px')
 const fingerprint = ref("")
 const ainputStatus = ref(false)
 const onFocus = () => {
@@ -93,7 +88,6 @@ const onBlur = () => {
 }
 const onChange = () => {
   now.value = input.value.length
-  height.value = `calc(100% - ${ainput.value.offsetHeight}px)`
 }
 function throttle(func, wait) {
   let timeout;

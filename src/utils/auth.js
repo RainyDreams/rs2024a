@@ -73,7 +73,9 @@ const defaultFailed = async (response,code) => {
 }
 class Auth {
   static async init(){
-    if ((await this.getPrtoken()).status == 'invalid') {
+    const prStatus = (await this.getPrtoken()).status;
+    console.log(prStatus)
+    if (prStatus == 'invalid') {
       const res = await this.guestLogin()
       if(res.status == 'sus'){
         ElMessage.success('以访客身份登录成功');
@@ -140,8 +142,12 @@ class Auth {
         return data.content;
       },
       failed: mode!=='try' ? defaultFailed : async (response, type) => {
-        ElMessage.error('网络错误，请重试');
-        return { status: 'error', content: response };
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        } else {
+          // ElMessage.error('网络错误，请重试');
+          return { status: 'error', content: response };
+        }
       }
     });
   }
