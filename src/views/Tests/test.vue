@@ -11,11 +11,15 @@
           <template v-for="(item,i) in chatList" class="chatList">
             <div class="user" v-if="item.role == 'user'">
               <el-avatar>你</el-avatar>
-              <div class="chatcontent" v-html="md.render(item.content)"></div>
+              <el-watermark :font="font" :gap="[30,0]" :rotate="-12" :content="['用户文本', fingerprint]">
+                <div class="chatcontent" v-html="md.render(item.content)"></div>
+              </el-watermark>
             </div>
             <div class="assistant" v-if="item.role == 'assistant'">
               <el-avatar>小英</el-avatar>
-              <div class="chatcontent" v-html="md.render(item.content)"></div>
+              <el-watermark :font="font" :gap="[30,0]" :rotate="-12" :content="['赤子英金大模型', fingerprint]">
+                <div class="chatcontent" v-html="md.render(item.content)"></div>
+              </el-watermark>
             </div>
           </template>
         </div>
@@ -74,10 +78,12 @@
   }
 }
 .chatList .user .el-avatar{
-  --el-avatar-bg-color:rgb(63, 124, 255) !important;
+  --el-avatar-bg-color:rgba(63, 124, 255, 0.75) !important;
+  backdrop-filter: blur(8px);
 }
 .chatList .assistant .el-avatar{
-  --el-avatar-bg-color:#904df5 !important;
+  --el-avatar-bg-color:rgba(144, 77, 245,0.75) !important;
+  backdrop-filter: blur(8px);
 }
 .chatList{
   padding-bottom: 16px;
@@ -90,8 +96,8 @@
   padding:12px;
   background-color: #fffd;
   border-radius: 12px;
-  margin-top:8px;
-  margin-bottom: 12px;
+  margin-top:10px;
+  margin-bottom: 18px;
   min-height: 44.3px;
 }
 .chatList .chatcontent h1{
@@ -122,14 +128,19 @@
 <script setup>
 import markdownIt from 'markdown-it'
 const md = new markdownIt()
-import { onActivated, onMounted, ref } from "vue"
+import { onActivated, onMounted, ref,reactive } from "vue"
 import Auth from "../../utils/auth";
-import { ElInput,ElButton,ElMessage,ElAvatar } from "element-plus"; 
+import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark } from "element-plus"; 
 const messages = ref([]);
 const chatList = ref([]);
 const input = ref("你好");
 const chatID = ref("");
 const loading = ref(true);
+const font = reactive({
+  color: 'rgba(0, 0, 0, .05)',
+})
+const fingerprint = ref("")
+
 const send = async (param)=>{
   if(input.value == '') {
     ElMessage.warning("请输入内容")
@@ -150,9 +161,9 @@ const send = async (param)=>{
   },500)
 
   const index = chatList.value.length - 1;
-  const fingerprint = await Auth.getUserFingerprint()
+  fingerprint.value = await Auth.getUserFingerprint()
   await Auth.chatWithAI(chatList.value,{
-    fingerprint:fingerprint,
+    fingerprint:fingerprint.value,
     onmessage:(event,source) => {
       if(event.data != '[DONE]'){
         chatList.value[index].content+=JSON.parse(event.data).response;
