@@ -8,7 +8,7 @@
             <div class="title">创建团队</div>
           </div>
           <div class="_content">
-            <el-alert type="info" show-icon :closable="false">
+            <el-alert type="info" show-icon :closable="false"  style="margin-bottom: 16px;">
               <p>团队创建成功后会生成分享链接，可以邀请团队成员加入。</p>
             </el-alert>
             <el-form 

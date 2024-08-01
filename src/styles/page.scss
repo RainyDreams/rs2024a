@@ -153,10 +153,10 @@
       font-size: 16px;
       color:#3c3e55;
     }
-    a{
-      color:rgba(34, 98, 251, 1);
-    }
   }
+}
+a{
+  color:rgba(34, 98, 251, 1);
 }
 .interactivePage{
   display: flex;
@@ -386,6 +386,9 @@
     margin-bottom: 24px;
     align-items: flex-start;
     width: 100%;
+    p{
+      margin: 0 !important;
+    }
   }
   
   .i-loading::before {
@@ -480,7 +483,10 @@
   overflow-x: hidden;
   transition: height 0.25s ease-in;
   scroll-behavior: smooth;
-  
+  &::-webkit-scrollbar {
+    width:0;
+    height:0;
+  }
 }
 .ainput{
   padding-top:12px;

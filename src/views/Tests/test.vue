@@ -9,20 +9,21 @@
                 <el-avatar>小英</el-avatar>
                 <div class="chatcontent" style="font-size: 12px;">
                   <p>赤子英金大模型公测 编译版本20240801_1455</p>
-                  <p>为了更好的测试，全量开放，所有人都可以访问。请及时反应使用大模型遇到的问题，方便我们改进。未来我们会将大模型融入到我们的产品中。</p>
-                  <p>* 大模型可能存在不准确信息，仅供参考学习。</p>
+                  <p>为了更好的测试，全量开放。请及时反应使用大模型遇到的问题，方便我们改进。未来我们会将大模型融入到我们的产品中。</p>
+                  <p>大服务生成的所有内容均由人工智能模型生成，其生成内容的准确性和完整性无法保证，不代表我们的态度或观点，仅供参考学习。</p>
+                  <p>使用本软件即代表同意<a href="https://www.chiziingiin.top/lincense/ai">《赤子英金大模型使用协议》</a></p>
                 </div>
               </div>
               <template v-for="(item,i) in chatList" class="chatList">
                 <div class="user" v-if="item.role == 'user'">
                   <el-avatar>你</el-avatar>
-                  <el-watermark :font="font" :gap="[0,0]" :rotate="-12" :content="['用户文本 用户文本 用户文本', fingerprint]">
+                  <el-watermark :font="font" :gap="[0,0]" :rotate="-12" :content="['用户文本 赤子英金大模型 公测', fingerprint]">
                     <div class="chatcontent" v-html="md.render(item.content)"></div>
                   </el-watermark>
                 </div>
                 <div class="assistant" v-if="item.role == 'assistant'">
                   <el-avatar>小英</el-avatar>
-                  <el-watermark :font="font" :gap="[0,0]" :rotate="-12" :content="['公测 赤子英金大模型 公测', fingerprint]">
+                  <el-watermark :font="font" :gap="[0,-12]" :rotate="-12" :content="['公测 赤子英金大模型 公测', fingerprint]">
                     <div class="chatcontent" v-html="md.render(item.content)"></div>
                   </el-watermark>
                 </div>
@@ -37,30 +38,31 @@
       <div :class="`ainput__wrapper ${ainputStatus ? 'active' : ''}`">
         <el-input
           v-model="input" 
-          :disabled="loading"
+          :readonly="loading"
           :autosize="{ minRows: 1, maxRows: 3 }"
           type="textarea"
+          resize="none"
           size="large"
-          autofocus
+          :autofocus="true"
           class="_input"
           :maxlength="1000"
           @focus="onFocus"
           @blur="onBlur"
-          @keydown="onChange"
           @keyup="onChange"
+          @change="onChange"
           placeholder="请输入内容"
         ></el-input>
         <div class="_number">
           <span>{{ now }} / 1000</span>
           <el-button 
-          @click="send()" 
-          :loading="loading"
-          style="margin-top: 16px;"
-          type="primary"
-          color="rgba(144, 77, 245,1)"
-        >
-          发送
-        </el-button>
+            @click="send()" 
+            :loading="loading"
+            style="margin-top: 16px;"
+            type="primary"
+            color="rgba(144, 77, 245,1)"
+          >
+            发送
+          </el-button>
         </div>
       </div>
     </div>
@@ -72,10 +74,8 @@ const md = new markdownIt()
 import { onActivated, onMounted, ref,reactive } from "vue"
 import Auth from "../../utils/auth";
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark } from "element-plus"; 
-const messages = ref([]);
 const chatList = ref([]);
 const input = ref("你好");
-const chatID = ref("");
 const loading = ref(true);
 const ainput = ref()
 const now = ref(0)
@@ -95,9 +95,37 @@ const onChange = () => {
   now.value = input.value.length
   height.value = `calc(100% - ${ainput.value.offsetHeight}px)`
 }
-const scrollToBottom = ()=>{
-  document.getElementsByClassName('scroll')[0].scrollTop=document.getElementsByClassName('scroll')[0].scrollHeight
+function throttle(func, wait) {
+  let timeout;
+  let previous = 0;
+  const later = function () {
+    previous = +new Date();
+    timeout = null;
+    return func.apply(this, arguments);
+  };
+  return function () {
+    const now = +new Date();
+    if (!previous) previous = now;
+    const remaining = wait - (now - previous);
+
+    if (remaining <= 0) {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+      previous = now;
+      func.apply(this, arguments);
+    } else if (!timeout) {
+      timeout = setTimeout(later, remaining);
+    }
+  };
 }
+const scrollToBottom = () => {
+  const scrollElement = document.getElementsByClassName('scroll')[0];
+  scrollElement.scrollTop = scrollElement.scrollHeight;
+};
+const throttledScrollToBottom = throttle(scrollToBottom, 300); // 调整 300 为所需的毫秒数
+
 const send = async (param)=>{
   if(input.value == '') {
     ElMessage.warning("请输入内容")
@@ -114,9 +142,9 @@ const send = async (param)=>{
   })
   input.value = ''
   setTimeout(()=>{
-    scrollToBottom()
+    throttledScrollToBottom()
   },100)
-
+  onChange()
   const index = chatList.value.length - 1;
   fingerprint.value = await Auth.getUserFingerprint()
   await Auth.chatWithAI(chatList.value,{
@@ -124,11 +152,11 @@ const send = async (param)=>{
     onmessage:(event,source) => {
       if(event.data != '[DONE]'){
         chatList.value[index].content+=JSON.parse(event.data).response;
-        scrollToBottom()
+        throttledScrollToBottom()
       } else {
         source.close();
         loading.value = false;
-        scrollToBottom()
+        throttledScrollToBottom()
       }
     },
     onerror: (event,source)=>{

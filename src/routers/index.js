@@ -44,7 +44,6 @@ const router = createRouter({
     { path: "/user/", name: "User", children:[
       { path: "profile", name: "UserProfile", component: UserIndex},
       { path: "login", name: "UserLogin", component: UserLogin },
-      { path: "register", name: "UserRegister", component: UserRegister},
       { path: "settings", name: "UserSettings", component: UserSettings },
     ]},
     { path: "/about/", name: "About", children: [
@@ -52,6 +51,7 @@ const router = createRouter({
       { path: "progress", name: "AboutProgress", component: AboutProgress },
       { path: "log", name: "AboutLog", component: AboutLog }
     ] },
+    { path: "/reg", name: "UserRegister", component: UserRegister},
     { path: "/settings/", name: "Settings", component: SettingsIndex },
     { path: "/test/ai", name: "Tests", component: Test },
     { path: "/danger/view", name: "DangerView", component: DangerView },
