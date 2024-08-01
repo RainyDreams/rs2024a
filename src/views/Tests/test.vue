@@ -2,7 +2,7 @@
   <div class="commonPage" style="height:calc(var(--system--height) - 60px);display: flex;flex-direction: column;">  
     <div class="scroll">
       <div class="row" >
-        <div class="col-12 col-lg-8" style="margin-bottom: 0;">
+        <div class="col-12 col-xl-8" style="margin-bottom: 0;">
           <div class="panel aichat" >
             <div class="chatList" style="min-height: 200px;">
               <div class="system">
@@ -34,48 +34,55 @@
       </div>
     </div>
     <div class="ainput" ref="ainput">
-      <div :class="`ainput__wrapper ${ainputStatus ? 'active' : ''}`">
-        <el-input
-          v-model="input" 
-          :readonly="loading"
-          :autosize="{ minRows: 1, maxRows: 3 }"
-          type="textarea"
-          resize="none"
-          size="large"
-          autofocus
-          class="_input"
-          :maxlength="1000"
-          @focus="onFocus"
-          @blur="onBlur"
-          @keyup="onChange"
-          @change="onChange"
-          :placeholder="placeholder"
-        ></el-input>
-        <div class="_number">
-          <span>{{ now }} / 1000</span>
-          <el-button 
-            @click="send()" 
-            :loading="loading"
-            style="margin-top: 16px;"
-            type="primary"
-            color="rgba(144, 77, 245,1)"
-          >
-            发送
-          </el-button>
+      <div class="row">
+        <div class="col-12 col-xl-8">
+          <div :class="`ainput__wrapper ${ainputStatus ? 'active' : ''}`">
+            <el-input
+              ref="askRef"
+              v-model="input" 
+              :readonly="loading"
+              :autosize="{ minRows: 1, maxRows: 3 }"
+              type="textarea"
+              resize="none"
+              size="large"
+              autofocus
+              class="_input"
+              :maxlength="1000"
+              @focus="onFocus"
+              @blur="onBlur"
+              @keyup="onChange"
+              @change="onChange"
+              :placeholder="placeholder"
+            ></el-input>
+            <div class="_number">
+              <span>{{ now }} / 1000</span>
+              <el-button 
+                @click="send()" 
+                :loading="loading"
+                style="margin-top: 16px;"
+                type="primary"
+                color="rgba(144, 77, 245,1)"
+              >
+                发送
+              </el-button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import markdownIt from 'markdown-it'
-const md = new markdownIt()
+import markdownIt from 'markdown-it';
+import markdownItHighlightjs from 'markdown-it-highlightjs'
 import { onActivated, onMounted, ref,reactive } from "vue"
 import Auth from "../../utils/auth";
 import { throttle } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark } from "element-plus"; 
+const md = new markdownIt().use(markdownItHighlightjs);
 const chatList = ref([]);
 const input = ref("");
+const askRef = ref();
 const placeholder = ref("来和我聊天吧，你可以试着说 你好👋");
 const loading = ref(true);
 const ainput = ref()
@@ -125,6 +132,7 @@ const send = async (param)=>{
         chatList.value[index].content+=JSON.parse(event.data).response;
         throttledScrollToBottom()
         placeholder.value = "还有什么想聊的";
+        askRef.value.focus()
       } else {
         source.close();
         loading.value = false;
@@ -144,6 +152,8 @@ onActivated(async ()=>{
   await Auth.init()
   // await send()
   loading.value = false;
+  askRef.value.focus()
+
   // console.log(Fingerprint)
 })
 </script>

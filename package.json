@@ -28,6 +28,7 @@
     "element-plus": "^2.7.7",
     "js-cookie": "^3.0.5",
     "markdown-it": "^14.1.0",
+    "markdown-it-highlightjs": "^4.1.0",
     "mitt": "^3.0.1",
     "sass": "^1.77.8",
     "vue": "^3.4.31",

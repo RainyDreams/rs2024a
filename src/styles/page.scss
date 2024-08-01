@@ -444,9 +444,9 @@ a{
   .chatList{
     // padding-bottom: 16px;
     &>div>div{
-      width: calc(100% - 50px);
+      max-width: calc(100% - 50px - 50px);
       width: fit-content;
-      max-width: 550px;
+      // max-width: 550px;
       // min-width: 80px;
     }
   }
@@ -494,6 +494,18 @@ a{
       &:last-child{
         margin-bottom: 0;
       }
+    }
+    pre{
+      border-radius: 8px;
+      overflow: auto;
+    }
+    *:not(pre)>code{
+      background: #011627;
+      color: #d6deeb;
+      padding: 3px 5px;
+      border-radius: 5px;
+      margin-left: 2px;
+      margin-right: 2px;
     }
   }
 }
