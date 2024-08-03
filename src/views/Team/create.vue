@@ -42,9 +42,7 @@
         </div>
       </div>
     </div>
-    <el-dialog v-model="dialogTableVisible" title="请分享你的团队链接给你的成员们" width="90%" max-width="400px">
-      <el-input readonly ref="inputRef" v-model="inputValue" @click="selectAllInput" />
-    </el-dialog>
+    <input style="height: 1px;width:1px;opacity: 0;visibility: hidden;" type="text" ref="inputRef" v-model="inputValue">
   </div>
 </template>
 
@@ -52,12 +50,14 @@
 import { ref,onMounted,reactive } from 'vue'
 import { Peoples } from '@icon-park/vue-next'; 
 import Auth from "../../utils/auth.js";
-import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert,ElDialog,} from 'element-plus';
+import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert,ElDialog, ElMessageBox,} from 'element-plus';
+import { useRouter } from 'vue-router';
 const inputRef = ref(null);
 const inputValue = ref('');
 const dialogTableVisible = ref(false)
 const ruleFormRef = ref(null);
 const formloading = ref(false);
+const router = useRouter()
 const form = reactive({
   name: '',
   desc: '',
@@ -80,16 +80,14 @@ const rules = reactive({
     { required: true, message: '请选择团队可见性', trigger: 'change' }
   ]
 })
-const selectAllInput = () => {
-  if (inputRef.value) {
-    inputRef.value.select();
-  }
-};
-
 const selectAndCopy = () => {
   if (inputRef.value) {
-    inputRef.value.select();
-    document.execCommand('copy');
+    navigator.clipboard.writeText(inputRef.value.value).then(() => {
+      console.log('文本已复制到剪贴板');
+    }, (err) => {
+      inputRef.value.select();
+      document.execCommand('copy');
+    });
   }
 };
 const submitForm = (formEl) => {
@@ -104,13 +102,22 @@ const submitForm = (formEl) => {
       })
       if(createTeam.status == 'sus'){
         inputValue.value = createTeam.content.inviteurl;
-        dialogTableVisible.value = true;
         form.name = '';
         form.desc = '';
-        // localStorage.setItem('teamInfo',{teamId:createTeam.content.teamid,teamInviteurl:createTeam.content.inviteurl});
         ElMessage({
           message: '创建成功',
           type: 'success',
+        });
+        ElMessageBox.alert(`<p>请分享你的团队链接给你的成员们</p><p><b>${inputValue.value}</b></p>`, '提示', {
+          dangerouslyUseHTMLString:true,
+          confirmButtonText: '复制',
+          beforeClose: (action, instance, done) => {
+            if (action === 'confirm') {
+              debugger
+              selectAndCopy();
+              done();
+            }
+          }
         })
       } else {
         ElMessage({
@@ -118,45 +125,6 @@ const submitForm = (formEl) => {
           type: 'error',
         })
       }
-      
-      // const response = await fetch( '/api/createTeam', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     name:encodeURIComponent(form.name),
-      //     desc:encodeURIComponent(form.desc),
-      //   }),
-      // });
-      // if (response.status === 200) {
-      //   const data = await response.json();
-      //   if(data.status == 'sus'){
-      //     console.log('[team] create success',data);
-      //     inputValue.value = data.content.inviteurl;
-      //     dialogTableVisible.value = true;
-      //     form.name = '';
-      //     form.desc = '';
-      //     localStorage.setItem('teamInfo',{teamId:data.content.teamid,teamInviteurl:data.content.inviteurl});
-      //     ElMessage({
-      //       message: '创建成功！',
-      //       type: 'success',
-      //     });
-      //   } else {
-      //     console.log('[team] create error',data);
-      //     ElMessage({
-      //       message: '出现错误',
-      //       type: 'error',
-      //     });
-      //     return { status: 'error', content: data.content };
-      //   }
-      // } else {
-      //   ElMessage({
-      //     message: '出现错误',
-      //     type: 'error',
-      //   });
-      //   return { status: 'error', content: response };
-      // }
       formloading.value=false;
     } else {
       console.log('error submit!')

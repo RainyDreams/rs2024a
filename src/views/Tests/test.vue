@@ -8,7 +8,7 @@
               <div class="system">
                 <el-avatar src="/logo_sm.png">小英</el-avatar>
                 <div class="chatcontent" style="font-size:12px;">
-                  <p>赤子英金大模型公测 编译版本CzigChat-1.0-14b@20240802_1941</p>
+                  <p>赤子英金大模型公测 编译版本CzigChat-1.0-14b@202408032254</p>
                   <p>为了更好的测试，全量开放。未来我们会将大模型融入到我们的产品中。<strong>本产品由赤子英金开发和训练，未接入任何平台API，独立运行在我们的服务器上。</strong>大服务生成的所有内容均由人工智能模型生成，其生成内容的准确性和完整性无法保证，不代表我们的态度或观点，仅供参考学习。</p>
                   <p>使用本软件即代表同意<a target="_blank" href="https://www.chiziingiin.top/license/ai">《赤子英金大模型使用协议》</a>，如若大模型出现回答错误、不准确、不道德等问题请及时<a href="https://project.chiziingiin.top/system/feedback">反馈给我们</a>，方便改进。</p>
                   <p>需要注意的是：本页面为测试页面，聊天历史不会被保存。</p>
@@ -37,6 +37,7 @@
       <div class="row">
         <div class="col-12 col-xl-8">
           <div :class="`ainput__wrapper ${ainputStatus ? 'active' : ''}`">
+            <div class="clickWrapper" @click="changeFocus"></div>
             <el-input
               ref="askRef"
               v-model="input" 
@@ -89,13 +90,16 @@ const ainput = ref()
 const now = ref(0)
 const fingerprint = ref("")
 const ainputStatus = ref(false)
-
+const changeFocus = () => {
+  askRef.value.focus()
+}
 const onFocus = () => {
   ainputStatus.value = true;
   throttledScrollToBottom();
 }
 const onBlur = () => {
-  ainputStatus.value = false
+  console.log(document.activeElement)
+  ainputStatus.value = false;
 }
 const onChange = () => {
   now.value = input.value.length
@@ -129,14 +133,16 @@ const send = async (param)=>{
     content: ""
   })
   input.value = '';
-  loading.value = true
+  loading.value = true;
+  askRef.value.focus();
   placeholder.value = "正在回复中...";
   setTimeout(()=>{
     throttledScrollToBottom();
   },100)
-  onChange()
+  onChange();
   const index = chatList.value.length - 1;
-  fingerprint.value = await Auth.getUserFingerprint()
+  fingerprint.value = await Auth.getUserFingerprint();
+  window.clarity("identify", fingerprint.value, null, "TEST-AI", null)
   await Auth.chatWithAI(chatList.value,{
     fingerprint:fingerprint.value,
     onclose:(source) => {

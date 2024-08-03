@@ -63,7 +63,7 @@ const uid = route.query.uid;
 const pid = route.query.pid;
 
 async function getTeamInfo(close){
-  // const prtoken = await Auth.getPrtoken();
+  const prtoken = await Auth.getPrtoken();
   if(prtoken.status=="exist"||prtoken.status=="sus"){
     const res = await Auth.getTeamInfo({uid,pid});
     if(res.status=="sus"){

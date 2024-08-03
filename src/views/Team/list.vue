@@ -15,7 +15,7 @@
               <p>没有加入团队</p>
             </template>
             <template #default>
-              <router-link to="/projects/create"><el-button type="primary">
+              <router-link to="/team/create"><el-button type="primary">
                 去创建团队<el-icon class="el-icon--right"><Right /></el-icon>
               </el-button></router-link>
             </template>

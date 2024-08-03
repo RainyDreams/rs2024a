@@ -52,7 +52,7 @@
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="submitForm(ruleFormRef)">
+                  <el-button type="primary" :loading="createLoading" @click="submitForm(ruleFormRef)">
                     创建项目
                   </el-button>
                 </el-form-item>
@@ -73,6 +73,7 @@ import { ElMessage, ElForm, ElFormItem, ElInput, ElSelect, ElOption, ElButton, E
 const ruleFormRef = ref(null);
 const options = ref([]);
 const loading = ref(true);
+const createLoading = ref(false)
 const form = reactive({
   name: '',
   desc: '',
@@ -101,6 +102,7 @@ const submitForm = (formEl) => {
     if (valid) {
       // console.log('submit!')
       // await // Auth.getPrtoken();
+      createLoading.value = true;
       const createProject = await Auth.createProject({
         name: form.name,
         desc: form.desc,
@@ -108,6 +110,7 @@ const submitForm = (formEl) => {
         visibility: form.visibility
       })
       if(createProject.status == 'sus'){
+        createLoading.value = false;
         ElMessage({
           message: '创建成功',
           type: 'success',
@@ -117,12 +120,12 @@ const submitForm = (formEl) => {
         form.team = ''
         form.visibility = ''
       } else {
+        createLoading.value = false;
         ElMessage({
           message: '创建失败',
           type: 'error',
         })
       }
-      console.log(createProject)
     } else {
       console.log('error submit!')
       return false
