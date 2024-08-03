@@ -21,7 +21,7 @@
             </template>
           </el-empty>
         </div>
-        <div class="row">
+        <div class="row" v-if="!loading && teamList.length>0" >
           <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xxl-6" v-for="(item,i) in teamList">
             <div class="panel teambox">
               <div class="teamname">{{ item.name }}</div>
@@ -47,26 +47,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="panel" v-if="!loading && teamList.length>0" v-for="(item,i) in teamList">
-          <div class="_content">
-            <el-row class="listbox">
-              <el-col :span="12">
-                <div class="li">
-                  <div class="_header">{{ item.name }}</div>
-                  <div class="_content">
-                    <p>{{ item.desc }}</p>
-                  </div>
-                  <div class="_footer">
-                    <div class="avatar_list">
-                      <el-avatar :size="20"></el-avatar>
-                    </div>
-                    <div class="el-button"></div>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-        </div> -->
       </div>
       <div v-if="!loading" class="col-sm-12 col-md-12 col-lg-12 col-xxl-4 ">
         <div class="stikyPanel">

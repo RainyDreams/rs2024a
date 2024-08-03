@@ -1,5 +1,6 @@
 body{
-  --system--height:100vh;
+  --window--height:100vh;
+  --system--height:min(100vh , var(--window--height));
   overflow: hidden;
 }
 #app{
@@ -447,7 +448,7 @@ a{
     flex: 0 0 auto;
   }
   .chatList .assistant .el-avatar{
-    --el-avatar-bg-color:rgba(144, 77, 245,0.95) !important;
+    // --el-avatar-bg-color:rgba(144, 77, 245,0.95) !important;
     backdrop-filter: blur(8px);
     margin-right:10px;
     flex: 0 0 auto;
@@ -462,7 +463,7 @@ a{
     }
   }
   .chatList .chatcontent{
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.45em;
     color:#3c3e55;
     padding:10px 16px;
@@ -502,8 +503,7 @@ a{
       margin-bottom: 6px;
     }
     p{
-      margin-bottom: 6px;
-      
+      margin-bottom: 6px; 
     }
     &>*:last-child{
       margin-bottom: 0 !important;
@@ -512,7 +512,7 @@ a{
       border-radius: 8px;
       overflow: auto;
     }
-    *:not(pre)>code{
+    *:not(pre)>code,blockquote{
       background: #011627;
       color: #d6deeb;
       padding: 3px 5px;
@@ -523,12 +523,8 @@ a{
   }
 }
 .scroll{
-  // display: flex;
-  // flex-direction: column;
-  // height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  // transition: height 0.25s ease-in;
   scroll-behavior: smooth;
   max-height: 100%;
   flex: 1 1 0;
@@ -547,20 +543,35 @@ a{
     width:100%;
     background-color: #fff;
     border-radius: 16px;
-    overflow: hidden;
     padding:16px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    border:2px solid #fff;
     transition: all 0.25s ease;
-  }
-  .ainput__wrapper:hover{
-    border:2px solid rgba(144, 77, 245,1);
-  }
-  .ainput__wrapper.active{
-    border:2px solid rgba(144, 77, 245,1);
-    box-shadow: 0 0 0 5px rgba(144, 77, 245,0.3);
+    position: relative;
+    &.active{
+      background-color: #fffffffc;
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      top: -2.5px;
+      left: -2.5px;
+      right: -2.5px;
+      bottom: -2.5px;
+      z-index: -1;
+      border-radius: 18.5px;
+      opacity: 0;
+      transition: all 0.25s ease;
+      background: linear-gradient(135deg, rgb(222, 41, 16) 0%, rgba(144, 77, 245,1) 50%)
+    }
+    &:hover::before{
+      opacity: 0.5;
+    }
+    &.active::before {
+      opacity: 1;
+      box-shadow: 2px 2px 0px 2px rgba(144, 77, 245,0.3),
+    }
   }
   ._input .el-textarea__inner{
     border:0px;
@@ -571,6 +582,9 @@ a{
     appearance: none;
     padding-left: 2px;
     padding-right: 2px;
+    font-size: 16px;
+    font-weight:500;
+    color:#3c3e55;
   }
   ._number{
     display: flex;

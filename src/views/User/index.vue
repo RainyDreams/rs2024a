@@ -75,7 +75,6 @@ function handleUpload(options) {
       .then(response => {
         // console.log(response,options);
         profile.value.avatar = 'https://project.chiziingiin.top/api/avatar/'+ response.data.content;
-
       })
       .catch(error => {
         console.error(error);

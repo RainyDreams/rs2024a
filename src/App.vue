@@ -89,7 +89,7 @@ const activeName = ref(0);
 const showMenu = ref(false)
 import { throttle } from './utils/helpers'
 const throttleResize = throttle(()=>{
-  document.body.style.setProperty('--system--height', `${window.innerHeight}px`);
+  document.body.style.setProperty('--window--height', `${window.innerHeight}px`);
 },200)
 onMounted(()=>{
   ElNotification({

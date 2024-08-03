@@ -72,74 +72,80 @@ const defaultFailed = async (response,code) => {
   return { status: 'error', content: response };
 }
 class Auth {
-  static async init(){
-    const prStatus = (await this.getPrtoken('first')).status;
-    console.log(prStatus)
-    if (prStatus == 'invalid') {
-      ElMessage.info('正在尝试使用访客身份登录，请稍等');
-      const res = await this.guestLogin()
-      if(res.status == 'sus'){
-        ElMessage.success('以访客身份登录成功');
+  static async init() {
+    const prStatus = (await this.getPrtoken("first")).status;
+    console.log(prStatus);
+    if (prStatus == "invalid") {
+      ElMessage.info("正在尝试使用访客身份登录，请稍等");
+      const res = await this.guestLogin();
+      if (res.status == "sus") {
+        ElMessage.success("以访客身份登录成功");
       }
     }
   }
-  static async basicAuth(url=BASICURL, body='', {
-    success = defaultSuccess,
-    failed = defaultFailed
-  } = {
-    success : defaultSuccess, 
-    failed : defaultFailed
-  }){
-    try { 
-      const response = await fetch(BASICURL+url, {
-        method: 'POST',
+  static async basicAuth(
+    url = BASICURL,
+    body = "",
+    { success = defaultSuccess, failed = defaultFailed } = {
+      success: defaultSuccess,
+      failed: defaultFailed,
+    }
+  ) {
+    try {
+      const response = await fetch(BASICURL + url, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: body
+        body: body,
       });
       if (response.status === 200) {
         const data = await response.json();
-        if (data.status ==='sus') {
-          return { status:'sus', content: await success(data) };
+        if (data.status === "sus") {
+          return { status: "sus", content: await success(data) };
         } else {
-          return await failed(response,0) ;
+          return await failed(response, 0);
         }
       } else {
-        return await failed(response,1) ;
+        return await failed(response, 1);
       }
-    } catch(error) {
-      return await failed(error,2) ;
+    } catch (error) {
+      return await failed(error, 2);
     }
   }
 
   static async guestLogin(param) {
-    const res = await this.basicAuth('/api/guestlogin', JSON.stringify({username:'guest'}));
-    if (res.status == 'sus') {
+    const res = await this.basicAuth(
+      "/api/guestlogin",
+      JSON.stringify({ username: "guest" })
+    );
+    if (res.status == "sus") {
       const rt = await this.getPrtoken();
-      return rt
+      return rt;
     } else {
-      ElMessage.error('以访客身份登录：失败');
-      return { status: 'error', content: res.content };
+      ElMessage.error("以访客身份登录：失败");
+      return { status: "error", content: res.content };
     }
   }
 
-  static async test(){
-    return this.basicAuth('/api/test', );
+  static async test() {
+    return this.basicAuth("/api/test");
   }
 
-  static async reportErrlog(content){
-    return this.basicAuth('/api/reportErrlog', content);
+  static async reportErrlog(content) {
+    return this.basicAuth("/api/reportErrlog", content);
   }
 
   static async getPrtoken(mode) {
-    console.log(Cookies.get('czigauth'))
-    if (Cookies.get('czigauth')) {
-      return { status: 'exist', content: Cookies.get('czigauth') };
+    console.log(Cookies.get("czigauth"));
+    if (Cookies.get("czigauth")) {
+      return { status: "exist", content: Cookies.get("czigauth") };
     }
-    return this.basicAuth('/api/prtoken', '', {
+    return this.basicAuth("/api/prtoken", "", {
       success: async (data) => {
-        Cookies.set('czigauth', 'Already Authenticated', { expires: new Date(data.content.expires) });
+        Cookies.set("czigauth", "Already Authenticated", {
+          expires: new Date(data.content.expires),
+        });
         return data.content;
       },
       // failed: mode!=='try' ? defaultFailed : async (response, type) => {
@@ -154,65 +160,119 @@ class Auth {
   }
   static async createTeam(param) {
     await this.getPrtoken();
-    return this.basicAuth('/api/createTeam', JSON.stringify({ name:param.name,desc:param.desc }), );
+    return this.basicAuth(
+      "/api/createTeam",
+      JSON.stringify({ name: param.name, desc: param.desc })
+    );
   }
-  static async getTeamInfo(param={}) {
+  static async getTeamInfo(param = {}) {
     await this.getPrtoken();
-    return this.basicAuth('/api/teamInfo', JSON.stringify({ uid: param.uid||'', pid: param.pid }), );
+    return this.basicAuth(
+      "/api/teamInfo",
+      JSON.stringify({ uid: param.uid || "", pid: param.pid })
+    );
   }
-  static async getTeamList(param={}){
+  static async getTeamList(param = {}) {
     await this.getPrtoken();
-    return this.basicAuth('/api/teamList', JSON.stringify({ uid: param.uid||'' }), );
+    return this.basicAuth(
+      "/api/teamList",
+      JSON.stringify({ uid: param.uid || "" })
+    );
   }
-  static async getJoinedTeamList(param={}){
+  static async getJoinedTeamList(param = {}) {
     await this.getPrtoken();
-    return this.basicAuth('/api/joinedTeamList', JSON.stringify({ uid: param.uid||'' }), )
+    return this.basicAuth(
+      "/api/joinedTeamList",
+      JSON.stringify({ uid: param.uid || "" })
+    );
   }
-  static async getDashboard(){
+  static async getDashboard() {
     await this.getPrtoken();
-    return this.basicAuth('/api/dashboard', '', )
+    return this.basicAuth("/api/dashboard", "");
   }
   static async createProject(param) {
     await this.getPrtoken();
-    return this.basicAuth('/api/createProject', JSON.stringify({ ...param }));
+    return this.basicAuth("/api/createProject", JSON.stringify({ ...param }));
   }
-  static async getProjectDetail(param={}) {
+  static async getProjectDetail(param = {}) {
     await this.getPrtoken();
-    return this.basicAuth('/api/projectDetail', JSON.stringify({ projectid: param.id }), );
+    return this.basicAuth(
+      "/api/projectDetail",
+      JSON.stringify({ projectid: param.id })
+    );
   }
-  static async getProjectList(param={}) {
+  static async getProjectList(param = {}) {
     await this.getPrtoken();
-    return this.basicAuth('/api/projectList', JSON.stringify({ uid: param.uid||'' }), );
+    return this.basicAuth(
+      "/api/projectList",
+      JSON.stringify({ uid: param.uid || "" })
+    );
   }
-  static async getJoinedProjectList(param={}) {
+  static async getJoinedProjectList(param = {}) {
     await this.getPrtoken();
-    return this.basicAuth('/api/joinedProjectList', JSON.stringify({ uid: param.uid||'' }), )
+    return this.basicAuth(
+      "/api/joinedProjectList",
+      JSON.stringify({ uid: param.uid || "" })
+    );
   }
-  static async getUserInfo(param={}) {
+  static async getUserInfo(param = {}) {
     await this.getPrtoken();
-    return this.basicAuth('/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
+    return this.basicAuth(
+      "/api/userinfo",
+      JSON.stringify({ uid: param.uid || "" })
+    );
   }
-
 
   /* 实验性功能 */
-  static async chatWithAI(list,param){
+  static async chatWithAI(list, param) {
     await this.getPrtoken();
-    const res = await this.basicAuth('/api/ai/send', JSON.stringify({ content:JSON.stringify(list),vf:param.fingerprint }) );
-    if(res.status==='sus'){
-      const eventSource = new EventSource('/api/ai/stream', { withCredentials: true });
-      eventSource.onmessage = (e) => param.onmessage(e, eventSource);
-      eventSource.onerror = (e) => param.onerror(e, eventSource);
+    const res = await this.basicAuth(
+      "/api/ai/send",
+      JSON.stringify({ content: JSON.stringify(list), vf: param.fingerprint })
+    );
+    if (res.status === "sus") {
+      await this.getStreamText('/api/ai/stream', { content: JSON.stringify(list),}, {
+        onmessage:param.onmessage,
+        onclose:param.onclose
+      });
     }
   }
-  static async getAIGuestList(){
-    await this.getPrtoken()
-    return this.basicAuth('/api/danger/viewAIGuest', );
+
+  static async getStreamText(url,postData,param) {
+    const postOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+      credentials: "include",
+    };
+    const response = await fetch(url, postOptions);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const reader = response.body.getReader();
+    let decoder = new TextDecoder();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) { param.onclose(); break; }
+      const textArray = (decoder.decode(value, { stream: true }).replace(/\n/g,"").trim().replace('data: ','')).split('data: ');
+      for (const text of textArray) {
+        if(text == '[DONE]') continue;
+        param.onmessage(text);
+      }
+    }
+  }
+
+  static async getAIGuestList() {
+    await this.getPrtoken();
+    return this.basicAuth("/api/danger/viewAIGuest");
   }
   static async getUserFingerprint() {
-    const fp = await FingerprintJS.load()
-    const result = await fp.get()
+    const fp = await FingerprintJS.load();
+    const result = await fp.get();
     const visitorId = result.visitorId;
-    return visitorId
+    return visitorId;
   }
 }
 
