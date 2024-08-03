@@ -226,15 +226,26 @@ a{
 
 
 .userPage{
-  min-height: unset !important;
-  // .background{
-  //   padding-top: 16px;
-    padding-top:240px;
-    background-image:url(../assets/userbg.svg);
-    background-position: 0 16px;
-    background-size: 100%;
-    background-repeat: no-repeat;
-  // }
+  padding-top:26px;
+  padding-left: 24px;
+  padding-right: 24px;
+  .userProfile{
+    display: flex;
+  }
+  .userBasic{
+    flex:1 0 auto;
+  }
+  .userWelcome{
+    font-size: 2vw;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #3c3e55;
+    margin-bottom: 5px;
+  }
+  .userSign{
+    color: #5F6388;
+    font-size: 1.5vw;
+  }
   .panel{
     position: relative;
   }
@@ -457,6 +468,7 @@ a{
     padding:10px 16px;
     background-color: #fffd;
     border-radius: 12px;
+    word-break: break-all;
     min-height: 40.3px;
     h1{
       line-height: 1.45em;
@@ -491,9 +503,10 @@ a{
     }
     p{
       margin-bottom: 6px;
-      &:last-child{
-        margin-bottom: 0;
-      }
+      
+    }
+    &>*:last-child{
+      margin-bottom: 0 !important;
     }
     pre{
       border-radius: 8px;

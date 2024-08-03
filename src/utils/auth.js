@@ -27,15 +27,6 @@ const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async (response,code) => {
   // console.log('ss',code)
   if (response.status === 401) {
-    ElMessageBox.alert('登录已过期，请重新登录', '提示', {
-      confirmButtonText: '确定',
-      showCancelButton:false,
-      'show-close':false,
-      type: 'warning',
-      callback: async () => {
-        window.location.href = LOGINURL+'?url='+encodeURIComponent(window.location.href)
-      }
-    })
     return { status: 'invalid', content: response };
   } else {
     ElMessage.error('服务器错误');
@@ -82,9 +73,10 @@ const defaultFailed = async (response,code) => {
 }
 class Auth {
   static async init(){
-    const prStatus = (await this.getPrtoken()).status;
+    const prStatus = (await this.getPrtoken('first')).status;
     console.log(prStatus)
     if (prStatus == 'invalid') {
+      ElMessage.info('正在尝试使用访客身份登录，请稍等');
       const res = await this.guestLogin()
       if(res.status == 'sus'){
         ElMessage.success('以访客身份登录成功');

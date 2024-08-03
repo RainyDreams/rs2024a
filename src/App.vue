@@ -133,13 +133,13 @@ router.beforeEach((to, from) => {
 });
 function M(str){
   // console.log(str,window.innerWidth)
-  if(window.innerWidth <= 880){
+  if(window.innerWidth <= 1000){
     return str;
   }
   return ''
 }
 function isM(to,name){
-  if(window.innerWidth > 880){
+  if(window.innerWidth > 1000){
     router.push(to)
   } else {
     activeName.value = name;
@@ -148,7 +148,7 @@ function isM(to,name){
     if(item){
       activeName.value = item.name;
       tabbarList.value = [];
-      // if(window.innerWidth <= 880){
+      // if(window.innerWidth <= 1000){
       tabbarList.value = [];
       setTimeout(()=>{
         tabbarList.value = item.tabs;
