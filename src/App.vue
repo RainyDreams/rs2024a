@@ -3,6 +3,9 @@
     <div class="mainpage">
       <div class="header" v-if="!TabBarHide">
         <div :class="{navlist:1,show:showMenu}" :style="showMenu?'':'transition-delay: 0.20s;'">
+          <div class="logo" v-if="SideBarHide" style="margin-left: 24px;">
+            <img src="/logo.svg" alt="赤子英金协作系统">
+          </div>
           <a v-for="(item,i) in configList" :class="`nav ${activeName==item.name?'router-link-active':''} animate__animated ${M(showMenu?'animate__fadeInTopLeft':'animate__fadeOutTopLeft')}`" :style="(showMenu?`animation-duration:0.5s;`:'')+`animation-delay:${0.08*(i)}s`" :key="item.name" @click="isM(item.to,item.name)">
             <div class="icon" ><component :is="getIcon(item.icon)" theme="outline" size="22"/></div>
             <p>{{ item.title }}</p>
@@ -47,7 +50,7 @@
         </el-config-provider>
       </div>
     </div>
-    <div v-if="!TabBarHide" class="tabbar pc" >
+    <div v-if="!SideBarHide" class="tabbar pc" >
       <div class="logo">
         <img src="/logo.svg" alt="赤子英金协作系统">
       </div>
@@ -84,6 +87,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Auth from './utils/auth';
 const router = useRouter();
 const TabBarHide = ref(false);
+const SideBarHide = ref(false);
 const isDarkMode = ref(0);
 const activeName = ref(0);
 const showMenu = ref(false)
@@ -92,13 +96,13 @@ const throttleResize = throttle(()=>{
   document.body.style.setProperty('--window--height', `${window.innerHeight}px`);
 },200)
 onMounted(()=>{
-  ElNotification({
-    title: '提示',
-    message: "如果您对本项目有任何建议或遇到任何问题，可以点击导航栏“关于软件”联系我们",
-    position: 'bottom-right',
-    type: 'info',
-    offset: 125, 
-  });
+  // ElNotification({
+  //   title: '提示',
+  //   message: "如果您对本项目有任何建议或遇到任何问题，可以点击导航栏“关于软件”联系我们",
+  //   position: 'bottom-right',
+  //   type: 'info',
+  //   offset: 125, 
+  // });
   throttleResize()
 })
 // window.onresize = throttleResize()
@@ -107,10 +111,8 @@ function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
 router.beforeEach((to, from) => {
-  // console.log(to)
   const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
   rightList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1);
-  // console.log(to,from)
   if(item){
     activeName.value = item.name;
     if(window.innerWidth <= 992){
@@ -125,10 +127,12 @@ router.beforeEach((to, from) => {
   } else {
     activeName.value = '';
   }
-  if(to.meta.tabbarhide){
-    TabBarHide.value = true;
+  if(to.meta.hide){
+    TabBarHide.value = to.meta.hide.find(i=>i=='tabbar');
+    SideBarHide.value = to.meta.hide.find(i=>i=='sidebar')
   }else{
     TabBarHide.value = false;
+    SideBarHide.value = false;
   }
 });
 function M(str){

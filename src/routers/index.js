@@ -26,7 +26,7 @@ import Error404 from '../views/Errors/404.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: "/", name: "Home", component: HomeIndex },
+    { path: "/", name: "Home", component: HomeIndex, meta:{hide:['sidebar','tabbar']} },
     { path: "/projects/", name: "Projects", children: [
       { path: "create", name: "ProjectsCreate", component: ProjectsCreate },
       { path: "dashboard", name: "ProjectsDashboard", component: ProjectsDashboard },
@@ -39,7 +39,7 @@ const router = createRouter({
       { path: "create", name: "TeamCreate", component: TeamCreate },
       { path: "list", name: "TeamList", component: TeamList },
       { path: "settings", name: "TeamSettins", component: TeamSettings },
-      { path: "invite", name: "TeamInvite", component: TeamInvite,meta:{tabbarhide:true} },
+      { path: "invite", name: "TeamInvite", component: TeamInvite,meta:{hide:['tabbar','sidebar']}},
     ]},
     { path: "/user/", name: "User", children:[
       { path: "profile", name: "UserProfile", component: UserIndex},

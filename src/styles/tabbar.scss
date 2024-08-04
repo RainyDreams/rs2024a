@@ -2,6 +2,18 @@
 
 
 // @media (min-width: $medium-screen-width){
+  .logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    margin-bottom: 0px;
+    color:#5F6388;
+    font-weight: 600;
+    img{
+      height:100%;
+    }
+  }
   .page{
     display: flex;
     flex-direction: row-reverse;
@@ -29,6 +41,7 @@
       .navlist{
         display:flex;
         height:100%;
+        align-items: center;
         .nav{
           padding:0 16px;
           display: flex;
@@ -114,6 +127,8 @@
         flex:1;
         overflow-y: auto;
         scroll-behavior: smooth;
+        overflow-x: hidden;
+        
       }
       .routerpage>*{
         // min-height: 100%;
@@ -123,18 +138,6 @@
       width: 250px;
       // background-color: rgba(251, 250, 255, 1);
       padding-top:28px;
-      .logo{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 40px;
-        margin-bottom: 0px;
-        color:#5F6388;
-        font-weight: 600;
-        img{
-          height:100%;
-        }
-      }
     }
     .tablist{
       display: flex;
