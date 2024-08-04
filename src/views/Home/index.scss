@@ -1,11 +1,13 @@
 .container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100vh;
   color: white;
   text-align: center;
+  overflow: hidden;
 }
 
 .container__headline {
@@ -13,6 +15,16 @@
   letter-spacing: 3px;
   font-weight: 600;
   color:rgb(43, 22, 100);
+}
+
+.container__copyright{
+  width: 100%;
+  text-align: center;
+  font-size: 1vmin;
+  font-size: 16px;
+  font-weight: bold;
+  color:#5F6388;
+  padding:4px 24px;
 }
 
 .hero__inner {
@@ -99,4 +111,23 @@
       transition-delay: var(--delay);
     }
   }
+}
+
+
+.scrollText div{
+  font-size: 10vmin;
+  margin: 0;
+  display: flex;
+  word-break: keep-all;
+  // 不允许换行
+  white-space: nowrap;
+  font-weight: 700;
+  color:#3c3e55;
+}
+
+.no{
+  word-break: keep-all;
+  white-space: nowrap;
+  display: flex;
+  width: 100vw;
 }

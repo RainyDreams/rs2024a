@@ -9,6 +9,9 @@ body{
   background-color: rgba(226, 240, 254);
   background-image: linear-gradient(to right bottom, rgb(244, 245, 231), rgb(215, 234, 253));
 }
+::selection{
+  background-color: rgba(34, 98, 251, 0.2);
+}
 .commonPage{
   padding-top: 24px;
   padding-left: 16px;
