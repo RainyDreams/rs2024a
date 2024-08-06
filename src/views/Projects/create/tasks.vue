@@ -8,7 +8,6 @@
     ref="ruleFormRef"
     status-icon
     :inline-message="true"
-    size="large"
   >
     <el-form-item label="任务名称" prop="name">
       <el-input v-model="form.name" autofocus />
@@ -20,7 +19,7 @@
         maxlength="100"
         show-word-limit
         type="textarea"
-        placeholder="简单概括一下任务的具体内容"
+        placeholder="描述一下任务的具体内容"
       />
     </el-form-item>
     <el-form-item label="开始时间" prop="startTime">
@@ -40,32 +39,37 @@
       <el-form-item label="参与人员" prop="members">
         <el-select
           v-model="form.members"
-          multiple
-          filterable
-          allow-create
-          default-first-option
+          multiple 
           placeholder="请选择参与人员"
         >
           <el-option
-            v-for="item in options"
+            v-for="item in persons"
             :key="item.value"
             :label="item.label"
-          />
+            :value="item.value"
+          >
+            <div class="" style="display:flex;align-items: center;">
+              <el-avatar :size="22" :src="item.avatar"></el-avatar>
+              <span>{{ item.label }}</span>
+            </div>
+          </el-option>
         </el-select>
       </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm(ruleFormRef)">
-        创建{{ type }}
+        创建任务
       </el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup>
-import { ref, reactive } from "vue"
-import { useRouter } from "vue-router"
-import { ElMessage } from "element-plus"
+import { ref, reactive, onMounted, onActivated } from "vue"
+import { useRoute, useRouter } from "vue-router"
+import { ElMessage,ElForm,ElFormItem,ElButton,ElSelect,ElInput,ElDatePicker,ElOption,ElAvatar } from "element-plus"
+import Auth from "../../../utils/auth";
 const router = useRouter()
+const route = useRoute()
 const ruleFormRef = ref(null)
 const form = reactive({
   name: "",
@@ -91,21 +95,31 @@ const rules = reactive({
   ],
   members: [
     { required: true, message: "请选择参与人员",trigger: "change" }
-    
   ]
 })
-const options = [
-  { value: "zhinan", label: "指南" },
-  { value: "shejiyuanze", label: "设计原则" },
-  { value: "daohang", label: "导航" },
-  { value: "icon", label: "图标" },
-  { value: "components", label: "组件" },
-  { value: "changyong", label: "常用" },
-]
-const type = ref('')
-function submitForm(formEl) {
+const persons = ref([])
+const projectId = ref('')
+onMounted(async ()=>{
+  await Auth.getPrtoken();
+  projectId.value = route.params.projectId;
+  const res = await Auth.getProjectDetail({id:projectId.value})
+  if(res.status == 'sus'){
+    // projectDetail.value = res.content;
+    console.log(res.content)
+    persons.value = res.content.persons.map((item)=>{
+      return {label:item.nickname,value:item.id,avatar:item.avatar}
+    })
+  }
+})
+async function submitForm(formEl) {
   if (!formEl) {
     return
+  } else {
+    const res = await Auth.createProjectItem({
+      type:"tasks",
+      projectId:projectId.value,
+      ...form
+    })
   }
 }
 </script>

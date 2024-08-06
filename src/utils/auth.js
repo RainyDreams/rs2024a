@@ -27,6 +27,7 @@ const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async (response,code) => {
   // console.log('ss',code)
   if (response.status === 401) {
+    ElMessage.error('未登录或登录过期');
     return { status: 'invalid', content: response };
   } else {
     ElMessage.error('服务器错误');
@@ -215,11 +216,18 @@ class Auth {
       JSON.stringify({ uid: param.uid || "" })
     );
   }
+  static async createProjectItem(param = {}){
+    await this.getPrtoken();
+    return this.basicAuth(
+      "/api/project/create-item",
+      JSON.stringify({ ...param })
+    );
+  }
   static async getUserInfo(param = {}) {
     await this.getPrtoken();
     return this.basicAuth(
-      "/api/userinfo",
-      JSON.stringify({ uid: param.uid || "" })
+      "/api/project/create-"+param.type,
+      JSON.stringify({ ...param })
     );
   }
 

@@ -94,7 +94,7 @@ import { useRoute, useRouter } from 'vue-router';
 import routerBack from '../../components/routerBack.vue';
 const route = useRoute();
 const router = useRouter();
-const projectId = route.params.projectId;
+const projectId = ref(route.params.projectId);
 const projectDetail = ref({
   name:'',
   desc:'',
@@ -104,12 +104,11 @@ const projectDetail = ref({
   issue:[]
 });
 function toCreate(type){
-  router.push(`/projects/detail-create/${type}/${projectId}`)
+  router.push(`/projects/detail-create/${type}/${projectId.value}`)
 }
 onActivated(async ()=>{
-  // await // Auth.getPrtoken();
-  const res = await Auth.getProjectDetail({id:projectId})
-  console.log(res)
+  projectId.value = route.params.projectId;
+  const res = await Auth.getProjectDetail({id:projectId.value})
   if(res.status == 'sus'){
     projectDetail.value = res.content;
   }
