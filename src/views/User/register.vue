@@ -99,45 +99,6 @@ const submitForm = (formEl) => {
           type: 'error',
         })
       }
-      
-      // const response = await fetch( '/api/createTeam', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     name:encodeURIComponent(form.name),
-      //     desc:encodeURIComponent(form.desc),
-      //   }),
-      // });
-      // if (response.status === 200) {
-      //   const data = await response.json();
-      //   if(data.status == 'sus'){
-      //     console.log('[team] create success',data);
-      //     inputValue.value = data.content.inviteurl;
-      //     dialogTableVisible.value = true;
-      //     form.name = '';
-      //     form.desc = '';
-      //     localStorage.setItem('teamInfo',{teamId:data.content.teamid,teamInviteurl:data.content.inviteurl});
-      //     ElMessage({
-      //       message: '创建成功！',
-      //       type: 'success',
-      //     });
-      //   } else {
-      //     console.log('[team] create error',data);
-      //     ElMessage({
-      //       message: '出现错误',
-      //       type: 'error',
-      //     });
-      //     return { status: 'error', content: data.content };
-      //   }
-      // } else {
-      //   ElMessage({
-      //     message: '出现错误',
-      //     type: 'error',
-      //   });
-      //   return { status: 'error', content: response };
-      // }
       formloading.value=false;
     } else {
       console.log('error submit!')
