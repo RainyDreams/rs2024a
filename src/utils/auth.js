@@ -225,10 +225,7 @@ class Auth {
   }
   static async getUserInfo(param = {}) {
     await this.getPrtoken();
-    return this.basicAuth(
-      "/api/project/create-"+param.type,
-      JSON.stringify({ ...param })
-    );
+    return this.basicAuth('/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
   }
 
   /* 实验性功能 */

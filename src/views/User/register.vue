@@ -11,7 +11,7 @@
             <el-alert type="error" show-icon :closable="false" style="margin-bottom: 16px;">
               <p>目前仅支持测试用户注册，账户有效期1小时，1小时后自动注销</p>
             </el-alert>
-            <!-- <el-form 
+            <el-form 
               :model="form" 
               label-width="auto" 
               style="max-width: 600px"
@@ -19,32 +19,25 @@
               ref="ruleFormRef"
               status-icon
             >
-              <el-form-item label="团队名称" prop="name">
-                <el-input v-model="form.name" autofocus />
+              <el-form-item label="用户名" prop="username">
+                <el-input v-model="form.username" autofocus />
               </el-form-item>
-              <el-form-item label="团队描述" prop="desc">
-                <el-input
-                  v-model="form.desc"
-                  :autosize="{ minRows: 2, maxRows: 4 }"
-                  maxlength="30"
-                  show-word-limit
-                  type="textarea"
-                  placeholder="简单概括一下你们的团队"
-                />
+              <el-form-item label="用户昵称" prop="nickname">
+                <el-input v-model="form.nickname"/>
+              </el-form-item>
+              <el-form-item label="密码" prop="password">
+                <el-input v-model="form.password"/>
               </el-form-item>
               <el-form-item>
                 <el-button :loading="formloading" type="primary" @click="submitForm(ruleFormRef)">
                   创建团队
                 </el-button>
               </el-form-item>
-            </el-form> -->
+            </el-form>
           </div>
         </div>
       </div>
     </div>
-    <el-dialog v-model="dialogTableVisible" title="请分享你的团队链接给你的成员们" width="90%" max-width="400px">
-      <el-input readonly ref="inputRef" v-model="inputValue" @click="selectAllInput" />
-    </el-dialog>
   </div>
 </template>
 
@@ -59,48 +52,36 @@ const dialogTableVisible = ref(false)
 const ruleFormRef = ref(null);
 const formloading = ref(false);
 const form = reactive({
-  name: '',
-  desc: '',
-  team: '',
-  resource: ''
+  username: '',
+  nickname: '',
+  password: ''
 });
 const rules = reactive({
-  name: [
-    { required: true, message: '请输入团队名称', trigger: 'blur' },
-    { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
   ],
-  desc: [
-    { required: true, message: '请输入团队描述', trigger: 'blur' }, 
-    { min: 5, max: 30, message: '长度在 5 到 30 个字符', trigger: 'blur' }
+  nickname: [
+    { required: true, message: '请输入用户昵称', trigger: 'blur' },
+    { min: 3, max:20, message: '长度在 3 到 20 个字符',}
   ],
-  team: [
-    { required: true, message: '请选择参与团队', trigger: 'change' }
-  ],
-  visibility: [
-    { required: true, message: '请选择团队可见性', trigger: 'change' }
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
   ]
 })
-const selectAllInput = () => {
-  if (inputRef.value) {
-    inputRef.value.select();
-  }
-};
 
-const selectAndCopy = () => {
-  if (inputRef.value) {
-    inputRef.value.select();
-    document.execCommand('copy');
-  }
-};
+
 const submitForm = (formEl) => {
   if (!formEl) return;
   formloading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
       // const prtoken = // await // Auth.getPrtoken();
-      const createTeam = await Auth.createTeam({
-        name:form.name,
-        desc:form.desc
+      const createTeam = await Auth.userRegister({
+        username:form.username,
+        nickname:form.nickname,
+        password:form.password
       })
       if(createTeam.status == 'sus'){
         inputValue.value = createTeam.content.inviteurl;
