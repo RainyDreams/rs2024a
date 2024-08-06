@@ -7,25 +7,25 @@ export default defineConfig((mode) => {
     plugins: [
       vue(),
     ],
-    // build: (mode === 'production') ? {
-    //   rollupOptions: {
-    //     output: {
-    //       manualChunks(id) {
-    //         if (id.includes('node_modules')) {
-    //           return id.toString().split('node_modules/')[1].split('/')[0].toString();
-    //         }
-    //       },
-    //     },
-    //   },
-    //   minify: 'terser',
-    //   terserOptions: {
-    //     compress: {
-    //       drop_debugger: true,
-    //     },
-    //   },
-    // } : {},
-    // optimizeDeps: {
-    //   include: ['vue', 'vue-router'],
-    // },
+    build: (mode === 'production') ? {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return id.toString().split('node_modules/')[1].split('/')[0].toString();
+            }
+          },
+        },
+      },
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_debugger: true,
+        },
+      },
+    } : {},
+    optimizeDeps: {
+      include: ['vue', 'vue-router'],
+    },
   };
 });

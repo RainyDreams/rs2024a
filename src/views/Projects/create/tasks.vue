@@ -1,12 +1,12 @@
 <template>
   <el-form 
-    label-position="top"
     :model="form" 
     label-width="auto" 
     style="max-width: 600px"
     :rules="rules"
     ref="ruleFormRef"
     status-icon
+    label-position="top"
     :inline-message="true"
   >
     <el-form-item label="任务名称" prop="name">

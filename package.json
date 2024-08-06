@@ -35,8 +35,6 @@
     "mitt": "^3.0.1",
     "sass": "^1.77.8",
     "terser": "^5.31.3",
-    "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-purgecss": "^0.2.12",
     "vue": "^3.4.31",
     "vue-echarts": "^6.7.3",
     "vue-router": "^4.4.0"

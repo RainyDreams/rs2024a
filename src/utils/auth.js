@@ -114,7 +114,6 @@ class Auth {
       return await failed(error, 2);
     }
   }
-
   static async guestLogin(param) {
     const res = await this.basicAuth(
       "/api/guestlogin",
@@ -128,15 +127,18 @@ class Auth {
       return { status: "error", content: res.content };
     }
   }
-
+  static async userRegister(param){
+    return this.basicAuth("/api/reg", JSON.stringify(param))
+  }
+  static async checkUsername(value){
+    return this.basicAuth("/api/checkUsername", JSON.stringify({username:value}))
+  }
   static async test() {
     return this.basicAuth("/api/test");
   }
-
   static async reportErrlog(content) {
     return this.basicAuth("/api/reportErrlog", content);
   }
-
   static async getPrtoken(mode) {
     console.log(Cookies.get("czigauth"));
     if (Cookies.get("czigauth")) {
