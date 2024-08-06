@@ -49,7 +49,7 @@
             :value="item.value"
           >
             <div class="" style="display:flex;align-items: center;">
-              <el-avatar :size="22" :src="item.avatar"></el-avatar>
+              <el-avatar alt="头像" :size="22" :src="item.avatar"></el-avatar>
               <span>{{ item.label }}</span>
             </div>
           </el-option>

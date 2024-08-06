@@ -5,7 +5,7 @@
         <!-- <span>加入</span>
         <span class="teamName"> {{ teamName }} </span>
         <span>团队</span> -->
-        <el-avatar></el-avatar>
+        <el-avatar alt="头像"></el-avatar>
         <div class="_name">{{ teamName }}</div>
         <div class="_desc">{{ teamDesc }}</div>
       </div>

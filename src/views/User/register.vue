@@ -45,10 +45,8 @@
 import { ref,onMounted,reactive } from 'vue'
 import { Peoples } from '@icon-park/vue-next'; 
 import Auth from "../../utils/auth.js";
-import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert,ElDialog,} from 'element-plus';
-const inputRef = ref(null);
-const inputValue = ref('');
-const dialogTableVisible = ref(false)
+import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert,} from 'element-plus';
+import CryptoJS from 'crypto-js';
 const ruleFormRef = ref(null);
 const formloading = ref(false);
 const form = reactive({
@@ -77,18 +75,16 @@ const submitForm = (formEl) => {
   formloading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
-      // const prtoken = // await // Auth.getPrtoken();
+      
       const createTeam = await Auth.userRegister({
         username:form.username,
         nickname:form.nickname,
-        password:form.password
+        password:CryptoJS.MD5(form.username+form.password).toString()
       })
       if(createTeam.status == 'sus'){
-        inputValue.value = createTeam.content.inviteurl;
-        dialogTableVisible.value = true;
-        form.name = '';
-        form.desc = '';
-        // localStorage.setItem('teamInfo',{teamId:createTeam.content.teamid,teamInviteurl:createTeam.content.inviteurl});
+        form.username = '';
+        form.nickname = '';
+        form.password = '';
         ElMessage({
           message: '创建成功',
           type: 'success',

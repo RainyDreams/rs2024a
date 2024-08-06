@@ -34,7 +34,7 @@
               <div class="teamtitle">我的身份</div>
               <div class="teamidentity">
                 <div class="useravatar">
-                  <el-avatar :src="item.userAvatar" :size="38" />
+                  <el-avatar alt="头像" :src="item.userAvatar" :size="38" />
                 </div>
                 <div class="userinfo">
                   <div class="username">{{ item.userNickname }}</div>

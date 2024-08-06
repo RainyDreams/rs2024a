@@ -6,7 +6,7 @@
           <div class="panel aichat" >
             <div class="chatList" style="min-height: 200px;">
               <div class="system">
-                <el-avatar src="/logo_sm.png">小英</el-avatar>
+                <el-avatar alt="头像" src="/logo_sm.png">小英</el-avatar>
                 <div class="chatcontent" style="font-size:12px;">
                   <p>赤子英金大模型公测 编译版本CzigChat-1.0-14b@202408032254</p>
                   <p>为了更好的测试，全量开放。未来我们会将大模型融入到我们的产品中。<strong>本产品由赤子英金开发和训练，未接入任何平台API，独立运行在我们的服务器上。</strong>大服务生成的所有内容均由人工智能模型生成，其生成内容的准确性和完整性无法保证，不代表我们的态度或观点，仅供参考学习。</p>
@@ -16,13 +16,13 @@
               </div>
               <template v-for="(item,i) in chatList" class="chatList">
                 <div class="user" v-if="item.role == 'user'"> 
-                  <el-avatar>你</el-avatar>
+                  <el-avatar alt="头像">你</el-avatar>
                   <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,0]" :rotate="-12" :content="['赤子英金大模型 赤子英金大模型', fingerprint]">
                     <div class="chatcontent" v-html="md.render(item.content)"></div>
                   </el-watermark>
                 </div>
                 <div class="assistant" v-if="item.role == 'assistant'">
-                  <el-avatar src="/logo_sm.png" fit="contain">小英</el-avatar>
+                  <el-avatar alt="头像" src="/logo_sm.png" fit="contain">小英</el-avatar>
                   <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12" :content="['赤子英金大模型 赤子英金大模型', fingerprint]">
                     <div class="chatcontent" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
                   </el-watermark>

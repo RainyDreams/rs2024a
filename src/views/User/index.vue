@@ -2,7 +2,7 @@
   <div class="userPage">
     <div class="userProfile">
       <div class="userAvatar">
-        <el-avatar :src="profile.avatar" :size="80"></el-avatar>
+        <el-avatar alt="头像" :src="profile.avatar" :size="80"></el-avatar>
       </div>
       <div class="userBasic">
         <div class="userWelcome">
