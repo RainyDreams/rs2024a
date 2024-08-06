@@ -6,13 +6,10 @@ import purgecss from 'vite-plugin-purgecss';
 export default defineConfig({
   plugins: [
     vue(),
-    compression({
-      algorithm: 'gzip',
-      ext: '.gz',
-    }),
-    purgecss({
-      content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-    }),
+    // purgecss({
+    //   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx,sass,scss}'],
+    //   safelist: ['important-class', /^another-important-class/],
+    // }),
   ],
   build: {
     rollupOptions: {
