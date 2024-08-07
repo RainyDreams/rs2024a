@@ -114,6 +114,42 @@ class Auth {
       return await failed(error, 2);
     }
   }
+  static async handleRecaptcha() {
+    return new Promise((resolve,reject)=>{
+      window.grecaptcha.ready(() => {
+        window.grecaptcha.execute('6Ld2QRYqAAAAABbPygHb0HUKpd-LMU1Ckmy6nb8G', 
+          { action: 'submit' }).then(token => {
+          fetch('/api/verify-recaptcha', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token })
+          })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+              resolve({ status: "sus", content: token })
+            } else {
+              reject({ status: "error", content: data })
+            }
+          });
+        });
+      });
+    })
+  }
+  static async getRecaptchaToken(){
+    return new Promise((resolve,reject)=>{
+      window.grecaptcha.ready(() => {
+        window.grecaptcha.execute('6Ld2QRYqAAAAABbPygHb0HUKpd-LMU1Ckmy6nb8G', { action: 'submit' })
+        .then(token => {
+          resolve(token)
+        }).catch(err=>{
+          reject(err)
+        })
+      });
+    })
+  }
   static async guestLogin(param) {
     const res = await this.basicAuth(
       "/api/guestlogin",

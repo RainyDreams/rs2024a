@@ -12,6 +12,9 @@ body{
 ::selection{
   background-color: rgba(34, 98, 251, 0.2);
 }
+._show{
+  visibility: visible !important;
+}
 .commonPage{
   padding-top: 24px;
   padding-left: 16px;
@@ -220,7 +223,7 @@ a{
       justify-content: flex-end;
       height:16px;
       opacity: 0.5;
-      background-image: url('/logo.svg');
+      background-image: url('/logo.webp');
       background-repeat: no-repeat;
       background-position: center;
       background-size: auto 100%;

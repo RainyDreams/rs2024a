@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref,onMounted,reactive } from 'vue'
+import { ref,onMounted,reactive, onActivated, onDeactivated } from 'vue'
 import { Peoples } from '@icon-park/vue-next'; 
 import Auth from "../../utils/auth.js";
 import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert, ElMessageBox,} from 'element-plus';
@@ -64,6 +64,7 @@ const rules = reactive({
     { min: 5, max: 25, message: '长度在 5 到 25 个字符', trigger: 'blur' },
     {
       validator: async (rule, value, callback) => {
+        if(!value) return;
         try {
           const isValid = (await Auth.checkUsername(value)).content.verified;
           console.log(isValid);
@@ -97,12 +98,16 @@ const submitForm = (formEl) => {
   formloading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
+      ElMessage.info('正在进行人机验证')
+      const verifyToken = await Auth.getRecaptchaToken();
+      ElMessage.info('正在进行注册流程')
       const encode = CryptoJS.MD5(form.username+form.password).toString().toUpperCase();
       const createTeam = await Auth.userRegister({
         username:form.username,
         nickname:form.nickname,
         password:encode,
-        avatar:'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+        avatar:'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+        token:verifyToken
       })
       if(createTeam.status == 'sus'){
         form.username = '';
@@ -126,5 +131,15 @@ const submitForm = (formEl) => {
   })
 }
 
-</script>
+onActivated(() => {
+  // ruleFormRef.value.clearValidate();
+  document.querySelector('.grecaptcha-badge').classList.add('_show');
 
+})
+
+onDeactivated(()=>{
+  document.querySelector('.grecaptcha-badge').classList.remove('_show');
+  // document.querySelector('.grecaptcha-badge').style="visibility:hidden;"
+})
+
+</script>

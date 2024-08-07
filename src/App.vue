@@ -4,7 +4,7 @@
       <div class="header" v-if="!TabBarHide">
         <div :class="{navlist:1,show:showMenu}" :style="showMenu?'':'transition-delay: 0.20s;'">
           <div class="logo" v-if="SideBarHide" style="margin-left: 24px;">
-            <img src="/logo.svg" alt="赤子英金协作系统">
+            <img src="/logo.webp" alt="赤子英金协作系统">
           </div>
           <a v-for="(item,i) in configList" :class="`nav ${activeName==item.name?'router-link-active':''} animate__animated ${M(showMenu?'animate__fadeInTopLeft':'animate__fadeOutTopLeft')}`" :style="(showMenu?`animation-duration:0.5s;`:'')+`animation-delay:${0.08*(i)}s`" :key="item.name" @click="isM(item.to,item.name)">
             <div class="icon" ><component :is="getIcon(item.icon)" theme="outline" size="22"/></div>
@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="m navMenu" @click="bindShowMenu()">
-          <img src="/logo.svg" alt="赤子英金协作系统">
+          <img src="/logo.webp" alt="赤子英金协作系统">
           <MenuFoldOne theme="outline" size="22" fill="#5F6388" v-if="!showMenu"/>
           <MenuUnfoldOne theme="outline" size="22" fill="#5F6388" v-if="showMenu"/>
         </div>
@@ -53,7 +53,7 @@
     </div>
     <div v-if="!SideBarHide" class="tabbar pc" >
       <div class="logo">
-        <img src="/logo.svg" alt="赤子英金协作系统">
+        <img src="/logo.webp" alt="赤子英金协作系统">
       </div>
       <ul class="tablist">
         <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
