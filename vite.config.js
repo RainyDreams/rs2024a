@@ -20,15 +20,9 @@ export default defineConfig((mode) => {
       minify: 'terser',
       terserOptions: {
         compress: {
+          drop_console: true,
           drop_debugger: true,
           passes: 10,
-          keep_fnames: false, 
-        },
-        mangle: {
-          toplevel: true, // 顶层作用域混淆
-          properties: {
-            regex: /^_/
-          }
         },
         format: {
           comments: false // 去除注释
