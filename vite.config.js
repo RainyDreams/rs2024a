@@ -7,7 +7,7 @@ export default defineConfig((mode) => {
     plugins: [
       vue(),
     ],
-    build: (mode === 'production') ? {
+    build: {
       rollupOptions: {
         output: {
           manualChunks(id) {
@@ -21,11 +21,24 @@ export default defineConfig((mode) => {
       terserOptions: {
         compress: {
           drop_debugger: true,
+          passes: 10,
+          keep_fnames: false, 
         },
+        mangle: {
+          toplevel: true, // 顶层作用域混淆
+          properties: {
+            regex: /^_/
+          }
+        },
+        format: {
+          comments: false // 去除注释
+        }
       },
-    } : {},
+      chunkSizeWarningLimit: 500, 
+    },
     optimizeDeps: {
       include: ['vue', 'vue-router'],
+      exclude: ['lodash-es'], 
     },
   };
 });

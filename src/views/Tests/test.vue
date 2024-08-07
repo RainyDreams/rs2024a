@@ -75,7 +75,7 @@
 </template>
 <script setup>
 import markdownIt from 'markdown-it';
-import markdownItHighlightjs from 'markdown-it-highlightjs'
+// import markdownItHighlightjs from 'markdown-it-highlightjs'
 import { onActivated, onMounted, ref,reactive } from "vue"
 import Auth from "../../utils/auth";
 import { throttle } from '../../utils/helpers'

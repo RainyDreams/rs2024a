@@ -48,7 +48,7 @@
 import { ref,onMounted,reactive } from 'vue'
 import { Peoples } from '@icon-park/vue-next'; 
 import Auth from "../../utils/auth.js";
-import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert,} from 'element-plus';
+import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert, ElMessageBox,} from 'element-plus';
 import CryptoJS from 'crypto-js';
 const ruleFormRef = ref(null);
 const formloading = ref(false);
@@ -108,11 +108,9 @@ const submitForm = (formEl) => {
         form.username = '';
         form.nickname = '';
         form.password = '';
-        ElMessage({
-          message: '创建成功',
-          type: 'success',
+        ElMessageBox.alert('注册成功，请登录', '提示', {}).then(() => {
+          window.location.href = 'https://auth.chiziingiin.top/newreg?url='+encodeURIComponent(window.location.href)
         })
-        window.location.href = 'https://auth.chiziingiin.top/newreg?url='+encodeURI(window.location.href)
       } else {
         ElMessage({
           message: '创建失败',
