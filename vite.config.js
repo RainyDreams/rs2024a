@@ -37,8 +37,7 @@ export default defineConfig((mode) => {
       chunkSizeWarningLimit: 500, 
     },
     optimizeDeps: {
-      include: ['vue', 'vue-router'],
-      exclude: ['lodash-es'], 
+      include: ['vue', 'vue-router', 'element-plus'],
     },
   };
 });
