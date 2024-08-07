@@ -138,10 +138,10 @@ class Auth {
       });
     })
   }
-  static async getRecaptchaToken(){
+  static async getRecaptchaToken(action="default"){
     return new Promise((resolve,reject)=>{
       window.grecaptcha.ready(() => {
-        window.grecaptcha.execute('6Ld2QRYqAAAAABbPygHb0HUKpd-LMU1Ckmy6nb8G', { action: 'submit' })
+        window.grecaptcha.execute('6Ld2QRYqAAAAABbPygHb0HUKpd-LMU1Ckmy6nb8G', { action })
         .then(token => {
           resolve(token)
         }).catch(err=>{

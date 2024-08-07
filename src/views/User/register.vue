@@ -99,7 +99,7 @@ const submitForm = (formEl) => {
   formEl.validate(async (valid) => {
     if (valid) {
       ElMessage.info('正在进行人机验证')
-      const verifyToken = await Auth.getRecaptchaToken();
+      const verifyToken = await Auth.getRecaptchaToken('signup');
       ElMessage.info('正在进行注册流程')
       const encode = CryptoJS.MD5(form.username+form.password).toString().toUpperCase();
       const createTeam = await Auth.userRegister({
