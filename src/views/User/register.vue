@@ -31,6 +31,7 @@
               <el-form-item label="密码" prop="password">
                 <el-input v-model="form.password"/>
               </el-form-item>
+              <div id="turnstile-box"></div>
               <el-form-item style="margin-top: 16px;">
                 <el-button :loading="formloading" type="primary" @click="submitForm(ruleFormRef)">
                   创建临时账户
@@ -99,8 +100,8 @@ const submitForm = (formEl) => {
   formEl.validate(async (valid) => {
     if (valid) {
       ElMessage.info('正在进行人机验证')
-      const verifyToken = await Auth.getRecaptchaToken('signup');
-      ElMessage.info('正在进行注册流程')
+      const verifyToken = await Auth.getRecaptchaToken({action:'signup',id:'#turnstile-box'})
+      ElMessage.info('正在注册')
       const encode = CryptoJS.MD5(form.username+form.password).toString().toUpperCase();
       const createTeam = await Auth.userRegister({
         username:form.username,
@@ -113,10 +114,11 @@ const submitForm = (formEl) => {
         form.username = '';
         form.nickname = '';
         form.password = '';
-        ElMessageBox.alert('注册成功，请登录', '提示', {}).then(() => {
-          window.location.href = 'https://auth.chiziingiin.top/newreg?url='+encodeURIComponent(window.location.href)
+        ElMessageBox.alert('注册成功，将前往登录页面', '提示', {}).then(() => {
+          window.location.href = 'https://auth.chiziingiin.top/newreg'
         })
       } else {
+        turnstile.remove('#turnstile-box')
         ElMessage({
           message: '创建失败',
           type: 'error',
@@ -124,6 +126,7 @@ const submitForm = (formEl) => {
       }
       formloading.value=false;
     } else {
+      turnstile.remove('#turnstile-box')
       console.log('error submit!')
       formloading.value=false;
       return false;
@@ -133,7 +136,10 @@ const submitForm = (formEl) => {
 
 onActivated(() => {
   // ruleFormRef.value.clearValidate();
-  document.querySelector('.grecaptcha-badge').classList.add('_show');
+  document.onLoad = function(){
+    // Auth.handleRecaptcha();
+    document.querySelector('.grecaptcha-badge').classList.add('_show');
+  }
 
 })
 

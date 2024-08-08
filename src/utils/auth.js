@@ -138,15 +138,29 @@ class Auth {
       });
     })
   }
-  static async getRecaptchaToken(action="default"){
+  static async getRecaptchaToken({action="default",id='#turnstile-box'}){
     return new Promise((resolve,reject)=>{
-      window.grecaptcha.ready(() => {
-        window.grecaptcha.execute('6Ld2QRYqAAAAABbPygHb0HUKpd-LMU1Ckmy6nb8G', { action })
-        .then(token => {
-          resolve(token)
-        }).catch(err=>{
-          reject(err)
-        })
+      // window.grecaptcha.ready(() => {
+      //   window.grecaptcha.execute('6Ld2QRYqAAAAABbPygHb0HUKpd-LMU1Ckmy6nb8G', { action })
+      //   .then(token => {
+      //     resolve(token)
+      //   }).catch(err=>{
+      //     reject(err)
+      //   })
+      // });
+      // if using synchronous loading, will be called once the DOM is ready
+      window.turnstile.ready(function () {
+        window.turnstile.render(id, {
+          sitekey: '0x4AAAAAAAgyM4dGoERAGuG2',
+          action: action,
+          callback: function(token) {
+            resolve(token)
+          },
+          'error-callback': function(err) {
+            reject(err)
+          },
+          'refresh-expired':'auto'
+        });
       });
     })
   }
