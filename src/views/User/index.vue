@@ -26,6 +26,7 @@
         <div class="title">基本信息</div>
       </div>
       <div class="_content">
+        <el-button @click="logout">退出登录</el-button>
         <div >{{ profile }}</div>
         <el-upload
           class="avatar-uploader"
@@ -45,7 +46,7 @@
 <script setup>
 import { IdCardH } from '@icon-park/vue-next';
 import { onActivated, onMounted, ref } from 'vue';
-import { ElAvatar,ElSkeleton,ElUpload,ElIcon } from 'element-plus';
+import { ElAvatar,ElSkeleton,ElUpload,ElIcon,ElButton, ElMessageBox } from 'element-plus';
 import Auth from '../../utils/auth';
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
@@ -61,6 +62,18 @@ onMounted(async ()=>{
   profile.value = res.content;
   loading.value=false;
 })
+async function logout(){
+  const res = await Auth.logout();
+  if(res.status == 'sus'){
+    ElMessageBox.alert('退出成功', '提示', {
+      confirmButtonText: '确定',
+      showClose:false,
+      callback: action => {
+        window.location.href = 'https://auth.chiziingiin.top/relogin';
+      }
+    })
+  }
+}
 function handleUpload(options) {
   const file = options.file;
   if (file.type.startsWith('image')) {

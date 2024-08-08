@@ -33,6 +33,7 @@
       <el-date-picker
         v-model="form.endTime"
         type="datetime"
+        :editable="false"
         placeholder="选择日期时间"
       />
     </el-form-item>
@@ -66,7 +67,7 @@
 <script setup>
 import { ref, reactive, onMounted, onActivated } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { ElMessage,ElForm,ElFormItem,ElButton,ElSelect,ElInput,ElDatePicker,ElOption,ElAvatar } from "element-plus"
+import { ElMessage,ElForm,ElFormItem,ElButton,ElSelect,ElInput,ElDatePicker,ElOption,ElAvatar, ElMessageBox } from "element-plus"
 import Auth from "../../../utils/auth";
 const router = useRouter()
 const route = useRoute()
@@ -81,7 +82,7 @@ const form = reactive({
 const rules = reactive({
   name: [
     { required: true, message: "请输入任务名称", trigger: "blur" },
-    { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+    { min: 2, max: 16, message: "长度在 2 到 16 个字符", trigger: "blur" }
   ],
   desc: [
     { required: true, message: "请输入任务内容", trigger: "blur" },
@@ -112,14 +113,26 @@ onMounted(async ()=>{
   }
 })
 async function submitForm(formEl) {
-  if (!formEl) {
-    return
-  } else {
-    const res = await Auth.createProjectItem({
-      type:"tasks",
-      projectId:projectId.value,
-      ...form
-    })
-  }
+  if (!formEl) return;
+  formEl.validate(async (valid) => {
+    if (valid) {
+      const res = await Auth.createProjectItem({
+        type:"task",
+        projectId:projectId.value,
+        ...form
+      })
+      if(res.status == 'sus'){
+        ElMessageBox.alert('创建成功','提示' , {
+          confirmButtonText: '确定',
+          showClose:false,
+          callback: action => {
+            router.push({
+              path: '/projects/detail/'+projectId.value,
+            })
+          }
+        })
+      }
+    }
+  })
 }
 </script>

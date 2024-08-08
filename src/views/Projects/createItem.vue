@@ -10,7 +10,7 @@
         <discussion v-if="createType=='discussion'" />
         <workflow v-else-if="createType=='workflow'" />
         <issue v-else-if="createType=='issue'" />
-        <taasks v-else-if="createType=='tasks'" />
+        <task v-else-if="createType=='task'" />
       </div>
     </div>
   </div>
@@ -20,7 +20,7 @@
 import discussion from "./create/discussion.vue";
 import workflow from "./create/workflow.vue";
 import issue from "./create/issue.vue";
-import taasks from "./create/tasks.vue";
+import task from "./create/task.vue";
 import { ref,onMounted,reactive, onActivated, nextTick } from 'vue'
 import { FileAddition, Refresh } from '@icon-park/vue-next'; 
 import routerBack from '../../components/routerBack.vue';
@@ -35,7 +35,7 @@ function Update(){
   projectId.value = route.params.projectId;
   type.value = {
     workflow:'工作流',
-    tasks:'任务', 
+    task:'任务', 
     discussion:'讨论', 
     issue:'问题'
   }[createType.value] || '参数错误'

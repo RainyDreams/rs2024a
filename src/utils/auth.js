@@ -180,6 +180,10 @@ class Auth {
   static async userRegister(param){
     return this.basicAuth("/api/reg", JSON.stringify(param))
   }
+  static async logout(){
+    await this.getPrtoken()
+    return this.basicAuth("/api/logout")
+  }
   static async checkUsername(value){
     return this.basicAuth("/api/checkUsername", JSON.stringify({username:value}))
   }
@@ -273,6 +277,13 @@ class Auth {
     return this.basicAuth(
       "/api/project/create-item",
       JSON.stringify({ ...param })
+    );
+  }
+  static async getProjectItem(param={}){
+    await this.getPrtoken();
+    return this.basicAuth(
+      "/api/project/get-item",
+      JSON.stringify({ projectId: param.projectId, type: param.type })
     );
   }
   static async getUserInfo(param = {}) {

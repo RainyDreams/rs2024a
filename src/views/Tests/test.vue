@@ -6,12 +6,12 @@
           <div class="panel aichat" >
             <div class="chatList" style="min-height: 200px;">
               <div class="system">
-                <el-avatar alt="头像" src="/logo_sm.png">小英</el-avatar>
+                <el-avatar alt="头像" src="/logo_sm.webp">小英</el-avatar>
                 <div class="chatcontent" style="font-size:12px;">
-                  <p>赤子英金大模型公测 编译版本CzigChat-1.0-14b@202408032254</p>
-                  <p>为了更好的测试，全量开放。未来我们会将大模型融入到我们的产品中。<strong>本产品由赤子英金开发和训练，未接入任何平台API，独立运行在我们的服务器上。</strong>大服务生成的所有内容均由人工智能模型生成，其生成内容的准确性和完整性无法保证，不代表我们的态度或观点，仅供参考学习。</p>
+                  <p>赤子英金大模型公测 依托QWen大模型构建 编译版本CzigChat-1.0-14b@202408032254</p>
+                  <p>为了更好的测试，全量开放。未来我们会将大模型融入到我们的产品中。<strong>本产品由赤子英金开发和训练，未接入任何第三方平台API，独立运行在我们的服务器上。</strong>大服务生成的所有内容均由人工智能模型生成，其生成内容的准确性和完整性无法保证，不代表我们的态度或观点，仅供参考学习。</p>
                   <p>使用本软件即代表同意<a target="_blank" href="https://www.chiziingiin.top/license/ai">《赤子英金大模型使用协议》</a>，如若大模型出现回答错误、不准确、不道德等问题请及时<a href="https://project.chiziingiin.top/system/feedback">反馈给我们</a>，方便改进。</p>
-                  <p>需要注意的是：本页面为测试页面，聊天历史不会被保存。</p>
+                  <p>聊天历史不会被保存。</p>
                 </div>
               </div>
               <template v-for="(item,i) in chatList" class="chatList">
@@ -22,7 +22,7 @@
                   </el-watermark>
                 </div>
                 <div class="assistant" v-if="item.role == 'assistant'">
-                  <el-avatar alt="头像" src="/logo_sm.png" fit="contain">小英</el-avatar>
+                  <el-avatar alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar>
                   <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12" :content="['赤子英金大模型 赤子英金大模型', fingerprint]">
                     <div class="chatcontent" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
                   </el-watermark>
@@ -40,7 +40,7 @@
             <div class="clickWrapper" @click="changeFocus"></div>
             <el-input
               ref="askRef"
-              v-model="input" 
+              v-model.lazy="input"
               :autosize="{ minRows: 1, maxRows: 4 }"
               type="textarea"
               resize="none"
@@ -75,7 +75,7 @@
 </template>
 <script setup>
 import markdownIt from 'markdown-it';
-// import markdownItHighlightjs from 'markdown-it-highlightjs'
+import markdownItHighlightjs from 'markdown-it-highlightjs'
 import { onActivated, onMounted, ref,reactive } from "vue"
 import Auth from "../../utils/auth";
 import { throttle } from '../../utils/helpers'
@@ -98,11 +98,12 @@ const onFocus = () => {
   throttledScrollToBottom();
 }
 const onBlur = () => {
-  console.log(document.activeElement)
+  // console.log(document.activeElement)
   ainputStatus.value = false;
 }
 const onChange = () => {
   now.value = input.value.length
+  // input.value = askRef.value.value
 }
 const handleEnter = async (event) => {
   if (event.shiftKey) {

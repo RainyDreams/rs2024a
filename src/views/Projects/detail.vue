@@ -1,7 +1,7 @@
 <template>
  <div class="commonPage">
   <routerBack name="项目列表" back="/projects/list"></routerBack>
-  <div class="panel">
+  <div class="panel" style="padding-top: 12px;">
     <div class="_content">
       <el-tabs >
         <el-tab-pane label="基本信息">
@@ -14,7 +14,7 @@
         </el-tab-pane>
         <el-tab-pane label="工作流">
           <div v-if="projectDetail.workflow.length>0">
-
+            <view-workflow></view-workflow>
           </div>
           <div v-else>
             <el-empty :image-size="150" >
@@ -30,8 +30,8 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="任务">
-          <div v-if="projectDetail.tasks.length>0">
-
+          <div v-if="projectDetail.task.length>0">
+            <view-task></view-task>
           </div>
           <div v-else>
             <el-empty :image-size="150" >
@@ -39,7 +39,7 @@
                 <p>还未创建</p>
               </template>
               <template #default>
-                <p><el-button @click="toCreate('tasks')" type="primary">
+                <p><el-button @click="toCreate('task')" type="primary">
                   去创建<el-icon class="el-icon--right"><Right /></el-icon>
                 </el-button></p>
               </template>
@@ -48,7 +48,7 @@
         </el-tab-pane>
         <el-tab-pane label="问题">
           <div v-if="projectDetail.issue.length>0">
-
+            <view-issue></view-issue>
           </div>
           <div v-else>
             <el-empty :image-size="150" >
@@ -65,7 +65,7 @@
         </el-tab-pane>
         <el-tab-pane label="讨论">
           <div v-if="projectDetail.discussion.length>0">
-
+            <view-discussion></view-discussion>
           </div>
           <div v-else>
             <el-empty :image-size="150" >
@@ -86,6 +86,10 @@
  </div>
 </template>
 <script setup>
+import ViewWorkflow from './view/workflow.vue'
+import ViewTask from './view/task.vue'
+import ViewIssue from './view/issue.vue'
+import ViewDiscussion from './view/discussion.vue';
 import { ElTabs,ElTabPane,ElEmpty,ElIcon,ElButton } from 'element-plus';
 import { Right } from '@icon-park/vue-next';
 import Auth from '../../utils/auth';
@@ -99,7 +103,7 @@ const projectDetail = ref({
   name:'',
   desc:'',
   workflow:[],
-  tasks:[], 
+  task:[], 
   discussion:[], 
   issue:[]
 });
@@ -107,6 +111,7 @@ function toCreate(type){
   router.push(`/projects/detail-create/${type}/${projectId.value}`)
 }
 onActivated(async ()=>{
+  console.log('active')
   projectId.value = route.params.projectId;
   const res = await Auth.getProjectDetail({id:projectId.value})
   if(res.status == 'sus'){

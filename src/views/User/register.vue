@@ -29,7 +29,7 @@
                 <el-input v-model="form.nickname"/>
               </el-form-item>
               <el-form-item label="密码" prop="password">
-                <el-input v-model="form.password"/>
+                <el-input v-model="form.password" type="password"/>
               </el-form-item>
               <div id="turnstile-box"></div>
               <el-form-item style="margin-top: 16px;">

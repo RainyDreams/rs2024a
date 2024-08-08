@@ -328,7 +328,3 @@ const rightList = [
 const tabbarList = ref(configList[0].tabs);
 
 </script>
-
-<style lang="scss" scoped>
-@import "./styles/tabbar.scss";
-</style>

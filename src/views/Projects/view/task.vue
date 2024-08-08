@@ -1,7 +1,7 @@
 <template>
   <div class="row">
-    <div class="col-12 col-md-6 col-xl-4" v-for="(item,index) in discussionList" :key="index">
-      <div class="discussionCard prcard">
+    <div class="col-12 col-md-6 col-xl-4" v-for="(item,index) in taskList" :key="index">
+      <div class="taskCard prcard">
         <div class="name">{{ item.name }}</div>
         <div class="userline">
           <el-avatar :src="item.myProfile.avatar"></el-avatar>
@@ -23,13 +23,13 @@ import Auth from '../../../utils/auth';
 import { useRoute } from 'vue-router';
 const route = useRoute();
 const projectId = ref();
-const discussionList = ref([]);
+const taskList = ref([]);
 onMounted(async ()=>{
   projectId.value = route.params.projectId;
   const res = await Auth.getProjectItem({
-    type:'discussion',projectId:projectId.value
+    type:'task',projectId:projectId.value
   })
-  discussionList.value=res.content;
+  taskList.value=res.content;
 })
 
 </script>

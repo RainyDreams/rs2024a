@@ -1,17 +1,5 @@
-body{
-  --window--height:100vh;
-  --system--height:min(100vh , var(--window--height));
-  overflow: hidden;
-}
-#app{
-  height:100vh !important;
-  padding-bottom: calc(100vh - var(--system--height)) !important;
-  background-color: rgba(226, 240, 254);
-  background-image: linear-gradient(to right bottom, rgb(244, 245, 231), rgb(215, 234, 253));
-}
-::selection{
-  background-color: rgba(34, 98, 251, 0.2);
-}
+
+
 ._show{
   visibility: visible !important;
 }

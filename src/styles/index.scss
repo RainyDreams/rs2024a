@@ -12,10 +12,59 @@
 @use "element-plus/theme-chalk/src/index.scss" as *;
 
 @import "./theme.scss";
-@import "./public.scss";
 @import "./grid.scss";
 @import "./page.scss";
-@import "./tabbar.scss";
+@import "./project.scss";
+@import "./app.scss";
+
+
+
+#app {
+  font-family: 'MiSans',Arial, Helvetica, sans-serif !important;
+  // padding-bottom: calc(100vh - var(--system--height));
+}
+@font-face {
+  font-family: Lato;
+  font-weight: 500;
+  font-style: normal;
+  text-rendering: optimizeLegibility;
+  src: url(https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/fonts/lato-semibold/lato-semibold.woff2) format("woff2"),
+    url(https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/fonts/lato-semibold/lato-semibold.woff) format("woff");
+}
+@font-face {
+  font-family: Lato;
+  font-weight: 500;
+  font-style: italic;
+  text-rendering: optimizeLegibility;
+  src: url(https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/fonts/lato-semibold-italic/lato-semibold-italic.woff2)
+      format("woff2"),
+    url(https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/fonts/lato-semibold-italic/lato-semibold-italic.woff) format("woff");
+}
+@font-face {
+  font-family: Lato;
+  font-weight: 600;
+  font-style: normal;
+  text-rendering: optimizeLegibility;
+  src: url(https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/fonts/lato-bold/lato-bold.woff2) format("woff2"),
+    url(https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/fonts/lato-bold/lato-bold.woff) format("woff");
+}
+@font-face {
+  font-family: Lato;
+  font-weight: 600;
+  font-style: italic;
+  text-rendering: optimizeLegibility;
+  src: url(https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/fonts/lato-bold-italic/lato-bold-italic.woff2) format("woff2"),
+    url(https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/fonts/lato-bold-italic/lato-bold-italic.woff) format("woff");
+}
+
+html{
+  --window--height:100vh;
+  --system--height:min(100vh , var(--window--height));
+  overflow-x: hidden;
+  padding-bottom: calc(100vh - var(--system--height)) !important;
+  background-color: rgba(226, 240, 254);
+  // background-image: linear-gradient(to right bottom, rgb(244, 245, 231), rgb(215, 234, 253));
+}
 
 .el-message{
   border-radius:20px;
@@ -23,7 +72,6 @@
   border:none;
   box-shadow: 0px 2px 6px var(  --el-message-border-color);
 }
-// @import "./tabbar.scss"
 
 
 :root {
@@ -67,4 +115,7 @@ p{
 }
 ::-webkit-scrollbar-thumb:active {
   background-color: rgba(0, 0, 0, 0.25);
+}
+::selection{
+  background-color: rgba(34, 98, 251, 0.2);
 }
