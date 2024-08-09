@@ -1,17 +1,17 @@
 <template>
   <div class="site-content">
-    <div class="panel bs-container">
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12 col-md-6">
           <h1 class="mt-1 mb-3 text-3xl font-semibold md:mt-20 md:mb-8 md:text-5xl/snug lg:text-6xl/snug">为什么选择赤子英金？</h1>
           <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们致力于实现「零成本也能构建高效的应用程序」的梦想</h5>
         </div>
         <div class="col-12 col-md-6">
-          <iframe style="height:100%;width:100%;min-height:400px;" src="https://player.bilibili.com/player.html?bvid=BV1wf421z74D&danmaku=0&as_wide=0" frameborder="0"></iframe>
+          <iframe style="height:100%;width:100%;min-height:400px;" src="https://player.bilibili.com/player.html?bvid=BV1wf421z74D&as_wide=0&danmaku=0&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>
         </div>
       </div>
     </div>
-    <div class="panel bs-container">
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12">
           <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug">我们的优势</h2>
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <div class="panel bs-container">
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12">
           <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug">我们拥有软件完全著作权</h2>
@@ -69,7 +69,7 @@
         <div class="col-12"></div>
       </div>
     </div>
-    <div class="panel bs-container">
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12">
           <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug">安全</h2>
@@ -78,7 +78,7 @@
         <div class="col-12"></div>
       </div>
     </div>
-    <div class="panel bs-container">
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12">
           <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug">高效</h2>
@@ -87,7 +87,7 @@
         <div class="col-12"></div>
       </div>
     </div>
-    <div class="panel bs-container">
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12">
           <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug">创新 & 智能</h2>
@@ -96,7 +96,7 @@
         <div class="col-12"></div>
       </div>
     </div>
-    <div class="panel bs-container">
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <h2 class="font-semibold mt-10 mb-3 text-3xl md:mt-20 md:mb-8 md:text-5xl/snug lg:text-6xl/snug text-center">梦想只是开始 探索永不止步</h2>
     </div>
     <div class="copyright py-5">
