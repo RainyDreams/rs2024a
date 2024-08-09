@@ -18,8 +18,8 @@
 @import "./app.scss";
 
 
-
 #app {
+  color:#3c3e55;
   font-family: 'MiSans',Arial, Helvetica, sans-serif !important;
   // padding-bottom: calc(100vh - var(--system--height));
 }
@@ -62,7 +62,7 @@ html{
   --system--height:min(100vh , var(--window--height));
   overflow-x: hidden;
   padding-bottom: calc(100vh - var(--system--height)) !important;
-  background-color: rgba(226, 240, 254);
+  background-color: rgb(240, 248, 255);
   // background-image: linear-gradient(to right bottom, rgb(244, 245, 231), rgb(215, 234, 253));
 }
 

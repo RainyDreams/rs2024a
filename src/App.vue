@@ -3,9 +3,9 @@
     <div class="mainpage">
       <div class="header" v-if="!TabBarHide">
         <div :class="{navlist:1,show:showMenu}" :style="showMenu?'':'transition-delay: 0.20s;'">
-          <div class="logo" v-if="SideBarHide" style="margin-left: 24px;">
+          <router-link class="logo pc" to="/" v-if="SideBarHide" style="margin-left:24px;height:28px;padding:0 8px;">
             <img src="/logo.webp" alt="赤子英金协作系统">
-          </div>
+          </router-link>
           <a v-for="(item,i) in configList" :class="`nav ${activeName==item.name?'router-link-active':''} animate__animated ${M(showMenu?'animate__fadeInTopLeft':'animate__fadeOutTopLeft')}`" :style="(showMenu?`animation-duration:0.5s;`:'')+`animation-delay:${0.08*(i)}s`" :key="item.name" @click="isM(item.to,item.name)">
             <div class="icon" ><component :is="getIcon(item.icon)" theme="outline" size="22"/></div>
             <p>{{ item.title }}</p>
@@ -24,7 +24,9 @@
           </div>
         </div>
         <div class="m navMenu" @click="bindShowMenu()">
-          <img src="/logo.webp" alt="赤子英金协作系统">
+          <router-link to="/">
+            <img src="/logo.webp" alt="赤子英金协作系统">
+          </router-link>
           <MenuFoldOne theme="outline" size="22" fill="#5F6388" v-if="!showMenu"/>
           <MenuUnfoldOne theme="outline" size="22" fill="#5F6388" v-if="showMenu"/>
         </div>
@@ -52,9 +54,9 @@
       </div>
     </div>
     <div v-if="!SideBarHide" class="tabbar pc" >
-      <div class="logo">
+      <router-link class="logo" to="/">
         <img src="/logo.webp" alt="赤子英金协作系统">
-      </div>
+      </router-link>
       <ul class="tablist">
         <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
           <router-link class="" :to="item.to" >
@@ -97,21 +99,12 @@ const throttleResize = throttle(()=>{
   document.body.style.setProperty('--window--height', `${window.innerHeight}px`);
 },200)
 onMounted(()=>{
-  // ElNotification({
-  //   title: '提示',
-  //   message: "如果您对本项目有任何建议或遇到任何问题，可以点击导航栏“关于软件”联系我们",
-  //   position: 'bottom-right',
-  //   type: 'info',
-  //   offset: 125, 
-  // });
   throttleResize()
 })
-// window.onresize = throttleResize()
-
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
-router.beforeEach((to, from) => {
+router.afterEach((to, from) => {
   const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
   rightList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1);
   if(item){
@@ -120,21 +113,20 @@ router.beforeEach((to, from) => {
       tabbarList.value = [];
       setTimeout(()=>{
         tabbarList.value = item.tabs;
-      },5)
+      },1)
     } else {
       tabbarList.value = item.tabs;
     }
-
   } else {
     activeName.value = '';
   }
-  if(to.meta.hide){
-    TabBarHide.value = to.meta.hide.find(i=>i=='tabbar');
-    SideBarHide.value = to.meta.hide.find(i=>i=='sidebar')
-  }else{
-    TabBarHide.value = false;
-    SideBarHide.value = false;
-  }
+  console.log(to.meta.hide.length)
+  if(to.meta.hide)
+  to.meta.hide.map((e)=>{
+    TabBarHide.value = e == 'tabbar'?true:TabBarHide.value;
+    SideBarHide.value = e == 'sidebar'?true:SideBarHide.value;
+    console.log(e,TabBarHide.value,SideBarHide.value)
+  })
 });
 function M(str){
   // console.log(str,window.innerWidth)

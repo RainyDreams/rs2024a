@@ -36,8 +36,7 @@
     <div class="ainput" ref="ainput">
       <div class="row">
         <div class="col-12 col-xl-8">
-          <div :class="`ainput__wrapper ${ainputStatus ? 'active' : ''}`">
-            <div class="clickWrapper" @click="changeFocus"></div>
+          <div :class="`ainput__wrapper`">
             <el-input
               ref="askRef"
               v-model.lazy="input"
@@ -75,12 +74,12 @@
 </template>
 <script setup>
 import markdownIt from 'markdown-it';
-import markdownItHighlightjs from 'markdown-it-highlightjs'
+// import markdownItHighlightjs from 'markdown-it-highlightjs'
 import { onActivated, onMounted, ref,reactive } from "vue"
 import Auth from "../../utils/auth";
 import { throttle } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark } from "element-plus"; 
-const md = new markdownIt().use(markdownItHighlightjs);
+const md = new markdownIt()
 const chatList = ref([]);
 const input = ref("");
 const askRef = ref();
@@ -89,17 +88,8 @@ const loading = ref(true);
 const ainput = ref()
 const now = ref(0)
 const fingerprint = ref("")
-const ainputStatus = ref(false)
-const changeFocus = () => {
-  askRef.value.focus()
-}
 const onFocus = () => {
-  ainputStatus.value = true;
   throttledScrollToBottom();
-}
-const onBlur = () => {
-  // console.log(document.activeElement)
-  ainputStatus.value = false;
 }
 const onChange = () => {
   now.value = input.value.length
