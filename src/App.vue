@@ -23,12 +23,12 @@
             </ul>
           </div>
         </div>
-        <div class="m navMenu" @click="bindShowMenu()">
+        <div class="m navMenu">
           <router-link to="/">
             <img src="/logo.webp" alt="赤子英金协作系统">
           </router-link>
-          <MenuFoldOne theme="outline" size="22" fill="#5F6388" v-if="!showMenu"/>
-          <MenuUnfoldOne theme="outline" size="22" fill="#5F6388" v-if="showMenu"/>
+          <MenuFoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="!showMenu"/>
+          <MenuUnfoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="showMenu"/>
         </div>
         <div class="btns">
           <div class="btn">
@@ -120,20 +120,15 @@ router.afterEach((to, from) => {
   } else {
     activeName.value = '';
   }
-  console.log(to.meta.hide.length)
-  if(to.meta.hide)
-  to.meta.hide.map((e)=>{
-    TabBarHide.value = e == 'tabbar'?true:TabBarHide.value;
-    SideBarHide.value = e == 'sidebar'?true:SideBarHide.value;
-    console.log(e,TabBarHide.value,SideBarHide.value)
+  TabBarHide.value = false;
+  SideBarHide.value = false;
+  to.meta.hide.find(e=>{
+    if(e=='tabbar') TabBarHide.value = true;
+    else if (e=='sidebar') SideBarHide.value = true;
   })
 });
 function M(str){
-  // console.log(str,window.innerWidth)
-  if(window.innerWidth <= 1000){
-    return str;
-  }
-  return ''
+  return window.innerWidth <= 1000?str:'';
 }
 function isM(to,name){
   if(window.innerWidth > 1000){
@@ -156,11 +151,9 @@ function isM(to,name){
   }
 }
 function toM(path) {
-  // router.push(path)
   showMenu.value=false
 }
 function clickUser(){
-  // showMenu.value=false;
   router.push('/user/profile');
   activeName.value="User";
   tabbarList.value = rightList[1].tabs;

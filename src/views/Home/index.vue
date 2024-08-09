@@ -7,7 +7,7 @@
           <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们致力于实现「零成本也能构建高效的应用程序」的梦想</h5>
         </div>
         <div class="col-12 col-md-6">
-          <iframe style="height:100%;width:100%;min-height:400px;" src="https://player.bilibili.com/player.html?bvid=BV1wf421z74D&as_wide=0&danmaku=0&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>
+          <iframe style="height:100%;width:100%;min-height:400px;" src="https://player.bilibili.com/player.html?bvid=BV1wf421z74D&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>
         </div>
       </div>
     </div>

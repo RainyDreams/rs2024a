@@ -9,9 +9,9 @@
   "description": "CF2Z RS 2024 2312-A",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rshis/rs2024-a.git"
+    "url": "https://github.com//rs2024-a.git"
   },
-  "homepage": "https://github.com/rshis/rs2024-a.git",
+  "homepage": "https://github.com//rs2024-a.git",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -39,9 +39,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.41",
-    "tailwindcss": "^3.4.9",
     "vite": "^5.3.4"
   }
 }

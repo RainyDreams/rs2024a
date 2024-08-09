@@ -25,7 +25,7 @@ export default defineConfig((mode) => {
           passes: 10,
         },
         format: {
-          comments: false // 去除注释
+          comments: false
         }
       },
       chunkSizeWarningLimit: 500, 

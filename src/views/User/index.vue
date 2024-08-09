@@ -1,33 +1,265 @@
 <template>
-  <div class="userPage">
-    <div class="userProfile">
-      <div class="userAvatar">
-        <el-avatar alt="头像" :src="profile.avatar" :size="80"></el-avatar>
-      </div>
-      <div class="userBasic">
-        <div class="userWelcome">
-          <span class="welcome">Hi,</span>
-          <span class="userNickname">{{ profile.nickname }}</span>
-        </div>
-        <div class="userSign">目前暂不支持签名</div>
-      </div>
-    </div>
-    <div class="userFocusList">
-    </div>
-  </div>
-  <!-- <p>这个页面不知道咋设计了🤷‍♀️，如果你有好的方案请联系我们</p> -->
-  <div class="commonPage" style="padding: 0;">
+  <div class="commonPage">
     <div class="panel" v-if="loading">
       <el-skeleton animated :rows="5" />
     </div>
+    <div class="row" v-if="!loading">
+      <div class="col-12 col-md-6 col-lg-4 ">
+        <div class="panel">
+          <div class="flex flex-row">
+            <div class="flex items-center mr-3">
+              <el-avatar :src="profile.avatar" :size="60"></el-avatar>
+            </div>
+            <div class="flex items-center flex-col ">
+              <div class="text-xl font-semibold truncate">{{ profile.nickname }}</div>
+              <div class="break-all">{{ profile.sign || '暂无签名' }}</div>
+              <el-button @click="logout" link>退出登录</el-button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-8 ">
+        <div class="panel text-center">
+          <div class="row">
+            <div class="col-6 col-sm-4 col-md-4 col-lg-3">
+              <el-statistic :value="profile.teams.length">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    团队
+                    <el-tooltip
+                      effect="dark"
+                      content="你创建和加入的团队数量"
+                      placement="top"
+                    >
+                      <info style="margin-left: 4px;cursor: pointer;" theme="outline" :size="12" fill="#555" strokeLinejoin="bevel"/>
+                    </el-tooltip>
+                  </div>
+                </template>
+              </el-statistic>
+            </div>
+            <div class="col-6 col-sm-4 col-md-4 col-lg-3">
+              <el-statistic :value="profile.projects.length">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    项目
+                    <el-tooltip
+                      effect="dark"
+                      content="你创建和加入的项目数量"
+                      placement="top"
+                    >
+                      <info style="margin-left: 4px;cursor: pointer;" theme="outline" :size="12" fill="#555" strokeLinejoin="bevel"/>
+                    </el-tooltip>
+                  </div>
+                </template>
+              </el-statistic>
+            </div>
+            <div class="col-6 col-sm-4 col-md-4 col-lg-3">
+              <el-statistic :value="profile.workflow.length">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    工作流
+                    <el-tooltip
+                      effect="dark"
+                      content="你创建和加入的工作流数量"
+                     placement="top"
+                    >
+                      <info style="margin-left: 4px;cursor: pointer;" theme="outline" :size="12" fill="#555" strokeLinejoin="bevel"/>
+                    </el-tooltip>
+                  </div>
+                </template>
+              </el-statistic>
+            </div>
+            <div class="col-6 col-sm-4 col-md-4 col-lg-3">
+              <el-statistic :value="profile.task.length">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    任务
+                    <el-tooltip
+                      effect="dark"
+                      content="你创建和加入的任务数量"
+                      placement="top"
+                    >
+                      <info style="margin-left: 4px;cursor: pointer;" theme="outline" :size="12" fill="#555" strokeLinejoin="bevel"/>
+                    </el-tooltip>
+                  </div>
+                </template>
+              </el-statistic>
+            </div>
+            <div class="col-6 col-sm-4 col-md-4 col-lg-3">
+              <el-statistic :value="profile.issue.length">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    问题
+                    <el-tooltip
+                      effect="dark"
+                      content="你创建和加入的问题数量"
+                      placement="top"
+                    >
+                      <info style="margin-left: 4px;cursor: pointer;" theme="outline" :size="12" fill="#555" strokeLinejoin="bevel"/>
+                    </el-tooltip>
+                  </div>
+                </template>
+              </el-statistic>
+            </div>
+            <div class="col-6 col-sm-4 col-md-4 col-lg-3">
+              <el-statistic :value="profile.discussion.length">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    讨论
+                    <el-tooltip
+                      effect="dark"
+                      content="你创建和加入的讨论数量"
+                     placement="top"
+                    >
+                      <info style="margin-left: 4px;cursor: pointer;" theme="outline" :size="12" fill="#555" strokeLinejoin="bevel"/>
+                    </el-tooltip>
+                  </div>
+                </template>
+              </el-statistic>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="panel">
+          <div class="_header">
+            <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
+            <div class="title">团队</div>
+          </div>
+          <div class="_content">
+            <ul>
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.teams">
+                <div class="flex-1 shrink break-all">
+                  <div></div>
+                  <div class="text-xs text-slate-400">ID:{{ item.team }}</div>
+                </div>
+                <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
+                  <div>我的身份</div>
+                  <div>{{ item.role }}</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="panel">
+          <div class="_header">
+            <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
+            <div class="title">项目</div>
+          </div>
+          <div class="_content">
+            <ul>
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.projects">
+                <div class="flex-1 shrink break-all">
+                  <div></div>
+                  <div class="text-xs text-slate-400">ID:{{ item.project }}</div>
+                </div>
+                <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
+                  <div>我的身份</div>
+                  <div>{{ item.role }}</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="panel">
+          <div class="_header">
+            <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
+            <div class="title">工作流</div>
+          </div>
+          <div class="_content">
+            <ul>
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.workflow">
+                <div class="flex-1 shrink break-all">
+                  <div></div>
+                  <div class="text-xs text-slate-400">ID:{{ item.workflow }}</div>
+                </div>
+                <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
+                  <div>我的身份</div>
+                  <div>{{ item.role }}</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="panel">
+          <div class="_header">
+            <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
+            <div class="title">任务</div>
+          </div>
+          <div class="_content">
+            <ul>
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.task">
+                <div class="flex-1 shrink break-all">
+                  <div></div>
+                  <div class="text-xs text-slate-400">ID:{{ item.task }}</div>
+                </div>
+                <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
+                  <div>我的身份</div>
+                  <div>{{ item.role }}</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="panel">
+          <div class="_header">
+            <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
+            <div class="title">问题</div>
+          </div>
+          <div class="_content">
+            <ul>
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.issue">
+                <div class="flex-1 shrink break-all">
+                  <div></div>
+                  <div class="text-xs text-slate-400">ID:{{ item.issue }}</div>
+                </div>
+                <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
+                  <div>我的身份</div>
+                  <div>{{ item.role }}</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="panel">
+          <div class="_header">
+            <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
+            <div class="title">讨论</div>
+          </div>
+          <div class="_content">
+            <ul>
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.discussion">
+                <div class="flex-1 shrink break-all">
+                  <div></div>
+                  <div class="text-xs text-slate-400">ID:{{ item.discussion }}</div>
+                </div>
+                <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
+                  <div>我的身份</div>
+                  <div>{{ item.role }}</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 
     <div class="panel" v-if="!loading" >
       <div class="_header">
-        <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
         <div class="title">基本信息</div>
       </div>
       <div class="_content">
-        <el-button @click="logout">退出登录</el-button>
-        <div >{{ profile }}</div>
+        
         <el-upload
           class="avatar-uploader"
           action="/api/uploadAvatar"
@@ -40,13 +272,13 @@
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
         </el-upload>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script setup>
-import { IdCardH } from '@icon-park/vue-next';
+import { Info,IdCardH } from '@icon-park/vue-next';
 import { onActivated, onMounted, ref } from 'vue';
-import { ElAvatar,ElSkeleton,ElUpload,ElIcon,ElButton, ElMessageBox } from 'element-plus';
+import { ElAvatar,ElStatistic, ElMessageBox,ElTooltip,ElSkeleton,ElButton} from 'element-plus';
 import Auth from '../../utils/auth';
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
@@ -54,6 +286,13 @@ import axios from 'axios';
 const profile = ref({
   nickname: '加载中',
   avatar: 'https://project.chiziingiin.top/api/avatar/',
+  sign: '暂无签名',
+  teams: [],
+  projects: [],
+  workflow: [],
+  task: [],
+  issue: [],
+  discussion: []
 })
 const imageUrl = ref('')
 const loading = ref(true)
@@ -106,6 +345,9 @@ function handleUpload(options) {
   width: 178px;
   height: 178px;
   display: block;
+}
+.panel{
+  height: 100%;
 }
 </style>
 <style>
