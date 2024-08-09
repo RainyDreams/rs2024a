@@ -13,9 +13,9 @@
             <div class="flex items-center flex-col ">
               <div class="text-xl font-semibold truncate">{{ profile.nickname }}</div>
               <div class="break-all">{{ profile.sign || '暂无签名' }}</div>
-              <el-button @click="logout" link>退出登录</el-button>
             </div>
           </div>
+          <el-button style="width: 100%;" @click="logout" class="mt-4" round size="large">退出登录</el-button>
         </div>
       </div>
       <div class="col-12 col-md-6 col-lg-8 ">
@@ -130,12 +130,16 @@
             <ul>
               <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.teams">
                 <div class="flex-1 shrink break-all">
-                  <div></div>
+                  <div class="text-md">{{ item.name }}</div>
                   <div class="text-xs text-slate-400">ID:{{ item.team }}</div>
+                  <div class="text-sm text-slate-600 mt-1">{{ item.desc }}</div>
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>
                   <div>{{ item.role }}</div>
+                  <div class="mt-2">
+                    <el-avatar :size="20" v-for="(e) in item.persons" :src="e.avatar"></el-avatar>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -152,8 +156,9 @@
             <ul>
               <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.projects">
                 <div class="flex-1 shrink break-all">
-                  <div></div>
+                  <div class="text-md">{{ item.name }}</div>
                   <div class="text-xs text-slate-400">ID:{{ item.project }}</div>
+                  <div class="text-sm text-slate-600 mt-1">{{ item.desc }}</div>
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>
@@ -196,8 +201,9 @@
             <ul>
               <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.task">
                 <div class="flex-1 shrink break-all">
-                  <div></div>
+                  <div class="text-md">{{ item.name }}</div>
                   <div class="text-xs text-slate-400">ID:{{ item.task }}</div>
+                  <div class="text-sm text-slate-600 mt-1">{{ item.desc }}</div>
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>
@@ -296,22 +302,31 @@ const profile = ref({
 })
 const imageUrl = ref('')
 const loading = ref(true)
-onMounted(async ()=>{
+onActivated(async ()=>{
   const res = await Auth.getUserInfo();
   profile.value = res.content;
   loading.value=false;
 })
 async function logout(){
-  const res = await Auth.logout();
-  if(res.status == 'sus'){
-    ElMessageBox.alert('退出成功', '提示', {
-      confirmButtonText: '确定',
-      showClose:false,
-      callback: action => {
-        window.location.href = 'https://auth.chiziingiin.top/relogin';
+  ElMessageBox.alert('确定要退出吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    showCancelButton:true,
+    callback: async (action) => {
+      if (action === 'confirm') {
+        const res = await Auth.logout();
+        if(res.status == 'sus'){
+          ElMessageBox.alert('退出成功', '提示', {
+            confirmButtonText: '确定',
+            showClose:false,
+            callback: action => {
+              window.location.href = 'https://auth.chiziingiin.top/relogin';
+            }
+          })
+        }
       }
-    })
-  }
+    },
+  });
 }
 function handleUpload(options) {
   const file = options.file;

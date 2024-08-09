@@ -119,3 +119,37 @@ p{
 ::selection{
   background-color: rgba(34, 98, 251, 0.2);
 }
+
+
+/* MX(FULL NAME:MUNOX, A TEAM OF CHIZIINGIIN GROUP) MESSAGE STYLES */
+
+.el-message-box{
+  border-radius: 14px;
+  padding:20px 24px;
+  .el-message-box__title{
+    font-size: 14px;
+    color:#3c3e55;
+    opacity: 0.85;
+  }
+  .el-message-box__message{
+    font-size: 18px;
+    color:#3c3e55;
+  }
+  .el-message-box__headerbtn{
+    width:36px;
+    height:36px;
+    transition: background 0.1s ease;
+    background-color: transparent;
+    &:hover{
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+  }
+  .el-message-box__btns {
+    padding-top: 22px;
+    button{
+      flex:1;
+      height:40px;
+      border-radius: 8px;
+    }
+  }
+}

@@ -113,12 +113,12 @@ const submitForm = (formEl) => {
           confirmButtonText: '复制',
           beforeClose: (action, instance, done) => {
             if (action === 'confirm') {
-              debugger
               selectAndCopy();
               done();
             }
           }
         })
+        router.push({path:'/team/list'})
       } else {
         ElMessage({
           message: '创建失败',

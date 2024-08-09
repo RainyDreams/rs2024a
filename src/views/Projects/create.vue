@@ -70,10 +70,12 @@ import { ref,onMounted,reactive, onActivated } from 'vue'
 import { FileAddition } from '@icon-park/vue-next'; 
 import Auth from '../../utils/auth';
 import { ElMessage, ElForm, ElFormItem, ElInput, ElSelect, ElOption, ElButton, ElRadioGroup, ElRadio} from 'element-plus';
+import { useRouter } from 'vue-router';
 const ruleFormRef = ref(null);
 const options = ref([]);
 const loading = ref(true);
 const createLoading = ref(false)
+const router = useRouter()
 const form = reactive({
   name: '',
   desc: '',
@@ -119,6 +121,7 @@ const submitForm = (formEl) => {
         form.desc = ''
         form.team = ''
         form.visibility = ''
+        router.push({path:'/projects/list'})
       } else {
         createLoading.value = false;
         ElMessage({
