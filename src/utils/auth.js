@@ -301,6 +301,9 @@ class Auth {
   }
 
   /* 实验性功能 */
+  static async getAIWelcome(){
+    return this.basicAuth('/api/ai/welcome', '', );
+  }
   static async chatWithAI(list, param) {
     await this.getPrtoken();
     const res = await this.basicAuth(
@@ -341,6 +344,7 @@ class Auth {
       }
     }
   }
+
 
   static async getAIGuestList() {
     await this.getPrtoken();

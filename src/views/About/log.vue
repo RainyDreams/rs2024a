@@ -1,16 +1,20 @@
 <template>
   <div class="commonPage">
     <div class="panel">
-      <h1 class="text-xl mb-3 font-semibold">更新日志</h1>
+      <h1 class="text-2xl mb-2 font-semibold">更新日志</h1>
+      <p class="text-lg mb-4">我们已将代码开源在GitHub，如果你也想参与其中，请提交<a target="_blank" href="https://github.com/RainyDreams/rs2024a/pulls">Pull Request</a></p>
       <el-skeleton :rows="5" animated v-show="loading"></el-skeleton>
       <div class="list" v-show="!loading">
         <template v-for="(item,i) in list">
           <p class="opacity-80 text-sm">{{item.formatDate}}</p>
-          <p class="mb-2 whitespace-pre-line text-md/tight">{{ item.message }}</p>
+          <p class="whitespace-pre-line text-md/tight">{{ item.message }}</p>
+          <p class="mb-3 text-slate-500">
+            <a :href="item.user_url" target="_blank"><el-avatar class="align-middle" :src="item.avatar" :size="18"/><span class="ml-1">{{ item.user }}</span></a>
+          </p>
         </template>
       </div>
       <el-pagination style="margin-top: 18px;" v-model:current-page="now"
-       background layout="prev, pager, next" :page-count="total" @current-change="changePage"
+       background layout="pager" :page-count="total" @current-change="changePage"
        :pager-count="3"/>
     </div>
   </div>
@@ -20,7 +24,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { ElPagination,ElSkeleton } from 'element-plus';
+import { ElPagination,ElSkeleton,ElAvatar } from 'element-plus';
 import Auth from '../../utils/auth';
 import dayjs from 'dayjs';
 const list = ref()
