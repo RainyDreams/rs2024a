@@ -128,7 +128,7 @@
           </div>
           <div class="_content">
             <ul>
-              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.teams">
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in profile.teams">
                 <div class="flex-1 shrink break-all">
                   <div class="text-md">{{ item.name }}</div>
                   <div class="text-xs text-slate-400">ID:{{ item.team }}</div>
@@ -154,7 +154,7 @@
           </div>
           <div class="_content">
             <ul>
-              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.projects">
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in profile.projects">
                 <div class="flex-1 shrink break-all">
                   <div class="text-md">{{ item.name }}</div>
                   <div class="text-xs text-slate-400">ID:{{ item.project }}</div>
@@ -177,7 +177,7 @@
           </div>
           <div class="_content">
             <ul>
-              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.workflow">
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in profile.workflow">
                 <div class="flex-1 shrink break-all">
                   <div></div>
                   <div class="text-xs text-slate-400">ID:{{ item.workflow }}</div>
@@ -199,7 +199,7 @@
           </div>
           <div class="_content">
             <ul>
-              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.task">
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in profile.task">
                 <div class="flex-1 shrink break-all">
                   <div class="text-md">{{ item.name }}</div>
                   <div class="text-xs text-slate-400">ID:{{ item.task }}</div>
@@ -222,7 +222,7 @@
           </div>
           <div class="_content">
             <ul>
-              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.issue">
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in profile.issue">
                 <div class="flex-1 shrink break-all">
                   <div></div>
                   <div class="text-xs text-slate-400">ID:{{ item.issue }}</div>
@@ -244,7 +244,7 @@
           </div>
           <div class="_content">
             <ul>
-              <li class="flex border border-slate-200 px-4 py-3 rounded-md" v-for="(item,i) in profile.discussion">
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in profile.discussion">
                 <div class="flex-1 shrink break-all">
                   <div></div>
                   <div class="text-xs text-slate-400">ID:{{ item.discussion }}</div>

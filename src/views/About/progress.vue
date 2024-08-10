@@ -1,18 +1,10 @@
 <template>
   <div class="commonPage">
     <div class="panel">
-      <div class="doc">
-        <h2>2024年7月3日</h2>
-        <p>开始项目，设计程序</p>
-        <h2>2024年7月21日</h2>
-        <p>开始开发</p>
-        <h2>2024年7月31日</h2>
-        <p>增加AI</p>
-
-
-        <p>&nbsp;</p>
-
-      </div>
+      <h1 class="text-2xl mb-2 font-semibold">创作历程</h1>
+      <p class="mb-1 text-base">零本创智的诞生始于一个简单而坚定的想法</p>
+      <p class="mb-1">「零成本也能构建创新高效应用程序」</p>
+      <p class="mb-1">我们的故事仍在书写...</p>
     </div>
   </div>
 
