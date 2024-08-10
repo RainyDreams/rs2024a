@@ -3,31 +3,28 @@
 */
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 function copyText(text) {
-  // 创建一个临时的文本输入元素
   const textarea = document.createElement('textarea');
   textarea.value = text;
-  // 将文本输入元素添加到文档主体
   document.body.appendChild(textarea);
-  // 选中输入框中的文本
   textarea.select();
-  // 执行复制操作
   try {
     document.execCommand('copy');
   } catch (err) {
     console.error('复制操作失败', err);
   }
-  // 从文档主体中移除临时的文本输入元素
   document.body.removeChild(textarea);
 }
 const BASICURL = ''
 const LOGINURL = 'https://auth.chiziingiin.top'
 import Cookies from 'js-cookie';
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useRouter } from "vue-router";
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async (response,code) => {
   // console.log('ss',code)
   if (response.status === 401) {
     ElMessage.error('未登录或登录过期');
+    window.location.href="/login-needed?url="+encodeURIComponent(window.location.href)
     return { status: 'invalid', content: response };
   } else {
     ElMessage.error('服务器错误');

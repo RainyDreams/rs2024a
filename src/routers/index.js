@@ -19,6 +19,8 @@ import UserSettings from '../views/User/settings.vue';
 import AboutInfo from '../views/About/info.vue';
 import AboutProgress from '../views/About/progress.vue';
 import AboutLog from '../views/About/log.vue';
+import LoginSuccess from '../views/Status/LoginSuccess.vue';
+import LoginNeeded from '../views/Status/LoginNeeded.vue';
 
 import DangerView from '../views/Tests/admin.vue'
 import Test from '../views/Tests/test.vue';
@@ -54,6 +56,8 @@ const router = createRouter({
       { path: "log", name: "AboutLog", component: AboutLog }
     ] },
     { path: "/reg", name: "UserRegister", component: UserRegister,meta:{hide:['tabbar','sidebar']}},
+    { path: "/login-success", name: "LoginSuccess", component: LoginSuccess,meta:{hide:['sidebar']}},
+    { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar']}},
     { path: "/settings/", name: "Settings", component: SettingsIndex },
     { path: "/test/ai", name: "Tests", component: Test },
     { path: "/danger/view", name: "DangerView", component: DangerView },

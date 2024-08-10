@@ -9,7 +9,9 @@
           <p class="mb-2 whitespace-pre-line text-md/tight">{{ item.message }}</p>
         </template>
       </div>
-      <el-pagination style="margin-top: 18px;" v-model:current-page="now" background layout="prev, pager, next" :page-count="total" @current-change="changePage"/>
+      <el-pagination style="margin-top: 18px;" v-model:current-page="now"
+       background layout="prev, pager, next" :page-count="total" @current-change="changePage"
+       :pager-count="3"/>
     </div>
   </div>
 
