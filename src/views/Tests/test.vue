@@ -7,7 +7,7 @@
             <div class="chatList" style="min-height: 200px;">
               <div class="system">
                 <el-avatar alt="头像" src="/logo_sm.webp">小英</el-avatar>
-                <div class="chatcontent" style="font-size:12px;" >
+                <div class="chatcontent" style="font-size:14px;width:100%;" >
                   <el-skeleton :rows="5" animated v-show="welcome_loading"></el-skeleton>
                   <div v-show="!welcome_loading" v-html="md.render(welcome)"></div>
                 </div>
