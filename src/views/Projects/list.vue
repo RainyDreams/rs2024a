@@ -1,62 +1,81 @@
 <template>
   <div class="commonPage">
-    <div class="container row">
-      <div class="col-sm-12 col-md-12 col-xxl-8">
-        <div class="big_header">
-          <div class="icon"><form-one theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>
-          <div class="title">我参与的项目</div>
-        </div>
-        <div class="panel" v-if="loading">
-          <el-skeleton animated :rows="5" />
-        </div>
-        <div class="panel" v-if="!loading && projectList.length==0">
-          <el-empty :image-size="150" >
-            <template #description>
-              <p>没有参与的项目</p>
-            </template>
-            <template #default>
-              <router-link to="/projects/create"><el-button type="primary">
-                去创建项目<el-icon class="el-icon--right"><Right /></el-icon>
-              </el-button></router-link>
-            </template>
-          </el-empty>
-        </div>
-        <div class="panel" v-if="!loading && projectList.length>0" v-for="project in projectList">
-          <div class="commonHeader">
-            <div class="title">
-              <WaterfallsH class="icon" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
-              <span>{{ project.name }}</span>
+    <div class="big_header">
+      <div class="icon"><form-one theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>
+      <div class="title">我参与的项目</div>
+    </div>
+    <div class="panel" v-if="loading">
+      <el-skeleton animated :rows="5" />
+    </div>
+    <div class="panel" v-if="!loading && projectList.length==0">
+      <el-empty :image-size="150" >
+        <template #description>
+          <p>没有参与的项目</p>
+        </template>
+        <template #default>
+          <router-link to="/projects/create"><el-button type="primary">
+            去创建项目<el-icon class="el-icon--right"><Right /></el-icon>
+          </el-button></router-link>
+        </template>
+      </el-empty>
+    </div>
+    <div class="row" v-if="!loading && projectList.length>0" >
+      <div class="col-12 col-sm-6 col-md-6 col-lg-4" v-for="item in projectList">
+        <div class="panel projectbox">
+          <div class="text-sm text-slate-400">项目名称</div>
+          <div class="text-2xl/tight font-semibold">{{ item.name }}</div>
+          <div class="text-sm text-slate-400 mb-1 break-all">ID:{{ item.project }}</div>
+          <div class="text-sm text-slate-400">项目描述</div>
+          <div class="text-lg/tight break-all mb-1">{{ item.desc }}</div>
+          <div class="text-sm text-slate-400">创建人</div>
+          <div class="text-lg/tight break-all mb-1">{{ item.createuser.nickname }}</div>
+          <div class="text-sm text-slate-400">创建时间</div>
+          <div class="text-lg/tight break-all mb-1">{{ item.formatCreatetime }}</div>
+          <div class="text-sm text-slate-400">参与团队数量</div>
+          <div class="text-lg/tight break-all mb-1">{{ item.teamsNumber }}</div>
+          <div class="text-sm text-slate-400">我的身份</div>
+          <div class="text-lg/tight break-all mb-1">{{ item.role }}</div>
+          <div class="row text-center mt-3">
+            <div class="col-4 col-sm-6 col-md-3">
+              <el-statistic :value="item.workflowNumber">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    工作流
+                  </div>
+                </template>
+              </el-statistic>
             </div>
-            <div class="desc">{{ project.desc }}</div>
+            <div class="col-4 col-sm-6 col-md-3">
+              <el-statistic :value="item.taskNumber">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    任务
+                  </div>
+                </template>
+              </el-statistic>
+            </div>
+            <div class="col-4 col-sm-6 col-md-3">
+              <el-statistic :value="item.issueNumber">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    问题
+                  </div>
+                </template>
+              </el-statistic>
+            </div>
+            <div class="col-4 col-sm-6 col-md-3">
+              <el-statistic :value="item.discussionNumber">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    讨论
+                  </div>
+                </template>
+              </el-statistic>
+            </div>
           </div>
-          <el-collapse v-model="activeNames" @change="handleChange">
-            <el-collapse-item title="预览详情" name="1">
-              <div class="_content commonCards row">
-                <div class="col-md-6 col-lg-4" v-if="project.cards.tasks">
-                  <div class="card ">
-                    <div class="_title">{{ project.cards.tasks.title }}</div>
-                    <div class="content"></div>
-                    <div ></div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-lg-4" v-if="project.cards.issues">
-                  <div class="card ">
-                    <div class="_title">{{ project.cards.issues.title }}</div>
-                    <div class="content"></div>
-                    <div ></div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-lg-4" v-if="project.cards.discussion">
-                  <div class="card ">
-                    <div class="_title">{{ project.cards.discussion.title }}</div>
-                    <div class="content"></div>
-                    <div ></div>
-                  </div>
-                </div>
-              </div>
-            </el-collapse-item>
-          </el-collapse>
-          <el-button size="large" @click="to(project.id)">查看详情</el-button>
+          <div class="more mt-3">
+            <el-button size="large" @click="to(item.id)" color="#626aef" plain type="primary" style="width:100%">查看项目</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -67,47 +86,19 @@
 import {onActivated, onMounted, ref} from 'vue';
 import Auth from '../../utils/auth';
 import { WaterfallsH,Right,FormOne } from '@icon-park/vue-next';
-import { ElCollapse,ElCollapseItem,ElButton,ElSkeleton,ElEmpty } from 'element-plus';
+import { ElStatistic,ElButton,ElSkeleton,ElEmpty } from 'element-plus';
 import { useRouter,RouterLink } from 'vue-router';
+import Dayjs from 'dayjs';
 const projectList = ref([])
 const loading = ref(true);
 const activeNames = '1'
 const router = useRouter();
 onActivated(async ()=>{
-  // await // Auth.getPrtoken();
   const res = await Auth.getJoinedProjectList();
-  // projectList.value = res.content
-  // debugger
-  let tmp = []
-  res.content.forEach(item=>{
-    // Basic
-    let cards = {
-      news:{
-        title:"近期动态",
-        content:null,
-      },
-      tasks:{
-        title:"任务",
-        content:null,
-      },
-      issues:{
-        title:"问题",
-        content:null,
-      },
-      discussion:{
-        title:"讨论",
-        content:null,
-      },
-    };
-    let project = {
-      id:item.id,
-      name:item.name,
-      desc:item.desc,
-      cards,
-    }
-    tmp.push(project)
+  projectList.value = res.content.map(item=>{
+    item.formatCreatetime = Dayjs(item.createtime).format('YYYY年MM月DD日 HH:mm:ss')
+    return item;
   });
-  projectList.value = tmp;
   loading.value = false
 })
 

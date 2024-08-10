@@ -251,13 +251,7 @@ a{
     word-wrap: break-word; /* 旧版浏览器支持 */
     overflow-wrap: break-word; /* 现代浏览器支持 */
   }
-  .hr{
-    background-color:#5F6388;
-    height:1px;
-    width: 100%;
-    opacity: 0.5;
-    margin-bottom: 4px;
-  }
+  
   .teamtitle{
     margin-top: 12px;
     font-size: 12px;
@@ -314,6 +308,14 @@ a{
       }
     }
   }
+}
+
+.hr{
+  background-color:#5F6388;
+  height:1px;
+  width: 100%;
+  opacity: 0.5;
+  margin-bottom: 4px;
 }
 
 
