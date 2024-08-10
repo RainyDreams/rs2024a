@@ -192,12 +192,12 @@ class Auth {
   }
   static async getPrtoken(mode) {
     console.log(Cookies.get("czigauth"));
-    if (Cookies.get("czigauth")) {
+    if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
       return { status: "exist", content: Cookies.get("czigauth") };
     }
     return this.basicAuth("/api/prtoken", "", {
       success: async (data) => {
-        Cookies.set("czigauth", "Already Authenticated", {
+        Cookies.set("czigauth", "AlreadyAuthenticated", {
           expires: new Date(data.content.expires),
         });
         return data.content;
@@ -307,6 +307,7 @@ class Auth {
   }
 
   static async getStreamText(url,postData,param) {
+    await this.getPrtoken();
     const postOptions = {
       method: "POST",
       headers: {

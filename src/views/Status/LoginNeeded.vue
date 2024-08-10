@@ -5,7 +5,7 @@
     subTitle="可能您的登录已经过期或无效"
   >
     <template #extra>
-      <a :href="`https://auth.chiziingiin.top/url=${url}`">
+      <a :href="`https://auth.chiziingiin.top/?url=${url}`">
         <el-button type="primary">前往登录页面</el-button>
       </a>
     </template>
