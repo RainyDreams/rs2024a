@@ -290,6 +290,9 @@ class Auth {
     await this.getPrtoken();
     return this.basicAuth('/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
   }
+  static async getUpdateList(param = {}){
+    return this.basicAuth('/api/getUpdateList', JSON.stringify({ page:param.page }), );
+  }
 
   /* 实验性功能 */
   static async chatWithAI(list, param) {
