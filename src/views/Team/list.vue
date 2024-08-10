@@ -49,7 +49,7 @@
         </div>
       </div>
       <div v-if="!loading" class="col-sm-12 col-md-12 col-lg-12 col-xxl-4 ">
-        <div class="stikyPanel">
+        <div class="">
           <div class="big_header">
             <div class="icon"><Order theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>
             <div class="title">意见征集</div>
@@ -62,7 +62,6 @@
             </div>
           </div>
         </div>
-        
       </div>
     </div>
   </div>

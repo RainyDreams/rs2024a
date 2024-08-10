@@ -4,11 +4,20 @@
       <div class="row">
         <div class="col-12 col-md-6">
           <h1 class="mt-1 mb-3 text-3xl font-semibold md:mt-20 md:mb-8 md:text-5xl/snug lg:text-6xl/snug">为什么选择赤子英金？</h1>
-          <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们致力于实现「零成本也能构建高效的应用程序」的梦想</h5>
+          <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">以AI技术驱动的完整的创新市场项目解决方案，致力于实现 「零成本也能构建创新高效应用程序」的梦想</h5>
         </div>
         <div class="col-12 col-md-6">
           <iframe style="height:100%;width:100%;min-height:400px;" src="https://player.bilibili.com/player.html?bvid=BV1wf421z74D&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>
         </div>
+      </div>
+    </div>
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">全行业唯一、独创</h2>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">我们原创了以AI驱动项目流程，全行业独创</p>
+        </div>
+        <div class="col-12"></div>
       </div>
     </div>
     <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">

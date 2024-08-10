@@ -12,7 +12,12 @@
             <div class="content">{{ projectDetail.desc }}</div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="工作流">
+        <el-tab-pane>
+          <template #label>
+            <el-badge value="特色功能" class="item" :offset="[0, -2]" type="primary">
+              <span>工作流</span>
+            </el-badge>
+          </template>
           <div v-if="projectDetail.workflow.length>0">
             <view-workflow></view-workflow>
           </div>
@@ -29,7 +34,10 @@
             </el-empty>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="任务">
+        <el-tab-pane >
+          <template #label>
+            <span class="ml-4 mr-4">任务</span>
+          </template>
           <div v-if="projectDetail.task.length>0">
             <view-task></view-task>
           </div>
@@ -90,7 +98,7 @@ import ViewWorkflow from './view/workflow.vue'
 import ViewTask from './view/task.vue'
 import ViewIssue from './view/issue.vue'
 import ViewDiscussion from './view/discussion.vue';
-import { ElTabs,ElTabPane,ElEmpty,ElIcon,ElButton } from 'element-plus';
+import { ElTabs,ElTabPane,ElEmpty,ElIcon,ElButton,ElBadge } from 'element-plus';
 import { Right } from '@icon-park/vue-next';
 import Auth from '../../utils/auth';
 import { onActivated,ref } from 'vue';
