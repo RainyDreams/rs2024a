@@ -21,14 +21,22 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from "vue-router";
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async (response,code) => {
-  // console.log('ss',code)
   if (response.status === 401) {
-    ElMessage.error('未登录或登录过期');
-    window.location.href="/login-needed?url="+encodeURIComponent(window.location.href)
-    return { status: 'invalid', content: response };
+    const getPr = await Auth.getPrtoken();
+    if(getPr.status=='sus'){
+      ElMessageBox.alert('网络遇到问题，请刷新页面', '错误', {
+        confirmButtonText: '确定',
+        callback:()=>{
+          window.location.reload()
+        }
+      })
+    } else {
+      ElMessage.error('未登录或登录过期');
+      window.location.href="/login-needed?url="+encodeURIComponent(window.location.href)
+      return { status: 'invalid', content: response };
+    }
   } else {
     ElMessage.error('服务器错误');
-    console.dir(response)
     try{
       if(code==2)
         throw response;
@@ -58,7 +66,6 @@ const defaultFailed = async (response,code) => {
             }))
             console.info('[errId]',r)
             copyText(`${r.content.id}`)
-            
             ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}\n可以将以上信息提供给我，便于分析处理错误`,'提示',{})
           }
           done();
@@ -199,17 +206,19 @@ class Auth {
       success: async (data) => {
         Cookies.set("czigauth", "AlreadyAuthenticated", {
           expires: new Date(data.content.expires),
+          path: "/",
+          secure: true,
+          domain:'.chiziingiin.top'
         });
         return data.content;
       },
-      // failed: mode!=='try' ? defaultFailed : async (response, type) => {
-      //   if (response.status === 401) {
-      //     return { status: 'invalid', content: response };
-      //   } else {
-      //     // ElMessage.error('网络错误，请重试');
-      //     return { status: 'error', content: response };
-      //   }
-      // }
+      failed: async (response, type) => {
+        if (response.status === 401) {
+          return { status: 'invalid', content: response };
+        } else {
+          return { status: 'error', content: response };
+        }
+      }
     });
   }
   static async createTeam(param) {

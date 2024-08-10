@@ -122,6 +122,7 @@ router.afterEach((to, from) => {
   }
   TabBarHide.value = false;
   SideBarHide.value = false;
+  if(to.meta.hide)
   to.meta.hide.find(e=>{
     if(e=='tabbar') TabBarHide.value = true;
     else if (e=='sidebar') SideBarHide.value = true;
