@@ -210,11 +210,12 @@ class Auth {
     return this.basicAuth("/api/reportErrlog", content);
   }
   static async getPrtoken(mode) {
-    window.clarity("event", 'getPrtoken')
     console.log(Cookies.get("czigauth"));
+
     if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
       return { status: "exist", content: Cookies.get("czigauth") };
     }
+    window.clarity("event", 'getPrtoken')
     return this.basicAuth("/api/prtoken", "", {
       success: async (data) => {
         Cookies.set("czigauth", "AlreadyAuthenticated", {
@@ -223,13 +224,16 @@ class Auth {
           secure: true,
           domain:'.chiziingiin.top'
         });
+        window.clarity("set", 'userID', data.content.customID);
         window.clarity("identify", data.content.customID, data.content.sessionID)
         return data.content;
       },
       failed: async (response, type) => {
         if (response.status === 401) {
+          window.clarity("event", 'getPrtoken_401')
           return { status: 'invalid', content: response };
         } else {
+          window.clarity("event", 'getPrtoken_Error')
           return { status: 'error', content: response };
         }
       }

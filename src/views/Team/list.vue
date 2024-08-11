@@ -1,7 +1,7 @@
 <template>
   <div class="commonPage">
-    <div class="container row">
-      <div class="col-sm-12 col-md-12 col-lg-12 col-xxl-8">
+    <div class="row">
+      <div class="col-sm-12 col-xxl-8">
         <div class="big_header">
           <div class="icon"><address-book theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>
           <div class="title">团队列表</div>
@@ -22,7 +22,7 @@
           </el-empty>
         </div>
         <div class="row" v-if="!loading && teamList.length>0" >
-          <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xxl-6" v-for="(item,i) in teamList">
+          <div class="col-12 col- col-md-6" v-for="(item,i) in teamList">
             <div class="panel teambox">
               <div class="teamname">{{ item.name }}</div>
               <div class="teamdesc">{{ item.desc }}</div>
@@ -50,7 +50,7 @@
           </div>
         </div>
       </div>
-      <div v-if="!loading" class="col-sm-12 col-md-12 col-lg-12 col-xxl-4 ">
+      <div v-if="!loading" class="col-sm-12 col-xxl-4 ">
         <div class="">
           <div class="big_header">
             <div class="icon"><Order theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>
