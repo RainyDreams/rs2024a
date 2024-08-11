@@ -111,6 +111,7 @@ const submitForm = (formEl) => {
         token:verifyToken
       })
       if(createTeam.status == 'sus'){
+        window.clarity("identify", createTeam.content.id, createTeam.content.sessionID,'register',createTeam.content.id)
         form.username = '';
         form.nickname = '';
         form.password = '';

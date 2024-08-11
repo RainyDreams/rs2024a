@@ -189,6 +189,7 @@ class Auth {
     }
   }
   static async userRegister(param){
+    await this.getUserFingerprint();
     window.clarity("event", 'userRegister')
     return this.basicAuth("/api/reg", JSON.stringify(param))
   }
@@ -198,20 +199,22 @@ class Auth {
     return this.basicAuth("/api/logout")
   }
   static async checkUsername(value){
+    await this.getUserFingerprint();
     window.clarity("event", 'checkUsername')
     return this.basicAuth("/api/checkUsername", JSON.stringify({username:value}))
   }
   static async test() {
+    await this.getUserFingerprint();
     window.clarity("event", 'test')
     return this.basicAuth("/api/test");
   }
   static async reportErrlog(content) {
+    await this.getUserFingerprint();
     window.clarity("event", 'reportErrlog')
     return this.basicAuth("/api/reportErrlog", content);
   }
   static async getPrtoken(mode) {
     console.log(Cookies.get("czigauth"));
-
     if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
       return { status: "exist", content: Cookies.get("czigauth") };
     }
@@ -224,11 +227,13 @@ class Auth {
           secure: true,
           domain:'.chiziingiin.top'
         });
+        await this.getUserFingerprint();
         window.clarity("set", 'userID', data.content.customID);
         window.clarity("identify", data.content.customID, data.content.sessionID,'getPrtoken',data.content.customID)
         return data.content;
       },
       failed: async (response, type) => {
+        await this.getUserFingerprint();
         if (response.status === 401) {
           window.clarity("event", 'getPrtoken_401')
           return { status: 'invalid', content: response };
