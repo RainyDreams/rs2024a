@@ -12,6 +12,7 @@ function copyText(text) {
   } catch (err) {
     console.error('复制操作失败', err);
   }
+  window.clarity("event",'copy')
   document.body.removeChild(textarea);
 }
 const BASICURL = ''
@@ -19,8 +20,10 @@ const LOGINURL = 'https://auth.chiziingiin.top'
 import Cookies from 'js-cookie';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from "vue-router";
+import { da } from "element-plus/es/locales.mjs";
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async (response,code) => {
+  window.clarity("event", 'auth_error')
   if (response.status === 401) {
     const getPr = await Auth.getPrtoken();
     if(getPr.status=='sus'){
@@ -107,6 +110,7 @@ class Auth {
       if (response.status === 200) {
         const data = await response.json();
         if (data.status === "sus") {
+          window.clarity("event", 'auth_success')
           return { status: "sus", content: await success(data) };
         } else {
           return await failed(response, 0);
@@ -119,6 +123,7 @@ class Auth {
     }
   }
   static async handleRecaptcha() {
+    window.clarity("event", 'Recaptcha')
     return new Promise((resolve,reject)=>{
       window.grecaptcha.ready(() => {
         window.grecaptcha.execute('6Ld2QRYqAAAAABbPygHb0HUKpd-LMU1Ckmy6nb8G', 
@@ -143,6 +148,7 @@ class Auth {
     })
   }
   static async getRecaptchaToken({action="default",id='#turnstile-box'}){
+    window.clarity("event", 'getRecaptchaToken')
     return new Promise((resolve,reject)=>{
       // window.grecaptcha.ready(() => {
       //   window.grecaptcha.execute('6Ld2QRYqAAAAABbPygHb0HUKpd-LMU1Ckmy6nb8G', { action })
@@ -169,6 +175,7 @@ class Auth {
     })
   }
   static async guestLogin(param) {
+    window.clarity("event", 'guestLogin')
     const res = await this.basicAuth(
       "/api/guestlogin",
       JSON.stringify({ username: "guest" })
@@ -182,22 +189,28 @@ class Auth {
     }
   }
   static async userRegister(param){
+    window.clarity("event", 'userRegister')
     return this.basicAuth("/api/reg", JSON.stringify(param))
   }
   static async logout(){
+    window.clarity("event", 'logout')
     await this.getPrtoken()
     return this.basicAuth("/api/logout")
   }
   static async checkUsername(value){
+    window.clarity("event", 'checkUsername')
     return this.basicAuth("/api/checkUsername", JSON.stringify({username:value}))
   }
   static async test() {
+    window.clarity("event", 'test')
     return this.basicAuth("/api/test");
   }
   static async reportErrlog(content) {
+    window.clarity("event", 'reportErrlog')
     return this.basicAuth("/api/reportErrlog", content);
   }
   static async getPrtoken(mode) {
+    window.clarity("event", 'getPrtoken')
     console.log(Cookies.get("czigauth"));
     if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
       return { status: "exist", content: Cookies.get("czigauth") };
@@ -210,6 +223,7 @@ class Auth {
           secure: true,
           domain:'.chiziingiin.top'
         });
+        window.clarity("identify", data.content.customID, data.content.sessionID)
         return data.content;
       },
       failed: async (response, type) => {
@@ -222,6 +236,7 @@ class Auth {
     });
   }
   static async createTeam(param) {
+    window.clarity("event", 'createTeam')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/createTeam",
@@ -229,6 +244,7 @@ class Auth {
     );
   }
   static async getTeamInfo(param = {}) {
+    window.clarity("event", 'getTeamInfo')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/teamInfo",
@@ -236,6 +252,7 @@ class Auth {
     );
   }
   static async getTeamList(param = {}) {
+    window.clarity("event", 'getTeamList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/teamList",
@@ -243,6 +260,7 @@ class Auth {
     );
   }
   static async getJoinedTeamList(param = {}) {
+    window.clarity("event", 'getJoinedTeamList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/joinedTeamList",
@@ -250,14 +268,17 @@ class Auth {
     );
   }
   static async getDashboard() {
+    window.clarity("event", 'getDashboard')
     await this.getPrtoken();
     return this.basicAuth("/api/dashboard", "");
   }
   static async createProject(param) {
+    window.clarity("event", 'createProject')
     await this.getPrtoken();
     return this.basicAuth("/api/createProject", JSON.stringify({ ...param }));
   }
   static async getProjectDetail(param = {}) {
+    window.clarity("event", 'getProjectDetail')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/projectDetail",
@@ -265,6 +286,7 @@ class Auth {
     );
   }
   static async getProjectList(param = {}) {
+    window.clarity("event", 'getProjectList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/projectList",
@@ -272,6 +294,7 @@ class Auth {
     );
   }
   static async getJoinedProjectList(param = {}) {
+    window.clarity("event", 'getJoinedProjectList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/joinedProjectList",
@@ -279,6 +302,7 @@ class Auth {
     );
   }
   static async createProjectItem(param = {}){
+    window.clarity("event", 'createProjectItem')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/project/create-item",
@@ -286,6 +310,7 @@ class Auth {
     );
   }
   static async getProjectItem(param={}){
+    window.clarity("event", 'getProjectItem')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/project/get-item",
@@ -293,6 +318,7 @@ class Auth {
     );
   }
   static async getUserInfo(param = {}) {
+    window.clarity("event", 'getUserInfo')
     await this.getPrtoken();
     return this.basicAuth('/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
   }
@@ -302,13 +328,16 @@ class Auth {
 
   /* 实验性功能 */
   static async getAIWelcome(){
+    window.clarity("event", 'getAIWelcome')
     return this.basicAuth('/api/ai/welcome', '', );
   }
   static async AI_createWorkflow(param){
+    window.clarity("event", 'AI_createWorkflow')
     await this.getPrtoken();
     return this.basicAuth('/api/ai/createWorkflow', JSON.stringify(param), );
   }
   static async chatWithAI(list, param) {
+    window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
     const res = await this.basicAuth(
       "/api/ai/send",
@@ -323,6 +352,7 @@ class Auth {
   }
 
   static async getStreamText(url,postData,param) {
+    window.clarity("event", 'getStreamText')
     await this.getPrtoken();
     const postOptions = {
       method: "POST",
@@ -351,10 +381,12 @@ class Auth {
 
 
   static async getAIGuestList() {
+    window.clarity("event", 'getAIGuestList')
     await this.getPrtoken();
     return this.basicAuth("/api/danger/viewAIGuest");
   }
   static async getUserFingerprint() {
+    window.clarity("event", 'getUserFingerprint')
     const fp = await FingerprintJS.load();
     const result = await fp.get();
     const visitorId = result.visitorId;
