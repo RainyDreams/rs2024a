@@ -394,6 +394,7 @@ class Auth {
     const fp = await FingerprintJS.load();
     const result = await fp.get();
     const visitorId = result.visitorId;
+    window.clarity("set", 'Fingerprint',result.visitorId);
     return visitorId;
   }
 }
