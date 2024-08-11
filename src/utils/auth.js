@@ -304,6 +304,10 @@ class Auth {
   static async getAIWelcome(){
     return this.basicAuth('/api/ai/welcome', '', );
   }
+  static async AI_createWorkflow(param){
+    await this.getPrtoken();
+    return this.basicAuth('/api/ai/createWorkflow', JSON.stringify(param), );
+  }
   static async chatWithAI(list, param) {
     await this.getPrtoken();
     const res = await this.basicAuth(

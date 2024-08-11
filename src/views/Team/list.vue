@@ -42,7 +42,9 @@
                 </div>
               </div>
               <div class="more">
-                <el-button size="large" color="#626aef" plain type="primary" style="width:100%">查看团队</el-button>
+                <router-link :to="`/team/detail/${item.id}`">
+                  <el-button size="large" color="#626aef" plain type="primary" style="width:100%">查看团队</el-button>
+                </router-link>
               </div>
             </div>
           </div>

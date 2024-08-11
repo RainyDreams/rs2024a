@@ -10,6 +10,7 @@ import ProjectsItemCreate from '../views/Projects/createItem.vue';
 import ProjectsDetail from '../views/Projects/detail.vue';
 import TeamCreate from '../views/Team/create.vue';
 import TeamList from '../views/Team/list.vue';
+import TeamDetail from '../views/Team/detail.vue';
 import TeamSettings from '../views/Team/settings.vue';
 import TeamInvite from '../views/Team/invite.vue';
 import UserIndex from '../views/User/index.vue';
@@ -44,6 +45,7 @@ const router = createRouter({
       { path: "list", name: "TeamList", component: TeamList },
       { path: "settings", name: "TeamSettins", component: TeamSettings },
       { path: "invite", name: "TeamInvite", component: TeamInvite,meta:{hide:['tabbar','sidebar']}},
+      { path: "detail/:teamId", name: "TeamDetail", component: TeamDetail },
     ]},
     { path: "/user/", name: "User", children:[
       { path: "profile", name: "UserProfile", component: UserIndex},
