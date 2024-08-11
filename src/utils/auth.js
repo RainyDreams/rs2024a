@@ -225,7 +225,7 @@ class Auth {
           domain:'.chiziingiin.top'
         });
         window.clarity("set", 'userID', data.content.customID);
-        window.clarity("identify", data.content.customID, data.content.sessionID)
+        window.clarity("identify", data.content.customID, data.content.sessionID,'getPrtoken',data.content.customID)
         return data.content;
       },
       failed: async (response, type) => {
