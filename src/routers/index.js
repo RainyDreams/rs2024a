@@ -24,7 +24,7 @@ import Notification from '../views/Notification/index.vue';
 import LoginSuccess from '../views/Status/LoginSuccess.vue';
 import LoginNeeded from '../views/Status/LoginNeeded.vue';
 import JoinTeamApplication from '../views/Status/JoinTeamApplication.vue';
-
+import JoinProcess from '../views/Status/JoinProcess.vue';
 import DangerView from '../views/Tests/admin.vue'
 import Test from '../views/Tests/test.vue';
 import Error404 from '../views/Errors/404.vue';
@@ -60,7 +60,8 @@ const router = createRouter({
       { path: "log", name: "AboutLog", component: AboutLog }
     ] },
     {path: "/status/", name:"Status", children:[
-      { path: "jta", name:"JoinTeamApplication", component:JoinTeamApplication,meta:{hide:['tabbar','sidebar'] }},
+      { path: "jta", name:"JoinTeamApplication", component:JoinTeamApplication,meta:{hide:['sidebar'] }},
+      { path: "joining", name:"JoinProcess", component:JoinProcess,meta:{hide:['sidebar'] }},
     ]},
     { path: "/notification", name: "Notification", component: Notification,meta:{hide:['sidebar']}},
     { path: "/reg", name: "UserRegister", component: UserRegister,meta:{hide:['tabbar','sidebar']}},

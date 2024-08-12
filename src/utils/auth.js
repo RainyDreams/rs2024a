@@ -43,6 +43,12 @@ const defaultFailed = async (response,code) => {
     try{
       if(code==2)
         throw response;
+      if(code==0){
+        throw {
+          status: 0b00000011,
+          message: '这块可能是编写程序疏漏引发的错误，请点击报告错误，并把识别码发给我。感谢您的支持',
+        };
+      }
       let text = (await response.text());
       throw new Error(response.url+"<br/>" + text)
     } catch (err){
@@ -51,8 +57,8 @@ const defaultFailed = async (response,code) => {
         dangerouslyUseHTMLString:true,
         customClass:'czigerr',
         message: 
-        `本软件正在公测阶段，现遇到了程序、服务器错误，请联系本项目负责人张新越（赤峰二中202312班）<br/>
-        以下是可以提供的错误信息<br/><b>错误代码：<span style="color:red">${response.status||'未知(可能为CORS)'}</span></b><br/><b>${(err.message+"</b><i>"+err.stack+"")}</i>`,
+        `<div class="text-sm ">本软件正在公测阶段，现遇到了程序、服务器错误，请联系本项目负责人张新越（赤峰二中202312班）<br/>
+        以下是可以提供的错误信息<br/><b>状态码：<span style="color:red">${response.status||'未知(可能为CORS)'}</span></b><br/><b>${(err.message+"</b><i>"+err.stack+"")}</i></div>`,
         confirmButtonText: '报告错误',
         showCancelButton:true,
         cancelButtonText:'忽略错误',
@@ -64,11 +70,13 @@ const defaultFailed = async (response,code) => {
             const ua = navigator.userAgent;
             const r = await Auth.reportErrlog(JSON.stringify({
               ua,
+              link:window.location.href,
               content:`${response.status}:${err.message+err.stack+''}`,
               time:new Date().getTime()
             }))
             console.info('[errId]',r)
             copyText(`${r.content.id}`)
+            window.clarity("set", 'reportID', r.content.id);
             ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}\n可以将以上信息提供给我，便于分析处理错误`,'提示',{})
           }
           done();
@@ -113,7 +121,7 @@ class Auth {
           window.clarity("event", 'auth_success')
           return { status: "sus", content: await success(data) };
         } else {
-          return await failed(response, 0);
+          return await failed(data, 0);
         }
       } else {
         return await failed(response, 1);
@@ -282,6 +290,22 @@ class Auth {
     return this.basicAuth(
       "/api/joinedTeamList",
       JSON.stringify({ uid: param.uid || "" })
+    );
+  }
+  static async removeTeamUser(param={}){
+    window.clarity("event", 'removeTeamUser')
+    await this.getPrtoken();
+    return this.basicAuth(
+      "/api/teamRemoveMember",
+      JSON.stringify(param)
+    );
+  }
+  static async teamChangeRole(param){
+    window.clarity("event", 'changeRole')
+    await this.getPrtoken();
+    return this.basicAuth(
+      "/api/teamChangeRole",
+      JSON.stringify(param)
     );
   }
   static async getDashboard() {

@@ -98,6 +98,9 @@ async function getTeamInfo(close){
 }
 async function joinTeam(){
   const res = await Auth.joinTeam({pid})
+  if(res.status == 'sus'){
+    window.location.href = '/status/joining'
+  }
 }
 onMounted(async () => {
   const loading = ElLoading.service({

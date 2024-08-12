@@ -61,7 +61,7 @@ export const roleMap = [
  * @returns {any}
  */
 export function getRole(role){
-  return roleMap[role] || '未知角色'
+  return (roleMap.find(e=>e.value == role)?.label || '查询错误')
 }
 
 /**
