@@ -96,6 +96,9 @@ async function getTeamInfo(close){
     return;
   }
 }
+async function joinTeam(){
+  const res = await Auth.joinTeam({pid})
+}
 onMounted(async () => {
   const loading = ElLoading.service({
     lock: true,

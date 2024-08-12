@@ -6,7 +6,7 @@
         <div class="userline">
           <el-avatar :src="item.myProfile.avatar"></el-avatar>
           <div class="nickname">{{ item.myProfile.nickname }}</div>
-          <div class="role">{{ item.myProfile.role }}</div>
+          <div class="role">{{ getRole(item.myProfile.role) }}</div>
         </div>
         <div class="desc">
           {{ item.desc }}
@@ -21,6 +21,7 @@
 import { onActivated,onMounted,ref } from 'vue';
 import Auth from '../../../utils/auth';
 import { useRoute } from 'vue-router';
+import { getRole } from '../../../utils/helpers';
 const route = useRoute();
 const projectId = ref();
 const workflowList = ref([]);

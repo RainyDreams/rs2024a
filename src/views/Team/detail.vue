@@ -8,7 +8,7 @@
           <h1 class="text-2xl/tight font-semibold md:text-3xl/tight">{{ teamDetail.name }}</h1>
           <p class="text-xs mb-1 text-slate-400 break-all">ID:{{ teamDetail.id }}</p>
           <p class="text-xs mb-1 text-slate-400">邀请链接</p>
-          <p class="text-sm mb-2 break-all">{{ teamDetail.inviteurl }}</p>
+          <p class="text-sm mb-2 break-all"><a target="_blank" :href="teamDetail.inviteurl">{{ teamDetail.inviteurl }}</a></p>
           <div class="text-xs mb-1 text-slate-400">团队描述</div>
           <p class="text-lg/tight break-all mb-2">{{ teamDetail.desc }}</p>
           <div class="text-xs mb-1 text-slate-400">创建时间</div>
@@ -20,17 +20,27 @@
             </div>
             <div class="userinfo">
               <div class="username">{{ teamDetail.myProfile.nickname }}</div>
-              <div class="userrole">{{ teamDetail.myProfile.role }}</div>
+              <div class="userrole">{{ getRole(teamDetail.myProfile.role) }}</div>
             </div>
           </div>
           <div class="text-xs mb-2 text-slate-400">团队人员</div>
           <div class="row">
-            <div class="col-12 col-mg-12 col-xl-6" v-for="(item,index) in teamDetail.persons">
-              <div class="border py-2 px-3 rounded-2xl flex items-center">
+            <div class="col-12 " v-for="(item,index) in teamDetail.persons">
+              <div class="border py-2 px-3 rounded-lg flex items-center">
                 <el-avatar :src="item.avatar"></el-avatar>
-                <div class="ml-2">
+                <div class="ml-2 flex-1">
                   <p class="text-base md:text-xl/tight">{{ item.nickname }}</p>
-                  <p>{{ item.role }}</p>
+                  <p>{{ getRole(item.role) }}</p>
+                </div>
+                <div>
+                  <el-select v-model="item.role" :disabled="item.disabled" placeholder="Select" style="width: 120px">
+                    <el-option
+                      v-for="role in options"
+                      :key="role.value"
+                      :label="role.label"
+                      :value="role.value"
+                    />
+                  </el-select>
                 </div>
               </div>
             </div>
@@ -57,7 +67,8 @@ import Auth from '../../utils/auth';
 import { onActivated,ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import routerBack from '../../components/routerBack.vue';
-import { dayjs, ElAvatar } from 'element-plus';
+import { dayjs, ElAvatar,ElSelect,ElOption } from 'element-plus';
+import { roleMap,getRole } from '../../utils/helpers';
 const route = useRoute();
 const loading = ref(true)
 const router = useRouter();
@@ -68,13 +79,13 @@ const teamDetail = ref({
   "projects": [],
   "createuser":"",
   "createtime":"",
-  "myProfile":{
-
-  },
+  "myProfile":{ },
   "name":"",
   "desc":"",
   "inviteurl":""
 })
+
+const options = roleMap
 
 onActivated(async ()=>{
   loading.value = true;
@@ -83,6 +94,16 @@ onActivated(async ()=>{
   if(res.status == 'sus'){
     teamDetail.value = {
       ...res.content,
+      persons:res.content.persons.map(e=>{
+        if(res.content.myProfile.id == e.id){
+          e.disabled = true
+        } else if(res.content.myProfile.role == 'member'){
+          e.disabled = true
+        } else if (res.content.myProfile.role == 'admin'){
+          if(e.role == 'owner' || e.role == 'admin') e.disabled = true;
+        }
+        return e;
+      }),
       formatCreateTime:dayjs(res.content.createtime).format('YYYY年M月DD日 HH:mm:ss')
     };
   }

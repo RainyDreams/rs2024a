@@ -31,9 +31,9 @@
           <MenuUnfoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="showMenu"/>
         </div>
         <div class="btns">
-          <div class="btn">
+          <router-link class="btn" to="/notification">
             <remind theme="outline" size="20" fill="#5F6388" :strokewidth="5"  strokeLinejoin="bevel"/>
-          </div>
+          </router-link>
           <a :class="`btn _user ${activeName=='User'?'router-link-active':''}`" @click="clickUser()">
             <el-avatar
               alt="头像"
@@ -94,13 +94,6 @@ const SideBarHide = ref(false);
 const isDarkMode = ref(0);
 const activeName = ref(0);
 const showMenu = ref(false)
-import { throttle } from './utils/helpers'
-const throttleResize = throttle(()=>{
-  document.body.style.setProperty('--window--height', `${window.innerHeight}px`);
-},200)
-onMounted(()=>{
-  throttleResize()
-})
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }

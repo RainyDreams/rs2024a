@@ -252,6 +252,14 @@ class Auth {
       JSON.stringify({ name: param.name, desc: param.desc })
     );
   }
+  static async joinTeam(param) {
+    window.clarity("event","joinTeam")
+    await this.getPrtoken();
+    return this.basicAuth(
+      "/api/joinTeam",
+      JSON.stringify({ pid: param.pid })
+    );
+  }
   static async getTeamInfo(param = {}) {
     window.clarity("event", 'getTeamInfo')
     await this.getPrtoken();
@@ -332,7 +340,29 @@ class Auth {
     return this.basicAuth('/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
   }
   static async getUpdateList(param = {}){
+    window.clarity("event", 'getUpdateList')
     return this.basicAuth('/api/getUpdateList', JSON.stringify({ page:param.page }), );
+  }
+  static async getNotification(param={}){
+    window.clarity("event", 'getNotification')
+    await this.getPrtoken();
+    return this.basicAuth('/api/getNotification', JSON.stringify({ page:param.page }), );
+  }
+
+  static async openWindow(url,callback){
+    window.clarity("event", 'openWindow')
+    let width = 500;
+    let height = 500;
+    let left = (screen.width - width) / 2;
+    let top = (screen.height - height) / 2;
+    let newWindow = window.open(url, '_blank', `width=${width},height=${height},left=${left},top=${top}`);
+    let intervalId;
+    intervalId = setInterval(() => {
+      if (newWindow.closed) {
+        callback();
+        clearInterval(intervalId);
+      }
+    }, 1000);
   }
 
   /* 实验性功能 */

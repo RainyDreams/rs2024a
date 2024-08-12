@@ -32,18 +32,31 @@ export function getDateDiff(dt) {
   return { str: dateStr, show: false };
 }
 
+
+export const roleMap = [
+  {
+    value:'creator',
+    label:'创建者',
+  },
+  {
+    value:'owner',
+    label:'拥有者',
+  },
+  {
+    value:'admin',
+    label:'管理员',
+  },
+  {
+    value:'member',
+    label:'成员',
+  },
+]
 /**
  * Description
  * @param {any} role 角色名称
  * @returns {any}
  */
 export function getRole(role){
-  const roleMap = {
-    'creator': '创建者',
-    'owner': '拥有者',
-    'admin': '管理员',
-    'member': '普通成员'
-  }
   return roleMap[role] || '未知角色'
 }
 

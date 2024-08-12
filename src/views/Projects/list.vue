@@ -39,7 +39,7 @@
               <div class="text-xs mb-1 text-slate-400">参与团队数量</div>
               <div class="text-lg/tight break-all mb-2">{{ item.teamsNumber }}</div>
               <div class="text-xs mb-1 text-slate-400">我的身份</div>
-              <div class="text-lg/tight break-all mb-2">{{ item.role }}</div>
+              <div class="text-lg/tight break-all mb-2">{{ getRole(item.role) }}</div>
               <div class="row text-center mt-3">
                 <div class="col-4 col-sm-6 col-md-3">
                   <el-statistic :value="item.workflowNumber">
@@ -110,6 +110,7 @@ import Auth from '../../utils/auth';
 import { WaterfallsH,Right,FormOne } from '@icon-park/vue-next';
 import { ElStatistic,ElButton,ElSkeleton,ElEmpty,ElAvatar } from 'element-plus';
 import { useRouter,RouterLink } from 'vue-router';
+import { getRole } from '../../utils/helpers';
 import Dayjs from 'dayjs';
 const projectList = ref([])
 const loading = ref(true);

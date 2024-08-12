@@ -20,8 +20,10 @@ import UserSettings from '../views/User/settings.vue';
 import AboutInfo from '../views/About/info.vue';
 import AboutProgress from '../views/About/progress.vue';
 import AboutLog from '../views/About/log.vue';
+import Notification from '../views/Notification/index.vue';
 import LoginSuccess from '../views/Status/LoginSuccess.vue';
 import LoginNeeded from '../views/Status/LoginNeeded.vue';
+import JoinTeamApplication from '../views/Status/JoinTeamApplication.vue';
 
 import DangerView from '../views/Tests/admin.vue'
 import Test from '../views/Tests/test.vue';
@@ -57,6 +59,10 @@ const router = createRouter({
       { path: "progress", name: "AboutProgress", component: AboutProgress },
       { path: "log", name: "AboutLog", component: AboutLog }
     ] },
+    {path: "/status/", name:"Status", children:[
+      { path: "jta", name:"JoinTeamApplication", component:JoinTeamApplication,meta:{hide:['tabbar','sidebar'] }},
+    ]},
+    { path: "/notification", name: "Notification", component: Notification,meta:{hide:['sidebar']}},
     { path: "/reg", name: "UserRegister", component: UserRegister,meta:{hide:['tabbar','sidebar']}},
     { path: "/login-success", name: "LoginSuccess", component: LoginSuccess,meta:{hide:['sidebar']}},
     { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar']}},

@@ -18,11 +18,6 @@
 @import "./app.scss";
 
 
-#app {
-  color:#3c3e55;
-  font-family: 'MiSans',Arial, Helvetica, sans-serif !important;
-  // padding-bottom: calc(100vh - var(--system--height));
-}
 @font-face {
   font-family: Lato;
   font-weight: 500;
@@ -66,6 +61,14 @@ html{
   // background-image: linear-gradient(to right bottom, rgb(244, 245, 231), rgb(215, 234, 253));
 }
 
+#app {
+  width:100%;
+  height:100%;
+  height:100dvh;
+  color:#3c3e55;
+  font-family: 'MiSans',Arial, Helvetica, sans-serif !important;
+}
+
 .el-message{
   border-radius:20px;
   background-color: #fff;
@@ -86,9 +89,7 @@ html,body{
   padding: 0;
   -webkit-font-smoothing: antialiased;
 }
-#app {
-  width:100%;
-}
+
 ul,li{
   list-style: none;
   padding: 0;
