@@ -85,7 +85,7 @@ async function getTeamInfo(close){
       type: 'error',
     })
     setTimeout(() => {
-      window.location.href = 'https://auth.chiziingiin.top/?url='+encodeURI(window.location.href)
+      window.location.href = 'https://auth.chiziingiin.top/?url='+encodeURIComponent(window.location.href)
     },1000)
     return;
   } else {

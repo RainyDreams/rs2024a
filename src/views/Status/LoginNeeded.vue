@@ -5,7 +5,7 @@
     subTitle="可能您的登录已经过期或无效"
   >
     <template #extra>
-      <a :href="`https://auth.chiziingiin.top/?url=${url}`">
+      <a @click="open()">
         <el-button type="primary">前往登录页面</el-button>
       </a>
     </template>
@@ -14,10 +14,14 @@
 
 <script setup>
 import { ElResult,ElButton } from 'element-plus';
+import Auth from '../../utils/auth';
 import { onMounted, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 const route = useRoute();
 const url = ref('')
+async function open(){
+  await Auth.openWindow(`https://auth.chiziingiin.top/?url=${url.value}&mode=window`)
+} 
 onMounted(()=>{
   url.value = encodeURIComponent(route.query.url || '')
 })

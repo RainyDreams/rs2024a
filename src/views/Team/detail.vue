@@ -41,6 +41,16 @@
                       :value="role.value"
                     />
                   </el-select>
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="移出团队"
+                    placement="top"
+                  >
+                    <el-button v-if="item.canbedeleted" @click="removeuser(item.id)" type="danger" class="ml-2" plain>
+                      <Logout theme="outline" size="16" fill="currentColor" strokeLinejoin="bevel"/>
+                    </el-button>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
@@ -67,8 +77,9 @@ import Auth from '../../utils/auth';
 import { onActivated,ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import routerBack from '../../components/routerBack.vue';
-import { dayjs, ElAvatar,ElSelect,ElOption } from 'element-plus';
-import { roleMap,getRole } from '../../utils/helpers';
+import { dayjs, ElAvatar,ElSelect,ElOption,ElButton,ElTooltip } from 'element-plus';
+import { Logout } from '@icon-park/vue-next';
+import { commonRoleMap,getRole } from '../../utils/helpers';
 const route = useRoute();
 const loading = ref(true)
 const router = useRouter();
@@ -84,8 +95,10 @@ const teamDetail = ref({
   "desc":"",
   "inviteurl":""
 })
-
-const options = roleMap
+const removeuser = async (id)=>{
+  
+}
+const options = commonRoleMap;
 
 onActivated(async ()=>{
   loading.value = true;
@@ -101,6 +114,9 @@ onActivated(async ()=>{
           e.disabled = true
         } else if (res.content.myProfile.role == 'admin'){
           if(e.role == 'owner' || e.role == 'admin') e.disabled = true;
+          e.canbedeleted = true;
+        } else if (res.content.myProfile.role == 'owner'){
+          e.canbedeleted = true;
         }
         return e;
       }),

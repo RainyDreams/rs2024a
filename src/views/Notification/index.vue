@@ -47,6 +47,7 @@ async function renderMessage (message){
             fn:function(){
               jsCookie.set('apply_join_team_id',content.data.teamid)
               jsCookie.set('apply_join_team_user',content.data.userid)
+              jsCookie.set('apply_join_team_note',content.sessionID)
               return Auth.openWindow(e.url,()=>{})
             }
           }

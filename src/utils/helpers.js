@@ -33,6 +33,17 @@ export function getDateDiff(dt) {
 }
 
 
+
+export const commonRoleMap = [
+  {
+    value:'admin',
+    label:'管理员',
+  },
+  {
+    value:'member',
+    label:'成员',
+  },
+]
 export const roleMap = [
   {
     value:'creator',
@@ -42,14 +53,7 @@ export const roleMap = [
     value:'owner',
     label:'拥有者',
   },
-  {
-    value:'admin',
-    label:'管理员',
-  },
-  {
-    value:'member',
-    label:'成员',
-  },
+  ...commonRoleMap
 ]
 /**
  * Description
