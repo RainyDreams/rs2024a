@@ -7,10 +7,24 @@
       <el-tabs v-show="!loading">
         <el-tab-pane label="基本信息">
           <div class="infoList">
-            <div class="title">项目名称</div>
-            <div class="content">{{ projectDetail.name }}</div>
-            <div class="title">项目描述</div>
-            <div class="content">{{ projectDetail.desc }}</div>
+            <div class="text-xs mb-1 text-slate-400">项目名称</div>
+            <div class="text-2xl/tight font-semibold mb-2">{{ projectDetail.name }}</div>
+            <div class="text-xs mb-1 text-slate-400">项目描述</div>
+            <div class="text-lg/tight break-all mb-2">{{ projectDetail.desc }}</div>
+            <ul>
+              <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in projectDetail.teams">
+                <div class="flex-1 shrink break-all">
+                  <div class="text-md">{{ item.name }}</div>
+                  <div class="text-xs text-slate-400">ID:{{ item.id }}</div>
+                  <div class="text-sm text-slate-600 mt-1">{{ item.desc }}</div>
+                </div>
+                <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
+                  <div class="mt-2">
+                    <el-avatar :size="20" v-for="(e) in item.persons" :src="e.avatar"></el-avatar>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
         </el-tab-pane>
         <el-tab-pane>
@@ -99,7 +113,7 @@ import ViewWorkflow from './view/workflow.vue'
 import ViewTask from './view/task.vue'
 import ViewIssue from './view/issue.vue'
 import ViewDiscussion from './view/discussion.vue';
-import { ElTabs,ElTabPane,ElEmpty,ElIcon,ElButton,ElBadge,ElSkeleton } from 'element-plus';
+import { ElTabs,ElTabPane,ElEmpty,ElIcon,ElButton,ElBadge,ElSkeleton,ElAvatar } from 'element-plus';
 import { Right } from '@icon-park/vue-next';
 import Auth from '../../utils/auth';
 import { onActivated,ref } from 'vue';

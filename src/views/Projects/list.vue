@@ -26,7 +26,7 @@
             <div class="panel projectbox">
               <div class="text-xs mb-1 text-slate-400">项目名称</div>
               <div class="text-2xl/tight font-semibold">{{ item.name }}</div>
-              <div class="text-xs mb-1 text-slate-400 mb-2 break-all">ID:{{ item.project }}</div>
+              <div class="text-xs text-slate-400 mb-2 break-all">ID:{{ item.project }}</div>
               <div class="text-xs mb-1 text-slate-400">项目描述</div>
               <div class="text-lg/tight break-all mb-2">{{ item.desc }}</div>
               <div class="text-xs mb-1 text-slate-400">创建人</div>

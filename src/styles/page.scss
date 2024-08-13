@@ -5,6 +5,21 @@
 ._show{
   visibility: visible !important;
 }
+.czig-text{
+  background-image: linear-gradient(180deg, rgb(222, 41, 16) 25%, rgb(255, 157, 0) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.primary-text{
+  background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.primary-bg{
+  background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+}
 .commonPage{
   padding-top: 24px;
   padding-left: 16px;
@@ -20,7 +35,7 @@
     margin-bottom: 16px;
     .icon{
       font-size: 0;
-      color:rgb(34, 98, 251)
+      color:#2262fb
     }
     .title{
       font-size: 20px;

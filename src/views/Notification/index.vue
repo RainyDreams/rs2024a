@@ -31,7 +31,7 @@ const userList = ref([]);
 const messageList = ref([]);
 let messageList_ = []
 function changePage (index){
-  messageList = messageList_[index].list
+  messageList.value = messageList_[index].list
 }
 async function renderMessage (message){
   const {content,time} = message;
