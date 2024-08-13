@@ -1,28 +1,22 @@
 /*
-
+ * @Author: Zhang Xinyue
+ * @LastEditors: Zhang Xinyue
+ * @Description: 登录模块、主要逻辑模块
+ * @FilePath: \RS2024-A\project\src\auth.js
+ * @Software: VS Code
+ * @Copyright: Copyright (c) 2024 CHIZIINGIIN
 */
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
-function copyText(text) {
-  const textarea = document.createElement('textarea');
-  textarea.value = text;
-  document.body.appendChild(textarea);
-  textarea.select();
-  try {
-    document.execCommand('copy');
-  } catch (err) {
-    console.error('复制操作失败', err);
-  }
-  window.clarity("event",'copy')
-  document.body.removeChild(textarea);
-}
-const BASICURL = ''
-const LOGINURL = 'https://auth.chiziingiin.top'
+
 import Cookies from 'js-cookie';
+import Dexie from 'dexie';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from "vue-router";
 import { da } from "element-plus/es/locales.mjs";
+const BASICURL = ''
+const LOGINURL = 'https://auth.chiziingiin.top'
 const defaultSuccess = async (data) => data.content?data.content:data;
-const defaultFailed = async (response,code) => {
+const defaultFailed = async function (response,code) {
   window.clarity("event", 'auth_error')
   if (response.status === 401) {
     const getPr = await Auth.getPrtoken();
@@ -87,8 +81,33 @@ const defaultFailed = async (response,code) => {
   }
   return { status: 'error', content: response };
 }
-class Auth {
-  static async init() {
+function copyText(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.error('复制操作失败', err);
+  }
+  window.clarity("event",'copy')
+  document.body.removeChild(textarea);
+}
+class Scheduler {
+  constructor(max){
+    this.max = max;this.count = 0 ;this.queue = new Array();
+  }
+  async add(promiseCreator){
+    if(this.count>=this.max) await new Promise((resolve,reject)=>this.queue.push(resolve));   
+    this.count ++;let res = await promiseCreator();this.count--;
+    if(this.queue.length){this.queue.shift()();}
+    return res;
+  }
+}
+let Auth = {
+  mainTaskThread: new Scheduler(5),
+  init: async function init() {
     const prStatus = (await this.getPrtoken("first")).status;
     console.log(prStatus);
     if (prStatus == "invalid") {
@@ -98,8 +117,8 @@ class Auth {
         ElMessage.success("以访客身份登录成功");
       }
     }
-  }
-  static async basicAuth(
+  },
+  basicAuth:async function basicAuth(
     url = BASICURL,
     body = "",
     { success = defaultSuccess, failed = defaultFailed } = {
@@ -129,8 +148,8 @@ class Auth {
     } catch (error) {
       return await failed(error, 2);
     }
-  }
-  static async handleRecaptcha() {
+  },
+  handleRecaptcha:async function handleRecaptcha() {
     window.clarity("event", 'Recaptcha')
     return new Promise((resolve,reject)=>{
       window.grecaptcha.ready(() => {
@@ -154,8 +173,8 @@ class Auth {
         });
       });
     })
-  }
-  static async getRecaptchaToken({action="default",id='#turnstile-box'}){
+  },
+  getRecaptchaToken:async function getRecaptchaToken({action="default",id='#turnstile-box'}){
     window.clarity("event", 'getRecaptchaToken')
     return new Promise((resolve,reject)=>{
       // window.grecaptcha.ready(() => {
@@ -181,8 +200,8 @@ class Auth {
         });
       });
     })
-  }
-  static async guestLogin(param) {
+  },
+  guestLogin:async function guestLogin(param) {
     window.clarity("event", 'guestLogin')
     const res = await this.basicAuth(
       "/api/guestlogin",
@@ -195,33 +214,33 @@ class Auth {
       ElMessage.error("以访客身份登录：失败");
       return { status: "error", content: res.content };
     }
-  }
-  static async userRegister(param){
+  },
+  userRegister:async function userRegister(param){
     await this.getUserFingerprint();
     window.clarity("event", 'userRegister')
     return this.basicAuth("/api/reg", JSON.stringify(param))
-  }
-  static async logout(){
+  },
+  logout: async function logout(){
     window.clarity("event", 'logout')
     await this.getPrtoken()
     return this.basicAuth("/api/logout")
-  }
-  static async checkUsername(value){
+  },
+  checkUsername:async function checkUsername(value){
     await this.getUserFingerprint();
     window.clarity("event", 'checkUsername')
     return this.basicAuth("/api/checkUsername", JSON.stringify({username:value}))
-  }
-  static async test() {
+  },
+  test:async function test() {
     await this.getUserFingerprint();
     window.clarity("event", 'test')
     return this.basicAuth("/api/test");
-  }
-  static async reportErrlog(content) {
+  },
+  reportErrlog:async function reportErrlog(content) {
     await this.getUserFingerprint();
     window.clarity("event", 'reportErrlog')
     return this.basicAuth("/api/reportErrlog", content);
-  }
-  static async getPrtoken(mode) {
+  },
+  getPrtoken: async function getPrtoken(mode) {
     console.log(Cookies.get("czigauth"));
     if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
       return { status: "exist", content: Cookies.get("czigauth") };
@@ -251,129 +270,128 @@ class Auth {
         }
       }
     });
-  }
-  static async createTeam(param) {
+  },
+  createTeam:async function createTeam(param) {
     window.clarity("event", 'createTeam')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/createTeam",
       JSON.stringify({ name: param.name, desc: param.desc })
     );
-  }
-  static async joinTeam(param) {
+  },
+  joinTeam:async function joinTeam(param) {
     window.clarity("event","joinTeam")
     await this.getPrtoken();
     return this.basicAuth(
       "/api/joinTeam",
       JSON.stringify({ pid: param.pid })
     );
-  }
-  static async getTeamInfo(param = {}) {
+  },
+  getTeamInfo:async function getTeamInfo(param = {}) {
     window.clarity("event", 'getTeamInfo')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/teamInfo",
       JSON.stringify({ uid: param.uid || "", pid: param.pid })
     );
-  }
-  static async getTeamList(param = {}) {
+  },
+  getTeamList:async function getTeamList(param = {}) {
     window.clarity("event", 'getTeamList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/teamList",
       JSON.stringify({ uid: param.uid || "" })
     );
-  }
-  static async getJoinedTeamList(param = {}) {
+  },
+  getJoinedTeamList: async function getJoinedTeamList(param = {}) {
     window.clarity("event", 'getJoinedTeamList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/joinedTeamList",
       JSON.stringify({ uid: param.uid || "" })
     );
-  }
-  static async removeTeamUser(param={}){
+  },
+  removeTeamUser:async function removeTeamUser(param={}){
     window.clarity("event", 'removeTeamUser')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/teamRemoveMember",
       JSON.stringify(param)
     );
-  }
-  static async teamChangeRole(param){
+  },
+  teamChangeRole:async function teamChangeRole(param){
     window.clarity("event", 'changeRole')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/teamChangeRole",
       JSON.stringify(param)
     );
-  }
-  static async getDashboard() {
+  },
+  getDashboard:async function getDashboard() {
     window.clarity("event", 'getDashboard')
     await this.getPrtoken();
     return this.basicAuth("/api/dashboard", "");
-  }
-  static async createProject(param) {
+  },
+  createProject: async function createProject(param) {
     window.clarity("event", 'createProject')
     await this.getPrtoken();
     return this.basicAuth("/api/createProject", JSON.stringify({ ...param }));
-  }
-  static async getProjectDetail(param = {}) {
+  },
+  getProjectDetail:async function getProjectDetail(param = {}) {
     window.clarity("event", 'getProjectDetail')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/projectDetail",
       JSON.stringify({ projectid: param.id })
     );
-  }
-  static async getProjectList(param = {}) {
+  },
+  getProjectList:async function getProjectList(param = {}) {
     window.clarity("event", 'getProjectList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/projectList",
       JSON.stringify({ uid: param.uid || "" })
     );
-  }
-  static async getJoinedProjectList(param = {}) {
+  },
+  getJoinedProjectList:async function getJoinedProjectList(param = {}) {
     window.clarity("event", 'getJoinedProjectList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/joinedProjectList",
       JSON.stringify({ uid: param.uid || "" })
     );
-  }
-  static async createProjectItem(param = {}){
+  },
+  createProjectItem:async function createProjectItem(param = {}){
     window.clarity("event", 'createProjectItem')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/project/create-item",
       JSON.stringify({ ...param })
     );
-  }
-  static async getProjectItem(param={}){
+  },
+  getProjectItem:async function getProjectItem(param={}){
     window.clarity("event", 'getProjectItem')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/project/get-item",
       JSON.stringify({ projectId: param.projectId, type: param.type })
     );
-  }
-  static async getUserInfo(param = {}) {
+  },
+  getUserInfo:async function getUserInfo(param = {}) {
     window.clarity("event", 'getUserInfo')
     await this.getPrtoken();
     return this.basicAuth('/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
-  }
-  static async getUpdateList(param = {}){
+  },
+  getUpdateList:async function getUpdateList(param = {}){
     window.clarity("event", 'getUpdateList')
     return this.basicAuth('/api/getUpdateList', JSON.stringify({ page:param.page }), );
-  }
-  static async getNotification(param={}){
+  },
+  getNotification:async function getNotification(param={}){
     window.clarity("event", 'getNotification')
     await this.getPrtoken();
     return this.basicAuth('/api/getNotification', JSON.stringify({ page:param.page }), );
-  }
-
-  static async openWindow(url,callback){
+  },
+  openWindow:async function openWindow(url,callback){
     window.clarity("event", 'openWindow')
     let width = 500;
     let height = 500;
@@ -387,19 +405,19 @@ class Auth {
         clearInterval(intervalId);
       }
     }, 1000);
-  }
+  },
 
   /* 实验性功能 */
-  static async getAIWelcome(){
+  getAIWelcome: async function getAIWelcome(){
     window.clarity("event", 'getAIWelcome')
     return this.basicAuth('/api/ai/welcome', '', );
-  }
-  static async AI_createWorkflow(param){
+  },
+  AI_createWorkflow:async function AI_createWorkflow(param){
     window.clarity("event", 'AI_createWorkflow')
     await this.getPrtoken();
     return this.basicAuth('/api/ai/createWorkflow', JSON.stringify(param), );
-  }
-  static async chatWithAI(list, param) {
+  },
+  chatWithAI:async function chatWithAI(list, param) {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
     const res = await this.basicAuth(
@@ -412,9 +430,8 @@ class Auth {
         onclose:param.onclose
       });
     }
-  }
-
-  static async getStreamText(url,postData,param) {
+  },
+  getStreamText:async function getStreamText(url,postData,param) {
     window.clarity("event", 'getStreamText')
     await this.getPrtoken();
     const postOptions = {
@@ -440,21 +457,39 @@ class Auth {
         param.onmessage(text);
       }
     }
-  }
-
-
-  static async getAIGuestList() {
+  },
+  getAIGuestList:async function getAIGuestList() {
     window.clarity("event", 'getAIGuestList')
     await this.getPrtoken();
     return this.basicAuth("/api/danger/viewAIGuest");
-  }
-  static async getUserFingerprint() {
+  },
+  getUserFingerprint:async function getUserFingerprint() {
     window.clarity("event", 'getUserFingerprint')
     const fp = await FingerprintJS.load();
     const result = await fp.get();
     const visitorId = result.visitorId;
     window.clarity("set", 'Fingerprint',result.visitorId);
     return visitorId;
+  },
+  db:{
+
+  },
+  db_init:async function db_init(){
+    if (!this.db.version) {
+      this.db = new Dexie('lingben_chuangzhi');
+      this.db.version(1).stores({
+        user_profile_cache: 'id, avatar, username, nickname'
+      });
+      return await this.db.open();
+    }
+  },
+  getUserInfoByID:async function getUserInfoByID(id){
+    await this.db_init()
+    window.clarity("event", 'getUserInfoByID')
+    const result = await this.db.user_profile_cache.where('id').equals(id).toArray();
+    if(result.length){
+
+    }
   }
 }
 

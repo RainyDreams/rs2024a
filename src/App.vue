@@ -87,7 +87,6 @@ import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignText
 import { Remind } from "@icon-park/vue-next";
 import { ElConfigProvider,ElAvatar,ElNotification } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-import Dexie from 'dexie';
 import Auth from './utils/auth';
 const router = useRouter();
 const TabBarHide = ref(false);
@@ -96,11 +95,7 @@ const isDarkMode = ref(0);
 const activeName = ref(0);
 const showMenu = ref(false)
 onMounted(()=>{
-  const db = new Dexie('lingben_chuangzhi');
-  db.version(1).stores({
-    user_avatar_cache: 'user, avatar'
-  });
-  db.user_avatar_cache.add({ user: 'test', avatar: '' });
+  
 })
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
