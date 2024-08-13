@@ -291,7 +291,7 @@ import { Plus } from '@element-plus/icons-vue'
 import axios from 'axios';
 const profile = ref({
   nickname: '加载中',
-  avatar: 'https://project.chiziingiin.top/api/avatar/',
+  avatar: 'https://lingben.chiziingiin.top/api/avatar/',
   sign: '暂无签名',
   teams: [],
   projects: [],
@@ -341,7 +341,7 @@ function handleUpload(options) {
       axios.post('/api/uploadAvatar', data)
       .then(response => {
         // console.log(response,options);
-        profile.value.avatar = 'https://project.chiziingiin.top/api/avatar/'+ response.data.content;
+        profile.value.avatar = 'https://lingben.chiziingiin.top/api/avatar/'+ response.data.content;
       })
       .catch(error => {
         console.error(error);

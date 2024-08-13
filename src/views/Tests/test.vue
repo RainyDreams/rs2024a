@@ -1,5 +1,5 @@
 <template>
-  <div class="commonPage" style="height:calc(var(--system--height) - 60px);display: flex;flex-direction: column;">  
+  <div class="commonPage" style="height:calc(100dvh - 60px);display: flex;flex-direction: column;">  
     <div class="scroll">
       <div class="row" >
         <div class="col-12 col-xl-8" style="margin-bottom: 0;">
@@ -46,7 +46,6 @@
               class="_input"
               :maxlength="1000"
               @focus="onFocus"
-              @blur="onBlur"
               @keyup="onChange"
               @change="onChange"
               :placeholder="placeholder"

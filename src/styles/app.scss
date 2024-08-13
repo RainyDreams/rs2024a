@@ -79,19 +79,20 @@
             content:"";
             position: absolute;
             display: block;
-            bottom:0;
-            left:16px;
-            right:16px;
-            width:calc(100% - 32px);
-            height:3px;
-            border-radius: 3px 3px 1px 1px;
-            background: rgba(34, 98, 251, 1);
-            background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+            bottom:3px;
+            z-index: -1;
+            left:4px;
+            right:4px;
+            width:calc(100% - 8px);
+            height:44px;
+            border-radius: 5px;
+            // background: rgba(34, 98, 251, 1);
+            background-image: linear-gradient(105deg, #2263fb15 20%, #801fff15 88.8%);
             opacity: 0;
             visibility: hidden;
             transition: all 0.1s ease-in-out;
           }
-          &.router-link-active::after{
+          &.router-link-active::after,&:hover::after{
             opacity: 1;
             visibility: visible;
           }

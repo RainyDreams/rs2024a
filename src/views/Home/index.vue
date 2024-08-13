@@ -28,22 +28,31 @@
           <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-5">依托我们卓越的设计和技术能力和 Cloudflare 提供的免费云服务</h5>
         </div>
         <div class="col-12">
-          <div class="row">
-            <div class="col-12 col-sm-6 col-md-4">
-              <div class="card px-6 bg-white py-8 rounded-xl border-slate-200 border">
-                <h3 class="font-semibold text-2xl/tight lg:text-3xl/tight primary-text">零成本</h3>
+          <div class="row cursor-default">
+            <div class="col-12 col-md-4">
+              <div class="px-6 bg-white py-8 rounded-xl border-slate-200 border group">
+                <h3 class="font-semibold text-2xl/tight lg:text-3xl/tight w-fit">
+                  <span class="primary-text">零</span>
+                  <span class="group-hover:text-blue transition-all">成本</span>
+                </h3>
                 <p class="text-base mt-3">我们采用无服务器的Workers，我们在有限的服务内无需支出任何成本当然也不会收取您费用</p>
               </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4">
-              <div class="card px-6 bg-white py-8 rounded-xl border-slate-200 border">
-                <h3 class="font-semibold text-2xl/tight lg:text-3xl/tight primary-text">高速响应</h3>
+            <div class="col-12 col-md-4">
+              <div class="px-6 bg-white py-8 rounded-xl border-slate-200 border group">
+                <h3 class="font-semibold text-2xl/tight lg:text-3xl/tight w-fit">
+                  <span class="primary-text">高速</span>
+                  <span class="group-hover:text-blue transition-all">响应</span>
+                </h3>
                 <p class="text-base mt-3">我们不断地优化我们服务器代码和前端架构，这使得我们软件的平均响应速度&lt;1s</p>
               </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4">
-              <div class="card px-6 bg-white py-8 rounded-xl border-slate-200 border">
-                <h3 class="font-semibold text-2xl/tight lg:text-3xl/tight primary-text">界面美观</h3>
+            <div class="col-12 col-md-4">
+              <div class="px-6 bg-white py-8 rounded-xl border-slate-200 border group">
+                <h3 class="font-semibold text-2xl/tight lg:text-3xl/tight w-fit">
+                  <span class="group-hover:text-blue transition-all">界面</span>
+                  <span class="primary-text">美观</span>
+                </h3>
                 <p class="text-base mt-3">我们采用无服务器的Workers Javascript代码运行，响应快速</p>
               </div>
             </div>

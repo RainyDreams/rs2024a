@@ -26,6 +26,7 @@
     "axios": "^1.7.3",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.12",
+    "dexie": "^4.0.8",
     "echarts": "^5.5.1",
     "element-plus": "^2.7.7",
     "js-cookie": "^3.0.5",
