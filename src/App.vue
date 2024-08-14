@@ -34,11 +34,12 @@
           <router-link class="btn" to="/notification">
             <remind theme="outline" size="20" fill="#5F6388" :strokewidth="5"  strokeLinejoin="bevel"/>
           </router-link>
-          <a :class="`btn _user ${activeName=='User'?'router-link-active':''}`" @click="clickUser()">
+          <a v-if="!basicInfo.isLogined" class="login_tab" href="https://auth.chiziingiin.top/from-home">登录</a>
+          <a v-if="basicInfo.isLogined" :class="`btn _user ${activeName=='User'?'router-link-active':''}`" @click="clickUser()">
             <el-avatar
               alt="头像"
               :size="35"
-              src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+              :src="basicInfo.avatar"
             />
           </a>
         </div>
@@ -55,7 +56,7 @@
     </div>
     <div v-if="!SideBarHide" class="tabbar pc" >
       <router-link class="logo" to="/">
-        <img src="/logo.webp" style="color:#3c3e55" alt="零本智协">
+        <img src="/logo.webp" class="mb-3" style="color:#3c3e55" alt="零本智协">
       </router-link>
       <ul class="tablist">
         <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
@@ -81,7 +82,7 @@
 console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已经掌握一定的技术能力，我很高兴我的软件能被你们所了解。\n但有以下几点需要注意：%c\n%c1. 我们是学生初创项目，请不要尝试攻击、毁坏或者以任何方式使它停止工作，我们感谢你的善举\n2. 如果你想要研究它的源码和创作历程，请关注“赤子英金”', 
 'font-size:18px;padding:4px;color:#fff;background:#f00;','','font-size:12px;line-height:16px;padding:2px;', '','padding:2px;line-height:16px;font-size:12px;'); 
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
-import { ref,markRaw, reactive, onMounted } from 'vue';
+import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRouter } from 'vue-router'
 import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
@@ -94,8 +95,13 @@ const SideBarHide = ref(false);
 const isDarkMode = ref(0);
 const activeName = ref(0);
 const showMenu = ref(false)
-onMounted(()=>{
-  
+const basicInfo = ref({
+  isLogined:false,
+  avatar:''
+})
+onMounted(async ()=>{
+  console.log(1)
+  basicInfo.value = (await Auth.getBasicInfo())
 })
 function bindShowMenu(){
   showMenu.value=!showMenu.value;

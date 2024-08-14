@@ -41,12 +41,12 @@
               <template #description>
                 <p>还未创建</p>
               </template>
-              <template #default>
-                <p><el-button @click="toCreate('workflow')" type="primary">
-                  去创建<el-icon class="el-icon--right"><Right /></el-icon>
-                </el-button></p>
-              </template>
             </el-empty>
+          </div>
+          <div class="mt-3 text-center">
+            <p><el-button @click="toCreate('workflow')" type="primary">
+              去创建<el-icon class="el-icon--right"><Right /></el-icon>
+            </el-button></p>
           </div>
         </el-tab-pane>
         <el-tab-pane >
@@ -61,12 +61,12 @@
               <template #description>
                 <p>还未创建</p>
               </template>
-              <template #default>
-                <p><el-button @click="toCreate('task')" type="primary">
-                  去创建<el-icon class="el-icon--right"><Right /></el-icon>
-                </el-button></p>
-              </template>
             </el-empty>
+          </div>
+          <div class="mt-3 text-center">
+            <p><el-button @click="toCreate('task')" type="primary">
+              去创建<el-icon class="el-icon--right"><Right /></el-icon>
+            </el-button></p>
           </div>
         </el-tab-pane>
         <el-tab-pane label="问题">
@@ -78,12 +78,12 @@
               <template #description>
                 <p>还未创建</p>
               </template>
-              <template #default>
-                <p><el-button @click="toCreate('issue')" type="warning">
-                  去创建<el-icon class="el-icon--right"><Right /></el-icon>
-                </el-button></p>
-              </template>
             </el-empty>
+          </div>
+          <div class="mt-3 text-center">
+            <p><el-button @click="toCreate('issue')" type="warning">
+              去创建<el-icon class="el-icon--right"><Right /></el-icon>
+            </el-button></p>
           </div>
         </el-tab-pane>
         <el-tab-pane label="讨论">
@@ -95,12 +95,12 @@
               <template #description>
                 <p>还未创建</p>
               </template>
-              <template #default>
-                <p><el-button @click="toCreate('discussion')" type="primary">
-                  去创建<el-icon class="el-icon--right"><Right /></el-icon>
-                </el-button></p>
-              </template>
             </el-empty>
+          </div>
+          <div class="mt-3 text-center">
+            <p><el-button @click="toCreate('discussion')" type="primary">
+              去创建<el-icon class="el-icon--right"><Right /></el-icon>
+            </el-button></p>
           </div>
         </el-tab-pane>
       </el-tabs>
