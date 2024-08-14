@@ -406,7 +406,6 @@ let Auth = {
       }
     }, 1000);
   },
-
   /* 实验性功能 */
   getAIWelcome: async function getAIWelcome(){
     window.clarity("event", 'getAIWelcome')
@@ -477,18 +476,46 @@ let Auth = {
   db_init:async function db_init(){
     if (!this.db.version) {
       this.db = new Dexie('lingben_chuangzhi');
-      this.db.version(1).stores({
-        user_profile_cache: 'id, avatar, username, nickname'
+      this.db.version(2).stores({
+        user_profile_cache: 'id, avatar, username, nickname, expirationTime'
       });
       return await this.db.open();
     }
   },
-  getUserInfoByID:async function getUserInfoByID(id){
+  getUserInfoByID:async function getUserInfoByID(user){
     await this.db_init()
+    let this_ = this;
     window.clarity("event", 'getUserInfoByID')
-    const result = await this.db.user_profile_cache.where('id').equals(id).toArray();
-    if(result.length){
-
+    this.db.transaction('rw', this.db.user_profile_cache, async () => {
+      const now = Date.now();
+      const expiredItems = await this_.db.user_profile_cache.where('expirationTime').below(now).toArray();
+      for (const item of expiredItems) {
+        await this_.db.user_profile_cache.delete(item.id);
+      }
+    });
+    const result = await this.db.user_profile_cache.where('id').equals(user.id).first();
+    
+    if(result){
+      return {
+        ...user,
+        ...result
+      }
+    } else {
+      return await this.mainTaskThread.add(async() => {
+        const {content} = await this_.getUserInfo({uid:user.id})
+        await this_.db.user_profile_cache.update(content.id,{
+          id: content.id,
+          avatar: content.avatar,
+          username: content.username,
+          nickname: content.nickname,
+          expirationTime:Date.now() + 60*60*1000
+        })
+        return {
+          ...user,
+          ...content
+        }
+      })
+     
     }
   }
 }

@@ -107,19 +107,20 @@
         </div>
       </div>
     </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
+    <div class="panel bs-container py-10 md:py-16 lg:py-20 xl:py-24">
       <h2 class="mt-14 mb-6 text-4xl md:mt-20 md:mb-10 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">来！现在就尝试零本创智</h2>
       <h5 class="text-center mb-14 md:mb-20">
         <el-button size="large" class="text-2xl py-7 px-8 primary-bg" type="primary">开启旅程</el-button>
       </h5>
     </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <h2 class="font-semibold mt-10 mb-10 text-3xl md:mt-20 md:mb-20 md:text-5xl/snug lg:text-6xl/snug text-center primary-text">梦想只是开始 探索永不止步</h2>
+    <div class="panel bs-container flex h-dvh items-center justify-center flex-col">
+      <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">梦想只是开始 探索永不止步</h2>
+      <p class="mt-4">Designed by Zhang Xinyue, Chiziingiin.</p>
     </div>
     <div class="copyright py-5">
       <p class="text-center"><span class="czig-text">赤子英金</span> · <span class="primary-text">零本创智</span></p>
       <p class="text-center text-sm mt-1 mb-1">- 赤子英金第一款产品发布留念 -</p>
-      <p class="text-center">Copyright © 2024 CHIZIINGIIN All rights reserved.</p>
+      <p class="text-center">Copyright © 2024 Chiziingiin All rights reserved.</p>
     </div>
   </div>
 </template>

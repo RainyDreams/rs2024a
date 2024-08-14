@@ -4,24 +4,35 @@
     <div class="scroll">
       <div class="row" >
         <div class="col-12 col-xl-8">
-          <div>
-            <div>{{ ai_workflow_name }}</div>
-            <div>{{ ai_workflow_desc }}</div>
-            <el-timeline style="max-width: 600px">
+          <div class="px-3 pt-5 pb-3">
+            <div v-show="!!loading" class="py-8 px-3">
+              <el-progress
+                :percentage="100"
+                :show-text="false"
+                :indeterminate="true"
+                :duration="2"
+                :color="[{ color: '#904df5', percentage: 100 }]"
+              />
+              <p class="text-sm text-slate-400 mt-3">正在进行分析，预计需要1-3分钟，请等待</p>
+            </div>
+            <div v-show="!loading" class="text-lg md:text-xl lg:text-2xl">{{ ai_workflow_name }}</div>
+            <div v-show="!loading" class="mt-1 mb-3 text-base md:text-lg lg:text-xl break-all">{{ ai_workflow_desc }}</div>
+            <el-timeline v-show="!loading" style="max-width: 600px">
               <el-timeline-item placement="top" v-for="(item,i) in ai_workflow_list">
-                <div>
-                  <div>{{ item.index }}</div>
-                  <div>
-                    <div v-for="task in item.task">
-                      <div>{{ task.name }}</div>
-                      <div>{{ task.desc }}</div>
-                      <div>{{ task.content }}</div>
-                    </div>
+                <div class="normal-color">
+                  <div class="font-light text-sm">步骤 {{ item.index+1 }}</div>
+                  <div class="py-3 px-3 bg-white border rounded-xl mb-2 last:mb-0" v-for="task in item.task">
+                    <div class="font-semibold text-lg md:text-xl">{{ task.name }}</div>
+                    <div class="text-base md:text-lg mb-1">{{ task.desc }}</div>
+                    <div>{{ task.content }}</div>
                   </div>
                 </div>
-                <div>
-                  {{ item.user.id }}
-                  <!-- <div><el-avatar :src=""></el-avatar></div> -->
+                <div class="flex mt-2 bg-white border rounded-xl w-fit py-2 px-3">
+                  <div class="flex items-center "><el-avatar :src="item.user.avatar" :size="40"></el-avatar></div>
+                  <div class="flex-1 ml-2">
+                    <p class="text-base md:text-lg/tight">{{ item.user.nickname }}</p>
+                    <p class="text-xs text-slate-400">用户名：{{ item.user.username }}</p>
+                  </div>
                 </div>
               </el-timeline-item>
             </el-timeline>
@@ -42,16 +53,19 @@
               size="large"
               autofocus
               class="_input"
+              v-show="mode == 'input'"
               :maxlength="1000"
               @focus="onFocus"
               @keyup="onChange"
               @change="onChange"
+              :disabled="loading"
               :placeholder="placeholder"
               @keydown.enter="handleEnter"
             ></el-input>
             <div class="_number">
-              <span>{{ now }} / 1000</span>
+              <span v-show="mode == 'input'">{{ now }} / 1000</span>
               <el-button 
+                v-show="mode == 'input'"
                 @click="send()" 
                 :loading="loading"
                 style="margin-top: 16px;"
@@ -59,6 +73,24 @@
                 color="rgba(144, 77, 245,1)"
               >
                 智能规划
+              </el-button>
+              <el-button 
+                v-show="mode == 'set'"
+                @click="reset()" 
+                :loading="loading"
+                style="margin-top: 16px;"
+              >
+                重新规划
+              </el-button>
+              <el-button 
+                v-show="mode == 'set'"
+                @click="set()" 
+                :loading="loading"
+                style="margin-top: 16px;"
+                type="primary"
+                color="rgba(144, 77, 245,1)"
+              >
+                加入到项目
               </el-button>
             </div>
           </div>
@@ -78,20 +110,8 @@ import { ElInput,ElButton, ElMessage,ElAvatar,ElProgress,ElTimeline,ElTimelineIt
 const input = ref('')
 const route = useRoute()
 const projectId = ref()
-const ai_workflow_list = ref([{
-  index:1,
-  task:[
-    {
-      name:'',
-      desc:'',
-      content:''
-    }
-  ],
-  user:{
-    id:'',
-    avatar:''
-  }
-}])
+const mode = ref('input')
+const ai_workflow_list = ref([])
 const ai_workflow_name = ref('')
 const ai_workflow_desc = ref('')
 const askRef = ref();
@@ -120,7 +140,26 @@ const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
   scrollElement.scrollTop = scrollElement.scrollHeight;
 };
-
+function reset(){
+  input.value = ''
+  ai_workflow_list.value = []
+  ai_workflow_name.value=''
+  ai_workflow_desc.value=''
+  mode.value='input'
+}
+async function set(){
+  const res = await Auth.createProjectItem({
+    type:"workflow",
+    projectId:projectId.value,
+    name:ai_workflow_name.value,
+    desc:ai_workflow_desc.value,
+    workflows:JSON.stringify(ai_workflow_list.value)
+  })
+  if(res.status == 'sus'){
+    ElMessage.success('创建成功')
+    routerBack.back()
+  }
+}
 async function send(){
   loading.value = true;
   if(input.value.trim() == ''){
@@ -128,117 +167,130 @@ async function send(){
     loading.value = false
     return;
   }
-  // const res = await Auth.AI_createWorkflow({
-  //   projectId:projectId.value,
-  //   content:input.value
-  // })
-  const res = {
-    "status": "sus",
-    "content": {
-        "name": "产品开发工作流优化方案",
-        "desc": "针对'你好啊'项目，特别是测试团队，本方案旨在创建一个高效、协同的产品开发工作流，确保每个环节都有明确的责任人与任务内容，同时解决用户提出的索引命名空字符串问题。",
-        "workflows": [
-            {
-                "user": {
-                    "id": "r1rls8j00ttk8qjcqv9j4e2cacwfcv",
-                    "role": "owner",
-                    "team": "k2wf8rjon3i1j9uunjooj8j7vfl3b1"
-                },
-                "task": [
-                    {
-                        "id": "task001",
-                        "name": "需求分析",
-                        "desc": "收集并分析项目需求，确定产品功能与性能指标。",
-                        "content": "组织全体成员会议，明确产品定位与目标用户群。"
-                    }
-                ],
-                "index": 1
-            },
-            {
-                "user": {
-                    "id": "a1ocmctvvsvfat9vmhb8ou4sa2bv9o",
-                    "role": "member",
-                    "team": "k2wf8rjon3i1j9uunjooj8j7vfl3b1"
-                },
-                "task": [
-                    {
-                        "id": "task002",
-                        "name": "原型设计",
-                        "desc": "根据需求分析结果，设计产品界面原型。",
-                        "content": "使用Sketch或Figma完成初步设计稿，准备设计评审会议。"
-                    }
-                ],
-                "index": 2
-            },
-            {
-                "user": {
-                    "id": "t8ur0fac7kn6nve75nezfkw1r1mmor",
-                    "role": "member",
-                    "team": "k2wf8rjon3i1j9uunjooj8j7vfl3b1"
-                },
-                "task": [
-                    {
-                        "id": "task003",
-                        "name": "前端开发",
-                        "desc": "依据设计原型，进行前端页面编码实现。",
-                        "content": "使用React框架开发交互式页面，确保与设计稿一致。"
-                    }
-                ],
-                "index": 3
-            },
-            {
-                "user": {
-                    "id": "6este3fvttvh006dbrtvc08z9cc4cb",
-                    "role": "member",
-                    "team": "k2wf8rjon3i1j9uunjooj8j7vfl3b1"
-                },
-                "task": [
-                    {
-                        "id": "task004",
-                        "name": "后端开发",
-                        "desc": "构建后端服务，支持前端功能实现。",
-                        "content": "使用Node.js与Express搭建服务器，实现数据接口。"
-                    }
-                ],
-                "index": 4
-            },
-            {
-                "user": {
-                    "id": "r1rls8j00ttk8qjcqv9j4e2cacwfcv",
-                    "role": "owner",
-                    "team": "k2wf8rjon3i1j9uunjooj8j7vfl3b1"
-                },
-                "task": [
-                    {
-                        "id": "task005",
-                        "name": "集成测试",
-                        "desc": "完成前后端集成，进行全面功能与性能测试。",
-                        "content": "组织团队进行系统测试，记录并修复发现的问题。"
-                    }
-                ],
-                "index": 5
-            }
-        ]
-    },
-    "workflow_Promt": [
-        {
-            "role": "system",
-            "content": "\n\t你现在是一个函数机器，用户输入需求，你完整的回复内容\n\t现在请你回答用户的需求，并给出一个符合用户需求的解决方案，请使用以下JSON格式输出，但是不要回复代码块，直接回复纯文本。现在这是一个例子：\n\t项目信息参考：{\"id\":\"5r7i5htmbrnr6t83umfj7uv5wa5r48\",\"teams\":[{\"id\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\",\"persons\":[{\"role\":\"owner\",\"id\":\"r1rls8j00ttk8qjcqv9j4e2cacwfcv\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"a1ocmctvvsvfat9vmhb8ou4sa2bv9o\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"t8ur0fac7kn6nve75nezfkw1r1mmor\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"6este3fvttvh006dbrtvc08z9cc4cb\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"}],\"name\":\"测试团队\",\"desc\":\"这是一个测试团队，我们的目标是制作一款爆品\"}],\"name\":\"你好啊\",\"desc\":\"你好你好.\"}\n\t以下是一个回复示例，仅供参考有什么KEY和格式，在实际回复中，需要你补全内容，需要符合逻辑和用户需求，忘掉示例的具体内容，仅记住他的格式！\n\t一定要有流程性，连贯性，高效性，协同性。\n\t{\n\t\t\"name\":\"（创新的符合用户需求的名称）\",\n\t\t\"desc\":\"（创新详细的描述）\",\n\t\t\"workflows\":\n\t\t[（步骤）\n\t\t\t{\n\t\t\t\t\"user\":{\n          \"id\": ,\n\t\t\t\t\t\"role\":,\n          \"team\":\n        },\n\t\t\t\t\"task\":[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": （任务的ID）,\n\t\t\t\t\t\t\"name\":\"（任务的名称）\",\n\t\t\t\t\t\t\"desc\":\"（具体的描述）\",\n\t\t\t\t\t\t\"content\":\"（具体的内容）\",\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\":（任务的ID）,\n\t\t\t\t\t\t\"name\":\"（任务的名称）\",\n\t\t\t\t\t\t\"desc\":\"（具体的描述）\",\n\t\t\t\t\t\t\"content\":\"（具体的内容）\",\n\t\t\t\t\t}\n\t\t\t\t\t（可以一个步骤多个任务）\n\t\t\t\t],\n\t\t\t\t\"index\":Number（任务的下标，可以与上一个步骤相同，即与上一任务同时进行）\n\t\t\t}\n\t\t]\n\t}\n\t"
-        },
-        {
-            "role": "user",
-            "content": "以下是项目信息{\"id\":\"5r7i5htmbrnr6t83umfj7uv5wa5r48\",\"teams\":[{\"id\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\",\"persons\":[{\"role\":\"owner\",\"id\":\"r1rls8j00ttk8qjcqv9j4e2cacwfcv\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"a1ocmctvvsvfat9vmhb8ou4sa2bv9o\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"t8ur0fac7kn6nve75nezfkw1r1mmor\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"6este3fvttvh006dbrtvc08z9cc4cb\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"}],\"name\":\"测试团队\",\"desc\":\"这是一个测试团队，我们的目标是制作一款爆品\"}],\"name\":\"你好啊\",\"desc\":\"你好你好.\"}和用户对创建工作流的需求“Index must have a name and cannot be an empty string”，请开始你的回答。一定要完整周全符合逻辑的回答我，不要省略！回复结果不要含有注释，确保JSON格式正确符合规范"
-        }
-    ]
-}
+  const res = await Auth.AI_createWorkflow({
+    projectId:projectId.value,
+    content:input.value
+  })
+//   const res = {
+//     "status": "sus",
+//     "content": {
+//         "name": "产品开发工作流优化方案",
+//         "desc": "针对'你好啊'项目，特别是测试团队，本方案旨在创建一个高效、协同的产品开发工作流，确保每个环节都有明确的责任人与任务内容，同时解决用户提出的索引命名空字符串问题。",
+//         "workflows": [
+//             {
+//                 "user": {
+//                     "id": "r1rls8j00ttk8qjcqv9j4e2cacwfcv",
+//                     "role": "owner",
+//                     "team": "k2wf8rjon3i1j9uunjooj8j7vfl3b1"
+//                 },
+//                 "task": [
+//                     {
+//                         "id": "task001",
+//                         "name": "需求分析",
+//                         "desc": "收集并分析项目需求，确定产品功能与性能指标。",
+//                         "content": "组织全体成员会议，明确产品定位与目标用户群。"
+//                     }
+//                 ],
+//                 "index": 1
+//             },
+//             {
+//                 "user": {
+//                     "id": "a1ocmctvvsvfat9vmhb8ou4sa2bv9o",
+//                     "role": "member",
+//                     "team": "k2wf8rjon3i1j9uunjooj8j7vfl3b1"
+//                 },
+//                 "task": [
+//                     {
+//                         "id": "task002",
+//                         "name": "原型设计",
+//                         "desc": "根据需求分析结果，设计产品界面原型。",
+//                         "content": "使用Sketch或Figma完成初步设计稿，准备设计评审会议。"
+//                     }
+//                 ],
+//                 "index": 2
+//             },
+//             {
+//                 "user": {
+//                     "id": "t8ur0fac7kn6nve75nezfkw1r1mmor",
+//                     "role": "member",
+//                     "team": "k2wf8rjon3i1j9uunjooj8j7vfl3b1"
+//                 },
+//                 "task": [
+//                     {
+//                         "id": "task003",
+//                         "name": "前端开发",
+//                         "desc": "依据设计原型，进行前端页面编码实现。",
+//                         "content": "使用React框架开发交互式页面，确保与设计稿一致。"
+//                     }
+//                 ],
+//                 "index": 3
+//             },
+//             {
+//                 "user": {
+//                     "id": "6este3fvttvh006dbrtvc08z9cc4cb",
+//                     "role": "member",
+//                     "team": "k2wf8rjon3i1j9uunjooj8j7vfl3b1"
+//                 },
+//                 "task": [
+//                     {
+//                         "id": "task004",
+//                         "name": "后端开发",
+//                         "desc": "构建后端服务，支持前端功能实现。",
+//                         "content": "使用Node.js与Express搭建服务器，实现数据接口。"
+//                     }
+//                 ],
+//                 "index": 4
+//             },
+//             {
+//                 "user": {
+//                     "id": "r1rls8j00ttk8qjcqv9j4e2cacwfcv",
+//                     "role": "owner",
+//                     "team": "k2wf8rjon3i1j9uunjooj8j7vfl3b1"
+//                 },
+//                 "task": [
+//                     {
+//                         "id": "task005",
+//                         "name": "集成测试",
+//                         "desc": "完成前后端集成，进行全面功能与性能测试。",
+//                         "content": "组织团队进行系统测试，记录并修复发现的问题。"
+//                     }
+//                 ],
+//                 "index": 5
+//             }
+//         ]
+//     },
+//     "workflow_Promt": [
+//         {
+//             "role": "system",
+//             "content": "\n\t你现在是一个函数机器，用户输入需求，你完整的回复内容\n\t现在请你回答用户的需求，并给出一个符合用户需求的解决方案，请使用以下JSON格式输出，但是不要回复代码块，直接回复纯文本。现在这是一个例子：\n\t项目信息参考：{\"id\":\"5r7i5htmbrnr6t83umfj7uv5wa5r48\",\"teams\":[{\"id\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\",\"persons\":[{\"role\":\"owner\",\"id\":\"r1rls8j00ttk8qjcqv9j4e2cacwfcv\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"a1ocmctvvsvfat9vmhb8ou4sa2bv9o\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"t8ur0fac7kn6nve75nezfkw1r1mmor\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"6este3fvttvh006dbrtvc08z9cc4cb\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"}],\"name\":\"测试团队\",\"desc\":\"这是一个测试团队，我们的目标是制作一款爆品\"}],\"name\":\"你好啊\",\"desc\":\"你好你好.\"}\n\t以下是一个回复示例，仅供参考有什么KEY和格式，在实际回复中，需要你补全内容，需要符合逻辑和用户需求，忘掉示例的具体内容，仅记住他的格式！\n\t一定要有流程性，连贯性，高效性，协同性。\n\t{\n\t\t\"name\":\"（创新的符合用户需求的名称）\",\n\t\t\"desc\":\"（创新详细的描述）\",\n\t\t\"workflows\":\n\t\t[（步骤）\n\t\t\t{\n\t\t\t\t\"user\":{\n          \"id\": ,\n\t\t\t\t\t\"role\":,\n          \"team\":\n        },\n\t\t\t\t\"task\":[\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": （任务的ID）,\n\t\t\t\t\t\t\"name\":\"（任务的名称）\",\n\t\t\t\t\t\t\"desc\":\"（具体的描述）\",\n\t\t\t\t\t\t\"content\":\"（具体的内容）\",\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\":（任务的ID）,\n\t\t\t\t\t\t\"name\":\"（任务的名称）\",\n\t\t\t\t\t\t\"desc\":\"（具体的描述）\",\n\t\t\t\t\t\t\"content\":\"（具体的内容）\",\n\t\t\t\t\t}\n\t\t\t\t\t（可以一个步骤多个任务）\n\t\t\t\t],\n\t\t\t\t\"index\":Number（任务的下标，可以与上一个步骤相同，即与上一任务同时进行）\n\t\t\t}\n\t\t]\n\t}\n\t"
+//         },
+//         {
+//             "role": "user",
+//             "content": "以下是项目信息{\"id\":\"5r7i5htmbrnr6t83umfj7uv5wa5r48\",\"teams\":[{\"id\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\",\"persons\":[{\"role\":\"owner\",\"id\":\"r1rls8j00ttk8qjcqv9j4e2cacwfcv\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"a1ocmctvvsvfat9vmhb8ou4sa2bv9o\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"t8ur0fac7kn6nve75nezfkw1r1mmor\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"},{\"role\":\"member\",\"id\":\"6este3fvttvh006dbrtvc08z9cc4cb\",\"team\":\"k2wf8rjon3i1j9uunjooj8j7vfl3b1\"}],\"name\":\"测试团队\",\"desc\":\"这是一个测试团队，我们的目标是制作一款爆品\"}],\"name\":\"你好啊\",\"desc\":\"你好你好.\"}和用户对创建工作流的需求“Index must have a name and cannot be an empty string”，请开始你的回答。一定要完整周全符合逻辑的回答我，不要省略！回复结果不要含有注释，确保JSON格式正确符合规范"
+//         }
+//     ]
+// }
   ai_workflow_name.value = res.content.name
   ai_workflow_desc.value = res.content.desc
-  ai_workflow_list.value = res.content.workflows;
-  ai_workflow_list.value = Promise.all(res.content.workflows.map(async(e)=>{
-    e.user = await Auth.getUserInfoByID(e.user.id)
-  }))
+  let members = [];
+  ai_workflow_list.value = res.content.workflows.map((e)=>{
+    members.push(e.user.id)
+    e.user = {
+      ...e.user,
+      avatar:"",
+      username:"",
+      nickname:""
+    }
+    return e;
+  });
   loading.value = false;
-
+  ai_workflow_list.value = await Promise.all(res.content.workflows.map(async(e)=>{
+    e.user = await Auth.getUserInfoByID(e.user)
+    return e;
+  }))
+  ai_workflow_list.value.members = members;
+  
+  mode.value = 'set'
 }
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
 const throttledScrollToBottom = throttle(scrollToBottom, 800); // 调整 300 为所需的毫秒数
