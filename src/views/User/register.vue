@@ -5,12 +5,16 @@
         <div class="panel">
           <div class="_header">
             <div class="icon"><Peoples theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
-            <div class="title">赤子英金统一身份验证 测试用户创建通道</div>
+            <div class="title">零本智协统一身份验证 测试用户创建通道</div>
           </div>
           <div class="_content">
-            <el-alert type="error" show-icon :closable="false" style="margin-bottom: 16px;">
-              <p>目前仅支持测试账户注册，账户有效期1小时，1小时后自动注销</p>
-              <p>注销后会删除与此账户所有关联的项目、团队、任务、工作流等</p>
+            <el-alert type="info" show-icon :closable="false" style="margin-bottom: 8px;">
+              <p>版权说明：本项目的注册登录（身份验证系统）为本研究性学习团队原创</p>
+              <p>推荐使用电脑访问</p>
+            </el-alert>
+            <el-alert type="warning" show-icon :closable="false" style="margin-bottom: 16px;">
+              <p>目前仅支持对于本研究性学习项目进行预览的老师和学生账户注册</p>
+              <p>我们在项目预览期间，可以在不告知的情况下注销测试账户，注销后会删除与此账户所有关联的项目、团队、任务、工作流等</p>
             </el-alert>
             <el-form 
               :model="form" 
@@ -22,14 +26,31 @@
               label-position="top"
               :inline-message="true"
             >
+              <el-form-item label="账户类别" prop="type">
+                <el-select
+                  v-model="form.type"
+                  placeholder="请选择"
+                  style="width: 240px"
+                >
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
               <el-form-item label="用户名" prop="username">
-                <el-input v-model="form.username" autofocus />
+                <el-input v-model="form.username" placeholder="输入用户名，全局唯一凭据" autofocus />
               </el-form-item>
               <el-form-item label="用户昵称" prop="nickname">
                 <el-input v-model="form.nickname"/>
               </el-form-item>
               <el-form-item label="密码" prop="password">
-                <el-input v-model="form.password" type="password"/>
+                <el-input v-model="form.password" type="password" placeholder="请设置一个较强的密码"/>
+              </el-form-item>
+              <el-form-item label="备注（非必填）" prop="note">
+                <el-input v-model="form.note" placeholder="可以填写您注册此项目账户的目的，您是哪位老师/学生，方便我们识别" autofocus />
               </el-form-item>
               <div id="turnstile-box"></div>
               <el-form-item style="margin-top: 16px;">
@@ -49,7 +70,7 @@
 import { ref,onMounted,reactive, onActivated, onDeactivated } from 'vue'
 import { Peoples } from '@icon-park/vue-next'; 
 import Auth from "../../utils/auth.js";
-import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert, ElMessageBox,} from 'element-plus';
+import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert, ElMessageBox,ElSelect,ElOption} from 'element-plus';
 import CryptoJS from 'crypto-js';
 const ruleFormRef = ref(null);
 const formloading = ref(false);
@@ -58,7 +79,15 @@ const form = reactive({
   nickname: '',
   password: ''
 });
+const options = [
+  { value: 'teacher', label: '赤峰二中教师' },
+  { value: 'student', label: '赤峰二中学生' },
+  { value: 'guest', label: '其他访客' },
+]
 const rules = reactive({
+  type: [
+    { required: true, message: '请选择账户类别', trigger: 'change' }
+  ],
   username: [
     { type: 'string', pattern: /^[a-zA-Z][a-zA-Z0-9_]*$/, message: '用户名必须以字母开头且只能包含字母、数字和下划线', trigger: 'change' },
     { required: true, message: '请输入用户名（唯一登录凭据）', trigger: 'change' },
@@ -106,6 +135,7 @@ const submitForm = (formEl) => {
       const createTeam = await Auth.userRegister({
         username:form.username,
         nickname:form.nickname,
+        info:{identityNote:form.note,identityType:form.type},
         password:encode,
         avatar:'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
         token:verifyToken
@@ -115,6 +145,8 @@ const submitForm = (formEl) => {
         form.username = '';
         form.nickname = '';
         form.password = '';
+        form.note = '';
+        form.type = '';
         ElMessageBox.alert('注册成功，将前往登录页面', '提示', {}).then(() => {
           window.location.href = 'https://auth.chiziingiin.top/newreg'
         })
