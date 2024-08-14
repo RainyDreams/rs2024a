@@ -153,7 +153,8 @@ async function set(){
     projectId:projectId.value,
     name:ai_workflow_name.value,
     desc:ai_workflow_desc.value,
-    workflows:JSON.stringify(ai_workflow_list.value)
+    members:ai_workflow_list.value.members,
+    workflows:ai_workflow_list.value
   })
   if(res.status == 'sus'){
     ElMessage.success('创建成功')
