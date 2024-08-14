@@ -4,7 +4,7 @@
       <div class="header" v-if="!TabBarHide">
         <div :class="{navlist:1,show:showMenu}" :style="showMenu?'':'transition-delay: 0.20s;'">
           <router-link class="logo pc" to="/" v-if="SideBarHide" style="margin-left:24px;height:28px;padding:0 8px;">
-            <img src="/logo.webp" alt="零本创智">
+            <img src="/logo.webp" alt="零本智协">
           </router-link>
           <a v-for="(item,i) in configList" :class="`nav ${activeName==item.name?'router-link-active':''} animate__animated ${M(showMenu?'animate__fadeInTopLeft':'animate__fadeOutTopLeft')}`" :style="(showMenu?`animation-duration:0.5s;`:'')+`animation-delay:${0.08*(i)}s`" :key="item.name" @click="isM(item.to,item.name)">
             <div class="icon" ><component :is="getIcon(item.icon)" theme="outline" size="22"/></div>
@@ -25,7 +25,7 @@
         </div>
         <div class="m navMenu">
           <router-link to="/">
-            <img src="/logo.webp" alt="零本创智">
+            <img src="/logo.webp" alt="零本智协">
           </router-link>
           <MenuFoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="!showMenu"/>
           <MenuUnfoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="showMenu"/>
@@ -55,7 +55,7 @@
     </div>
     <div v-if="!SideBarHide" class="tabbar pc" >
       <router-link class="logo" to="/">
-        <img src="/logo.webp" alt="零本创智">
+        <img src="/logo.webp" alt="零本智协">
       </router-link>
       <ul class="tablist">
         <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
@@ -76,7 +76,7 @@
 
 
 
-{console.log('%c零本创智%c\n%c赤峰二中2023级12班2024年研究性学习项目\r%c\n2024-07-25雨窗',
+{console.log('%c零本智协%c\n%c赤峰二中2023级12班2024年研究性学习项目\r%c\n2024-07-25雨窗',
 'font-size:14px;background:#2262fb;color:#fff;font-family:Arial;padding:2px 4px;border-radius:4px;','','font-size:14px;background:#f00;color:#fff;font-family:Arial;padding:2px 4px;border-radius:4px;','font-size:16px;font-family:Arial;');
 console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已经掌握一定的技术能力，我很高兴我的软件能被你们所了解。\n但有以下几点需要注意：%c\n%c1. 我们是学生初创项目，请不要尝试攻击、毁坏或者以任何方式使它停止工作，我们感谢你的善举\n2. 如果你想要研究它的源码和创作历程，请关注“赤子英金”', 
 'font-size:18px;padding:4px;color:#fff;background:#f00;','','font-size:12px;line-height:16px;padding:2px;', '','padding:2px;line-height:16px;font-size:12px;'); 

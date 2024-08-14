@@ -3,7 +3,8 @@
     <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12 col-md-6">
-          <h1 class="mt-1 mb-3 text-4xl font-semibold md:mt-10 md:mb-8 md:text-6xl/snug lg:text-7xl/snug">零本创智</h1>
+          <h1 class="mt-1 text-4xl font-semibold md:mt-10 md:text-6xl/snug lg:text-7xl/snug">零本智协</h1>
+          <h3 class="text-lg/7 md:text-xl/snug lg:text-2xl/snug text-slate-500 mb-3 md:mb-5">赤峰二中2023级12班研究性学习项目</h3>
           <h3 class="text-lg/7 md:text-2xl/snug lg:text-3xl/snug text-slate-500">我们的愿景</h3>
           <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">依托尖端的 AI 技术驱动力量，构建全面创新的市场项目解决方案体系，致力于让<span class="primary-text">「零成本构建创新高效应用程序」</span>成为现实。</h5>
         </div>
@@ -108,18 +109,22 @@
       </div>
     </div>
     <div class="panel bs-container py-10 md:py-16 lg:py-20 xl:py-24">
-      <h2 class="mt-14 mb-6 text-4xl md:mt-20 md:mb-10 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">来！现在就尝试零本创智</h2>
+      <h2 class="mt-14 mb-6 text-4xl md:mt-20 md:mb-10 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">来！现在就尝试零本智协</h2>
       <h5 class="text-center mb-14 md:mb-20">
         <el-button size="large" class="text-2xl py-7 px-8 primary-bg" type="primary">开启旅程</el-button>
       </h5>
     </div>
     <div class="panel bs-container flex h-dvh items-center justify-center flex-col">
       <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">梦想只是开始 探索永不止步</h2>
-      <p class="mt-4">Designed by Zhang Xinyue, Chiziingiin.</p>
+      <p class="mt-4 text-center text-wrap break-words" style="word-break: normal;">Designed by Zhang Xinyue, Chiziingiin.</p>
     </div>
     <div class="copyright py-5">
-      <p class="text-center"><span class="czig-text">赤子英金</span> · <span class="primary-text">零本创智</span></p>
-      <p class="text-center text-sm mt-1 mb-1">- 赤子英金第一款产品发布留念 -</p>
+      <p class="text-center"><span class="">赤子英金</span> · <span class="primary-text">零本智协</span></p>
+      <p class="text-center text-sm mt-2 mb-2">
+        <a href="" class="mx-2">用户协议</a>
+        <a href="" class="mx-2">隐私条款</a>
+        <a href="" class="mx-2">名词介绍</a>
+      </p>
       <p class="text-center">Copyright © 2024 Chiziingiin All rights reserved.</p>
     </div>
   </div>

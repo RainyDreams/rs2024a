@@ -15,13 +15,13 @@
               <template v-for="(item,i) in chatList" class="chatList">
                 <div class="user" v-if="item.role == 'user'"> 
                   <el-avatar alt="头像">你</el-avatar>
-                  <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,0]" :rotate="-12" :content="['零本创智大模型 零本创智大模型', fingerprint]">
+                  <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,0]" :rotate="-12" :content="['零本智协大模型 零本智协大模型', fingerprint]">
                     <div class="chatcontent" v-html="md.render(item.content)"></div>
                   </el-watermark>
                 </div>
                 <div class="assistant" v-if="item.role == 'assistant'">
                   <el-avatar alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar>
-                  <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12" :content="['零本创智大模型 零本创智大模型', fingerprint]">
+                  <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12" :content="['零本智协大模型 零本智协大模型', fingerprint]">
                     <div class="chatcontent" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
                   </el-watermark>
                 </div>

@@ -95,7 +95,7 @@
             <div class="doc">
               <h2>你觉得这样设计好看吗</h2>
               <p>来参加我们的调研</p>
-              <p><a href="https://wj.qq.com/s2/15033628/565d/">零本创智项目网站设计意见征集</a></p>
+              <p><a href="https://wj.qq.com/s2/15033628/565d/">零本智协项目网站设计意见征集</a></p>
             </div>
           </div>
         </div>
