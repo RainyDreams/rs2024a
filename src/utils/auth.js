@@ -225,6 +225,15 @@ let Auth = {
       }
     }
   },
+  getUser:async function getUser(){
+    window.clarity("event", 'getUser')
+    const stmtGet = sessionStorage.getItem('userInfo')
+    if(stmtGet){
+      return JSON.parse(stmtGet)
+    } else {
+      return await this.getBasicInfo()
+    }
+  },
   logout: async function logout(){
     window.clarity("event", 'logout')
     await this.getPrtoken()
@@ -262,6 +271,9 @@ let Auth = {
         await this.getUserFingerprint();
         window.clarity("set", 'userID', data.content.customID);
         window.clarity("identify", data.content.customID, data.content.sessionID,'getPrtoken',data.content.customID)
+        (data.content.tags || []).forEach(e => {
+          window.clarity("set", 'userTag', e);
+        });
         return data.content;
       },
       failed: async (response, type) => {
@@ -335,7 +347,15 @@ let Auth = {
   getDashboard:async function getDashboard() {
     window.clarity("event", 'getDashboard')
     await this.getPrtoken();
-    return this.basicAuth("/api/dashboard", "");
+    return this.basicAuth("/api/dashboard", JSON.stringify({}));
+  },
+  getDashboardAnlysis:async function getDashboardAnlysis(param){
+    window.clarity("event", 'getDashboardAnlysis')
+    await this.getPrtoken();
+    return await this.getStreamText('/api/dashboardAnlysis', { content: JSON.stringify(),}, {
+      onmessage:param.onmessage,
+      onclose:param.onclose
+    });
   },
   createProject: async function createProject(param) {
     window.clarity("event", 'createProject')
@@ -380,6 +400,22 @@ let Auth = {
     return this.basicAuth(
       "/api/project/get-item",
       JSON.stringify({ projectId: param.projectId, type: param.type })
+    );
+  },
+  getProjectItemByID:async function getProjectItemByID(param={}){
+    window.clarity("event", 'getProjectItemByID')
+    await this.getPrtoken();
+    return this.basicAuth(
+      "/api/project/get-item-by-id",
+      JSON.stringify({ id: param.id,type: param.type })
+    );
+  },
+  removeProjectItem:async function removeProjectItem(param={}){
+    window.clarity("event", 'removeProjectItem')
+    await this.getPrtoken();
+    return this.basicAuth(
+      "/api/project/remove-item",
+      JSON.stringify({ id: param.id,type: param.type })
     );
   },
   getUserInfo:async function getUserInfo(param = {}) {

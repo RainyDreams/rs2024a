@@ -1,11 +1,15 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
+import legacy from '@vitejs/plugin-legacy'
 
 export default defineConfig((mode) => {
   return {
     plugins: [
       vue(),
+      legacy({
+        targets: ['>0.3%, edge>=79, firefox>=67, chrome>=64, safari>=12, chromeAndroid>=64, iOS>=12'],
+      })
     ],
     build: {
       rollupOptions: {

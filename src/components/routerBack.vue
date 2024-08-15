@@ -1,9 +1,39 @@
 <template>
-  <div class="routerBack" @click="routerBack" >
-    <Left theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
-    <p>返回{{ props.name }}</p>
+  <div class="flex mb-3">
+    <div class="routerBack shrink-0 mr-2" @click="routerBack" >
+      <Left theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
+      <p>返回{{ props.name }}</p>
+    </div>
+    <!-- <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>homepage</el-breadcrumb-item>
+    </el-breadcrumb> -->
   </div>
 </template>
+<script setup>
+import { Left } from '@icon-park/vue-next';
+import { useRouter } from 'vue-router';
+import { ElBreadcrumb,ElBreadcrumbItem } from 'element-plus';
+const router = useRouter()
+const props = defineProps({
+  name: {
+    type: String,
+    default: '上一页'
+  },
+  back: {
+    type: String,
+    default: ''
+  }
+})
+console.log(props.back)
+const routerBack = () => {
+  if(props.back){
+    router.push(props.back)
+  } else {
+    router.back()
+  }
+}
+</script>
+
 <style scoped>
 .routerBack {
   display: flex;
@@ -16,7 +46,6 @@
   padding:8px 12px;
   width:fit-content;
   border-radius: 8px;
-  margin-bottom: 12px;
   transition: all 0.2s ease;
 }
 .routerBack:hover {
@@ -28,26 +57,3 @@ p{
   letter-spacing: 1px;
 }
 </style>
-<script setup>
-import { Left } from '@icon-park/vue-next';
-import { useRouter } from 'vue-router';
-// 接受:name传值
-const router = useRouter()
-const props = defineProps({
-  name: {
-    type: String,
-    default: '上一页'
-  },
-  back: {
-    type: String,
-    default: ''
-  }
-})
-const routerBack = () => {
-  if(props.back){
-    router.push(props.back)
-  } else {
-    router.back()
-  }
-}
-</script>

@@ -1,6 +1,6 @@
 <template>
   <div class="commonPage">
-    <div class="container row">
+    <div class="row">
       <div class="col-sm-12 col-xxl-8">
         <div class="big_header">
           <div class="icon"><form-one theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div>

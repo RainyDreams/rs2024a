@@ -9,6 +9,7 @@ import ProjectsTodo from '../views/Projects/todo.vue';
 import ProjectsItemCreate from '../views/Projects/createItem.vue';
 import ProjectsItemCreate_workflow from '../views/Projects/create/workflow.vue';
 import ProjectsDetail from '../views/Projects/detail.vue';
+import Projects_Workflow from '../views/Projects/workflow/index.vue';
 import TeamCreate from '../views/Team/create.vue';
 import TeamList from '../views/Team/list.vue';
 import TeamDetail from '../views/Team/detail.vue';
@@ -44,6 +45,7 @@ const router = createRouter({
       { path: "detail-create/issue/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate },
       { path: "detail-create/task/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate },
       { path: "detail-create/discussion/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate },
+      { path: "workflow/:id", name: "ProjectsWorkflow", component: Projects_Workflow },
       { path: "detail/:projectId", name: "ProjectsDetail", component: ProjectsDetail },
     ]},
     { path: "/team/", name: "Team", children: [

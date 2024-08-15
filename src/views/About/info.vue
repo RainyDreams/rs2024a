@@ -2,7 +2,7 @@
 
   <div class="commonPage">
     <div class="panel text-base/snug">
-      <p class="mb-6"><img style="height:60px;" src="https://aaa.chiziingiin.top/logo.webp" alt=""></p>
+      <p class="mb-6"><img style="height:60px;" src="https://lingben.chiziingiin.top/logo.webp" alt=""></p>
       <p class="mb-2">软件临时代号：RS2024-A</p>
       <p class="mb-2">软件名称：零本智协（待定）</p>
       <p class="mb-2">Slogan：零成本构建创新高效应用程序</p>

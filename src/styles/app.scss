@@ -253,7 +253,12 @@ a.login_tab[href]{
         height:60px;
         cursor: pointer;
         &::after{
-          display: none;
+          top:0;
+          left:0;
+          width:100%;
+          height:100%;
+          border-radius: 0;
+          // display: none;
         }
         &.router-link-active{
           color:rgba(34, 98, 251, 1);
