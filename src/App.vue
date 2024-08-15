@@ -103,8 +103,11 @@ onMounted(async ()=>{
   // console.log(1)
   basicInfo.value = (await Auth.getBasicInfo())
   setTimeout(()=>{
-    document.querySelector('#loading-container').remove();
-  },200)
+    document.querySelector('#loading-container').classList.add('animate__fadeOut');
+    setTimeout(()=>{
+      document.querySelector('#loading-container').remove()
+    },2000)
+  },100)
 })
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
