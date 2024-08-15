@@ -1,23 +1,23 @@
 {
-  "name": "零本智协 | 赤峰二中2023级12班研究性学习项目 | 赤子英金",
+  "name": "零本智协 | 赤峰二中2023级12班研究性学习项目",
   "short_name": "零本智协",
   "display": "standalone",
-  "description": "赤峰二中2023级12班研究性学习项目 张新越团队的“团队协同软件” | 赤子英金",
+  "description": "依托尖端的 AI 技术驱动力量，构建全面创新的市场项目解决方案体系，致力于让「零成本构建创新高效应用程序」成为现实。",
   "icons": [
     {
-      "src": "/images/logo_256.png",
+      "src": "/images/logo_256.webp",
       "sizes": "256x256",
-      "type": "image/png"
+      "type": "image/webp"
     },
     {
-      "src": "/images/logo_384.png",
+      "src": "/images/logo_384.webp",
       "sizes": "384x384",
-      "type": "image/png"
+      "type": "image/webp"
     },
     {
-      "src": "/images/logo_512.png",
+      "src": "/images/logo_512.webp",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/webp"
     }
   ],
   "start_url": "/",

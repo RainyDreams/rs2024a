@@ -11,6 +11,7 @@
   <meta name="description" content="赤峰二中2023级12班研究性学习项目。依托尖端的 AI 技术驱动力量，构建全面创新的市场项目解决方案体系，致力于让「零成本构建创新高效应用程序」成为现实。"/>
   <meta name="keywords" content="零本智协,赤子英金,赤峰二中,2023级12班,AI,大模型,零成本,创新高效应用程序,研究,研究性学习,项目"/>
   <meta name="author" content="Zhang Xinyue"/>
+  <link rel="manifest" href="/manifest.json" />
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/highlight.js@11.10.0/styles/night-owl.min.css" as="style" onload="this.rel='stylesheet'">
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Normal/MiSans-Regular.min.css" as="style" onload="this.rel='stylesheet'">
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Normal/MiSans-Medium.min.css" as="style" onload="this.rel='stylesheet'">
@@ -20,8 +21,17 @@
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script> <style>.grecaptcha-badge { visibility: hidden;}</style>
 </head>
 <body>
+  <!-- 加载动画 -->
+  <div id="loading-container">
+    <img src="/images/loading.gif" id="" alt="加载中">
+    <p style="margin-top:8px;margin-bottom:0;">零本智协</p>
+    <p style="margin-top:8px;margin-bottom:0;">赤峰二中2023级12班研究性学习项目</p>
+    <p style="margin-top:8px;margin-bottom:0;">加载中...</p>
+    <style>#loading-container{position: fixed;top:0;left:0;height:100vh;width:100vw;z-index:99999;background-color:#fff;display: flex;align-items: center;justify-content: center;flex-direction: column;}</style>
+  </div>
+  <!-- 主要程序逻辑 -->
   <div id="app"></div>
-  <script type="module" src="/src/main.js"></script>
+  <script type="module" defer src="/src/main.js"></script>
   
 </body>
 </html>

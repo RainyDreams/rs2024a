@@ -100,8 +100,11 @@ const basicInfo = ref({
   avatar:''
 })
 onMounted(async ()=>{
-  console.log(1)
+  // console.log(1)
   basicInfo.value = (await Auth.getBasicInfo())
+  setTimeout(()=>{
+    document.querySelector('#loading-container').remove();
+  },200)
 })
 function bindShowMenu(){
   showMenu.value=!showMenu.value;

@@ -71,7 +71,7 @@
           <div class="_content">
             <el-progress
               v-show="loading2"
-              class="my-4"
+              class="mb-6"
               :percentage="100"
               :show-text="false"
               :indeterminate="true"
