@@ -26,6 +26,7 @@ import CommunicationChat from '../views/Communication/chat.vue';
 import Notification from '../views/Notification/index.vue';
 import LoginSuccess from '../views/Status/LoginSuccess.vue';
 import LoginNeeded from '../views/Status/LoginNeeded.vue';
+import LoginAlready from '../views/Status/LoginAlready.vue';
 import JoinTeamApplication from '../views/Status/JoinTeamApplication.vue';
 import JoinProcess from '../views/Status/JoinProcess.vue';
 import DangerView from '../views/Tests/admin.vue'
@@ -78,6 +79,7 @@ const router = createRouter({
     { path: "/reg", name: "UserRegister", component: UserRegister,meta:{hide:['tabbar','sidebar']}},
     { path: "/login-success", name: "LoginSuccess", component: LoginSuccess,meta:{hide:['sidebar']}},
     { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar']}},
+    { path: "/login-already", name: "LoginAlready", component: LoginAlready,meta:{hide:['sidebar']}},
     { path: "/settings/", name: "Settings", component: SettingsIndex },
     { path: "/test/ai", name: "Tests", component: Test },
     { path: "/test/new-feature", name: "TestsNew", component: TestNew },
