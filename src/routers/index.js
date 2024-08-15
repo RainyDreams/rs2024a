@@ -22,6 +22,7 @@ import UserSettings from '../views/User/settings.vue';
 import AboutInfo from '../views/About/info.vue';
 import AboutProgress from '../views/About/progress.vue';
 import AboutLog from '../views/About/log.vue';
+import CommunicationChat from '../views/Communication/chat.vue';
 import Notification from '../views/Notification/index.vue';
 import LoginSuccess from '../views/Status/LoginSuccess.vue';
 import LoginNeeded from '../views/Status/LoginNeeded.vue';
@@ -29,6 +30,7 @@ import JoinTeamApplication from '../views/Status/JoinTeamApplication.vue';
 import JoinProcess from '../views/Status/JoinProcess.vue';
 import DangerView from '../views/Tests/admin.vue'
 import Test from '../views/Tests/test.vue';
+import TestNew from '../views/Tests/video.vue';
 import Error404 from '../views/Errors/404.vue';
 
 
@@ -60,6 +62,9 @@ const router = createRouter({
       { path: "login", name: "UserLogin", component: UserLogin },
       { path: "settings", name: "UserSettings", component: UserSettings },
     ]},
+    { path: "/communication/", name: "Communication", children:[
+      { path: "chat", name: "CommunicationChat", component: CommunicationChat},
+    ]},
     { path: "/about/", name: "About", children: [
       { path: "info", name: "AboutInfo", component: AboutInfo },
       { path: "progress", name: "AboutProgress", component: AboutProgress },
@@ -75,6 +80,7 @@ const router = createRouter({
     { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar']}},
     { path: "/settings/", name: "Settings", component: SettingsIndex },
     { path: "/test/ai", name: "Tests", component: Test },
+    { path: "/test/new-feature", name: "TestsNew", component: TestNew },
     { path: "/danger/view", name: "DangerView", component: DangerView },
     
     { path: "/:catchAll(.*)", name: "NotFound", component: Error404 },

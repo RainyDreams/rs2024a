@@ -47,7 +47,7 @@
       <div class="routerpage">
         <el-config-provider :locale="zhCn">
           <router-view v-slot="{ Component }">
-            <keep-alive>
+            <keep-alive :exclude="[/reg/,]" :max="2">
               <component :is="Component" />
             </keep-alive>
           </router-view>
@@ -101,18 +101,19 @@ const basicInfo = ref({
 })
 onMounted(async ()=>{
   // console.log(1)
-  basicInfo.value = (await Auth.getBasicInfo())
   setTimeout(()=>{
-    document.querySelector('#loading-container').classList.add('animate__fadeOut');
-    setTimeout(()=>{
-      document.querySelector('#loading-container').remove()
-    },2000)
+    if(document.querySelector('#loading-container')){
+      document.querySelector('#loading-container').classList.add('animate__fadeOut');
+      setTimeout(()=>{
+        document.querySelector('#loading-container').remove()
+      },2000)
+    }
   },100)
 })
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
-router.afterEach((to, from) => {
+router.afterEach(async (to, from) => {
   const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
   rightList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1);
   if(item){
@@ -134,6 +135,9 @@ router.afterEach((to, from) => {
   to.meta.hide.find(e=>{
     if(e=='tabbar') TabBarHide.value = true;
     else if (e=='sidebar') SideBarHide.value = true;
+  })
+  Auth.mainTaskThread.add(async ()=>{
+    basicInfo.value = (await Auth.getBasicInfo())
   })
 });
 function M(str){
@@ -288,6 +292,11 @@ const configList = [
         title:'AI公测',
         icon:'Tool',
         to:'/test/ai'
+      },
+      {
+        title:'新功能测试区',
+        icon:'Tool',
+        to:'/test/new-feature'
       },
     ]
   },

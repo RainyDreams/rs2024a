@@ -217,6 +217,7 @@ let Auth = {
     if(getPr.status=='sus' || getPr.status=='exist'){
       const res = (await this.basicAuth("/api/getBasicInfo")).content;
       sessionStorage.setItem('userInfo',JSON.stringify(res))
+      window.clarity("set", 'userTag', res.identityType || 'normal');
       return res
     } else {
       return {
@@ -271,12 +272,15 @@ let Auth = {
         await this.getUserFingerprint();
         window.clarity("set", 'userID', data.content.customID);
         window.clarity("identify", data.content.customID, data.content.sessionID,'getPrtoken',data.content.customID)
-        (data.content.tags || []).forEach(e => {
-          window.clarity("set", 'userTag', e);
-        });
         return data.content;
       },
       failed: async (response, type) => {
+        Cookies.set("czigauth", "ERROR", {
+          expires: new Date(),
+          path: "/",
+          secure: true,
+          domain:'.chiziingiin.top'
+        });
         await this.getUserFingerprint();
         if (response.status === 401) {
           window.clarity("event", 'getPrtoken_401')

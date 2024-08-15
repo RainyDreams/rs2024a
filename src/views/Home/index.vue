@@ -109,21 +109,23 @@
       </div>
     </div>
     <div class="panel bs-container py-10 md:py-16 lg:py-20 xl:py-24">
-      <h2 class="mt-14 mb-6 text-4xl md:mt-20 md:mb-10 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">来！现在就尝试零本智协</h2>
+      <h2 class="mt-14 mb-6 text-4xl md:mt-20 md:mb-10 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">一键开启智慧协作新旅程</h2>
       <h5 class="text-center mb-14 md:mb-20">
-        <el-button size="large" class="text-2xl py-7 px-8 primary-bg" type="primary">开启旅程</el-button>
+        <router-link to="/reg">
+          <el-button size="large" class="text-2xl py-7 px-8 primary-bg" type="primary">注册使用</el-button>
+        </router-link>
       </h5>
     </div>
-    <div class="panel bs-container flex h-dvh items-center justify-center flex-col">
+    <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vmin;">
       <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">梦想只是开始 探索永不止步</h2>
       <p class="mt-4 text-center text-wrap break-words" style="word-break: normal;">Designed by Zhang Xinyue, Chiziingiin.</p>
     </div>
     <div class="copyright py-5">
       <p class="text-center"><span class="">赤子英金</span> · <span class="primary-text">零本智协</span></p>
       <p class="text-center text-sm mt-2 mb-2">
-        <a href="" class="mx-2">用户协议</a>
-        <a href="" class="mx-2">隐私条款</a>
-        <a href="" class="mx-2">名词介绍</a>
+        <a href="https://www.chiziingiin.top/license/user" class="mx-2">用户协议</a>
+        <a href="https://www.chiziingiin.top/license/private" class="mx-2">隐私条款</a>
+        <a href="https://www.chiziingiin.top/project/RS2024/explain" class="mx-2">名词介绍</a>
       </p>
       <p class="text-center">Copyright © 2024 Chiziingiin All rights reserved.</p>
     </div>

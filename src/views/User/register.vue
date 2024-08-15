@@ -1,5 +1,6 @@
 <template>
   <div class="commonPage">
+    <routerBack name="上一页" ></routerBack>
     <div class="row">
       <div class="col-md-12 col-lg-8">
         <div class="panel">
@@ -70,6 +71,7 @@
 import { ref,onMounted,reactive, onActivated, onDeactivated } from 'vue'
 import { Peoples } from '@icon-park/vue-next'; 
 import Auth from "../../utils/auth.js";
+import routerBack from '/src/components/routerBack.vue'
 import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert, ElMessageBox,ElSelect,ElOption} from 'element-plus';
 import CryptoJS from 'crypto-js';
 const ruleFormRef = ref(null);
@@ -81,7 +83,10 @@ const form = reactive({
 });
 const options = [
   { value: 'teacher', label: '赤峰二中教师' },
-  { value: 'student', label: '赤峰二中学生' },
+  { value: 'student24', label: '赤峰二中24级学生' },
+  { value: 'student23', label: '赤峰二中23级学生' },
+  { value: 'student22', label: '赤峰二中22级学生' },
+  { value: 'social', label: '社会人员' },
   { value: 'guest', label: '其他访客' },
 ]
 const rules = reactive({
