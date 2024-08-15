@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+<!-- 加载动画 -->
+<div id="loading-container">
+  <img src="/images/loading.gif" id="" alt="加载中">
+  <p style="margin-top:8px;margin-bottom:0;">零本智协</p>
+  <p style="margin-top:8px;margin-bottom:0;">赤峰二中2023级12班研究性学习项目</p>
+  <p style="margin-top:8px;margin-bottom:0;">加载中...</p>
+  <style>#loading-container{position: fixed;top:0;left:0;height:100vh;width:100vw;z-index:99999;background-color:#fff;display: flex;align-items: center;justify-content: center;flex-direction: column;}</style>
+</div>
+
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
@@ -21,14 +30,7 @@
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script> <style>.grecaptcha-badge { visibility: hidden;}</style>
 </head>
 <body>
-  <!-- 加载动画 -->
-  <div id="loading-container">
-    <img src="/images/loading.gif" id="" alt="加载中">
-    <p style="margin-top:8px;margin-bottom:0;">零本智协</p>
-    <p style="margin-top:8px;margin-bottom:0;">赤峰二中2023级12班研究性学习项目</p>
-    <p style="margin-top:8px;margin-bottom:0;">加载中...</p>
-    <style>#loading-container{position: fixed;top:0;left:0;height:100vh;width:100vw;z-index:99999;background-color:#fff;display: flex;align-items: center;justify-content: center;flex-direction: column;}</style>
-  </div>
+  
   <!-- 主要程序逻辑 -->
   <div id="app"></div>
   <script type="module" defer src="/src/main.js"></script>
