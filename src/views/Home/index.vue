@@ -9,7 +9,8 @@
           <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">依托尖端的 AI 技术驱动力量，构建全面创新的市场项目解决方案体系，致力于让<span class="primary-text">「零成本构建创新高效应用程序」</span>成为现实。</h5>
         </div>
         <div class="col-12 col-md-6">
-          <iframe style="height:100%;width:100%;min-height:350px;" src="https://player.bilibili.com/player.html?bvid=BV1wf421z74D&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>
+          视频区
+          <!-- <iframe style="height:100%;width:100%;min-height:350px;" src="https://player.bilibili.com/player.html?bvid=BV1wf421z74D&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe> -->
         </div>
       </div>
     </div>
