@@ -109,6 +109,7 @@ import { throttle } from '../../../utils/helpers'
 import { ElInput,ElButton, ElMessage,ElAvatar,ElProgress,ElTimeline,ElTimelineItem } from 'element-plus';
 const input = ref('')
 const route = useRoute()
+const router = useRouter()
 const projectId = ref()
 const mode = ref('input')
 const ai_workflow_list = ref([])
@@ -148,6 +149,7 @@ function reset(){
   mode.value='input'
 }
 async function set(){
+  loading.value=true;
   const res = await Auth.createProjectItem({
     type:"workflow",
     projectId:projectId.value,
@@ -158,8 +160,12 @@ async function set(){
   })
   if(res.status == 'sus'){
     ElMessage.success('创建成功')
+    router.push('/projects/'+projectId.value+'')
     // routerBack.back()
+  } else {
+    ElMessage.error('创建失败')
   }
+  loading.value=false;
 }
 async function send(){
   loading.value = true;

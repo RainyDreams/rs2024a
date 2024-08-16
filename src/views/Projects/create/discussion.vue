@@ -9,56 +9,22 @@
     label-position="top"
     :inline-message="true"
   >
-    <el-form-item label="任务名称" prop="name">
+    <el-form-item label="讨论主题" prop="name">
       <el-input v-model="form.name" autofocus />
     </el-form-item>
-    <el-form-item label="任务内容" prop="desc">
+    <el-form-item label="描述一下具体讨论的话题或方向" prop="desc">
       <el-input
         v-model="form.desc"
         :autosize="{ minRows: 2, maxRows: 4 }"
         maxlength="100"
         show-word-limit
         type="textarea"
-        placeholder="描述一下任务的具体内容"
+        placeholder="描述一下具体讨论的话题或方向"
       />
     </el-form-item>
-    <el-form-item label="开始时间" prop="startTime">
-      <el-date-picker
-        v-model="form.startTime"
-        type="datetime"
-        placeholder="选择日期时间"
-      />
-    </el-form-item>
-    <el-form-item label="截止时间" prop="endTime">
-      <el-date-picker
-        v-model="form.endTime"
-        type="datetime"
-        :editable="false"
-        placeholder="选择日期时间"
-      />
-    </el-form-item>
-      <el-form-item label="参与人员" prop="members">
-        <el-select
-          v-model="form.members"
-          multiple 
-          placeholder="请选择参与人员"
-        >
-          <el-option
-            v-for="item in persons"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-            <div class="" style="display:flex;align-items: center;">
-              <el-avatar alt="头像" :size="22" :src="item.avatar"></el-avatar>
-              <span>{{ item.label }}</span>
-            </div>
-          </el-option>
-        </el-select>
-      </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormRef)">
-        创建任务
+      <el-button type="primary" :loading="loading" @click="submitForm(ruleFormRef)">
+        创建讨论
       </el-button>
     </el-form-item>
   </el-form>
@@ -75,28 +41,19 @@ const ruleFormRef = ref(null)
 const form = reactive({
   name: "",
   desc: "",
-  startTime: "",
-  endTime: "",
-  members: []
+  members: [],
+  discussion:[]
 })
+const loading = ref(false)
 const rules = reactive({
   name: [
-    { required: true, message: "请输入任务名称", trigger: "blur" },
+    { required: true, message: "请输入讨论主题", trigger: "blur" },
     { min: 2, max: 16, message: "长度在 2 到 16 个字符", trigger: "blur" }
   ],
   desc: [
-    { required: true, message: "请输入任务内容", trigger: "blur" },
+    { required: true, message: "请描述一下具体讨论的话题或方向", trigger: "blur" },
     { min: 3, max: 100, message: "长度在 3 到 100 个字符", trigger: "blur" }
   ],
-  startTime: [
-    { required: true, message: "请选择开始时间", trigger: "change" }
-  ],
-  endTime: [
-    { required: true, message: "请选择截止时间", trigger: "change" }
-  ],
-  members: [
-    { required: true, message: "请选择参与人员",trigger: "change" }
-  ]
 })
 const persons = ref([])
 const projectId = ref('')
@@ -116,6 +73,7 @@ async function submitForm(formEl) {
   if (!formEl) return;
   formEl.validate(async (valid) => {
     if (valid) {
+      loading.value = true
       const res = await Auth.createProjectItem({
         type:"discussion",
         projectId:projectId.value,
@@ -131,7 +89,10 @@ async function submitForm(formEl) {
             })
           }
         })
+      } else {
+        ElMessage.error('创建错误')
       }
+      loading.value = false;
     }
   })
 }

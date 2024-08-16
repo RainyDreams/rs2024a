@@ -31,7 +31,7 @@ const createType = ref('');
 const type = ref('');
 function Update(){
   console.log(route)
-  createType.value = route.params.type;
+  createType.value = route.meta.type;
   projectId.value = route.params.projectId;
   type.value = {
     workflow:'工作流',

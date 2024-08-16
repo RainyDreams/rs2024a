@@ -87,15 +87,8 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="讨论">
-          <div v-if="projectDetail.discussion.length>0">
+          <div>
             <view-discussion></view-discussion>
-          </div>
-          <div v-else>
-            <el-empty :image-size="150" >
-              <template #description>
-                <p>还未创建</p>
-              </template>
-            </el-empty>
           </div>
           <div class="mt-3 text-center">
             <p><el-button @click="toCreate('discussion')" type="primary">

@@ -47,7 +47,7 @@
       <div class="routerpage">
         <el-config-provider :locale="zhCn">
           <router-view v-slot="{ Component }">
-            <keep-alive :exclude="[/reg/,]" :max="2">
+            <keep-alive :exclude="[/reg/,]" :max="1">
               <component :is="Component" />
             </keep-alive>
           </router-view>
@@ -84,7 +84,7 @@ console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已�
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
 import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRouter } from 'vue-router'
-import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool } from '@icon-park/vue-next';
+import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
 import { ElConfigProvider,ElAvatar,ElNotification } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
@@ -185,7 +185,10 @@ const iconList = {
   Remind,
   DocDetail,
   SettingConfig,
-  Tool
+  Tool,
+  SmartOptimization,
+  ApplicationOne,
+  MessageEmoji
 }
 function getIcon(name){
   return iconList[name];
@@ -213,11 +216,11 @@ const configList = [
         icon:'FormOne',
         to:'/projects/list'
       },
-      {
-        title:'待办事项',
-        icon:'AlignTextLeftOne',
-        to:'/projects/todo'
-      },
+      // {
+      //   title:'待办事项',
+      //   icon:'AlignTextLeftOne',
+      //   to:'/projects/todo'
+      // },
     ]
   },
   {
@@ -246,15 +249,20 @@ const configList = [
     ]
   },
   {
-    name:'Communication',
-    title:'协作沟通',
-    icon:'Communication',
-    to:"/communication/chat",
+    name:'Model',
+    title:'零本AI',
+    icon:'SmartOptimization',
+    to:"/model/chat",
     tabs:[
       {
-        title:'沟通',
-        icon:'AllApplication',
-        to:'/communication/chat'
+        title:'聊天',
+        icon:'MessageEmoji',
+        to:'/model/chat'
+      },
+      {
+        title:'分析',
+        icon:'ApplicationOne',
+        to:'/model/anlysis'
       },
       
     ]
@@ -282,24 +290,24 @@ const configList = [
       },
     ]
   },
-  {
-    name:'Test',
-    title:'实验性功能',
-    icon:'Tool',
-    to:"/test/ai",
-    tabs:[
-      {
-        title:'AI公测',
-        icon:'Tool',
-        to:'/test/ai'
-      },
-      {
-        title:'新功能测试区',
-        icon:'Tool',
-        to:'/test/new-feature'
-      },
-    ]
-  },
+  // {
+  //   name:'Test',
+  //   title:'实验性功能',
+  //   icon:'Tool',
+  //   to:"/test/ai",
+  //   tabs:[
+  //     {
+  //       title:'AI公测',
+  //       icon:'Tool',
+  //       to:'/test/ai'
+  //     },
+  //     {
+  //       title:'新功能测试区',
+  //       icon:'Tool',
+  //       to:'/test/new-feature'
+  //     },
+  //   ]
+  // },
   
 ];
 const rightList = [

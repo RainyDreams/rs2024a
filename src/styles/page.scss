@@ -555,6 +555,7 @@ a[href]{
     position: relative;
     z-index: 1;
     border-radius: 16px;
+    color:#3c3e55;
   }
   ._input .el-textarea__inner{
     border:0px;
@@ -567,7 +568,7 @@ a[href]{
     padding-right: 2px;
     font-size: 16px;
     font-weight:500;
-    color:#3c3e55;
+    color:inherit
   }
   ._number{
     display: flex;

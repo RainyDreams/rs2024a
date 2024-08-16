@@ -24,7 +24,7 @@
                   <el-input
                     v-model="form.desc"
                     :autosize="{ minRows: 2, maxRows: 4 }"
-                    maxlength="30"
+                    maxlength="100"
                     show-word-limit
                     type="textarea"
                     placeholder="简单概括一下你们的项目"
@@ -89,7 +89,7 @@ const rules = reactive({
   ],
   desc: [
     { required: true, message: '请输入项目描述', trigger: 'blur' }, 
-    { min: 5, max: 30, message: '长度在 5 到 30 个字符', trigger: 'blur' }
+    { min: 3, max: 100, message: '长度在 3 到 100 个字符', trigger: 'blur' }
   ],
   team: [
     { required: true, message: '请选择参与团队', trigger: 'change' }

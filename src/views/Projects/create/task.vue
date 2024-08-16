@@ -57,7 +57,7 @@
         </el-select>
       </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormRef)">
+      <el-button type="primary" :loading="loading" @click="submitForm(ruleFormRef)">
         创建任务
       </el-button>
     </el-form-item>
@@ -72,6 +72,7 @@ import Auth from "../../../utils/auth";
 const router = useRouter()
 const route = useRoute()
 const ruleFormRef = ref(null)
+const loading = ref(false)
 const form = reactive({
   name: "",
   desc: "",
@@ -116,6 +117,7 @@ async function submitForm(formEl) {
   if (!formEl) return;
   formEl.validate(async (valid) => {
     if (valid) {
+      loading.value = true
       const res = await Auth.createProjectItem({
         type:"task",
         projectId:projectId.value,
@@ -131,7 +133,10 @@ async function submitForm(formEl) {
             })
           }
         })
+      } else {
+        ElMessage.error('创建失败')
       }
+      loading.value = false;
     }
   })
 }

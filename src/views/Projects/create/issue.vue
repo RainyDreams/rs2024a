@@ -73,7 +73,7 @@
       </el-button>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormRef)">
+      <el-button type="primary" :loading="loading" @click="submitForm(ruleFormRef)">
         提出问题
       </el-button>
     </el-form-item>
@@ -95,6 +95,7 @@ const form = reactive({
   startTime:'',
   tags:[]
 })
+const loading = re(false);
 const rules = reactive({
   name: [
     { required: true, message: '请输入问题名称', trigger: 'blur' },
@@ -148,6 +149,7 @@ async function submitForm(formEl) {
   if (!formEl) return;
   formEl.validate(async (valid) => {
     if (valid) {
+      loading.value = true
       const res = await Auth.createProjectItem({
         type:"issue",
         projectId:projectId.value,
@@ -163,7 +165,10 @@ async function submitForm(formEl) {
             })
           }
         })
+      } else {
+        ElMessage.error('创建失败')
       }
+      loading.value = false;
     }
   })
 }

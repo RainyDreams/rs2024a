@@ -1,6 +1,6 @@
 <template>
   <div class="flex mb-3">
-    <div class="routerBack shrink-0 mr-2" @click="routerBack" >
+    <div :class="`routerBack shrink-0 mr-2 ${(props.theme=='dark')?'bg-slate-700 text-slate-400 hover:bg-slate-800':''}`" @click="routerBack" >
       <Left theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
       <p>返回{{ props.name }}</p>
     </div>
@@ -22,6 +22,10 @@ const props = defineProps({
   back: {
     type: String,
     default: ''
+  },
+  theme:{
+    type: String,
+    default: 'light'
   }
 })
 console.log(props.back)
@@ -34,7 +38,7 @@ const routerBack = () => {
 }
 </script>
 
-<style scoped>
+<style>
 .routerBack {
   display: flex;
   /* align-items: center; */

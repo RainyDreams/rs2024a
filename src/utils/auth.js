@@ -222,7 +222,8 @@ let Auth = {
     } else {
       return {
         isLogined:false,
-        avatar:''
+        avatar:'',
+        Notification:0,
       }
     }
   },
@@ -414,6 +415,22 @@ let Auth = {
       JSON.stringify({ id: param.id,type: param.type })
     );
   },
+  addDiscussion:async function addDiscussion(param={}){
+    window.clarity("event", 'addDiscussion')
+    await this.getPrtoken();
+    return this.basicAuth(
+      "/api/project/add-discussion",
+      JSON.stringify({ ...param })
+    );
+  },
+  getDiscussionAnlysis:async function getDiscussionAnlysis(param,fns){
+    window.clarity("event", 'getDiscussionAnlysis')
+    await this.getPrtoken();
+    return await this.getStreamText('/api/project/DiscussionAnlysis', { ...param}, {
+      onmessage:fns.onmessage,
+      onclose:fns.onclose
+    });
+  },
   removeProjectItem:async function removeProjectItem(param={}){
     window.clarity("event", 'removeProjectItem')
     await this.getPrtoken();
@@ -456,10 +473,28 @@ let Auth = {
     window.clarity("event", 'getAIWelcome')
     return this.basicAuth('/api/ai/welcome', '', );
   },
+  getAIAnlysisWelcome: async function getAIAnlysisWelcome(){
+    window.clarity("event", 'getAIAnlysisWelcome')
+    return this.basicAuth('/api/ai/anlysisWelcome', '', );
+  },
   AI_createWorkflow:async function AI_createWorkflow(param){
     window.clarity("event", 'AI_createWorkflow')
     await this.getPrtoken();
     return this.basicAuth('/api/ai/createWorkflow', JSON.stringify(param), );
+  },
+  chatWithAIAnlysis:async function chatWithAIAnlysis(list, param){
+    window.clarity("event", 'chatWithAIAnlysis')
+    await this.getPrtoken();
+    const res = await this.basicAuth(
+      "/api/ai/send",
+      JSON.stringify({ content: JSON.stringify(list), vf: param.fingerprint })
+    );
+    if (res.status === "sus") {
+      await this.getStreamText('/api/ai/stream_anlysis', { content: JSON.stringify(list),}, {
+        onmessage:param.onmessage,
+        onclose:param.onclose
+      });
+    }
   },
   chatWithAI:async function chatWithAI(list, param) {
     window.clarity("event", 'chatWithAI')

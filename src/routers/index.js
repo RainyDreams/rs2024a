@@ -10,6 +10,7 @@ import ProjectsItemCreate from '../views/Projects/createItem.vue';
 import ProjectsItemCreate_workflow from '../views/Projects/create/workflow.vue';
 import ProjectsDetail from '../views/Projects/detail.vue';
 import Projects_Workflow from '../views/Projects/workflow/index.vue';
+import Projects_Discussion from '../views/Projects/discussion/index.vue';
 import TeamCreate from '../views/Team/create.vue';
 import TeamList from '../views/Team/list.vue';
 import TeamDetail from '../views/Team/detail.vue';
@@ -22,16 +23,14 @@ import UserSettings from '../views/User/settings.vue';
 import AboutInfo from '../views/About/info.vue';
 import AboutProgress from '../views/About/progress.vue';
 import AboutLog from '../views/About/log.vue';
-import CommunicationChat from '../views/Communication/chat.vue';
+import ModelChat from '../views/Model/chat.vue';
+import ModelAnlysis from '../views/Model/anlysis.vue';
 import Notification from '../views/Notification/index.vue';
 import LoginSuccess from '../views/Status/LoginSuccess.vue';
 import LoginNeeded from '../views/Status/LoginNeeded.vue';
 import LoginAlready from '../views/Status/LoginAlready.vue';
 import JoinTeamApplication from '../views/Status/JoinTeamApplication.vue';
 import JoinProcess from '../views/Status/JoinProcess.vue';
-import DangerView from '../views/Tests/admin.vue'
-import Test from '../views/Tests/test.vue';
-import TestNew from '../views/Tests/video.vue';
 import Error404 from '../views/Errors/404.vue';
 
 
@@ -45,10 +44,11 @@ const router = createRouter({
       { path: "list", name: "ProjectsList", component: ProjectsList },
       { path: "todo", name: "ProjectsTodo", component: ProjectsTodo },
       { path: "detail-create/workflow/:projectId", name: "ProjectsItemCreate_wkfl", component: ProjectsItemCreate_workflow },
-      { path: "detail-create/issue/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate },
-      { path: "detail-create/task/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate },
-      { path: "detail-create/discussion/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate },
-      { path: "workflow/:id", name: "ProjectsWorkflow", component: Projects_Workflow },
+      { path: "detail-create/issue/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate,meta:{type:'issue'} },
+      { path: "detail-create/task/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate,meta:{type:'task'}},
+      { path: "detail-create/discussion/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate,meta:{type:'discussion'} },
+      { path: "workflow/:id", name: "ProjectsWorkflow", component: Projects_Workflow,meta:{hide:['tabbar','sidebar']} },
+      { path: "discussion/:id", name: "ProjectsDiscussion", component: Projects_Discussion,meta:{hide:['tabbar','sidebar']} },
       { path: "detail/:projectId", name: "ProjectsDetail", component: ProjectsDetail },
     ]},
     { path: "/team/", name: "Team", children: [
@@ -63,8 +63,9 @@ const router = createRouter({
       { path: "login", name: "UserLogin", component: UserLogin },
       { path: "settings", name: "UserSettings", component: UserSettings },
     ]},
-    { path: "/communication/", name: "Communication", children:[
-      { path: "chat", name: "CommunicationChat", component: CommunicationChat},
+    { path: "/model/", name: "Model", children:[
+      { path: "chat", name: "ModelChat", component: ModelChat},
+      { path: "anlysis", name: "ModelAnlysis", component: ModelAnlysis},
     ]},
     { path: "/about/", name: "About", children: [
       { path: "info", name: "AboutInfo", component: AboutInfo },
@@ -81,9 +82,6 @@ const router = createRouter({
     { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar']}},
     { path: "/login-already", name: "LoginAlready", component: LoginAlready,meta:{hide:['sidebar']}},
     { path: "/settings/", name: "Settings", component: SettingsIndex },
-    { path: "/test/ai", name: "Tests", component: Test },
-    { path: "/test/new-feature", name: "TestsNew", component: TestNew },
-    { path: "/danger/view", name: "DangerView", component: DangerView },
     
     { path: "/:catchAll(.*)", name: "NotFound", component: Error404 },
   ]

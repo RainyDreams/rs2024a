@@ -2,8 +2,7 @@
   <div class="mb-3 min-h-48">
     <div class="border-t border-x last:border-y py-4 px-5" v-for="(item,index) in workflowList">
       <div>
-        <el-tag :type="{open:'success'}[item.tag]">{{ {open:'开启'}[item.tag] }}</el-tag>
-        <el-tag class="ml-2" v-for="tag in item.tags">{{ tag }}</el-tag>
+        <el-tag :type="{in_progress:'primary'}[item.tag]">{{ {in_progress:'进行中'}[item.tag] }}</el-tag>
       </div>
       <h4 class="mt-2 font-semibold text-xl/normal">{{ item.name }}</h4>
       <p class="text-slate-600">{{ item.desc }}</p>
@@ -17,7 +16,7 @@
 import { onActivated,onMounted,ref } from 'vue';
 import Auth from '../../../utils/auth';
 import { useRoute } from 'vue-router';
-import {dayjs, ElButton} from 'element-plus'
+import {dayjs, ElButton,ElTag} from 'element-plus'
 import { getRole } from '../../../utils/helpers';
 const route = useRoute();
 const projectId = ref();
