@@ -43,6 +43,7 @@
 
 
 <script setup>
+import Cookies from 'js-cookie';
 import { ref,onMounted,reactive, onActivated, onDeactivated } from 'vue'
 import Auth from "../../utils/auth.js";
 import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert, ElMessageBox,ElSelect,ElOption} from 'element-plus';

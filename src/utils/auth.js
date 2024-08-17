@@ -7,12 +7,13 @@
  * @Copyright: Copyright (c) 2024 CHIZIINGIIN
 */
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
-
 import Cookies from 'js-cookie';
 import Dexie from 'dexie';
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { da } from "element-plus/es/locales.mjs";
+const router = useRouter()
+const route = useRoute()
 const BASICURL = ''
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async function (response,code) {
@@ -28,7 +29,9 @@ const defaultFailed = async function (response,code) {
       })
     } else {
       ElMessage.error('未登录或登录过期');
-      window.location.href="/login-needed?url="+encodeURIComponent(window.location.href)
+      // console.log(router)
+      Auth.router.push('/login-needed?url='+encodeURIComponent(Auth.route.fullPath))
+      // window.location.href="/login-needed?url="+encodeURIComponent(window.location.href)
       return { status: 'invalid', content: response };
     }
   } else {
@@ -106,6 +109,8 @@ class Scheduler {
 }
 let Auth = {
   mainTaskThread: new Scheduler(5),
+  router: null,
+  route: null,
   init: async function init() {
     const prStatus = (await this.getPrtoken("first")).status;
     console.log(prStatus);
@@ -215,7 +220,9 @@ let Auth = {
     window.clarity("event", 'userLogin')
     return this.basicAuth("/api/login", JSON.stringify(param))
   },
-  getBasicInfo: async function getBasicInfo(){
+  getBasicInfo: async function getBasicInfo({router,route}){
+    this.router = router;
+    this.route = route;
     window.clarity("event", 'getBasicInfo')
     const getPr = await Auth.getPrtoken();
     if(getPr.status=='sus' || getPr.status=='exist'){

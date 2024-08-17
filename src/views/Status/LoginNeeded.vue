@@ -21,7 +21,7 @@ const route = useRoute();
 const router = useRouter()
 const url = ref('')
 async function open(){
-  router.push('/login');
+  router.push(`/login?url=${url.value}&mode=window`);
   // await Auth.openWindow(`https://auth.chiziingiin.top/?url=${url.value}&mode=window`)
 } 
 onMounted(()=>{

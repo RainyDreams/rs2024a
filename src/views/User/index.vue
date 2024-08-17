@@ -224,8 +224,9 @@
             <ul>
               <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in profile.issue">
                 <div class="flex-1 shrink break-all">
-                  <div></div>
+                  <div class="text-md">{{ item.name }}</div>
                   <div class="text-xs text-slate-400">ID:{{ item.issue }}</div>
+                  <div class="text-sm text-slate-600 mt-1">{{ item.desc }}</div>
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>
@@ -246,8 +247,9 @@
             <ul>
               <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in profile.discussion">
                 <div class="flex-1 shrink break-all">
-                  <div></div>
-                  <div class="text-xs text-slate-400">ID:{{ item.discussion }}</div>
+                  <div class="text-md">{{ item.name }}</div>
+                  <div class="text-xs text-slate-400">ID:{{ item.id }}</div>
+                  <div class="text-sm text-slate-600 mt-1">{{ item.desc }}</div>
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>

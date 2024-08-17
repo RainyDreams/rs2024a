@@ -85,13 +85,14 @@ console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已�
 'font-size:18px;padding:4px;color:#fff;background:#f00;','','font-size:12px;line-height:16px;padding:2px;', '','padding:2px;line-height:16px;font-size:12px;'); 
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
 import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
-import { RouterLink, RouterView,useRouter } from 'vue-router'
+import { RouterLink, RouterView,useRoute,useRouter } from 'vue-router'
 import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
 import { ElConfigProvider,ElAvatar,ElNotification } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Auth from './utils/auth';
 const router = useRouter();
+const route = useRoute();
 const TabBarHide = ref(false);
 const SideBarHide = ref(false);
 const isDarkMode = ref(0);
@@ -139,7 +140,7 @@ router.afterEach(async (to, from) => {
     else if (e=='sidebar') SideBarHide.value = true;
   })
   Auth.mainTaskThread.add(async ()=>{
-    basicInfo.value = (await Auth.getBasicInfo())
+    basicInfo.value = (await Auth.getBasicInfo({router,route}))
   })
 });
 function M(str){
