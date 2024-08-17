@@ -16,11 +16,13 @@
 import { ElResult,ElButton } from 'element-plus';
 import Auth from '../../utils/auth';
 import { onMounted, ref } from 'vue';
-import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 const route = useRoute();
+const router = useRouter()
 const url = ref('')
 async function open(){
-  await Auth.openWindow(`https://auth.chiziingiin.top/?url=${url.value}&mode=window`)
+  router.push('/login');
+  // await Auth.openWindow(`https://auth.chiziingiin.top/?url=${url.value}&mode=window`)
 } 
 onMounted(()=>{
   url.value = encodeURIComponent(route.query.url || '')

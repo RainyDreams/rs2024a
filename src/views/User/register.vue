@@ -74,8 +74,10 @@ import Auth from "../../utils/auth.js";
 import routerBack from '/src/components/routerBack.vue'
 import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert, ElMessageBox,ElSelect,ElOption} from 'element-plus';
 import CryptoJS from 'crypto-js';
+import { useRouter } from 'vue-router';
 const ruleFormRef = ref(null);
 const formloading = ref(false);
+const router = useRouter()
 const form = reactive({
   username: '',
   nickname: '',
@@ -153,7 +155,8 @@ const submitForm = (formEl) => {
         form.note = '';
         form.type = '';
         ElMessageBox.alert('注册成功，将前往登录页面', '提示', {}).then(() => {
-          window.location.href = 'https://auth.chiziingiin.top/newreg'
+          // window.location.href = 'https://auth.chiziingiin.top/newreg'
+          router.push('/login')
         })
       } else {
         turnstile.remove('#turnstile-box')
@@ -171,19 +174,5 @@ const submitForm = (formEl) => {
     }
   })
 }
-
-onActivated(() => {
-  // ruleFormRef.value.clearValidate();
-  document.onLoad = function(){
-    // Auth.handleRecaptcha();
-    document.querySelector('.grecaptcha-badge').classList.add('_show');
-  }
-
-})
-
-onDeactivated(()=>{
-  document.querySelector('.grecaptcha-badge').classList.remove('_show');
-  // document.querySelector('.grecaptcha-badge').style="visibility:hidden;"
-})
 
 </script>

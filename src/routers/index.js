@@ -60,7 +60,6 @@ const router = createRouter({
     ]},
     { path: "/user/", name: "User", children:[
       { path: "profile", name: "UserProfile", component: UserIndex},
-      { path: "login", name: "UserLogin", component: UserLogin },
       { path: "settings", name: "UserSettings", component: UserSettings },
     ]},
     { path: "/model/", name: "Model", children:[
@@ -78,6 +77,7 @@ const router = createRouter({
     ]},
     { path: "/notification", name: "Notification", component: Notification,meta:{hide:['sidebar']}},
     { path: "/reg", name: "UserRegister", component: UserRegister,meta:{hide:['tabbar','sidebar']}},
+    { path: "/login", name: "UserLogin", component: UserLogin,meta:{hide:['tabbar','sidebar']}},
     { path: "/login-success", name: "LoginSuccess", component: LoginSuccess,meta:{hide:['sidebar']}},
     { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar']}},
     { path: "/login-already", name: "LoginAlready", component: LoginAlready,meta:{hide:['sidebar']}},

@@ -49,13 +49,14 @@
 <script setup>
 //检测网址传来的uid=xxx&pid=yyy然后请求服务器获取username和teamname
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElLoading, ElAvatar, ElButton} from 'element-plus'
 import Auth from '../../utils/auth';
 const route = useRoute()
 const teamName = ref('')
 const teamDesc = ref('')
 const userName = ref('')
+const router = useRouter()
 
 //获取路由param
 console.log(route)
@@ -85,7 +86,8 @@ async function getTeamInfo(close){
       type: 'error',
     })
     setTimeout(() => {
-      window.location.href = 'https://auth.chiziingiin.top/?url='+encodeURIComponent(window.location.href)
+      router.push(route.path)
+      // window.location.href = 'https://auth.chiziingiin.top/?url='+encodeURIComponent(window.location.href)
     },1000)
     return;
   } else {

@@ -289,6 +289,7 @@ import Auth from '../../utils/auth';
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 const profile = ref({
   nickname: '加载中',
   avatar: 'https://lingben.chiziingiin.top/api/avatar/',
@@ -302,6 +303,7 @@ const profile = ref({
 })
 const imageUrl = ref('')
 const loading = ref(true)
+const router = useRouter()
 onActivated(async ()=>{
   const res = await Auth.getUserInfo();
   profile.value = res.content;
@@ -320,7 +322,8 @@ async function logout(){
             confirmButtonText: '确定',
             showClose:false,
             callback: action => {
-              window.location.href = 'https://auth.chiziingiin.top/relogin';
+              router.push('/login')
+              // window.location.href = 'https://auth.chiziingiin.top/relogin';
             }
           })
         }

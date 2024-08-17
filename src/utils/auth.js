@@ -14,7 +14,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from "vue-router";
 import { da } from "element-plus/es/locales.mjs";
 const BASICURL = ''
-const LOGINURL = 'https://auth.chiziingiin.top'
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async function (response,code) {
   window.clarity("event", 'auth_error')
@@ -210,6 +209,11 @@ let Auth = {
     await this.getUserFingerprint();
     window.clarity("event", 'userRegister')
     return this.basicAuth("/api/reg", JSON.stringify(param))
+  },
+  userLogin:async function userLogin(param) {
+    await this.getUserFingerprint();
+    window.clarity("event", 'userLogin')
+    return this.basicAuth("/api/login", JSON.stringify(param))
   },
   getBasicInfo: async function getBasicInfo(){
     window.clarity("event", 'getBasicInfo')

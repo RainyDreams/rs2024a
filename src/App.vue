@@ -34,7 +34,7 @@
           <router-link class="btn" to="/notification">
             <remind theme="outline" size="20" fill="#5F6388" :strokewidth="5"  strokeLinejoin="bevel"/>
           </router-link>
-          <a v-if="!basicInfo.isLogined" class="login_tab" href="https://auth.chiziingiin.top/from-home">登录</a>
+          <router-link v-if="!basicInfo.isLogined" class="login_tab" to="/login">登录</router-link>
           <a v-if="basicInfo.isLogined" :class="`btn _user ${activeName=='User'?'router-link-active':''}`" @click="clickUser()">
             <el-avatar
               alt="头像"
@@ -47,9 +47,11 @@
       <div class="routerpage">
         <el-config-provider :locale="zhCn">
           <router-view v-slot="{ Component }">
-            <keep-alive :exclude="[/reg/,]" :max="1">
-              <component :is="Component" />
-            </keep-alive>
+            <!-- <transition :duration="{ enter: 400000, leave:0 }" enter-active-class="animate__animated animate__fadeInRight"> -->
+              <keep-alive :exclude="[/reg/,]" :max="1">
+                <component :is="Component" />
+              </keep-alive>
+            <!-- </transition> -->
           </router-view>
         </el-config-provider>
       </div>
