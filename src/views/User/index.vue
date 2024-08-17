@@ -10,7 +10,7 @@
             <div class="flex items-center mr-3">
               <el-avatar :src="profile.avatar" :size="60"></el-avatar>
             </div>
-            <div class="flex items-center flex-col ">
+            <div class="flex justify-center flex-col ">
               <div class="text-xl font-semibold truncate">{{ profile.nickname }}</div>
               <div class="break-all">{{ profile.sign || '暂无签名' }}</div>
             </div>

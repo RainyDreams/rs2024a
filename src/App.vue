@@ -32,7 +32,9 @@
         </div>
         <div class="btns">
           <router-link class="btn" to="/notification">
-            <remind theme="outline" size="20" fill="#5F6388" :strokewidth="5"  strokeLinejoin="bevel"/>
+            <el-badge :value="basicInfo.Notification?basicInfo.Notification:undefined" :max="99" class="item">
+              <remind theme="outline" size="20" fill="#5F6388" :strokewidth="5"  strokeLinejoin="bevel"/>
+            </el-badge>
           </router-link>
           <router-link v-if="!basicInfo.isLogined" class="login_tab" to="/login">登录</router-link>
           <a v-if="basicInfo.isLogined" :class="`btn _user ${activeName=='User'?'router-link-active':''}`" @click="clickUser()">
@@ -88,7 +90,7 @@ import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRoute,useRouter } from 'vue-router'
 import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
-import { ElConfigProvider,ElAvatar,ElNotification } from 'element-plus'
+import { ElConfigProvider,ElAvatar,ElNotification,ElBadge } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Auth from './utils/auth';
 const router = useRouter();
@@ -100,7 +102,8 @@ const activeName = ref(0);
 const showMenu = ref(false)
 const basicInfo = ref({
   isLogined:false,
-  avatar:''
+  avatar:'',
+  Notification:0,
 })
 onMounted(async ()=>{
   // console.log(1)
