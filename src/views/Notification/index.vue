@@ -1,9 +1,15 @@
 <template>
   <div class="bs-container h-full">
     <div class="notificationPage h-full py-16">
-      <div class="bg-white h-full rounded-3xl flex overflow-x-hidden border overflow-y-auto">
-        <ul class="w-100 bg-slate-50 border-r">
-          <li @click="changePage(index)" v-for="(item,index) in userList" class="cursor-pointer border-b px-4 py-2 text-xl">{{ item }}</li>
+      <el-empty :image-size="150" v-if="userList.length == 0">
+        <template #description>
+          <p>没有任何通知</p>
+        </template>
+      </el-empty>   
+      <div class="bg-white h-full rounded-3xl flex overflow-x-hidden border overflow-y-auto" 
+      v-if="userList.length > 0">
+        <ul class="w-100 bg-slate-50 border-r px-4">
+          <li @click="changePage(index)" v-for="(item,index) in userList" class="cursor-pointer border-b px-2 mb-2 last:mb-0 py-2 text-xl">{{ item }}</li>
         </ul>
         <div class="flex-1 bg-white p-4">
           <div class="message">
@@ -25,7 +31,7 @@
 <script setup>
 import { onActivated, ref } from 'vue';
 import Auth from '../../utils/auth';
-import { ElButton } from 'element-plus';
+import { ElButton,ElEmpty, ElMessage } from 'element-plus';
 import jsCookie from 'js-cookie';
 const userList = ref([]);
 const messageList = ref([]);
@@ -78,5 +84,17 @@ onActivated(async ()=>{
   messageList.value = await Promise.all(content[0].list.map(async (e)=>{
     return await renderMessage(e)
   }))
+  
+  await Promise.all(content.map(async (e)=>{
+    const res = await Auth.readNotification({
+      list:e.list.map(e=>e.id)
+    })
+    if(res.status == 'sus'){
+
+    } else {
+      ElMessage.error('网络错误')
+    }
+  }))
+  
 })
 </script>

@@ -464,6 +464,11 @@ let Auth = {
     await this.getPrtoken();
     return this.basicAuth('/api/getNotification', JSON.stringify({ page:param.page }), );
   },
+  readNotification: async function readNotification(param={}){
+    window.clarity("event", 'readNotification')
+    await this.getPrtoken();
+    return this.basicAuth('/api/readNotification', JSON.stringify({ list:param.list }), );
+  },
   openWindow:async function openWindow(url,callback){
     window.clarity("event", 'openWindow')
     let width = 500;
