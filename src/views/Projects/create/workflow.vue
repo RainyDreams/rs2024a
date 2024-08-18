@@ -103,7 +103,7 @@
 <script setup>
 import routerBack from '../../../components/routerBack.vue';
 import { onActivated, onMounted,ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router';
 import Auth from '../../../utils/auth';
 import { throttle } from '../../../utils/helpers'
 import { ElInput,ElButton, ElMessage,ElAvatar,ElProgress,ElTimeline,ElTimelineItem } from 'element-plus';

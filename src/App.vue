@@ -104,6 +104,7 @@ const basicInfo = ref({
   isLogined:false,
   avatar:'',
   Notification:0,
+  NotificationList:[]
 })
 onMounted(async ()=>{
   // console.log(1)
@@ -143,7 +144,45 @@ router.afterEach(async (to, from) => {
     else if (e=='sidebar') SideBarHide.value = true;
   })
   Auth.mainTaskThread.add(async ()=>{
-    basicInfo.value = (await Auth.getBasicInfo({router,route}))
+    basicInfo.value = (await Auth.getBasicInfo({router,route}));
+    const ps = new Promise((resolve,reject)=>{
+      if ('Notification' in window) {
+        if (Notification.permission === 'granted') {
+          resolve()
+        } else if (Notification.permission!== 'denied') {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              resolve()
+            } else {
+              reject()
+            }
+          });
+        } else {
+          reject()
+        }
+      }
+    })
+    ps.then(()=>{
+      basicInfo.value.NotificationList.forEach(e=>{
+        let nl = localStorage.getItem('notificationList')
+        if(!nl) {
+          localStorage.setItem('notificationList',JSON.stringify([]))
+        }
+        nl = localStorage.getItem('notificationList')
+        let decode = JSON.parse(nl)
+        if(!decode.includes(e.id)){
+          const notification = new Notification(
+            e.title, {
+            body: e.body,
+          });
+          notification.addEventListener('click', function() {
+            router.push('/notification')
+          });
+          decode.push(e.id)
+          localStorage.setItem('notificationList',JSON.stringify(decode))
+        } 
+      })
+    })
   })
 });
 function M(str){

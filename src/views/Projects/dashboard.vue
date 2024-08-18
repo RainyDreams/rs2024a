@@ -105,14 +105,14 @@ onMounted(async ()=>{
       loading.value = false
     })(),
     (async function(){
-      anlysis.value = (await Auth.getDashboardAnlysis({
+      (await Auth.getDashboardAnlysis({
         onclose:()=>{
           loading2.value = false
         },
         onmessage:(e)=>{
           anlysis.value += JSON.parse(e).response;
         }
-      })).content;
+      }))
     })()
   ])
 })

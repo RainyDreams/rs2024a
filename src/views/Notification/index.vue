@@ -11,12 +11,15 @@
         <ul class="w-100 bg-slate-50 border-r px-4 py-4">
           <li @click="changePage(index)" v-for="(item,index) in userList" class="cursor-pointer hover:bg-slate-200 transition-all rounded-lg px-2 mb-2 last:mb-0 py-1 text-xl">{{ item }}</li>
         </ul>
-        <div class="flex-1 bg-white p-4">
+        <div class="flex-1 bg-white">
           <div class="message">
-            <div class="message-item py-4 border-b" v-for="(item,index) in messageList">
-              <div class="text-lg mb-1">
-                {{ item.title }}
-                <el-tag v-show="item.is_read == 'true'">已读</el-tag>
+            <div class="message-item py-6 px-4 border-b hover:bg-slate-50 transition-all" v-for="(item,index) in messageList">
+              <div class="text-lg mb-1 flex">
+                <div class="flex-1">
+                  {{ item.title }}
+                  <el-tag v-show="item.is_read == 'true'">已读</el-tag>
+                </div>
+                <div class="text-sm text-slate-500">{{ item.time }}</div>
               </div>
               <div class="text-base/tight mb-2" v-html="item.content"></div>
               <div class="flex " v-if="item.actions" >
@@ -34,7 +37,7 @@
 <script setup>
 import { onActivated, ref } from 'vue';
 import Auth from '../../utils/auth';
-import { ElButton,ElEmpty, ElMessage,ElTag } from 'element-plus';
+import { dayjs, ElButton,ElEmpty, ElMessage,ElTag } from 'element-plus';
 import jsCookie from 'js-cookie';
 const userList = ref([]);
 const messageList = ref([]);
@@ -50,6 +53,7 @@ async function renderMessage (message){
     if(content.functionID == 'apply_to_join_team'){
       const targetUser = (await Auth.getUserInfo({uid:content.data.userid})).content;
       return {
+        time:dayjs(time).format('YYYY年M月DD日 HH:mm:ss'),
         title:content.title,
         content:`<div><img src="${targetUser.avatar}" class="rounded-full size-8 inline-block mr-2"/>${targetUser.nickname}申请加入团队</div>`,
         actions:content.actions.map((e)=>{
@@ -67,6 +71,7 @@ async function renderMessage (message){
     }
   } else if (content.type == 'text') {
     return {
+      time:dayjs(time).format('YYYY年M月DD日 HH:mm:ss'),
       title:content.title,
       text:content.text || '',
       actions:content.links.map(e=>{
