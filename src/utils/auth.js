@@ -49,13 +49,13 @@ const defaultFailed = async function (response,code) {
       let text = (await response.text());
       throw new Error(response.url+"<br/>" + text)
     } catch (err){
-      // console.error(err.stack)
+      console.error(err)
       ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
         dangerouslyUseHTMLString:true,
         customClass:'czigerr',
         message: 
         `<div class="text-sm ">本软件正在公测阶段，现遇到了程序、服务器错误，请联系本项目负责人张新越（赤峰二中202312班）<br/>
-        以下是可以提供的错误信息<br/><b>状态码：<span style="color:red">${response.status||'未知(可能为CORS)'}</span></b><br/><b>${(err.message+"</b><i>"+err.stack+"")}</i></div>`,
+        以下是可以提供的错误信息<br/><b>状态码：<span style="color:red">${response.status||'未知错误'}</span></b><br/><b>${(err.message+"</b><i>"+err.stack+"")}</i></div>`,
         confirmButtonText: '报告错误',
         showCancelButton:true,
         cancelButtonText:'忽略错误',
@@ -227,18 +227,15 @@ let Auth = {
     Auth.route = route;
     window.clarity("event", 'getBasicInfo')
     const getPr = await Auth.getPrtoken();
-    if(getPr.status=='sus' || getPr.status=='exist'){
+    // if(getPr.status=='sus' || getPr.status=='exist'){
       const res = (await Auth.basicAuth("/api/getBasicInfo")).content;
       sessionStorage.setItem('userInfo',JSON.stringify(res))
       window.clarity("set", 'userTag', res.identityType || 'normal');
       return task(res);
-    } else {
-      return task({
-        isLogined:false,
-        avatar:'',
-        Notification:0,
-      })
-    }
+    // } else {
+    //   const res = (await Auth.basicAuth("/api/getBasicInfo")).content;
+    //   return task(res)
+    // }
   },5000),
   getUser:async function getUser(){
     window.clarity("event", 'getUser')
