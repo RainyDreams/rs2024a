@@ -12,7 +12,7 @@
             <div class="text-xs mb-1 text-slate-400">项目描述</div>
             <div class="text-lg/tight break-all mb-2">{{ projectDetail.desc }}</div>
             <ul>
-              <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in projectDetail.teams">
+              <router-link :to="`/team/detail/${item.id}`" class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in projectDetail.teams">
                 <div class="flex-1 shrink break-all">
                   <div class="text-md">{{ item.name }}</div>
                   <div class="text-xs text-slate-400">ID:{{ item.id }}</div>
@@ -23,7 +23,7 @@
                     <el-avatar :size="20" v-for="(e) in item.persons" :src="e.avatar"></el-avatar>
                   </div>
                 </div>
-              </li>
+              </router-link>
             </ul>
           </div>
         </el-tab-pane>

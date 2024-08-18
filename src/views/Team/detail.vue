@@ -66,7 +66,7 @@
         <div class="col-md-6">
           <h4 class="text-xl mb-3">参与项目</h4>
           <div >
-            <router-link class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,index) in teamDetail.projects">
+            <router-link :to="`/projects/detail/${item.id}`" class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,index) in teamDetail.projects">
               <div class="flex-1 shrink break-all">
                 <div class="text-md">{{ item.name }}</div>
                 <div class="text-xs text-slate-400">ID:{{ item.id }}</div>

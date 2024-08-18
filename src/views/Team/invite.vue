@@ -50,7 +50,7 @@
 //检测网址传来的uid=xxx&pid=yyy然后请求服务器获取username和teamname
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage, ElLoading, ElAvatar, ElButton} from 'element-plus'
+import { ElMessage, ElLoading, ElAvatar, ElButton, ElMessageBox} from 'element-plus'
 import Auth from '../../utils/auth';
 const route = useRoute()
 const teamName = ref('')
@@ -85,10 +85,7 @@ async function getTeamInfo(close){
       message: '登录已过期，请重新登录',
       type: 'error',
     })
-    setTimeout(() => {
-      router.push(route.path)
-      // window.location.href = 'https://auth.chiziingiin.top/?url='+encodeURIComponent(window.location.href)
-    },1000)
+    router.push('/login?url=' + encodeURIComponent(route.path))
     return;
   } else {
     ElMessage({
@@ -101,7 +98,20 @@ async function getTeamInfo(close){
 async function joinTeam(){
   const res = await Auth.joinTeam({pid})
   if(res.status == 'sus'){
-    window.location.href = '/status/joining'
+    if(res.content.code == 2){
+      ElMessageBox.alert('你已经加入过该团队', '提示', {
+        confirmButtonText: '确定',
+        callback: action => {
+          router.push('/team/detail/'+pid)
+        },
+      });
+    } else if(res.content.code == 1) {
+      router.push('/status/joining');
+    }
+  } else {
+    // else {
+      ElMessage.error('加入失败')
+    // }
   }
 }
 onMounted(async () => {

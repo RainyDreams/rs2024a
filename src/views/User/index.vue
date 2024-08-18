@@ -136,7 +136,7 @@
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>
-                  <div>{{ item.role }}</div>
+                  <div>{{ getRole(item.role) }}</div>
                   <div class="mt-2">
                     <el-avatar :size="20" v-for="(e) in item.persons" :src="e.avatar"></el-avatar>
                   </div>
@@ -162,7 +162,7 @@
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>
-                  <div>{{ item.role }}</div>
+                  <div>{{ getRole(item.role) }}</div>
                 </div>
               </li>
             </ul>
@@ -179,12 +179,13 @@
             <ul>
               <li class="flex border border-slate-200 px-4 py-3 rounded-md mb-3 last:mb-0" v-for="(item,i) in profile.workflow">
                 <div class="flex-1 shrink break-all">
-                  <div></div>
+                  <div class="text-md">{{ item.name }}</div>
                   <div class="text-xs text-slate-400">ID:{{ item.workflow }}</div>
+                  <div class="text-sm text-slate-600 mt-1">{{ item.desc }}</div>
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>
-                  <div>{{ item.role }}</div>
+                  <div>{{ getRole(item.role) }}</div>
                 </div>
               </li>
             </ul>
@@ -207,7 +208,7 @@
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>
-                  <div>{{ item.role }}</div>
+                  <div>{{ getRole(item.role) }}</div>
                 </div>
               </li>
             </ul>
@@ -230,7 +231,7 @@
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>
-                  <div>{{ item.role }}</div>
+                  <div>{{ getRole(item.role) }}</div>
                 </div>
               </li>
             </ul>
@@ -253,7 +254,7 @@
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
                   <div>我的身份</div>
-                  <div>{{ item.role }}</div>
+                  <div>{{ getRole(item.role) }}</div>
                 </div>
               </li>
             </ul>
@@ -290,6 +291,7 @@ import { ElAvatar,ElStatistic, ElMessageBox,ElTooltip,ElSkeleton,ElButton} from 
 import Auth from '../../utils/auth';
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
+import { getRole } from '../../utils/helpers';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 const profile = ref({

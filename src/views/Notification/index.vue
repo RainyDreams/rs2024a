@@ -8,16 +8,19 @@
       </el-empty>   
       <div class="bg-white h-full rounded-3xl flex overflow-x-hidden border overflow-y-auto" 
       v-if="userList.length > 0">
-        <ul class="w-100 bg-slate-50 border-r px-4">
-          <li @click="changePage(index)" v-for="(item,index) in userList" class="cursor-pointer border-b px-2 mb-2 last:mb-0 py-2 text-xl">{{ item }}</li>
+        <ul class="w-100 bg-slate-50 border-r px-4 py-4">
+          <li @click="changePage(index)" v-for="(item,index) in userList" class="cursor-pointer hover:bg-slate-200 transition-all rounded-lg px-2 mb-2 last:mb-0 py-1 text-xl">{{ item }}</li>
         </ul>
         <div class="flex-1 bg-white p-4">
           <div class="message">
             <div class="message-item py-4 border-b" v-for="(item,index) in messageList">
-              <div class="">{{ item.title }}</div>
-              <div class="" v-html="item.content"></div>
-              <div class="" v-if="item.actions" v-for="(action) in item.actions">
-                <el-button @click="action.fn">{{ action.text }}</el-button>
+              <div class="text-lg mb-1">
+                {{ item.title }}
+                <el-tag v-show="item.is_read == 'true'">已读</el-tag>
+              </div>
+              <div class="text-base/tight mb-2" v-html="item.content"></div>
+              <div class="flex " v-if="item.actions" >
+                <el-button @click="action.fn" v-for="(action) in item.actions">{{ action.text }}</el-button>
               </div>
             </div>
           </div>
@@ -31,13 +34,15 @@
 <script setup>
 import { onActivated, ref } from 'vue';
 import Auth from '../../utils/auth';
-import { ElButton,ElEmpty, ElMessage } from 'element-plus';
+import { ElButton,ElEmpty, ElMessage,ElTag } from 'element-plus';
 import jsCookie from 'js-cookie';
 const userList = ref([]);
 const messageList = ref([]);
 let messageList_ = []
-function changePage (index){
-  messageList.value = messageList_[index].list
+async function changePage (index){
+  messageList.value = await Promise.all(messageList_[index].list.map(async (e)=>{
+    return await renderMessage(e)
+  }))
 }
 async function renderMessage (message){
   const {content,time} = message;
