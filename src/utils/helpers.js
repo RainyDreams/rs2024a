@@ -95,3 +95,14 @@ export function throttle(func, wait) {
     }
   };
 }
+
+export function asyncThrottle(func, delay) {
+  let lastCallTime = 0;
+  return async function (...args) {
+    const now = Date.now();
+    if (now - lastCallTime >= delay) {
+      lastCallTime = now;
+      return func(...args);
+    }
+  };
+}

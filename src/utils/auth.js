@@ -12,6 +12,7 @@ import Dexie from 'dexie';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRoute, useRouter } from "vue-router";
 import { da } from "element-plus/es/locales.mjs";
+import { asyncThrottle } from "./helpers";
 const router = useRouter()
 const route = useRoute()
 const BASICURL = ''
@@ -220,31 +221,32 @@ let Auth = {
     window.clarity("event", 'userLogin')
     return this.basicAuth("/api/login", JSON.stringify(param))
   },
-  getBasicInfo: async function getBasicInfo({router,route}){
-    this.router = router;
-    this.route = route;
+  // __getBasicInfo: ,
+  getBasicInfo:asyncThrottle(async function getBasicInfo({router,route,task}){
+    Auth.router = router;
+    Auth.route = route;
     window.clarity("event", 'getBasicInfo')
     const getPr = await Auth.getPrtoken();
     if(getPr.status=='sus' || getPr.status=='exist'){
-      const res = (await this.basicAuth("/api/getBasicInfo")).content;
+      const res = (await Auth.basicAuth("/api/getBasicInfo")).content;
       sessionStorage.setItem('userInfo',JSON.stringify(res))
       window.clarity("set", 'userTag', res.identityType || 'normal');
-      return res
+      return task(res);
     } else {
-      return {
+      return task({
         isLogined:false,
         avatar:'',
         Notification:0,
-      }
+      })
     }
-  },
+  },5000),
   getUser:async function getUser(){
     window.clarity("event", 'getUser')
     const stmtGet = sessionStorage.getItem('userInfo')
     if(stmtGet){
       return JSON.parse(stmtGet)
     } else {
-      return await this.getBasicInfo()
+      return this.getBasicInfo()
     }
   },
   logout: async function logout(){

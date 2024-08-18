@@ -117,6 +117,12 @@
         </router-link>
       </h5>
     </div>
+    <div class="panel bs-container flex items-center justify-center flex-col py-10" >
+      <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">
+        自2024年8月18日开始统计，已累计稳定提供服务
+        {{ count }}
+      </h2>
+    </div>
     <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vmin;">
       <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">梦想只是开始 探索永不止步</h2>
       <p class="mt-4 text-center text-wrap break-words" style="word-break: normal;">Designed by Zhang Xinyue, Chiziingiin.</p>
@@ -135,7 +141,12 @@
 
 <script setup>
 import { ElButton } from 'element-plus';
-
+import { emitter } from '../../utils/emitter';
+import { ref } from 'vue';
+const count = ref('')
+emitter.on('basicInfo',(e)=>{
+  count.value = e.visitInfo.count+'次';
+})
 </script>
 
 <style scoped >

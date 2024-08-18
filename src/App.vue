@@ -30,8 +30,8 @@
           <MenuFoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="!showMenu"/>
           <MenuUnfoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="showMenu"/>
         </div>
-        <div class="btns">
-          <router-link class="btn" to="/notification">
+        <div class="btns" v-show="basicInfo.visitInfo">
+          <router-link v-if="basicInfo.isLogined" class="btn" to="/notification">
             <el-badge :value="basicInfo.Notification?basicInfo.Notification:undefined" :max="99" class="item">
               <remind theme="outline" size="20" fill="#5F6388" :strokewidth="5"  strokeLinejoin="bevel"/>
             </el-badge>
@@ -44,6 +44,16 @@
               :src="basicInfo.avatar"
             />
           </a>
+        </div>
+        <div class="btns" v-show="!basicInfo.visitInfo" style="width:60px;">
+          <el-progress
+            style="width:100%"
+            :percentage="100"
+            :show-text="false"
+            :indeterminate="true"
+            :duration="1"
+            :color="[{ color: '#904df5', percentage: 100 }]"
+          ></el-progress>
         </div>
       </div>
       <div class="routerpage">
@@ -90,9 +100,10 @@ import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRoute,useRouter } from 'vue-router'
 import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
-import { ElConfigProvider,ElAvatar,ElNotification,ElBadge } from 'element-plus'
+import { ElConfigProvider,ElAvatar,ElProgress,ElBadge } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Auth from './utils/auth';
+import { emitter } from './utils/emitter';
 const router = useRouter();
 const route = useRoute();
 const TabBarHide = ref(false);
@@ -138,13 +149,17 @@ router.afterEach(async (to, from) => {
   }
   TabBarHide.value = false;
   SideBarHide.value = false;
-  if(to.meta.hide)
-  to.meta.hide.find(e=>{
-    if(e=='tabbar') TabBarHide.value = true;
-    else if (e=='sidebar') SideBarHide.value = true;
-  })
-  Auth.mainTaskThread.add(async ()=>{
-    basicInfo.value = (await Auth.getBasicInfo({router,route}));
+  if(to.meta.hide){
+    to.meta.hide.find(e=>{
+      if(e=='tabbar') TabBarHide.value = true;
+      else if (e=='sidebar') SideBarHide.value = true;
+    })
+  }
+  
+  // Auth.mainTaskThread.add(async ()=>{
+  (Auth.getBasicInfo({router,route,task:async function(re){
+    basicInfo.value = re;
+    emitter.emit('basicInfo',re)
     const ps = new Promise((resolve,reject)=>{
       if ('Notification' in window) {
         if (Notification.permission === 'granted') {
@@ -163,7 +178,7 @@ router.afterEach(async (to, from) => {
       }
     })
     ps.then(()=>{
-      basicInfo.value.NotificationList.forEach(e=>{
+      re.NotificationList.forEach(e=>{
         let nl = localStorage.getItem('notificationList')
         if(!nl) {
           localStorage.setItem('notificationList',JSON.stringify([]))
@@ -183,7 +198,8 @@ router.afterEach(async (to, from) => {
         } 
       })
     })
-  })
+  }}));
+  // })
 });
 function M(str){
   return window.innerWidth <= 1000?str:'';
