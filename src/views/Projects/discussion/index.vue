@@ -1,8 +1,8 @@
 <template>
-  <div class="commonPage dark bg-slate-900" style="height:calc(100dvh - 0px);display: flex;flex-direction: column;">  
+  <div class="commonPage dark bg-slate-900 px-1 md:px-3" style="height:calc(100dvh - 0px);display: flex;flex-direction: column;">  
     <routerBack name="项目详情" theme="dark" back="/projects/list"></routerBack>
     <div class="scroll">
-      <div class="panel bg-slate-800 text-slate-200">
+      <div class="panel bg-slate-800 text-slate-200 px-3 md:px-4">
         <div v-show="!!loading" class=" px-3">
           <el-progress
             :percentage="100"
@@ -17,20 +17,21 @@
           <div class="text-lg md:text-xl lg:text-2xl mb-2">{{ ds.name }}</div>
           <el-collapse class="border-slate-400">
             <el-collapse-item title="详细信息" name="1">
-              <div class="mt-1 mb-3 text-base/loose lg:text-lg/loose break-all">{{ ds.desc }}</div>
+              <p class="text-xs text-slate-400">描述</p>
+              <div class="mt-1 mb-1 text-base lg:text-lg break-all">{{ ds.desc }}</div>
               <p class="text-xs text-slate-400">创建人</p>
-              <div class="flex mt-2 bg-white border rounded-xl w-fit py-2 px-3 mb-3">
+              <div class="flex mt-2 bg-slate-800 border rounded-xl border-slate-500 w-fit py-2 px-3 mb-1">
                 <div class="flex items-center "><el-avatar :src="ds.createUserInfo.avatar" :size="40"></el-avatar></div>
                 <div class="flex-1 ml-2">
-                  <p class="text-base md:text-lg/tight">{{ ds.createUserInfo.nickname }}</p>
+                  <p class="text-base md:text-lg/tight text-slate-300">{{ ds.createUserInfo.nickname }}</p>
                   <p class="text-xs text-slate-400">用户名：{{ ds.createUserInfo.username }}</p>
                 </div>
               </div>
-              <div v-if="ds.createuser == user" class="mb-3">
+              <div v-if="ds.createuser == user" class="mb-2">
                 <el-button type="danger" plain @click="remove">删除讨论</el-button>
               </div>
               <p class="text-xs text-slate-400">创建时间</p>
-              <div class="text-base md:text-lg/tight">{{ ds.formatCreateTime }}</div>
+              <div class="text-sm md:text-base text-slate-300" >{{ ds.formatCreateTime }}</div>
             </el-collapse-item>
           </el-collapse>
 
@@ -38,31 +39,31 @@
             <div v-if="ds.discussion.length==0">
               <p class="text-center py-11">还没有讨论内容</p>
             </div>
-            <div class="row" v-else>
-              <div class="col-12 col-md-8">
-                <div class="border-b py-4 px-5 border-slate-700 flex hover:bg-slate-900 transition-all" v-for="item in ds.discussion">
-                  <div class="flex items-top pr-2"><el-avatar :src="item.createUserInfo.avatar" :size="40"></el-avatar></div>
-                  <div class="flex-1">
-                    <p class="text-base">
-                      {{ item.createUserInfo.nickname }}
-                      <span class="text-xs text-slate-400">{{ item.createUserInfo.username }}</span>
-                    </p>
-                    <!--  -->
-                    <p class="text-xs text-slate-400">发表时间：{{ item.formatCreateTime }}</p>
-                    <div class="mt-2">
-                      <div class="text-base md:text-lg/tight">{{ item.content }}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="row md:flex-row-reverse" v-else>
               <div class="col-12 col-md-4">
                 <div>
                   <h3 class="text-slate-300 my-3">AI智能总结</h3>
-                  <div class="mt-4 text-slate-300">
+                  <div class="mt-4 text-slate-400">
                     <div v-html="md.render(ai)"></div>
                   </div>
                 </div>
               </div>
+              <div class="col-12 col-md-8">
+                <div class="border-b py-2 px-0 border-slate-700 flex hover:bg-slate-900 transition-all" v-for="item in ds.discussion">
+                  <div class="flex items-top mr-2 size-5 shrink-0 md:size-8"><el-avatar :src="item.createUserInfo.avatar" class="h-full w-full"></el-avatar></div>
+                  <div class="flex-1">
+                    <p class="text-sm text-slate-200">
+                      {{ item.createUserInfo.nickname }}
+                      <span class="text-xs text-slate-400">{{ item.createUserInfo.username }}</span>
+                    </p>
+                    <p class="text-xs text-slate-400">发表时间：{{ item.formatCreateTime }}</p>
+                    <div class="mt-2">
+                      <div class="text-sm text-slate-300 md:text-base">{{ item.content }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
             </div>
           </div>
         </div>

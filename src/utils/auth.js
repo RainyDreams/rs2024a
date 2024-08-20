@@ -570,7 +570,7 @@ let Auth = {
   },
   db_init:async function db_init(){
     if (!this.db.version) {
-      this.db = new Dexie('lingben_chuangzhi');
+      this.db = new Dexie('lingben_zhixie');
       this.db.version(2).stores({
         user_profile_cache: 'id, avatar, username, nickname, expirationTime'
       });
@@ -589,7 +589,6 @@ let Auth = {
       }
     });
     const result = await this.db.user_profile_cache.where('id').equals(user.id).first();
-    
     if(result){
       return {
         ...user,
@@ -598,17 +597,27 @@ let Auth = {
     } else {
       return await this.mainTaskThread.add(async() => {
         const {content} = await this_.getUserInfo({uid:user.id})
-        await this_.db.user_profile_cache.update(content.id,{
-          id: content.id,
-          avatar: content.avatar,
-          username: content.username,
-          nickname: content.nickname,
-          expirationTime:Date.now() + 60*60*1000
-        })
-        return {
-          ...user,
-          ...content
+        // debugger;
+        try{
+          await this_.db.user_profile_cache.add({
+            id: content.id,
+            avatar: content.avatar,
+            username: content.username,
+            nickname: content.nickname,
+            expirationTime:Date.now() + 60*60*1000
+          })
+          return {
+            ...user,
+            ...content
+          }
+        }catch(e){
+          const result = await this.db.user_profile_cache.where('id').equals(user.id).first();
+          return {
+            ...user,
+            ...result
+          }
         }
+        
       })
      
     }

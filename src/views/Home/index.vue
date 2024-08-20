@@ -10,7 +10,7 @@
         </div>
         <div class="col-12 col-md-6">
           <!-- <div class="flex items-center justify-center h-full">预留视频区</div> -->
-          <iframe style="height:100%;width:100%;min-height:350px;" src="https://player.bilibili.com/player.html?bvid=BV1b1pQeCEcm&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>
+          <iframe style="height:100%;width:100%;min-height:350px;" src="https://player.bilibili.com/player.html?bvid=BV1b1pQeCEcm&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
         </div>
       </div>
     </div>

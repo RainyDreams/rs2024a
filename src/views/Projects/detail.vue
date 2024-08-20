@@ -19,8 +19,9 @@
                   <div class="text-sm text-slate-600 mt-1">{{ item.desc }}</div>
                 </div>
                 <div class="text-xs text-slate-600 px-1 py-1 text-right shrink-0">
-                  <div class="mt-2">
-                    <el-avatar :size="20" v-for="(e) in item.persons" :src="e.avatar"></el-avatar>
+                  <div class="mt-2 flex flex-wrap max-w-10 sm:max-w-16 md:max-w-20">
+                    <el-avatar class="shrink-0 mr-1 mb-1" :size="20" v-for="(e) in item.persons.slice(0,6)" :src="e.avatar"></el-avatar>
+                    <span v-if="item.persons.length>6">...</span>
                   </div>
                 </div>
               </router-link>

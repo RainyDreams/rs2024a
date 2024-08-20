@@ -131,32 +131,8 @@ onMounted(async ()=>{
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
-router.afterEach(async (to, from) => {
-  const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
-  rightList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1);
-  if(item){
-    activeName.value = item.name;
-    if(window.innerWidth <= 992){
-      tabbarList.value = [];
-      setTimeout(()=>{
-        tabbarList.value = item.tabs;
-      },1)
-    } else {
-      tabbarList.value = item.tabs;
-    }
-  } else {
-    activeName.value = '';
-  }
-  TabBarHide.value = false;
-  SideBarHide.value = false;
-  if(to.meta.hide){
-    to.meta.hide.find(e=>{
-      if(e=='tabbar') TabBarHide.value = true;
-      else if (e=='sidebar') SideBarHide.value = true;
-    })
-  }
-  
-  // Auth.mainTaskThread.add(async ()=>{
+
+const update = () => {
   (Auth.getBasicInfo({router,route,task:async function(re){
     basicInfo.value = re;
     emitter.emit('basicInfo',re)
@@ -199,6 +175,36 @@ router.afterEach(async (to, from) => {
       })
     })
   }}));
+}
+
+setInterval(update, 100000);
+
+router.afterEach(async (to, from) => {
+  const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
+  rightList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1);
+  if(item){
+    activeName.value = item.name;
+    if(window.innerWidth <= 992){
+      tabbarList.value = [];
+      setTimeout(()=>{
+        tabbarList.value = item.tabs;
+      },1)
+    } else {
+      tabbarList.value = item.tabs;
+    }
+  } else {
+    activeName.value = '';
+  }
+  TabBarHide.value = false;
+  SideBarHide.value = false;
+  if(to.meta.hide){
+    to.meta.hide.find(e=>{
+      if(e=='tabbar') TabBarHide.value = true;
+      else if (e=='sidebar') SideBarHide.value = true;
+    })
+  }
+  update()
+  // Auth.mainTaskThread.add(async ()=>{
   // })
 });
 function M(str){
