@@ -2,7 +2,7 @@
   <div class="commonPage">
     <div class="panel">
       <h1 class="text-2xl mb-2 font-semibold">更新日志</h1>
-      <p class="text-lg mb-4">我们已将代码开源在GitHub，如果你也想参与其中，请提交<a target="_blank" href="https://github.com/RainyDreams/rs2024a/pulls">Pull Request</a></p>
+      <!-- <p class="text-lg mb-4">我们已将代码开源在GitHub，如果你也想参与其中，请提交<a target="_blank" href="https://github.com/RainyDreams/rs2024a/pulls">Pull Request</a></p> -->
       <el-skeleton :rows="5" animated v-show="loading"></el-skeleton>
       <div class="list" v-show="!loading">
         <div class="shadow-slate-50 cursor-pointer border-t border-l border-r last:border-b bg-white transition-all py-2 px-3 md:py-4 md:px-5" 
@@ -14,7 +14,7 @@
           <p class="mb-3 text-slate-500">
             <a :href="item.user_url" target="_blank"><el-avatar class="align-middle" :src="item.avatar" :size="18"/><span class="ml-1">{{ item.user }}</span></a>
           </p>
-          <p><el-button @click="to(item.url)">前往GitHub查看</el-button></p>
+          <!-- <p><el-button @click="to(item.url)">前往GitHub查看</el-button></p> -->
         </div>
       </div>
       <el-pagination style="margin-top: 18px;" v-model:current-page="now"
@@ -43,9 +43,9 @@ onMounted(async ()=>{
   });
   loading.value=false;
 })
-function to(url){
-  window.open(url)
-}
+// function to(url){
+//   window.open(url)
+// }
 async function changePage(page){
   loading.value=true;
   let res = (await Auth.getUpdateList({page}));
