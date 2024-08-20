@@ -25,7 +25,7 @@
         </el-form-item>
         <div id="turnstile-box"></div>
         <div class="text-slate-400 text-xs/tight mt-2">登录即代表同意<a target="_blank" href="https://www.chiziingiin.top/license/auth">《零本智协统一身份验证用户协议》</a></div>
-        <div class="text-slate-400 text-xs/tight mt-2">没有账号？前往<router-link to="/reg">用户登录平台</router-link></div>
+        <div class="text-slate-400 text-xs/tight mt-2">没有账号？前往<router-link to="/reg">用户注册平台</router-link></div>
         <el-form-item style="margin-top: 16px;">
           <el-button :loading="formloading" type="primary" style="width: 100%;" plain @click="submitForm(ruleFormRef)">
             登录
