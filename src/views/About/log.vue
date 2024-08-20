@@ -10,11 +10,18 @@
           :tabindex="i"
           >
           <p class="opacity-80 text-xs md:text-sm">{{item.formatDate}}</p>
-          <p class="whitespace-pre-line text-sm/tight md:text-base/relaxed">{{ item.message }}</p>
-          <p class="mb-3 text-slate-500">
+          <p v-show="!item.show_full_message" class="text-sm/tight md:text-base/relaxed">{{ item.short_message }}</p>
+          <p v-show="item.show_full_message" class="whitespace-pre-line text-sm/tight md:text-base/relaxed">{{ item.message }}</p>
+          <p class="my-2"><el-button @click="item.show_full_message=!item.show_full_message" link type="primary">
+            {{item.show_full_message?'收起':'展开'}}
+            <!-- <template> -->
+              <up v-show="item.show_full_message" theme="outline" size="16" fill="currentColor" strokeLinejoin="bevel"/>
+              <down v-show="!item.show_full_message"theme="outline" size="16" fill="currentColor" strokeLinejoin="bevel"/>
+            <!-- </template> -->
+          </el-button></p>
+          <p class="mt-1 text-slate-500">
             <a :href="item.user_url" target="_blank"><el-avatar class="align-middle" :src="item.avatar" :size="18"/><span class="ml-1">{{ item.user }}</span></a>
           </p>
-          <!-- <p><el-button @click="to(item.url)">前往GitHub查看</el-button></p> -->
         </div>
       </div>
       <el-pagination style="margin-top: 18px;" v-model:current-page="now"
@@ -29,6 +36,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { ElPagination,ElSkeleton,ElAvatar,ElButton } from 'element-plus';
+import { Down,Up } from '@icon-park/vue-next';
 import Auth from '../../utils/auth';
 import dayjs from 'dayjs';
 const list = ref()
@@ -39,12 +47,10 @@ onMounted(async ()=>{
   let res = (await Auth.getUpdateList({page:1}))
   total.value = res.content.total;
   list.value = res.content.list.map(e=>{
-    return {...e,formatDate:dayjs(e.date).format('YYYY年MM月DD日 HH:mm:ss')}
+    return {...e,formatDate:dayjs(e.date).format('YYYY年MM月DD日 HH:mm:ss'),show_full_message:false}
   });
   loading.value=false;
 })
-// function to(url){
-//   window.open(url)
 // }
 async function changePage(page){
   loading.value=true;
