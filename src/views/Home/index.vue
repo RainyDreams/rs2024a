@@ -9,8 +9,8 @@
           <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">依托尖端的 AI 技术驱动力量，构建全面创新的市场项目解决方案体系，致力于让<span class="primary-text">「零成本构建创新高效应用程序」</span>成为现实。</h5>
         </div>
         <div class="col-12 col-md-6">
-          <div class="flex items-center justify-center h-full">预留视频区</div>
-          <!-- <iframe style="height:100%;width:100%;min-height:350px;" src="https://player.bilibili.com/player.html?bvid=BV1wf421z74D&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe> -->
+          <!-- <div class="flex items-center justify-center h-full">预留视频区</div> -->
+          <iframe style="height:100%;width:100%;min-height:350px;" src="https://player.bilibili.com/player.html?bvid=BV1b1pQeCEcm&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>
         </div>
       </div>
     </div>
@@ -18,7 +18,7 @@
       <div class="row">
         <div class="col-12">
           <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">我们完成从零到壹的突破</h2>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">原创了以AI驱动项目流程的解决方案</p>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">以AI驱动项目流程的解决方案</p>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">项目发展至今仍<span class="primary-text">零支出</span></p>
         </div>
       </div>
@@ -46,7 +46,7 @@
                   <span class="primary-text">高速</span>
                   <span class="group-hover:text-blue-950 transition-all">响应</span>
                 </h3>
-                <p class="text-base mt-3">我们不断地优化我们服务器代码和前端架构，这使得我们软件的平均响应速度&lt;1s</p>
+                <p class="text-base mt-3">我们不断地优化我们服务器代码和前端架构，这使得我们软件的平均响应速度&lt;2s</p>
               </div>
             </div>
             <div class="col-12 col-md-4">
@@ -55,7 +55,7 @@
                   <span class="group-hover:text-blue-950 transition-all">界面</span>
                   <span class="primary-text">美观</span>
                 </h3>
-                <p class="text-base mt-3">我们采用无服务器的Workers Javascript代码运行，响应快速</p>
+                <p class="text-base mt-3">从主题色选择，到每一个交互步骤，我们都用心雕琢</p>
               </div>
             </div>
           </div>
@@ -66,8 +66,8 @@
       <div class="row">
         <div class="col-12">
           <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">我们拥有软件完全著作权</h2>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">在开发过程中，我们的核心代码没有借助任何第三方库，完全由我们原创开发</p>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">为了提升开发效率，少部分与功能无关的代码使用了业界常用的第三方库</p>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">在开发过程中，我们的Workers代码没有借助任何第三方库，完全由我们原创开发</p>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">为了提升开发效率，前端部分使用了业界常用的第三方库</p>
         </div>
       </div>
     </div>
