@@ -135,7 +135,7 @@
         <a href="https://www.chiziingiin.top/license/private" class="mx-2">隐私条款</a>
         <a href="https://www.chiziingiin.top/project/RS2024/explain" class="mx-2">名词介绍</a>
       </p>
-      <p class="text-center px-2 text-sm">Copyright © 2024 Chiziingiin All rights reserved.</p>
+      <p class="text-center px-2 text-sm">Copyright © 2024 赤峰二中2023级12班研究性学习零本智协项目组 All rights reserved.</p>
     </div>
   </div>
 </template>

@@ -50,6 +50,9 @@
               <el-form-item label="密码" prop="password">
                 <el-input v-model="form.password" type="password" placeholder="请设置一个较强的密码"/>
               </el-form-item>
+              <el-form-item label="密码" prop="password2">
+                <el-input v-model="form.password2" type="password" placeholder="再次输入密码"/>
+              </el-form-item>
               <el-form-item label="备注（非必填）" prop="note">
                 <el-input v-model="form.note" placeholder="可以填写您注册此项目账户的目的，您是哪位老师/学生，方便我们识别" autofocus />
               </el-form-item>
@@ -81,7 +84,8 @@ const router = useRouter()
 const form = reactive({
   username: '',
   nickname: '',
-  password: ''
+  password: '',
+  password2: ''
 });
 const options = [
   { value: 'teacher', label: '赤峰二中教师' },
@@ -126,6 +130,16 @@ const rules = reactive({
   password: [
     { type: 'string', pattern: /^(?![A-Za-z]+$)(?![A-Z\d]+$)(?![A-Z\W]+$)(?![a-z\d]+$)(?![a-z\W]+$)(?![\d\W]+$)\S{8,20}$/, message: '密码必须严格包含大小写字母、数字、特殊字符至少3个组合，且长度在 8 到 20 个字符', trigger: 'blur' },
     { required: true, message: '请输入密码', trigger: 'blur' },
+  ],
+  password2: [
+    { required: true, message: '请再次输入密码', trigger: 'blur' },
+    { validator: (rule, value, callback) => {
+      if (value !== form.password) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    }, trigger: 'blur' }
   ]
 })
 

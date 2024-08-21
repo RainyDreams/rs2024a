@@ -65,6 +65,9 @@ const rules = reactive({
     { required: true, message: '请输入密码', trigger: 'blur' },
   ]
 });
+if(Cookies.get('czigauth') == 'AlreadyAuthenticated'){
+  router.push('/login-already')
+}
 const submitForm = (formEl) => {
   if (!formEl) return;
   formloading.value = true;

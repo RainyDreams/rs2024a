@@ -12,7 +12,13 @@
             </div>
             <div class="flex justify-center flex-col ">
               <div class="text-xl font-semibold truncate">{{ profile.nickname }}</div>
-              <div class="break-all">{{ profile.sign || '暂无签名' }}</div>
+              <el-tooltip
+                effect="dark"
+                content="正在建设中..."
+                placement="bottom"
+              >
+                <div class="break-all">{{ profile.sign || '暂无签名' }}</div>
+              </el-tooltip>
             </div>
           </div>
           <el-button style="width: 100%;" @click="logout" class="mt-4" round size="large">退出登录</el-button>
