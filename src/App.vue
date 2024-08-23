@@ -98,13 +98,14 @@ console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已�
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
 import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRoute,useRouter } from 'vue-router'
-import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji, Log } from '@icon-park/vue-next';
+import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji, Log, CooperativeHandshake } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
-import { ElConfigProvider,ElAvatar,ElProgress,ElBadge } from 'element-plus'
+import { ElConfigProvider,ElAvatar,ElProgress,ElBadge, ElMessage, ElMessageBox } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Auth from './utils/auth';
 import { emitter } from './utils/emitter';
 import NProgress from 'nprogress';
+import Cookies from 'js-cookie';
 import 'nprogress/nprogress.css';
 const router = useRouter();
 const route = useRoute();
@@ -139,19 +140,46 @@ const update = () => {
     // emitter.emit('basicInfo',re)
     const ps = new Promise((resolve,reject)=>{
       if ('Notification' in window) {
-        if (Notification.permission === 'granted') {
-          resolve()
-        } else if (Notification.permission!== 'denied') {
+        if (Cookies.get('permission') == 'accept' || Notification.permission === 'granted'){
+          resolve();
+        } else if(!Cookies.get('permission')){
+          ElMessageBox.alert('我们申请向您发送通知的权限', '授予权限', {
+            confirmButtonText: '同意',
+            showCancelButton: true,
+            cancelButtonText: '拒绝',
+            showClose: false,
+            callback: action => {
+              if(action=='confirm'){
+                Notification.requestPermission().then(permission => {
+                  if (permission === 'granted') {
+                    resolve();
+                    Auth.acceptPermission()
+                  } else {
+                    Auth.rejectPermission()
+                    reject()
+                  }
+                });
+              } else{
+                Auth.rejectPermission()
+                reject()
+              }
+            }
+          })
+        } else if (Notification.permission === 'default') {
           Notification.requestPermission().then(permission => {
             if (permission === 'granted') {
-              resolve()
+              resolve();
+              Auth.acceptPermission()
             } else {
+              Auth.rejectPermission()
               reject()
             }
           });
         } else {
           reject()
         }
+      } else {
+        reject()
       }
     })
     ps.then(()=>{
@@ -173,6 +201,10 @@ const update = () => {
           decode.push(e.id)
           localStorage.setItem('notificationList',JSON.stringify(decode))
         } 
+      })
+    }).catch(()=>{
+      re.NotificationList.forEach(e=>{
+        ElMessage.info('收到一条消息')
       })
     })
   }}));

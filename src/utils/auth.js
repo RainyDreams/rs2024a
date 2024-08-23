@@ -96,6 +96,16 @@ class Scheduler {
   }
 }
 let Auth = {
+  acceptPermission:()=>{
+    window.clarity("set", 'permission', 'accept');
+    window.clarity('event', 'permission_accept')
+    Cookies.set('permission',true,{expires:7})
+  },
+  rejectPermission:()=>{
+    window.clarity("set", 'permission', 'reject');
+    window.clarity('event', 'permission_reject')
+    Cookies.set('permission',false,{expires:7})
+  },
   mainTaskThread: new Scheduler(5),
   router: null,
   route: null,
