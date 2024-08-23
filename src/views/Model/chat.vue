@@ -76,7 +76,10 @@ import { onActivated, onMounted, ref,reactive } from "vue"
 import Auth from "../../utils/auth";
 import { throttle } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton } from "element-plus"; 
+import { useRoute, useRouter } from 'vue-router';
 const md = new markdownIt()
+const route = useRoute()
+const router = useRouter()
 const chatList = ref([]);
 const input = ref("");
 const askRef = ref();
@@ -87,12 +90,12 @@ const now = ref(0)
 const fingerprint = ref("")
 const welcome = ref('')
 const welcome_loading = ref(true)
+const sessionID = ref()
 const onFocus = () => {
   throttledScrollToBottom();
 }
 const onChange = () => {
   now.value = input.value.length
-  // input.value = askRef.value.value
 }
 const handleEnter = async (event) => {
   if (event.shiftKey) {
@@ -122,21 +125,28 @@ const send = async (param)=>{
     role: "assistant",
     content: ""
   })
+  const targetValue = input.value
   input.value = '';
   loading.value = true;
   askRef.value.focus();
   placeholder.value = "正在回复中...";
+  fingerprint.value = await Auth.getUserFingerprint();
+  window.clarity("identify", fingerprint.value, null, "TEST-AI", null)
   setTimeout(()=>{
     throttledScrollToBottom();
   },100)
   onChange();
   const index = chatList.value.length - 1;
-  fingerprint.value = await Auth.getUserFingerprint();
-  window.clarity("identify", fingerprint.value, null, "TEST-AI", null)
-  await Auth.chatWithAI(chatList.value,{
-    fingerprint:fingerprint.value,
+  await Auth.chatWithAI({
+    sessionID:sessionID.value,
+    content:targetValue,
+    vf:fingerprint.value,
     onclose:(source) => {
       loading.value = false;
+      Auth.setAIChatResponse({
+        sessionID:sessionID.value,
+        content:chatList.value[index].content
+      })
       throttledScrollToBottom()
       placeholder.value = "还有什么想聊的";
       askRef.value.focus()
@@ -150,14 +160,21 @@ const send = async (param)=>{
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
 const throttledScrollToBottom = throttle(scrollToBottom, 800); // 调整 300 为所需的毫秒数
 onActivated(async ()=>{
-  // loading.value = false;
-  onChange()
-  await Auth.init()
-  welcome.value = (await Auth.getAIWelcome()).content
-  welcome_loading.value = false;
-  loading.value = false;
-  askRef.value.focus()
-
-  // console.log(Fingerprint)
+  let id = route.params.id
+  if(!id || id=='new'){
+    const {content} = await Auth.getAISessionID()
+    router.push('/model/chat/'+content)
+    id = content
+  }
+  // } else {
+    sessionID.value = id
+    onChange()
+    await Auth.init()
+    welcome.value = (await Auth.getAIWelcome()).content;
+    chatList.value = (await Auth.getAIChatList({sessionID:id})).content;
+    welcome_loading.value = false;
+    loading.value = false;
+    askRef.value.focus()
+  // }
 })
 </script>

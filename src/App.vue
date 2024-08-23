@@ -370,12 +370,12 @@ const configList = [
     name:'Model',
     title:'零本AI',
     icon:'SmartOptimization',
-    to:"/model/chat",
+    to:"/model/chat/new",
     tabs:[
       {
         title:'聊天',
         icon:'MessageEmoji',
-        to:'/model/chat'
+        to:'/model/chat/new'
       },
       {
         title:'分析',

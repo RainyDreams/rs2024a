@@ -486,6 +486,29 @@ let Auth = {
     window.clarity("event", 'getAIAnlysisWelcome')
     return this.basicAuth('/api/ai/anlysisWelcome', '', );
   },
+  getAISessionID: async function getAISessionID(){
+    window.clarity("event", 'ApplyForAISessionID')
+    await this.getPrtoken();
+    let _this = this;
+    return this.basicAuth('/api/ai/apply_for_sessionID', JSON.stringify({
+      vf: await _this.getUserFingerprint()
+    }));
+  },
+  getAIChatList: async function getAIChatList(param){
+    window.clarity("event", 'getAIChatList')
+    await this.getPrtoken();
+    return this.basicAuth('/api/ai/get_chat_history', JSON.stringify({
+      sessionID: param.sessionID
+    }));
+  },
+  setAIChatResponse: async function setAIChatResponse(param){
+    window.clarity("event", 'setAIChatResponse')
+    await this.getPrtoken();
+    return this.basicAuth('/api/ai/set_chat_response', JSON.stringify({
+      sessionID: param.sessionID,
+      content: param.content
+    }));
+  },
   AI_createWorkflow:async function AI_createWorkflow(param){
     window.clarity("event", 'AI_createWorkflow')
     await this.getPrtoken();
@@ -505,45 +528,44 @@ let Auth = {
       });
     }
   },
-  chatWithAI:async function chatWithAI(list, param) {
+  chatWithAI:async function chatWithAI(param) {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
-    const res = await this.basicAuth(
-      "/api/ai/send",
-      JSON.stringify({ content: JSON.stringify(list), vf: param.fingerprint })
-    );
-    if (res.status === "sus") {
-      await this.getStreamText('/api/ai/stream', { content: JSON.stringify(list),}, {
-        onmessage:param.onmessage,
-        onclose:param.onclose
-      });
-    }
+    let _this = this;
+    await this.getStreamText('/api/ai/stream', { sessionID: param.sessionID, content: param.content,vf:param.vf}, {
+      onmessage:param.onmessage,
+      onclose:param.onclose
+    });
   },
   getStreamText:async function getStreamText(url,postData,param) {
     window.clarity("event", 'getStreamText')
-    await this.getPrtoken();
-    const postOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-      credentials: "include",
-    };
-    const response = await fetch(url, postOptions);
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const reader = response.body.getReader();
-    let decoder = new TextDecoder();
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) { param.onclose(); break; }
-      const textArray = (decoder.decode(value, { stream: true }).replace(/\n/g,"").trim().replace('data: ','')).split('data: ');
-      for (const text of textArray) {
-        if(text == '[DONE]') continue;
-        param.onmessage(text);
+    try{
+      await this.getPrtoken();
+      const postOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+        credentials: "include",
+      };
+      const response = await fetch(url, postOptions);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
+      const reader = response.body.getReader();
+      let decoder = new TextDecoder();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) { param.onclose(); break; }
+        const textArray = (decoder.decode(value, { stream: true }).replace(/\n/g,"").trim().replace('data: ','')).split('data: ');
+        for (const text of textArray) {
+          if(text == '[DONE]') continue;
+          param.onmessage(text);
+        }
+      }
+    } catch (error) {
+      defaultFailed(error,2)
     }
   },
   getAIGuestList:async function getAIGuestList() {
