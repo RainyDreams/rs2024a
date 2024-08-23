@@ -202,15 +202,20 @@ const update = () => {
           localStorage.setItem('notificationList',JSON.stringify(decode))
         } 
       })
+      setTimeout(()=>{
+        update()
+      },100000)
     }).catch(()=>{
       re.NotificationList.forEach(e=>{
         ElMessage.info('收到一条消息')
       })
+      setTimeout(()=>{
+        update()
+      },100000)
     })
   }}));
 }
 emitter.on('updateBasicAuth',update)
-setInterval(update, 100000);
 NProgress.configure({
   showSpinner: false,
   trickleSpeed: 200, 
