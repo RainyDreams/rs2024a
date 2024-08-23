@@ -17,13 +17,19 @@
           <p class="text-xs mb-1 text-slate-400">我的身份</p>
           <div class="teamidentity">
             <div class="useravatar">
-              <el-avatar alt="头像" :src="teamDetail.myProfile.avatar" :size="38" />
+              <el-avatar alt="头像" :src="teamDetail.myProfile?.avatar" :size="38" />
             </div>
             <div class="userinfo">
-              <div class="username">{{ teamDetail.myProfile.nickname }}</div>
-              <div class="userrole">{{ getRole(teamDetail.myProfile.role) }}</div>
+              <div class="username">{{ teamDetail.myProfile?.nickname }}</div>
+              <div class="userrole">{{ getRole(teamDetail.myProfile?.role) }}</div>
             </div>
           </div>
+          <p class="text-xs mb-3 text-slate-400">
+            <el-button @click="removeuser(teamDetail.myProfile?.id,teamDetail.persons.findIndex(e=>e.id==teamDetail.myProfile?.id))" type="danger" class="" plain>
+              <Logout class="mr-1" theme="outline" size="16" fill="currentColor" strokeLinejoin="bevel"/>
+              退出团队
+            </el-button>
+          </p>
           <div class="text-xs mb-2 text-slate-400">团队人员</div>
           <div class="row">
             <div class="col-12 " v-for="(item,index) in teamDetail.persons">
@@ -110,6 +116,9 @@ const removeuser = async (id,index)=>{
   teamDetail.value.persons[index].loading = false
   if(r.status == 'sus')
     ElMessage.success('操作成功')
+  if(id == teamDetail.value.myProfile.id){
+    router.push('/team/list')
+  }
   loading.value = true;
   await update()
   loading.value = false;

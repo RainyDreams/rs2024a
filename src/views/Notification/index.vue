@@ -64,6 +64,15 @@ async function renderMessage (message){
           }
         })
       }
+    } else if(content.functionID == 'remove_team_member'){
+      const targetUser = (await Auth.getUserInfo({uid:content.data.userid})).content;
+      const adminUser = (await Auth.getUserInfo({uid:content.data.admin_userid})).content;
+      return {
+        time:dayjs(time).format('YYYY年M月DD日 HH:mm:ss'),
+        title:content.title,
+        content:`<div><img src="${targetUser.avatar}" class="rounded-full size-8 inline-block mr-2"/>${targetUser.nickname}已被移出团队</div>
+        <p>操作人：<img src="${adminUser.avatar}" class="rounded-full size-8 inline-block mr-2"/>${adminUser.nickname}</p>`,
+      }
     }
   } else if (content.type == 'text') {
     return {
@@ -104,17 +113,13 @@ onActivated(async ()=>{
       messageList.value[i].FormatFromUser= await Auth.getUserInfoByID({id:e.from_user})
     })
   })
-  
-  // await Promise.all(content.map(async (e)=>{
-  //   const res = await Auth.readNotification({
-  //     list:e.map(e=>e.id)
-  //   })
-  //   if(res.status == 'sus'){
+  const res = await Auth.readNotification({
+    list:content.map(e=>e.id)
+  })
+  if(res.status == 'sus'){
 
-  //   } else {
-  //     ElMessage.error('网络错误')
-  //   }
-  // }))
-  
+  } else {
+    ElMessage.error('网络错误')
+  }
 })
 </script>
