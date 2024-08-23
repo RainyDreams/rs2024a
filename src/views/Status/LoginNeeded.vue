@@ -2,7 +2,7 @@
   <el-result
     icon="warning"
     title="当前操作需要登录才能进行"
-    subTitle="可能您的登录已经过期或无效"
+    subTitle="可能你的登录已经过期或无效"
   >
     <template #extra>
       <a @click="open()">

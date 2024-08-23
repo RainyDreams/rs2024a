@@ -60,7 +60,7 @@
         <el-config-provider :locale="zhCn">
           <router-view v-slot="{ Component }">
             <!-- <transition :duration="{ enter: 400000, leave:0 }" enter-active-class="animate__animated animate__fadeInRight"> -->
-              <keep-alive :exclude="[/reg/,]" :max="1">
+              <keep-alive :max="1">
                 <component :is="Component" />
               </keep-alive>
             <!-- </transition> -->
@@ -98,12 +98,14 @@ console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已�
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
 import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRoute,useRouter } from 'vue-router'
-import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji } from '@icon-park/vue-next';
+import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji, Log } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
 import { ElConfigProvider,ElAvatar,ElProgress,ElBadge } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Auth from './utils/auth';
 import { emitter } from './utils/emitter';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 const router = useRouter();
 const route = useRoute();
 const TabBarHide = ref(false);
@@ -131,11 +133,10 @@ onMounted(async ()=>{
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
-
 const update = () => {
   (Auth.getBasicInfo({router,route,task:async function(re){
     basicInfo.value = re;
-    emitter.emit('basicInfo',re)
+    // emitter.emit('basicInfo',re)
     const ps = new Promise((resolve,reject)=>{
       if ('Notification' in window) {
         if (Notification.permission === 'granted') {
@@ -176,9 +177,21 @@ const update = () => {
     })
   }}));
 }
-
+emitter.on('updateBasicAuth',update)
 setInterval(update, 100000);
-
+NProgress.configure({
+  showSpinner: false,
+  trickleSpeed: 200, 
+  parent: 'html',
+});
+router.beforeEach((to, from, next) => {
+  NProgress.start();
+  if(to.meta.title){
+    document.title = to.meta.title + ' - 零本智协';
+  }
+  update()
+  next();
+});
 router.afterEach(async (to, from) => {
   const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
   rightList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1);
@@ -203,7 +216,7 @@ router.afterEach(async (to, from) => {
       else if (e=='sidebar') SideBarHide.value = true;
     })
   }
-  update()
+  NProgress.done();
   // Auth.mainTaskThread.add(async ()=>{
   // })
 });
@@ -255,7 +268,8 @@ const iconList = {
   Tool,
   SmartOptimization,
   ApplicationOne,
-  MessageEmoji
+  MessageEmoji,
+  Log
 }
 function getIcon(name){
   return iconList[name];

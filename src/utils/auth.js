@@ -43,7 +43,7 @@ const defaultFailed = async function (response,code) {
       if(code==0){
         throw {
           status: 0b00000011,
-          message: '这块可能是编写程序疏漏引发的错误，请点击报告错误，并把识别码发给我。感谢您的支持',
+          message: '这块可能是编写程序疏漏引发的错误，请点击报告错误，并把识别码发给我。感谢你的支持',
         };
       }
       let text = (await response.text());
@@ -72,7 +72,7 @@ const defaultFailed = async function (response,code) {
               time:new Date().getTime()
             }))
             console.info('[errId]',r)
-            copyText(`${r.content.id}`)
+            Auth.copyText(`${r.content.id}`)
             window.clarity("set", 'reportID', r.content.id);
             ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}\n可以将以上信息提供给我，便于分析处理错误`,'提示',{})
           }
@@ -83,19 +83,6 @@ const defaultFailed = async function (response,code) {
     }
   }
   return { status: 'error', content: response };
-}
-function copyText(text) {
-  const textarea = document.createElement('textarea');
-  textarea.value = text;
-  document.body.appendChild(textarea);
-  textarea.select();
-  try {
-    document.execCommand('copy');
-  } catch (err) {
-    console.error('复制操作失败', err);
-  }
-  window.clarity("event",'copy')
-  document.body.removeChild(textarea);
 }
 class Scheduler {
   constructor(max){
@@ -221,22 +208,19 @@ let Auth = {
     window.clarity("event", 'userLogin')
     return this.basicAuth("/api/login", JSON.stringify(param))
   },
-  // __getBasicInfo: ,
-  getBasicInfo:asyncThrottle(async function getBasicInfo({router,route,task}){
+  getBasicInfo:asyncThrottle(async function getBasicInfo({router=Auth.router,route=Auth.route,task}){
     Auth.router = router;
     Auth.route = route;
     window.clarity("event", 'getBasicInfo')
     const getPr = await Auth.getPrtoken();
-    // if(getPr.status=='sus' || getPr.status=='exist'){
-      const res = (await Auth.basicAuth("/api/getBasicInfo")).content;
-      sessionStorage.setItem('userInfo',JSON.stringify(res))
-      window.clarity("set", 'userTag', res.identityType || 'normal');
-      return task(res);
-    // } else {
-    //   const res = (await Auth.basicAuth("/api/getBasicInfo")).content;
-    //   return task(res)
-    // }
-  },5000),
+    const res = (await Auth.basicAuth("/api/getBasicInfo")).content;
+    sessionStorage.setItem('userInfo',JSON.stringify(res))
+    window.clarity("set", 'userTag', res.identityType || 'normal');
+    return task(res);
+  },5000,({task})=>{
+    const info = JSON.parse(sessionStorage.getItem('userInfo') || '{}')
+    return task(info)
+  }),
   getUser:async function getUser(){
     window.clarity("event", 'getUser')
     const stmtGet = sessionStorage.getItem('userInfo')
@@ -622,6 +606,25 @@ let Auth = {
      
     }
   }
+}
+Auth.copyText = navigator.clipboard?(text) => {
+  window.clarity("event",'copy')
+  navigator.clipboard.writeText(text).then(() => {
+  }).catch((error) => {
+    console.error('Error copying text to clipboard:', error);
+  });
+}:(text)=>{
+  window.clarity("event",'copy')
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.error('复制操作失败', err);
+  }
+  document.body.removeChild(textarea);
 }
 
 export default Auth;

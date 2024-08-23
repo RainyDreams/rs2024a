@@ -48,7 +48,12 @@
 <script setup>
 import {ElResult} from 'element-plus'
 import { RouterLink, useRoute } from 'vue-router';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 const route = useRoute()
 const code = ref(route.query.code)
+onMounted(()=>{
+  setTimeout(()=>{
+    window.close()
+  },5000)
+})
 </script>

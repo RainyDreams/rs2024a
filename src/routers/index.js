@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { emitter } from '../utils/emitter';
 import HomeIndex from '../views/Home/index.vue';
+import HomeBlock from '../views/Home/block.vue';
 import SettingsIndex from '../views/Settings/index.vue';
 import ProjectsCreate from '../views/Projects/create.vue';
 import ProjectsDashboard from '../views/Projects/dashboard.vue';
@@ -33,66 +34,58 @@ import JoinTeamApplication from '../views/Status/JoinTeamApplication.vue';
 import JoinProcess from '../views/Status/JoinProcess.vue';
 import Error404 from '../views/Errors/404.vue';
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: "/", name: "Home", component: HomeIndex, meta:{hide:['sidebar']} },
+    { path: "/", name: "Home", component: HomeIndex, meta:{title:'首页',hide:['sidebar']} },
+    { path: "/block", name: "Block", component: HomeBlock, meta:{title:'该请求被拦截',hide:['sidebar']} },
     { path: "/projects/", name: "Projects", children: [
-      { path: "create", name: "ProjectsCreate", component: ProjectsCreate },
-      { path: "dashboard", name: "ProjectsDashboard", component: ProjectsDashboard },
-      { path: "list", name: "ProjectsList", component: ProjectsList },
-      { path: "todo", name: "ProjectsTodo", component: ProjectsTodo },
-      { path: "detail-create/workflow/:projectId", name: "ProjectsItemCreate_wkfl", component: ProjectsItemCreate_workflow },
-      { path: "detail-create/issue/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate,meta:{type:'issue'} },
-      { path: "detail-create/task/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate,meta:{type:'task'}},
-      { path: "detail-create/discussion/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate,meta:{type:'discussion'} },
-      { path: "workflow/:id", name: "ProjectsWorkflow", component: Projects_Workflow,meta:{hide:['tabbar','sidebar']} },
-      { path: "discussion/:id", name: "ProjectsDiscussion", component: Projects_Discussion,meta:{hide:['tabbar','sidebar']} },
-      { path: "detail/:projectId", name: "ProjectsDetail", component: ProjectsDetail },
+      { path: "create", name: "ProjectsCreate", component: ProjectsCreate,meta:{title:'创建项目'} },
+      { path: "dashboard", name: "ProjectsDashboard", component: ProjectsDashboard,meta:{title:'仪表盘'} },
+      { path: "list", name: "ProjectsList", component: ProjectsList,meta:{title:'项目列表'} },
+      { path: "todo", name: "ProjectsTodo", component: ProjectsTodo,meta:{title:'待办列表'} },
+      { path: "detail-create/workflow/:projectId", name: "ProjectsItemCreate_wkfl", component: ProjectsItemCreate_workflow,meta:{title:'创建工作流'} },
+      { path: "detail-create/issue/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate,meta:{type:'issue',title:'创建问题'} },
+      { path: "detail-create/task/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate,meta:{type:'task',title:'创建任务'}},
+      { path: "detail-create/discussion/:projectId", name: "ProjectsItemCreate", component: ProjectsItemCreate,meta:{type:'discussion',title:'创建讨论'} },
+      { path: "workflow/:id", name: "ProjectsWorkflow", component: Projects_Workflow,meta:{hide:['tabbar','sidebar'],title:'工作流详情'} },
+      { path: "discussion/:id", name: "ProjectsDiscussion", component: Projects_Discussion,meta:{hide:['tabbar','sidebar'],title:'讨论详情'} },
+      { path: "detail/:projectId", name: "ProjectsDetail", component: ProjectsDetail,meta:{title:'项目详情'} },
     ]},
     { path: "/team/", name: "Team", children: [
-      { path: "create", name: "TeamCreate", component: TeamCreate },
-      { path: "list", name: "TeamList", component: TeamList },
-      { path: "settings", name: "TeamSettins", component: TeamSettings },
-      { path: "invite", name: "TeamInvite", component: TeamInvite,meta:{hide:['tabbar','sidebar']}},
-      { path: "detail/:teamId", name: "TeamDetail", component: TeamDetail },
+      { path: "create", name: "TeamCreate", component: TeamCreate,meta:{title:'创建团队'} },
+      { path: "list", name: "TeamList", component: TeamList,meta:{title:'团队列表'} },
+      { path: "settings", name: "TeamSettins", component: TeamSettings,meta:{title:'团队设置'} },
+      { path: "invite", name: "TeamInvite", component: TeamInvite,meta:{hide:['tabbar','sidebar'],title:'邀请成员'}},
+      { path: "detail/:teamId", name: "TeamDetail", component: TeamDetail,meta:{title:'团队详情'} },
     ]},
     { path: "/user/", name: "User", children:[
-      { path: "profile", name: "UserProfile", component: UserIndex},
-      { path: "settings", name: "UserSettings", component: UserSettings },
+      { path: "profile", name: "UserProfile", component: UserIndex,meta:{title:'用户详情'}},
+      { path: "settings", name: "UserSettings", component: UserSettings,meta:{title:'用户设置'} },
     ]},
     { path: "/model/", name: "Model", children:[
-      { path: "chat", name: "ModelChat", component: ModelChat},
-      { path: "anlysis", name: "ModelAnlysis", component: ModelAnlysis},
+      { path: "chat", name: "ModelChat", component: ModelChat,meta:{title:'零本AI 聊天'}},
+      { path: "anlysis", name: "ModelAnlysis", component: ModelAnlysis,meta:{title:'零本AI 分析'}},
     ]},
     { path: "/about/", name: "About", children: [
-      { path: "info", name: "AboutInfo", component: AboutInfo },
-      { path: "progress", name: "AboutProgress", component: AboutProgress },
-      { path: "log", name: "AboutLog", component: AboutLog }
+      { path: "info", name: "AboutInfo", component: AboutInfo,meta:{title:'软件信息'} },
+      { path: "progress", name: "AboutProgress", component: AboutProgress,meta:{title:'创作历程'} },
+      { path: "log", name: "AboutLog", component: AboutLog,meta:{title:'更新日志'} }
     ] },
     {path: "/status/", name:"Status", children:[
-      { path: "jta", name:"JoinTeamApplication", component:JoinTeamApplication,meta:{hide:['sidebar'] }},
-      { path: "joining", name:"JoinProcess", component:JoinProcess,meta:{hide:['sidebar'] }},
+      { path: "jta", name:"JoinTeamApplication", component:JoinTeamApplication,meta:{hide:['sidebar'],title:'加入团队申请'}},
+      { path: "joining", name:"JoinProcess", component:JoinProcess,meta:{hide:['sidebar'] ,title:'加入团队中'}},
     ]},
-    { path: "/notification", name: "Notification", component: Notification,meta:{hide:['sidebar']}},
-    { path: "/reg", name: "UserRegister", component: UserRegister,meta:{hide:['tabbar','sidebar']}},
-    { path: "/login", name: "UserLogin", component: UserLogin,meta:{hide:['tabbar','sidebar']}},
-    { path: "/login-success", name: "LoginSuccess", component: LoginSuccess,meta:{hide:['sidebar']}},
-    { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar']}},
-    { path: "/login-already", name: "LoginAlready", component: LoginAlready,meta:{hide:['sidebar']}},
-    { path: "/settings/", name: "Settings", component: SettingsIndex },
+    { path: "/notification", name: "Notification", component: Notification,meta:{hide:['sidebar'],title:'通知'}},
+    { path: "/reg", name: "UserRegister", component: UserRegister,meta:{hide:['tabbar','sidebar'],title:'注册'}},
+    { path: "/login", name: "UserLogin", component: UserLogin,meta:{hide:['tabbar','sidebar'],title:'登录'}},
+    { path: "/login-success", name: "LoginSuccess", component: LoginSuccess,meta:{hide:['sidebar'],'title':'登录成功'}},
+    { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar'],title:'登录已失效'}},
+    { path: "/login-already", name: "LoginAlready", component: LoginAlready,meta:{hide:['sidebar'],title:'已登录'}},
+    { path: "/settings/", name: "Settings", component: SettingsIndex,meta:{title:'创建项目'},title:'设置'},
     
-    { path: "/:catchAll(.*)", name: "NotFound", component: Error404 },
+    { path: "/:catchAll(.*)", name: "NotFound", component: Error404,meta:{title:'404 NOT FOUND',hide:['sidebar']} },
   ]
 });
-
-router.beforeEach(async (to, from, next) => {
-  next();
-});
-
-router.afterEach((to) => {
-  
-})
 
 export default router

@@ -7,6 +7,7 @@
       <el-button type="primary" @click="goBack()">返回上一页</el-button>
     </el-empty>
   </div>
+  <pre class="text-center w-full">((hi,)=>{let us = "go and realize our dream"})(/^_^/)</pre>
 </template>
 
 <script setup>

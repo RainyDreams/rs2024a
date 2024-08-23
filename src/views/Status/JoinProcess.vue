@@ -13,5 +13,13 @@
 
 <script setup>
 import {ElResult} from 'element-plus'
+import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
+import { emitter } from '../../utils/emitter';
+emitter.emit('updateBasicAuth')
+onMounted(()=>{
+  setTimeout(()=>{
+    window.close()
+  },5000)
+})
 </script>

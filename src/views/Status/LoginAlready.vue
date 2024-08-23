@@ -1,7 +1,7 @@
 <template>
   <el-result
     icon="info"
-    title="您已登录，无需重复登录"
+    title="你已登录，无需重复登录"
   >
     <template #extra>
       <router-link to="/user/profile">

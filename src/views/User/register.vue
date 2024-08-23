@@ -54,7 +54,7 @@
                 <el-input v-model="form.password2" type="password" placeholder="再次输入密码"/>
               </el-form-item>
               <el-form-item label="备注（非必填）" prop="note">
-                <el-input v-model="form.note" placeholder="可以填写您注册此项目账户的目的，您是哪位老师/学生，方便我们识别" autofocus />
+                <el-input v-model="form.note" placeholder="可以填写你注册此项目账户的目的，你是哪位老师/学生，方便我们识别" autofocus />
               </el-form-item>
               <div id="turnstile-box"></div>
               <el-form-item style="margin-top: 16px;">
