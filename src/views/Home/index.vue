@@ -118,7 +118,7 @@
         </router-link>
       </h5>
     </div>
-    <div class="panel bs-container flex items-center justify-center flex-col py-10" >
+    <div class="panel bs-container flex items-center justify-center flex-col py-10" v-show="count">
       <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">
         自2024年8月18日开始统计，已累计稳定提供服务
         <span class="primary-text">{{ count }}</span>
@@ -130,12 +130,14 @@
     </div>
     <div class="copyright py-5 px-2">
       <p class="text-center"><span class="">赤子英金</span> · <span class="primary-text">零本智协</span></p>
-      <p class="text-center text-sm mt-2 mb-2">
+      <p class="text-center text-xs md:text-sm">Copyright © 2024 赤峰二中2023级12班研究性学习零本智协项目组 All rights reserved.</p>
+      <p class="text-center text-sm mt-2">
+        <a title="本站支持IPv6访问" target='_blank'><img style='display:inline-block;vertical-align:middle' alt="本站支持IPv6访问" src="https://static.ipw.cn/icon/ipv6-certified-s4.svg"></a>
+        <a title="本站支持SSL安全访问" target='_blank'><img style='display:inline-block;vertical-align:middle' alt="本站支持SSL安全访问" src="https://static.ipw.cn/icon/ssl-s4.svg"></a>
         <a href="https://www.chiziingiin.top/license/user" class="mx-2">用户协议</a>
-        <a href="https://www.chiziingiin.top/license/private" class="mx-2">隐私条款</a>
+        <a href="https://www.chiziingiin.top/license/private" class="mx-2">隐私政策</a>
         <a href="https://www.chiziingiin.top/project/RS2024/explain" class="mx-2">名词介绍</a>
       </p>
-      <p class="text-center text-xs md:text-sm">Copyright © 2024 赤峰二中2023级12班研究性学习零本智协项目组 All rights reserved.</p>
     </div>
   </div>
 </template>
@@ -143,12 +145,19 @@
 <script setup>
 import { ElButton } from 'element-plus';
 import { emitter } from '../../utils/emitter';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Auth from '../../utils/auth';
 const count = ref('')
-Auth.getBasicInfo({task:async function(re){
-  count.value = re.visitInfo.count+'次';
-}})
+emitter.on('basicInfo',()=>{
+  Auth.getBasicInfo({task:async function(re){
+    return await new Promise((resolve,reject)=>{
+      setTimeout(()=>{
+        count.value = re.visitInfo.count+'次';
+        resolve()
+      },1000)
+    })
+  }})
+})
 </script>
 
 <style scoped >

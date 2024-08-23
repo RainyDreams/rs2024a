@@ -137,7 +137,7 @@ function bindShowMenu(){
 const update = () => {
   (Auth.getBasicInfo({router,route,task:async function(re){
     basicInfo.value = re;
-    // emitter.emit('basicInfo',re)
+    emitter.emit('basicInfo',re)
     const ps = new Promise((resolve,reject)=>{
       if ('Notification' in window) {
         if (Cookies.get('permission') == 'accept' || Notification.permission === 'granted'){
