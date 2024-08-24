@@ -26,6 +26,7 @@ import AboutProgress from '../views/About/progress.vue';
 import AboutLog from '../views/About/log.vue';
 import ModelChat from '../views/Model/chat.vue';
 import ModelAnlysis from '../views/Model/anlysis.vue';
+import ModelHistory from '../views/Model/history.vue';
 import Notification from '../views/Notification/index.vue';
 import LoginSuccess from '../views/Status/LoginSuccess.vue';
 import LoginNeeded from '../views/Status/LoginNeeded.vue';
@@ -66,6 +67,7 @@ const router = createRouter({
     { path: "/model/", name: "Model", children:[
       { path: "chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'零本AI 聊天'}},
       { path: "anlysis", name: "ModelAnlysis", component: ModelAnlysis,meta:{title:'零本AI 分析'}},
+      { path: "history", name: "ModelHistory", component: ModelHistory,meta:{title:'零本AI 历史'}},
     ]},
     { path: "/about/", name: "About", children: [
       { path: "info", name: "AboutInfo", component: AboutInfo,meta:{title:'软件信息'} },

@@ -494,6 +494,11 @@ let Auth = {
       vf: await _this.getUserFingerprint()
     }));
   },
+  getAiChatHistory: async function getAiChatHistory(param){
+    window.clarity("event", 'getAiChatHistory')
+    await this.getPrtoken();
+    return this.basicAuth('/api/ai/get_history');
+  },
   getAIChatList: async function getAIChatList(param){
     window.clarity("event", 'getAIChatList')
     await this.getPrtoken();

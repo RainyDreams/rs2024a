@@ -456,7 +456,7 @@ a[href]{
   .chatList{
     // padding-bottom: 16px;
     &>div>div{
-      max-width: calc(100% - 50px - 50px);
+      max-width: calc(100% - 50px - 10px);
       width: fit-content;
       // max-width: 550px;
       // min-width: 80px;
