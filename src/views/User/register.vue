@@ -108,7 +108,7 @@ const rules = reactive({
         if(!value) return;
         try {
           const isValid = (await Auth.checkUsername(value)).content.verified;
-          console.log(isValid);
+          // console.log(isValid);
           if (isValid) {
             callback();
           } else {
@@ -182,7 +182,7 @@ const submitForm = (formEl) => {
       formloading.value=false;
     } else {
       turnstile.remove('#turnstile-box')
-      console.log('error submit!')
+      // console.log('error submit!')
       formloading.value=false;
       return false;
     }

@@ -18,7 +18,7 @@
     <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12 text-center">
-          <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">「梦想可以大，第一步总是小」</h2>
+          <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">「梦想可以大，第一步总是小」</h2>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">以AI驱动项目流程的解决方案</p>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">项目发展至今仍<span class="primary-text">零支出</span></p>
         </div>
@@ -111,7 +111,7 @@
       </div>
     </div>
     <div class="panel bs-container py-10 md:py-16 lg:py-20 xl:py-24">
-      <h2 class="mt-14 mb-6 text-4xl md:mt-20 md:mb-10 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">一键开启智慧协作新旅程</h2>
+      <h2 class="mt-14 mb-6 text-4xl/snug md:mt-20 md:mb-10 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">一键开启智慧协作新旅程</h2>
       <h5 class="text-center mb-14 md:mb-20">
         <router-link to="/reg">
           <el-button size="large" class="text-2xl py-7 px-8 primary-bg" type="primary">注册使用</el-button>
@@ -123,6 +123,23 @@
         自2024年8月18日开始统计，已累计稳定提供服务
         <span class="primary-text">{{ count }}</span>
       </h2>
+    </div>
+    <div class="panel bs-container items-center justify-center flex-col py-6 md:py-8 lg:py-16" style="">
+      <p class="mt-2 mb-2 text-sm/loose md:mt-3 md:mb-3 md:text-lg/loose lg:text-xl/loose break-normal text-center text-slate-700">
+        网页加载速度 流式传输 权限管理
+      <span class="md:block"></span>
+        最大化减小服务器压力 预加载 多次请求
+      <span class="md:block"></span>
+        操作实时反馈 错误报告 通知 并发 用户心理学
+      </p>
+      <h2 class="mt-2 mb-2 text-2xl/snug md:mt-4 md:mb-4 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">我们努力解决每一个技术问题</h2>
+      <p class="mt-2 mb-2 text-sm/loose md:mt-3 md:mb-3 md:text-lg/loose lg:text-xl/loose break-normal text-center text-slate-700">
+        异步 队列 指纹 标签 Cookie Redis IndexDB PWA
+      <span class="md:block"></span>
+        截流 防抖 反馈 验证 Session SQLite 响应式
+      <span class="md:block"></span>
+        假跳转 缓存 原子化 Notification API
+      </p>
     </div>
     <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vmin;">
       <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">梦想只是开始 探索永不止步</h2>

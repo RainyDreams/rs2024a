@@ -111,7 +111,7 @@ let Auth = {
   route: null,
   init: async function init() {
     const prStatus = (await this.getPrtoken("first")).status;
-    console.log(prStatus);
+    // console.log(prStatus);
     if (prStatus == "invalid") {
       ElMessage.info("正在尝试使用访客身份登录，请稍等");
       const res = await this.guestLogin();
@@ -223,10 +223,19 @@ let Auth = {
     Auth.route = route;
     window.clarity("event", 'getBasicInfo')
     const getPr = await Auth.getPrtoken();
-    const res = (await Auth.basicAuth("/api/getBasicInfo")).content;
-    sessionStorage.setItem('userInfo',JSON.stringify(res))
+    const info = sessionStorage.getItem('userInfo');
+    let mode;
+    if(info) mode = 'exist';
+    const res = (await Auth.basicAuth("/api/getBasicInfo",`{"mode":"${mode}"}`)).content;
+    sessionStorage.setItem('userInfo',JSON.stringify({
+      ...JSON.parse(info),
+      ...res,
+    }))
     window.clarity("set", 'userTag', res.identityType || 'normal');
-    return task(res);
+    return task({
+      ...JSON.parse(info),
+      ...res,
+    });
   },5000,({task})=>{
     const info = JSON.parse(sessionStorage.getItem('userInfo') || '{}')
     return task(info)
@@ -261,7 +270,7 @@ let Auth = {
     return this.basicAuth("/api/reportErrlog", content);
   },
   getPrtoken: async function getPrtoken(mode) {
-    console.log(Cookies.get("czigauth"));
+    // console.log(Cookies.get("czigauth"));
     if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
       return { status: "exist", content: Cookies.get("czigauth") };
     }

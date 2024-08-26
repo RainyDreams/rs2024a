@@ -31,7 +31,7 @@ import jsCookie from 'js-cookie';
 const chatList = ref([]);
 onActivated(async ()=>{
   const { content,code } = await Auth.getAiChatHistory();
-  console.log(content, code)
+  // console.log(content, code)
   if(code == 'ok' || content){
     chatList.value = content.map(e=>{
       return {

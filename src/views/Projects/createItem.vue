@@ -30,7 +30,7 @@ const projectId = ref('');
 const createType = ref('');
 const type = ref('');
 function Update(){
-  console.log(route)
+  // console.log(route)
   createType.value = route.meta.type;
   projectId.value = route.params.projectId;
   type.value = {
