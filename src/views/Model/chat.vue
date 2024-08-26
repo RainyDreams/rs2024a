@@ -43,7 +43,7 @@
               <textarea
                 class="el-textarea__inner"
                 ref="askRef"
-                v-model.lazy="input" 
+                v-model="input" 
                 :autosize="{ minRows: 1, maxRows: 4 }" 
                 type="textarea"
                 resize="none" 
@@ -96,20 +96,23 @@ const sessionID = ref()
 const onFocus = () => {
   throttledScrollToBottom();
 }
-// const onChange = () => {
-//   now.value = input.value.length
-// }
 watch(input, () => {
-  now.value = input.value.length
+  now.value = input.value.length;
+  askRef.value.style.height=0;
+  if(askRef.value.scrollHeight > askRef.value.clientHeight && askRef.value.scrollHeight < 200){
+    askRef.value.style.height = askRef.value.scrollHeight+'px'
+  } else if(askRef.value.scrollHeight < askRef.value.clientHeight && askRef.value.scrollHeight < 200) {
+    askRef.value.style.height = askRef.value.scrollHeight+'px'
+  }
 })
 const handleEnter = async (event) => {
   if (event.shiftKey) {
+    input.value = askRef.value.value
     return;
   } else if (event.key === 'Enter') {
     event.preventDefault();
     input.value = askRef.value.value
     if(!loading.value){
-      loading.value=true;
       throttledSend()
     }
   }
