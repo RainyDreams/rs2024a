@@ -53,6 +53,7 @@ const ruleFormRef = ref(null);
 const formloading = ref(false);
 const route = useRoute()
 const router = useRouter()
+const verifyToken = ref()
 const form = reactive({
   username: '',
   password: ''
@@ -68,19 +69,27 @@ const rules = reactive({
 if(Cookies.get('czigauth') == 'AlreadyAuthenticated'){
   router.push('/login-already')
 }
+onActivated(async ()=>{
+  // console.log(123)
+  // debugger;
+  verifyToken.value = await Auth.getRecaptchaToken({action:'signup',id:'#turnstile-box'})
+})
 const submitForm = (formEl) => {
   if (!formEl) return;
   formloading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
-      ElMessage.info('正在进行人机验证')
-      const verifyToken = await Auth.getRecaptchaToken({action:'signup',id:'#turnstile-box'})
+      if(!verifyToken.value){
+        ElMessage.warning('请等待人机验证完成')
+        formloading.value = false;
+        return;
+      }
       ElMessage.info('正在登录')
       const encode = CryptoJS.MD5(form.username+form.password).toString().toUpperCase();
       const createTeam = await Auth.userLogin({
         username:form.username,
         password:encode,
-        token:verifyToken
+        token:verifyToken.value
       })
       if(createTeam.status == 'sus'){
         window.clarity("identify", createTeam.content.id, createTeam.content.sessionID,'login',createTeam.content.id)
@@ -93,7 +102,6 @@ const submitForm = (formEl) => {
           domain:'.chiziingiin.top'
         });
         ElMessageBox.alert('登录成功！', '提示', {}).then(() => {
-          // window.location.href = 
           router.push(route.query.url || '/login-success')
         })
       } else {

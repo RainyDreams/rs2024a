@@ -151,47 +151,24 @@ let Auth = {
       return await failed(error, 2);
     }
   },
-  handleRecaptcha:async function handleRecaptcha() {
-    window.clarity("event", 'Recaptcha')
-    return new Promise((resolve,reject)=>{
-      window.grecaptcha.ready(() => {
-        window.grecaptcha.execute('6Ld2QRYqAAAAABbPygHb0HUKpd-LMU1Ckmy6nb8G', 
-          { action: 'submit' }).then(token => {
-          fetch('/api/verify-recaptcha', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ token })
-          })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-              resolve({ status: "sus", content: token })
-            } else {
-              reject({ status: "error", content: data })
-            }
-          });
-        });
-      });
-    })
-  },
   getRecaptchaToken:async function getRecaptchaToken({action="default",id='#turnstile-box'}){
     window.clarity("event", 'getRecaptchaToken')
     return new Promise((resolve,reject)=>{
-      window.turnstile.ready(function () {
+      // window.turnstile.ready(function () {
         window.turnstile.render(id, {
           sitekey: '0x4AAAAAAAgyM4dGoERAGuG2',
           action: action,
           callback: function(token) {
+            console.log(token);
             resolve(token)
           },
           'error-callback': function(err) {
+            console.log(err);
             reject(err)
           },
           'refresh-expired':'auto'
         });
-      });
+      // });
     })
   },
   guestLogin:async function guestLogin(param) {
@@ -225,16 +202,22 @@ let Auth = {
     const getPr = await Auth.getPrtoken();
     const info = sessionStorage.getItem('userInfo');
     let mode;
-    if(info) mode = 'exist';
+    if(info){
+      if(JSON.parse(info).avatar || JSON.parse(info).expirationTime < new Date().getTime()){
+        mode = 'exist'
+      }
+    }
     const res = (await Auth.basicAuth("/api/getBasicInfo",`{"mode":"${mode}"}`)).content;
     sessionStorage.setItem('userInfo',JSON.stringify({
       ...JSON.parse(info),
       ...res,
+      expirationTime: new Date().getTime() + 30 * 60 * 1000,
     }))
     window.clarity("set", 'userTag', res.identityType || 'normal');
     return task({
       ...JSON.parse(info),
       ...res,
+      expirationTime: new Date().getTime() + 30 * 60 * 1000,
     });
   },5000,({task})=>{
     const info = JSON.parse(sessionStorage.getItem('userInfo') || '{}')
@@ -671,6 +654,10 @@ Auth.copyText = navigator.clipboard?(text) => {
     console.error('复制操作失败', err);
   }
   document.body.removeChild(textarea);
+}
+
+window.onloadTurnstileCallback = function () {
+  console.log('onload?')
 }
 
 export default Auth;
