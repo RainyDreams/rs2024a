@@ -16,7 +16,7 @@ export default defineConfig((mode) => {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              return id.toString().split('node_modules/')[1].split('/')[0].toString();
+              return btoa(id.toString().split('node_modules/')[1].split('/')[0].toString()).slice(0,5);
             }
           },
         },
@@ -27,10 +27,12 @@ export default defineConfig((mode) => {
           drop_console: false,
           drop_debugger: true,
           passes: 10,
+          unused: true
         },
         format: {
+          beautify: false,
           comments: false,
-        }
+        },
       },
       chunkSizeWarningLimit: 500, 
     },
