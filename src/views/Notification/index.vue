@@ -1,11 +1,12 @@
 <template>
   <div class="bs-container h-full">
     <div class="notificationPage h-full">
-      <el-empty :image-size="150" v-if="messageList.length == 0">
+      <el-skeleton animated :rows="5" v-if="loading"/>
+      <el-empty :image-size="150" v-if="!loading && messageList.length == 0">
         <template #description>
           <p>没有任何通知</p>
         </template>
-      </el-empty>   
+      </el-empty>
       <div class="h-full flex flex-col" v-if="messageList.length > 0">
         <div class="border-b py-4 px-5 border-slate-100 flex hover:bg-slate-50 transition-all first:rounded-t-xl last:rounded-b-xl bg-white" v-for="item in messageList">
           <div class="flex items-top pr-2"><el-avatar :src="item.FormatFromUser.avatar" :size="40"></el-avatar></div>
@@ -34,9 +35,10 @@
 <script setup>
 import { onActivated, ref } from 'vue';
 import Auth from '../../utils/auth';
-import { dayjs, ElButton,ElEmpty, ElMessage,ElTag,ElAvatar } from 'element-plus';
+import { dayjs, ElButton,ElEmpty, ElMessage,ElTag,ElAvatar,ElSkeleton } from 'element-plus';
 import jsCookie from 'js-cookie';
 const messageList = ref([]);
+const loading = ref(true);
 let messageList_ = []
 async function changePage (index){
   messageList.value = await Promise.all(messageList_[index].list.map(async (e)=>{
@@ -106,6 +108,7 @@ onActivated(async ()=>{
       }
     }
   }))
+  loading.value=false
   messageList.value.map(async (e,i)=>{
     Auth.mainTaskThread.add(async ()=>{
       // console.log(messageList.value,i,)
@@ -121,5 +124,6 @@ onActivated(async ()=>{
   } else {
     ElMessage.error('网络错误')
   }
+
 })
 </script>

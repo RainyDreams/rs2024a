@@ -8,7 +8,7 @@
               <div class="system">
                 <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar>
                 <div class="chatcontent" style="font-size:14px;width:100%;">
-                  <el-skeleton :rows="5" animated v-show="welcome_loading"></el-skeleton>
+                  <el-skeleton :rows="3" animated v-show="welcome_loading"></el-skeleton>
                   <div v-show="!welcome_loading" v-html="md.render(welcome)"></div>
                   <p><router-link to="/model/history">聊天历史</router-link></p>
                 </div>

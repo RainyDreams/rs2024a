@@ -101,6 +101,7 @@ const submitForm = (formEl) => {
           secure: true,
           domain:'.chiziingiin.top'
         });
+        sessionStorage.removeItem('userInfo')
         ElMessageBox.alert('登录成功！', '提示', {}).then(() => {
           router.push(route.query.url || '/login-success')
         })
