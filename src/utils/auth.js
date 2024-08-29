@@ -634,6 +634,10 @@ let Auth = {
       })
      
     }
+  },
+  getIP:async function getIP(ip){
+    // const res = fetch('https://apis.map.qq.com/ws/location/v1/ip?key=L66BZ-OHFCU-DVZVU-BNPTD-KPAF5-CCFPO&ip='+ip)
+    return await this.basicAuth('/api/getIP', JSON.stringify({ip:ip}));
   }
 }
 Auth.copyText = navigator.clipboard?(text) => {

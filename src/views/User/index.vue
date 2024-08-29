@@ -267,6 +267,25 @@
           </div>
         </div>
       </div>
+      <div class="col-12">
+        <div class="panel">
+          <div class="_header">
+            <div class="icon"><IdCardH theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/></div>
+            <div class="title">创建信息</div>
+          </div>
+          <div class="_contnet">
+            <p>账户ID</p>
+            <p>{{ profile.id.slice(0,15) + '*****' + profile.id.slice(20,30) }}</p>
+            <p>账户类型</p>
+            <p>{{ profile.identityType }}</p>
+            <p>创建时间</p>
+            <p>{{ dayjs(profile.createTime).format('YYYY年M月DD日 HH:mm:ss') }}</p>
+            <p>创建IP</p>
+            <p>{{ profile.createIP }}</p>
+            <p>{{ profile.formatCreateIP }}</p>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- 
     <div class="panel" v-if="!loading" >
@@ -293,7 +312,7 @@
 <script setup>
 import { Info,IdCardH } from '@icon-park/vue-next';
 import { onActivated, onMounted, ref } from 'vue';
-import { ElAvatar,ElStatistic, ElMessageBox,ElTooltip,ElSkeleton,ElButton} from 'element-plus';
+import { ElAvatar,ElStatistic, ElMessageBox,ElTooltip,ElSkeleton,ElButton, dayjs} from 'element-plus';
 import Auth from '../../utils/auth';
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
@@ -317,6 +336,7 @@ const router = useRouter()
 onActivated(async ()=>{
   const res = await Auth.getUserInfo();
   profile.value = res.content;
+  profile.value.formatCreateIP = (await Auth.getIP(profile.value.createIP)).content;
   loading.value=false;
 })
 async function logout(){
