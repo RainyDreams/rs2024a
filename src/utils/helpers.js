@@ -10,27 +10,6 @@ export function dateDiff(fd, sd) {
   let dateDiff = date2.getTime() - date1.getTime();
   return Math.floor(dateDiff / (24 * 3600 * 1000));
 }
-/**
- * 
- * @param {*} dt 时间
- * @returns 
- */
-export function getDateDiff(dt) {
-  let now = new Date();
-  let nowDay = now.getDay();
-  let nowDate = now.getDate();
-  let nowMonth = now.getMonth() + 1;
-  let nowYear = now.getFullYear();
-  let nowStr = nowYear + "-" + nowMonth + "-" + nowDate;
-  let date = new Date(dt);
-  let dateDay = date.getDay();
-  let dateDate = date.getDate();
-  let dateMonth = date.getMonth() + 1;
-  let dateYear = date.getFullYear();
-  let dateStr = dateYear + "-" + dateMonth + "-" + dateDate;
-  let dateDiffRst = dateDiff(nowStr, dateStr);
-  return { str: dateStr, show: false };
-}
 
 
 
@@ -62,6 +41,28 @@ export const roleMap = [
  */
 export function getRole(role){
   return (roleMap.find(e=>e.value == role)?.label || '查询错误')
+}
+
+/**
+ * 
+ * @param {*} dt 时间
+ * @returns 
+ */
+export function getDateDiff(dt) {
+  let now = new Date();
+  let nowDay = now.getDay();
+  let nowDate = now.getDate();
+  let nowMonth = now.getMonth() + 1;
+  let nowYear = now.getFullYear();
+  let nowStr = nowYear + "-" + nowMonth + "-" + nowDate;
+  let date = new Date(dt);
+  let dateDay = date.getDay();
+  let dateDate = date.getDate();
+  let dateMonth = date.getMonth() + 1;
+  let dateYear = date.getFullYear();
+  let dateStr = dateYear + "-" + dateMonth + "-" + dateDate;
+  let dateDiffRst = dateDiff(nowStr, dateStr);
+  return { str: dateStr, show: false };
 }
 
 /**

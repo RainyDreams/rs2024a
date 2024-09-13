@@ -18,6 +18,26 @@
     <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12 text-center">
+          <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">圆满完成赤峰二中<span class="primary-text">百年校庆科技节</span>展示活动</h2>
+          <ul class="columns-2 mb-3">
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnvP3t.jpg"/>
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjH91.jpg"/>
+          </ul>
+          <ul  class="columns-3 mb-10">
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjb1x.jpg"/>
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjThR.jpg"/>
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjoN9.jpg"/>
+          </ul>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">相关资料</p>
+          <p class="text-lg/loose"><a href="https://github.com/RainyDreams/rs2024a">软件前端开源地址</a></p>
+          <p class="text-lg/loose"><a href="/file/【课题报告】2023级12班“零本智协”软件项目组.pdf">课题展示PPT（PDF）</a></p>
+          <p class="text-lg/loose"><a href="https://mp.weixin.qq.com/s/o8-AmYUw8WYAXiojc0sY9g">课题展示文档</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
+      <div class="row">
+        <div class="col-12 text-center">
           <h2 class="mt-10 mb-3 text-3xl md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">「梦想可以大，第一步总是小」</h2>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">以AI驱动项目流程的解决方案</p>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">项目发展至今仍<span class="primary-text">零支出</span></p>

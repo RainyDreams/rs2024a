@@ -39,6 +39,7 @@ const defaultFailed = async function (response,code) {
     ElMessage.error('服务器错误');
     try{
       if(code==2)
+        return;
         throw response;
       if(code==0){
         throw {
@@ -54,7 +55,7 @@ const defaultFailed = async function (response,code) {
         dangerouslyUseHTMLString:true,
         customClass:'czigerr',
         message: 
-        `<div class="text-sm ">本软件正在公测阶段，现遇到了程序、服务器错误，请联系本项目负责人张新越（赤峰二中202312班）<br/>
+        `<div class="text-sm ">正像你所看到的这样，我们的软件出现了BUG，但是并不严重，至少我们还能捕获这个错误。软件开发初期，仅用20余天开发，敬请见谅。请联系本项目负责人张新越（赤峰二中202312班）<br/>
         以下是可以提供的错误信息<br/><b>状态码：<span style="color:red">${response.status||'未知错误'}</span></b><br/><b>${(err.message+"</b><i>"+err.stack+"")}</i></div>`,
         confirmButtonText: '报告错误',
         showCancelButton:true,
