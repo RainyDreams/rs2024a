@@ -10,13 +10,13 @@
           </div>
           <div class="_content">
             <el-alert type="info" show-icon :closable="false" style="margin-bottom: 8px;">
-              <p>版权说明：本项目的注册登录（身份验证系统）为本研究性学习团队原创</p>
+              <!-- <p>版权说明：本项目的注册登录（身份验证系统）为本研究性学习团队原创</p> -->
               <p>推荐使用电脑访问</p>
             </el-alert>
-            <el-alert type="warning" show-icon :closable="false" style="margin-bottom: 16px;">
-              <p>目前仅支持对于本研究性学习项目进行预览的老师和学生账户注册</p>
-              <p>我们在项目预览期间，可以在不告知的情况下注销测试账户，注销后会删除与此账户所有关联的项目、团队、任务、工作流等</p>
-            </el-alert>
+            <!-- <el-alert type="warning" show-icon :closable="false" style="margin-bottom: 16px;"> -->
+              <!-- <p>目前仅支持对于本研究性学习项目进行预览的老师和学生账户注册</p> -->
+              <!-- <p>我们在项目预览期间，可以在不告知的情况下注销测试账户，注销后会删除与此账户所有关联的项目、团队、任务、工作流等</p> -->
+            <!-- </el-alert> -->
             <el-form 
               :model="form" 
               label-width="auto" 
@@ -42,7 +42,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="用户名" prop="username">
-                <el-input v-model="form.username" placeholder="输入用户名，全局唯一凭据" autofocus />
+                <el-input v-model="form.username" name="username" placeholder="输入用户名，全局唯一凭据" autofocus />
               </el-form-item>
               <el-form-item label="用户昵称" prop="nickname">
                 <el-input v-model="form.nickname"/>
@@ -54,7 +54,7 @@
                 <el-input v-model="form.password2" type="password" placeholder="再次输入密码"/>
               </el-form-item>
               <el-form-item label="备注（非必填）" prop="note">
-                <el-input v-model="form.note" placeholder="可以填写你注册此项目账户的目的，你是哪位老师/学生，方便我们识别" autofocus />
+                <el-input v-model="form.note" autosize type="textarea" placeholder="可以填写你注册此项目账户的目的，你是哪位老师/学生，方便我们识别" autofocus />
               </el-form-item>
               <div id="turnstile-box"></div>
               <el-form-item style="margin-top: 16px;">

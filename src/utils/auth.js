@@ -39,8 +39,8 @@ const defaultFailed = async function (response,code) {
     ElMessage.error('服务器错误');
     try{
       if(code==2)
-        return;
-        throw response;
+      {}
+        // throw response;
       if(code==0){
         throw {
           status: 0b00000011,

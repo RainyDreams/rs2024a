@@ -150,6 +150,7 @@ const update = () => {
             showClose: false,
             callback: action => {
               if(action=='confirm'){
+                Cookies.set('permission',true,{expires:7})
                 Notification.requestPermission().then(permission => {
                   if (permission === 'granted') {
                     resolve();
@@ -166,6 +167,7 @@ const update = () => {
             }
           })
         } else if (Notification.permission === 'default') {
+          Cookies.set('permission',false,{expires:7})
           Notification.requestPermission().then(permission => {
             if (permission === 'granted') {
               resolve();
