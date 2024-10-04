@@ -96,7 +96,6 @@ export function throttle(func, wait) {
     }
   };
 }
-
 export function asyncThrottle(func, delay, defaultFunc) {
   let lastCallTime = 0;
   return async function (...args) {

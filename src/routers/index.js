@@ -25,6 +25,7 @@ import AboutInfo from '../views/About/info.vue';
 import AboutProgress from '../views/About/progress.vue';
 import AboutLog from '../views/About/log.vue';
 import ModelChat from '../views/Model/chat.vue';
+import ModelTest from '../views/Model/test.vue';
 import ModelAnlysis from '../views/Model/anlysis.vue';
 import ModelHistory from '../views/Model/history.vue';
 import Notification from '../views/Notification/index.vue';
@@ -33,6 +34,8 @@ import LoginNeeded from '../views/Status/LoginNeeded.vue';
 import LoginAlready from '../views/Status/LoginAlready.vue';
 import JoinTeamApplication from '../views/Status/JoinTeamApplication.vue';
 import JoinProcess from '../views/Status/JoinProcess.vue';
+
+import TestIndex from '../views/Test/index.vue';
 import Error404 from '../views/Errors/404.vue';
 
 const router = createRouter({
@@ -65,7 +68,8 @@ const router = createRouter({
       { path: "settings", name: "UserSettings", component: UserSettings,meta:{title:'用户设置'} },
     ]},
     { path: "/model/", name: "Model", children:[
-      { path: "chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'零本AI 聊天'}},
+      { path: "chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'零本AI 聊天 专用测试版'}},
+      { path: "test/:id", name: "ModelChat", component: ModelTest,meta:{title:'零本AI 聊天'}},
       { path: "anlysis", name: "ModelAnlysis", component: ModelAnlysis,meta:{title:'零本AI 分析'}},
       { path: "history", name: "ModelHistory", component: ModelHistory,meta:{title:'零本AI 历史'}},
     ]},
@@ -85,6 +89,7 @@ const router = createRouter({
     { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar'],title:'登录已失效'}},
     { path: "/login-already", name: "LoginAlready", component: LoginAlready,meta:{hide:['sidebar'],title:'已登录'}},
     { path: "/settings/", name: "Settings", component: SettingsIndex,meta:{title:'创建项目'},title:'设置'},
+    { path: "/test/", name: "Test", component: TestIndex,meta:{title:'测试页面'} },
     
     { path: "/:catchAll(.*)", name: "NotFound", component: Error404,meta:{title:'404 NOT FOUND',hide:['sidebar']} },
   ]

@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12 col-lg-6">
           <h1 class="mt-1 text-4xl font-semibold md:mt-10 md:text-6xl/snug lg:text-7xl/snug text-transparent logo_text">零本智协</h1>
-          <h3 class="text-lg/7 md:text-xl/snug lg:text-2xl/snug text-slate-500 mb-3 md:mb-5">赤峰二中2023级12班研究性学习项目</h3>
+          <h3 class="text-lg/7 md:text-xl/snug lg:text-2xl/snug text-slate-500 mb-3 md:mb-5">20余天开发的研究性学习项目软件</h3>
           <h3 class="text-lg/7 md:text-2xl/snug lg:text-3xl/snug text-slate-500">我们的愿景</h3>
           <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">依托尖端的 AI 技术驱动力量，构建全面创新的市场项目解决方案体系，致力于让<span class="primary-text">「零成本构建创新高效应用程序」</span>成为现实。</h5>
         </div>

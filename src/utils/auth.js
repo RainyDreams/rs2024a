@@ -535,6 +535,15 @@ let Auth = {
       onclose:param.onclose
     });
   },
+  chatWithAI_test:async function chatWithAI(param) {
+    window.clarity("event", 'chatWithAI')
+    await this.getPrtoken();
+    let _this = this;
+    await this.getStreamText('/api/ai/stream_test', { sessionID: param.sessionID, content: param.content,vf:param.vf}, {
+      onmessage:param.onmessage,
+      onclose:param.onclose
+    });
+  },
   getStreamText:async function getStreamText(url,postData,param) {
     window.clarity("event", 'getStreamText')
     try{
