@@ -285,10 +285,20 @@ a[href]{
 
 .teambox{
   display: block;
-  background-image: linear-gradient(to bottom,
-  rgb(250, 247, 255),
-  rgb(255,255,255)
-  );
+  // background-image: linear-gradient(to bottom,
+  // rgb(250, 247, 255),
+  // rgb(255,255,255)
+  // );
+  background: #fff;
+  border:1px solid transparent;
+  box-shadow: none;
+  transition: all .3s ease-in;
+  // transition-delay: .1s;
+  &:hover{
+    background: linear-gradient(220deg, #f3f7ff .79%, #fff 63.4%);
+    border-color: #635bff;
+    box-shadow: 0 15px 35px -2px rgba(72, 117, 231, .1), 0 5px 15px 0 rgba(66, 81, 162, .1);
+  }
   --el-border-radius-base:8px;
   .teamname{
     font-size: 28px;

@@ -68,8 +68,8 @@ const router = createRouter({
       { path: "settings", name: "UserSettings", component: UserSettings,meta:{title:'用户设置'} },
     ]},
     { path: "/model/", name: "Model", children:[
-      { path: "chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'零本AI 聊天 专用测试版'}},
-      { path: "test/:id", name: "ModelChat", component: ModelTest,meta:{title:'零本AI 聊天'}},
+      { path: "chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'零本AI 聊天'}},
+      { path: "test/:id", name: "ModelTest", component: ModelTest,meta:{title:'零本AI 聊天 专用测试版'}},
       { path: "anlysis", name: "ModelAnlysis", component: ModelAnlysis,meta:{title:'零本AI 分析'}},
       { path: "history", name: "ModelHistory", component: ModelHistory,meta:{title:'零本AI 历史'}},
     ]},

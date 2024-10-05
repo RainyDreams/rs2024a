@@ -161,7 +161,7 @@ const send = async (param)=>{
       askRef.value.focus()
     },
     onmessage:(source) => {
-      chatList.value[index].content+=JSON.parse(source).response;
+      chatList.value[index].content+=JSON.parse(source).choices[0].delta.content;
       throttledScrollToBottom()
     },
   })
@@ -172,13 +172,16 @@ onActivated(async ()=>{
   let id = route.params.id
   if(!id || id=='new'){
     const {content} = await Auth.getAISessionID()
-    router.push('/model/chat/'+content)
-    id = content
+    id = route.params.id
+    if(route.path=='/model/chat/new') {
+      router.push('/model/chat/'+content)
+      id = content;
+    }
   }
   // } else {
     sessionID.value = id
     // onChange()
-    await Auth.init()
+    // await Auth.init()
     welcome.value = (await Auth.getAIWelcome()).content;
     chatList.value = (await Auth.getAIChatList({sessionID:id})).content;
     welcome_loading.value = false;

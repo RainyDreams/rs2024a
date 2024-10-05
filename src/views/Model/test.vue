@@ -18,14 +18,14 @@
                   <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar>
                   <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,0]" :rotate="-12"
                     :content="['零本智协大模型 零本智协大模型', fingerprint]">
-                    <div class="chatcontent" v-html="md.render(item.content)"></div>
+                    <div class="chatcontent" v-html="md.render(item.text)"></div>
                   </el-watermark>
                 </div>
-                <div class="assistant" v-if="item.role == 'assistant'">
+                <div class="assistant" v-else s="item.role == 'assistant'">
                   <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar>
                   <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                     :content="['零本智协大模型 零本智协大模型', fingerprint]">
-                    <div class="chatcontent" v-html="md.render(item.content) || `<span class='i-loading'></span>`">
+                    <div class="chatcontent" v-html="md.render(item.text) || `<span class='i-loading'></span>`">
                     </div>
                   </el-watermark>
                 </div>
@@ -152,16 +152,16 @@ const send = async (param)=>{
     vf:fingerprint.value,
     onclose:(source) => {
       loading.value = false;
-      Auth.setAIChatResponse({
+      Auth.setAIChatResponse_test({
         sessionID:sessionID.value,
-        content:chatList.value[index].content
+        content:chatList.value[index].text
       })
       throttledScrollToBottom()
       placeholder.value = "还有什么想聊的";
       askRef.value.focus()
     },
     onmessage:(source) => {
-      chatList.value[index].content+=JSON.parse(source).candidates[0].content.parts[0].text;
+      chatList.value[index].text+=JSON.parse(source).candidates[0].content.parts[0].text;
       throttledScrollToBottom()
     },
   })
@@ -172,13 +172,15 @@ onActivated(async ()=>{
   let id = route.params.id
   if(!id || id=='new'){
     const {content} = await Auth.getAISessionID()
-    router.push('/model/test/'+content)
-    id = content
+    if(route.path=='/model/test/new') {
+      router.push('/model/test/'+content)
+      id = content;
+    }
   }
   // } else {
     sessionID.value = id
     // onChange()
-    await Auth.init()
+    // await Auth.init()
     welcome.value = (await Auth.getAIWelcome()).content;
     chatList.value = (await Auth.getAIChatList({sessionID:id})).content;
     welcome_loading.value = false;

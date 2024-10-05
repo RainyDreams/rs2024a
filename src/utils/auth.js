@@ -46,23 +46,23 @@ const defaultFailed = async function (response,code) {
           status: 0b00000011,
           message: '这块可能是编写程序疏漏引发的错误，请点击报告错误，并把识别码发给我。感谢你的支持',
         };
-      }
+      } 
       let text = (await response.text());
       throw new Error(response.url+"<br/>" + text)
     } catch (err){
       console.error(err)
-      ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
-        dangerouslyUseHTMLString:true,
-        customClass:'czigerr',
-        message: 
-        `<div class="text-sm ">正像你所看到的这样，我们的软件出现了BUG，但是并不严重，至少我们还能捕获这个错误。软件开发初期，仅用20余天开发，敬请见谅。请联系本项目负责人张新越（赤峰二中202312班）<br/>
-        以下是可以提供的错误信息<br/><b>状态码：<span style="color:red">${response.status||'未知错误'}</span></b><br/><b>${(err.message+"</b><i>"+err.stack+"")}</i></div>`,
-        confirmButtonText: '报告错误',
-        showCancelButton:true,
-        cancelButtonText:'忽略错误',
-        'show-close':false,
-        beforeClose:async (value,instance, done)=>{
-          if(value=='confirm'){
+      // ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
+      //   dangerouslyUseHTMLString:true,
+      //   customClass:'czigerr',
+      //   message: 
+      //   `<div class="text-sm ">正像你所看到的这样，我们的软件出现了BUG，但是并不严重，至少我们还能捕获这个错误。软件开发初期，仅用20余天开发，敬请见谅。请联系本项目负责人张新越（赤峰二中202312班）<br/>
+      //   以下是可以提供的错误信息<br/><b>状态码：<span style="color:red">${response.status||'未知错误'}</span></b><br/><b>${(err.message+"</b><i>"+err.stack+"")}</i></div>`,
+      //   confirmButtonText: '报告错误',
+      //   showCancelButton:true,
+      //   cancelButtonText:'忽略错误',
+      //   'show-close':false,
+      //   beforeClose:async (value,instance, done)=>{
+      //     if(value=='confirm'){
             instance.confirmButtonLoading = true
             instance.confirmButtonText = '上传错误信息'
             const ua = navigator.userAgent;
@@ -73,14 +73,13 @@ const defaultFailed = async function (response,code) {
               time:new Date().getTime()
             }))
             console.info('[errId]',r)
-            Auth.copyText(`${r.content.id}`)
+            // Auth.copyText(`${r.content.id}`)
             window.clarity("set", 'reportID', r.content.id);
-            ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}\n可以将以上信息提供给我，便于分析处理错误`,'提示',{})
-          }
-          done();
-        }
-        // type: 'error',
-      })
+            // ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}\n可以将以上信息提供给我，便于分析处理错误`,'提示',{})
+          // }
+          // done();
+        // }
+      // })
     }
   }
   return { status: 'error', content: response };
@@ -503,6 +502,14 @@ let Auth = {
     window.clarity("event", 'setAIChatResponse')
     await this.getPrtoken();
     return this.basicAuth('/api/ai/set_chat_response', JSON.stringify({
+      sessionID: param.sessionID,
+      content: param.content
+    }));
+  },
+  setAIChatResponse_test: async function setAIChatResponse(param){
+    window.clarity("event", 'setAIChatResponse')
+    await this.getPrtoken();
+    return this.basicAuth('/api/ai/set_chat_response_test', JSON.stringify({
       sessionID: param.sessionID,
       content: param.content
     }));
