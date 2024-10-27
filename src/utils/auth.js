@@ -597,17 +597,20 @@ let Auth = {
       }
       const reader = response.body.getReader();
       let decoder = new TextDecoder();
+      let tmp=''
+      debugger;
       while (true) {
         try{
           const { done, value } = await reader.read();
           if (done) { param.onclose(); break; }
-          const textArray = (decoder.decode(value, { stream: true }).replace(/\n/g,"").trim().replace('data: ','')).split('data: ');
+          let textArray = (tmp+decoder.decode(value, { stream: true }).replace(/\n/g,"").trim()).split('data: ');
+          tmp = textArray.pop();
           for (const text of textArray) {
             if(text == '[DONE]') continue;
             param.onmessage(text);
           }
         } catch(e) {
-          console.error(e)
+          console.warn('getStreamText - ',e)
         }
       }
     } catch (error) {

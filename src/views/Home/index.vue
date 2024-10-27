@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12 col-lg-6">
           <h1 class="mt-1 text-4xl font-semibold md:mt-10 md:text-6xl/snug lg:text-7xl/snug text-transparent logo_text">零本智协</h1>
-          <h3 class="text-lg/7 md:text-xl/snug lg:text-2xl/snug text-slate-500 mb-3 md:mb-5">20余天开发的研究性学习项目软件</h3>
+          <h3 class="text-lg/7 md:text-xl/snug lg:text-2xl/snug text-slate-500 mb-3 md:mb-5">20余天开发的研究性学习项目</h3>
           <h3 class="text-lg/7 md:text-2xl/snug lg:text-3xl/snug text-slate-500">我们的愿景</h3>
           <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">依托尖端的 AI 技术驱动力量，构建全面创新的市场项目解决方案体系，致力于让<span class="primary-text">「零成本构建创新高效应用程序」</span>成为现实。</h5>
         </div>
@@ -15,33 +15,61 @@
         </div>
       </div>
     </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12 text-center">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">圆满完成赤峰二中<span class="primary-text">百年校庆科技节</span>展示活动</h2>
-          <ul class="columns-1 md:columns-2 mb-0 md:gap-1 md:mb-1">
-            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnvP3t.jpg"/>
-            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjH91.jpg"/>
-          </ul>
-          <ul  class="columns-3 mb-2 gap-0 md:gap-1">
-            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjb1x.jpg"/>
-            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjThR.jpg"/>
-            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjoN9.jpg"/>
-          </ul>
-          <p class="text-slate-500">赤峰二中摄影社团 姚懿轩 摄</p>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3 mt-8">相关资料</p>
-          <p class="text-lg/loose"><a href="https://github.com/RainyDreams/rs2024a">软件前端开源地址</a></p>
-          <p class="text-lg/loose"><a href="https://docs.qq.com/pdf/DVWdteVFOaERMT0xP?">课题展示PPT（PDF）</a></p>
-          <p class="text-lg/loose"><a href="https://mp.weixin.qq.com/s/o8-AmYUw8WYAXiojc0sY9g">课题展示文档</a></p>
-        </div>
-      </div>
-    </div>
+    
     <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12 text-center">
           <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">「梦想可以大，第一步总是小」</h2>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">以AI驱动项目流程的解决方案</p>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">项目发展至今仍<span class="primary-text">零支出</span></p>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">我们拥有软件完全著作权</h2>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">在开发过程中，我们的Workers代码没有借助任何第三方库，完全由我们原创开发</p>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">为了提升开发效率，前端部分使用了业界常用的第三方库</p>
+        </div>
+      </div>
+    </div> -->
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">安全</h2>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">从数据的存储、传输到使用，每一个环节都经过精心设计和严格监控</p>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">
+            采用我们原创的 
+            <span class="primary-text font-semibold text-2xl/tight md:text-4xl/tight lg:text-5xl/tight">3</span>
+            <span class="text-xl md:text-2xl/tight lg:text-3xl/tight">token</span>
+            + 
+            <span class="primary-text font-semibold text-2xl md:text-4xl/tight lg:text-5xl/tight">1</span>
+            <span class="text-xl md:text-2xl/tight lg:text-3xl/tight">授权</span>
+            + 
+            <span class="primary-text font-semibold text-2xl md:text-4xl/tight lg:text-5xl/tight">N</span>
+            <span class="text-xl md:text-2xl/tight lg:text-3xl/tight">验证</span>
+            模式
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium"><span class="primary-text">三思</span>而后行</h2>
+          <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">双核*智能架构，思考问题更深入全面。能迅速给出精准的解决方案，大大缩短项目周期，让你的业务<span class="primary-text">降本增效</span></h5>
+          <p class="text-sm text-gray-500 ">*通过两个大模型分工明确地进行合作剖析、分解、思考问题，从而得到高质量的回答</p>
+        </div>
+      </div>
+    </div>
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">创新 & 智能</h2>
+          <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们创新性的在产品的诸多功能中融入了大模型技术，使得工作更加高效</h5>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们坚信<span class="primary-text">创新是引领发展的第一动力</span></p>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">致力于为你提供独特而前沿的项目解决方案</p>
         </div>
       </div>
     </div>
@@ -87,47 +115,9 @@
     <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
         <div class="col-12">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">我们拥有软件完全著作权</h2>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">在开发过程中，我们的Workers代码没有借助任何第三方库，完全由我们原创开发</p>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">为了提升开发效率，前端部分使用了业界常用的第三方库</p>
-        </div>
-      </div>
-    </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">安全</h2>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">从数据的存储、传输到使用，每一个环节都经过精心设计和严格监控</p>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">
-            采用我们原创的 
-            <span class="primary-text font-semibold text-2xl/tight md:text-4xl/tight lg:text-5xl/tight">3</span>
-            <span class="text-xl md:text-2xl/tight lg:text-3xl/tight">token</span>
-            + 
-            <span class="primary-text font-semibold text-2xl md:text-4xl/tight lg:text-5xl/tight">1</span>
-            <span class="text-xl md:text-2xl/tight lg:text-3xl/tight">授权</span>
-            + 
-            <span class="primary-text font-semibold text-2xl md:text-4xl/tight lg:text-5xl/tight">N</span>
-            <span class="text-xl md:text-2xl/tight lg:text-3xl/tight">验证</span>
-            模式
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">高效</h2>
-          <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们能迅速给出精准的解决方案，大大缩短项目周期，让你的业务<span class="primary-text">降本增效</span></h5>
-        </div>
-      </div>
-    </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">创新 & 智能</h2>
-          <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们创新性的在产品的诸多功能中融入了大模型技术，使得工作更加高效</h5>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们坚信<span class="primary-text">创新是引领发展的第一动力</span></p>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">致力于为你提供独特而前沿的项目解决方案</p>
+          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">他们这样说...</h2>
+          <p>李世正</p>
+          <p>零本智协ai工具与其他十分有名气的ai工具相比可为有过之而无不及，是一款实用性极强的工具</p>
         </div>
       </div>
     </div>
@@ -138,6 +128,27 @@
           <el-button size="large" class="text-2xl py-7 px-8 primary-bg" type="primary">注册使用</el-button>
         </router-link>
       </h5>
+    </div>
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
+      <div class="row">
+        <div class="col-12 text-center">
+          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">圆满完成赤峰二中<span class="primary-text">百年校庆科技节</span>展示活动</h2>
+          <ul class="columns-1 md:columns-2 mb-0 md:gap-1 md:mb-1">
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnvP3t.jpg"/>
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjH91.jpg"/>
+          </ul>
+          <ul  class="columns-3 mb-2 gap-0 md:gap-1">
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjb1x.jpg"/>
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjThR.jpg"/>
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjoN9.jpg"/>
+          </ul>
+          <p class="text-slate-500">赤峰二中摄影社团 姚懿轩 摄</p>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3 mt-8">相关资料</p>
+          <p class="text-lg/loose"><a href="https://github.com/RainyDreams/rs2024a">软件前端开源地址</a></p>
+          <p class="text-lg/loose"><a href="https://docs.qq.com/pdf/DVWdteVFOaERMT0xP?">课题展示PPT（PDF）</a></p>
+          <p class="text-lg/loose"><a href="https://mp.weixin.qq.com/s/o8-AmYUw8WYAXiojc0sY9g">课题展示文档</a></p>
+        </div>
+      </div>
     </div>
     <div class="panel bs-container flex items-center justify-center flex-col py-10" v-show="count">
       <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">

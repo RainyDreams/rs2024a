@@ -30,12 +30,12 @@
                     </div>
                     <!-- </el-watermark> -->
                   </div>
-                  <div class="assistant" v-if="item.role == 'assistant'">
+                  <div class="assistant " v-if="item.role == 'assistant'">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar> -->
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     
-                    <div class="chatcontent" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
+                    <div class="chatcontent md:text-xl" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
                     <!-- </el-watermark> -->
                   </div>
                 </template>
