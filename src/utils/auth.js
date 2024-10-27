@@ -195,16 +195,20 @@ let Auth = {
     window.clarity("event", 'userLogin')
     return this.basicAuth("/api/login", JSON.stringify(param))
   },
-  getBasicInfo:asyncThrottle(async function getBasicInfo({router=Auth.router,route=Auth.route,task}){
+  getBasicInfo:/*asyncThrottle(*/async function getBasicInfo({router=Auth.router,route=Auth.route,task,to,next}){
     Auth.router = router;
     Auth.route = route;
     window.clarity("event", 'getBasicInfo')
     const getPr = await Auth.getPrtoken();
     const info = sessionStorage.getItem('userInfo');
     let mode;
+    if(to.meta.nologin){
+      next()
+    }
     if(info){
       if(JSON.parse(info).avatar || JSON.parse(info).expirationTime < new Date().getTime()){
-        mode = 'exist'
+        mode = 'exist';
+        next()
       }
     }
     const res = (await Auth.basicAuth("/api/getBasicInfo",`{"mode":"${mode}"}`)).content;
@@ -213,16 +217,22 @@ let Auth = {
       ...res,
       expirationTime: new Date().getTime() + 30 * 60 * 1000,
     }))
+    if(!res.isLogined){
+      next('/login-needed?url='+encodeURIComponent(Auth.route.fullPath))
+    } else {
+      next()
+    }
+    // debugger;
     window.clarity("set", 'userTag', res.identityType || 'normal');
     return task({
       ...JSON.parse(info),
       ...res,
       expirationTime: new Date().getTime() + 30 * 60 * 1000,
     });
-  },5000,({task})=>{
+  },/*5000,({task})=>{
     const info = JSON.parse(sessionStorage.getItem('userInfo') || '{}')
     return task(info)
-  }),
+  })*/
   getUser:async function getUser(){
     window.clarity("event", 'getUser')
     const stmtGet = sessionStorage.getItem('userInfo')
@@ -254,8 +264,17 @@ let Auth = {
   },
   getPrtoken: async function getPrtoken(mode) {
     // console.log(Cookies.get("czigauth"));
+    let userAuth = sessionStorage.getItem("userInfo");
+    if (userAuth) {
+      userAuth = JSON.parse(userAuth);
+    } else {
+      userAuth = {};
+    }
+    const userAuthStatus = userAuth && userAuth?.isLogined;
     if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
       return { status: "exist", content: Cookies.get("czigauth") };
+    } else if (!Cookies.get("czigauth") && !userAuthStatus){
+      return { status: "notExist", content: Cookies.get("czigauth") };
     }
     window.clarity("event", 'getPrtoken')
     return this.basicAuth("/api/prtoken", "", {
@@ -533,11 +552,20 @@ let Auth = {
       });
     }
   },
+  chatWithAI_Analysis:async function chatWithAI_Analysis(param) {
+    window.clarity("event", 'chatWithAI')
+    await this.getPrtoken();
+    let _this = this;
+    await this.getStreamText('/api/ai/stream_chat_analysis', { sessionID: param.sessionID, content: param.content,vf:param.vf}, {
+      onmessage:param.onmessage,
+      onclose:param.onclose
+    });
+  },
   chatWithAI:async function chatWithAI(param) {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
     let _this = this;
-    await this.getStreamText('/api/ai/stream', { sessionID: param.sessionID, content: param.content,vf:param.vf}, {
+    await this.getStreamText('/api/ai/stream', { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf}, {
       onmessage:param.onmessage,
       onclose:param.onclose
     });
@@ -570,12 +598,16 @@ let Auth = {
       const reader = response.body.getReader();
       let decoder = new TextDecoder();
       while (true) {
-        const { done, value } = await reader.read();
-        if (done) { param.onclose(); break; }
-        const textArray = (decoder.decode(value, { stream: true }).replace(/\n/g,"").trim().replace('data: ','')).split('data: ');
-        for (const text of textArray) {
-          if(text == '[DONE]') continue;
-          param.onmessage(text);
+        try{
+          const { done, value } = await reader.read();
+          if (done) { param.onclose(); break; }
+          const textArray = (decoder.decode(value, { stream: true }).replace(/\n/g,"").trim().replace('data: ','')).split('data: ');
+          for (const text of textArray) {
+            if(text == '[DONE]') continue;
+            param.onmessage(text);
+          }
+        } catch(e) {
+          console.error(e)
         }
       }
     } catch (error) {

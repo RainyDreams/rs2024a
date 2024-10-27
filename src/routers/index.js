@@ -41,8 +41,8 @@ import Error404 from '../views/Errors/404.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: "/", name: "Home", component: HomeIndex, meta:{title:'首页',hide:['sidebar']} },
-    { path: "/block", name: "Block", component: HomeBlock, meta:{title:'该请求被拦截',hide:['sidebar']} },
+    { path: "/", name: "Home", component: HomeIndex, meta:{title:'首页',hide:['sidebar'],nologin:true} },
+    { path: "/block", name: "Block", component: HomeBlock, meta:{title:'该请求被拦截',hide:['sidebar'],nologin:true} },
     { path: "/projects/", name: "Projects", children: [
       { path: "create", name: "ProjectsCreate", component: ProjectsCreate,meta:{title:'创建项目'} },
       { path: "dashboard", name: "ProjectsDashboard", component: ProjectsDashboard,meta:{title:'仪表盘'} },
@@ -74,24 +74,24 @@ const router = createRouter({
       { path: "history", name: "ModelHistory", component: ModelHistory,meta:{title:'零本AI 历史'}},
     ]},
     { path: "/about/", name: "About", children: [
-      { path: "info", name: "AboutInfo", component: AboutInfo,meta:{title:'软件信息'} },
-      { path: "progress", name: "AboutProgress", component: AboutProgress,meta:{title:'创作历程'} },
-      { path: "log", name: "AboutLog", component: AboutLog,meta:{title:'更新日志'} }
+      { path: "info", name: "AboutInfo", component: AboutInfo,meta:{title:'软件信息',nologin:true} },
+      { path: "progress", name: "AboutProgress", component: AboutProgress,meta:{title:'创作历程',nologin:true} },
+      { path: "log", name: "AboutLog", component: AboutLog,meta:{title:'更新日志',nologin:true} }
     ] },
     {path: "/status/", name:"Status", children:[
       { path: "jta", name:"JoinTeamApplication", component:JoinTeamApplication,meta:{hide:['sidebar'],title:'加入团队申请'}},
       { path: "joining", name:"JoinProcess", component:JoinProcess,meta:{hide:['sidebar'] ,title:'加入团队中'}},
     ]},
     { path: "/notification", name: "Notification", component: Notification,meta:{hide:['sidebar'],title:'通知'}},
-    { path: "/reg", name: "UserRegister", component: UserRegister,meta:{hide:['tabbar','sidebar'],title:'注册'}},
-    { path: "/login", name: "UserLogin", component: UserLogin,meta:{hide:['tabbar','sidebar'],title:'登录'}},
+    { path: "/reg", name: "UserRegister", component: UserRegister,meta:{hide:['tabbar','sidebar'],title:'注册',nologin:true}},
+    { path: "/login", name: "UserLogin", component: UserLogin,meta:{hide:['tabbar','sidebar'],title:'登录',nologin:true}},
     { path: "/login-success", name: "LoginSuccess", component: LoginSuccess,meta:{hide:['sidebar'],'title':'登录成功'}},
-    { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar'],title:'登录已失效'}},
+    { path: "/login-needed", name: "LoginNeeded", component: LoginNeeded,meta:{hide:['sidebar'],title:'登录已失效',nologin:true}},
     { path: "/login-already", name: "LoginAlready", component: LoginAlready,meta:{hide:['sidebar'],title:'已登录'}},
     { path: "/settings/", name: "Settings", component: SettingsIndex,meta:{title:'创建项目'},title:'设置'},
-    { path: "/test/", name: "Test", component: TestIndex,meta:{title:'测试页面'} },
+    { path: "/test/", name: "Test", component: TestIndex,meta:{title:'测试页面',nologin:true} },
     
-    { path: "/:catchAll(.*)", name: "NotFound", component: Error404,meta:{title:'404 NOT FOUND',hide:['sidebar']} },
+    { path: "/:catchAll(.*)", name: "NotFound", component: Error404,meta:{title:'404 NOT FOUND',hide:['sidebar'],nologin:true} },
   ]
 });
 

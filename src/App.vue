@@ -134,8 +134,8 @@ onMounted(async ()=>{
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
-const update = () => {
-  (Auth.getBasicInfo({router,route,task:async function(re){
+const update = (next,to) => {
+  (Auth.getBasicInfo({router,route,to,next,task:async function(re){
     basicInfo.value = re;
     emitter.emit('basicInfo',re)
     const ps = new Promise((resolve,reject)=>{
@@ -228,8 +228,7 @@ router.beforeEach((to, from, next) => {
   if(to.meta.title){
     document.title = to.meta.title + ' - 零本智协';
   }
-  update()
-  next();
+  update(next,to)
 });
 router.afterEach(async (to, from) => {
   const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
