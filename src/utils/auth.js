@@ -195,18 +195,23 @@ let Auth = {
     window.clarity("event", 'userLogin')
     return this.basicAuth("/api/login", JSON.stringify(param))
   },
+  getBasicInfoStatus:false,
   getBasicInfo:/*asyncThrottle(*/async function getBasicInfo({router=Auth.router,route=Auth.route,task,to,next}){
     Auth.router = router;
     Auth.route = route;
     window.clarity("event", 'getBasicInfo')
-    const getPr = await Auth.getPrtoken();
+    // const getPr = await Auth.getPrtoken();
     const info = sessionStorage.getItem('userInfo');
     let mode;
-    if(to.meta.nologin){
+    if(to.meta?.nologin){
       next()
     }
+    if(this.getBasicInfoStatus){
+      next()
+      return;
+    }
     if(info){
-      if(JSON.parse(info).avatar || JSON.parse(info).expirationTime < new Date().getTime()){
+      if(JSON.parse(info).avatar){
         mode = 'exist';
         next()
       }
@@ -218,7 +223,12 @@ let Auth = {
       expirationTime: new Date().getTime() + 30 * 60 * 1000,
     }))
     if(!res.isLogined){
-      next('/login-needed?url='+encodeURIComponent(Auth.route.fullPath))
+      if(res.AlreadyAuthenticated == true){
+        await this.getPrtoken('force')
+        next()
+      } else {
+        next('/login-needed?url='+encodeURIComponent(Auth.route.fullPath))
+      }
     } else {
       next()
     }
@@ -271,9 +281,12 @@ let Auth = {
       userAuth = {};
     }
     const userAuthStatus = userAuth && userAuth?.isLogined;
-    if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
+    if(mode == 'force'){
+
+    }
+    else if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
       return { status: "exist", content: Cookies.get("czigauth") };
-    } else if (!Cookies.get("czigauth") && !userAuthStatus){
+    } else if (!Cookies.get("czigauth") && !userAuthStatus && !userAuth?.AlreadyAuthenticated){
       return { status: "notExist", content: Cookies.get("czigauth") };
     }
     window.clarity("event", 'getPrtoken')
@@ -598,7 +611,7 @@ let Auth = {
       const reader = response.body.getReader();
       let decoder = new TextDecoder();
       let tmp=''
-      debugger;
+      // debugger;
       while (true) {
         try{
           const { done, value } = await reader.read();

@@ -7,7 +7,8 @@
     <div class="notificationPage h-full">
       <el-empty :image-size="150" v-if="chatList.length == 0">
         <template #description>
-          <p>没有聊天历史</p>
+          <p v-if="loading">正在获取</p>
+          <p v-else>没有聊天历史</p>
         </template>
       </el-empty>   
       <div class="h-full flex flex-col" v-if="chatList.length > 0">
@@ -29,6 +30,7 @@ import Auth from '../../utils/auth';
 import { dayjs, ElButton,ElEmpty, ElMessage,ElTag,ElAvatar } from 'element-plus';
 import jsCookie from 'js-cookie';
 const chatList = ref([]);
+const loading = ref(true)
 onActivated(async ()=>{
   const { content,code } = await Auth.getAiChatHistory();
   // console.log(content, code)
@@ -39,6 +41,7 @@ onActivated(async ()=>{
         formatCreateTime:dayjs(e.createTime).format('YYYY年M月DD日 HH:mm:ss')
       }
     })
+    loading.value = false
   }
 })
 </script>

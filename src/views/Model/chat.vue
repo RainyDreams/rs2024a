@@ -5,7 +5,7 @@
         <div class="col-12 col-xl-8" style="margin-bottom: 0;">
           <div class="panel aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, .03)'}" :gap="[0,0]" :rotate="-12"
-              :content="['零本智协大模型 零本智协大模型', fingerprint]">
+              :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;">
                 <div class="system">
                   <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar>
@@ -18,10 +18,27 @@
                 <template v-for="(item,i) in chatList" class="chatList">
                   <div class="user" v-if="item.role == 'user'">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="chatcontent md:text-base/tight lg:text-lg/snug" v-html="md.render(item.content)"></div>
-                    <div class="analysis" v-show="item.status != 'no_analysis'"> 
+                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" v-html="md.render(item.content)"></div>
+                    <div>
+                      <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        content="复制Markdown"
+                        placement="top-end"
+                      >
+                        <div 
+                          @click="copyText(item.content)"
+                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
+                        </div>
+                      </el-tooltip>
+                    </div>
+                    <div class="analysis" v-show="item.status != 'no_analysis'" style="max-width: 60%;">
                       <p v-show="item.status == 'analysis'">正在思考和分析问题...</p>
-                      <div class="_text text-gray-500 text-sm " v-show="item.status != 'analysised'" v-html="md.render(item.analysis || '')"></div>
+                      <div 
+                        class="_text text-gray-500 text-sm " v-show="item.status != 'analysised'" 
+                        v-html="md.render(item.analysis || '')"
+                      ></div>
                       <p v-show="item.status == 'analysised' || item.status == 'show_analysis'" @click="item.status = item.status=='show_analysis'?'analysised':'show_analysis'" class="flex items-center cursor-pointer justify-end">
                         {{item.status == 'analysised'?'展开':'收起'}}思考过程
                         <Down v-show="item.status == 'analysised'" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
@@ -35,7 +52,7 @@
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     
-                    <div class="chatcontent md:text-base/tight lg:text-lg/snug" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
+                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
                     <div>
                       <el-tooltip
                         class="box-item"
@@ -72,7 +89,7 @@
                 resize="none" 
                 size="large" 
                 autofocus 
-                :maxlength="1000"
+                :maxlength="2000"
                 @focus="onFocus"
                 :placeholder="placeholder" 
                 @keydown.enter="handleEnter"
@@ -173,7 +190,6 @@ const send = async (param)=>{
   loading.value = true;
   askRef.value.focus();
   placeholder.value = "正在回复中...";
-  fingerprint.value = await Auth.getUserFingerprint();
   window.clarity("identify", fingerprint.value, null, "TEST-AI", null)
   setTimeout(()=>{
     throttledScrollToBottom();
@@ -185,7 +201,7 @@ const send = async (param)=>{
     content:targetValue,
     vf:fingerprint.value,
     onclose:async (source) => {
-      chatList.value[index-1].status = 'analysised'
+      throttledScrollToBottom()
       await Auth.chatWithAI({
         sessionID:sessionID.value,
         content:targetValue,
@@ -199,17 +215,18 @@ const send = async (param)=>{
             // analysis:chatList.value[index].analysis,
           })
           throttledScrollToBottom()
+          chatList.value[index-1].status = 'analysised'
           placeholder.value = "还有什么想聊的";
           askRef.value.focus()
         },
         onmessage:(source) => {
-          chatList.value[index].content+=JSON.parse(source).choices[0].delta.content;
+          chatList.value[index].content+=JSON.parse(source).choices[0].delta?.content || '';
           throttledScrollToBottom()
         },
       })
     },
     onmessage:(source) => {
-      chatList.value[index-1].analysis+=JSON.parse(source).choices[0].delta.content;
+      chatList.value[index-1].analysis+=JSON.parse(source).choices[0].delta?.content || '';
       throttledScrollToBottom()
     },
   })
@@ -231,6 +248,7 @@ onActivated(async ()=>{
     sessionID.value = id
     // onChange()
     // await Auth.init()
+    fingerprint.value = await Auth.getUserFingerprint();
     welcome.value = (await Auth.getAIWelcome()).content;
     chatList.value = (await Auth.getAIChatList({sessionID:id})).content.map(e=>{
       e.status = e.analysis?'analysised':'no_analysis';

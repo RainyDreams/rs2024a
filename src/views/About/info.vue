@@ -42,8 +42,9 @@
       <p class="mb-2 mt-4 text-lg"><b class="primary-text">「梦想可以大，第一步总是小」</b></p>
       <p class="mb-2">希望我们这样一款不成熟的微小产品可以给你带来一点点不一样的体验。</p>
       <p class="mb-2">赤子英金 · 只争朝夕</p>
-      <p class="mb-2">特别感谢：Qwen大模型、Cloudflare提供的免费服务</p>
-      <p class="mb-2">2024年8月21日 雨窗</p>
+      <p class="mb-2">特别感谢：Doubao大模型、Qwen大模型、Cloudflare提供的免费服务</p>
+      <p class="mb-2">2024年8月21日 雨窗 项目制作完成</p>
+      <p class="mb-2">2024年10月28日 深夜 结题</p>
     </div>
   </div>
 

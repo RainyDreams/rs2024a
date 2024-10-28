@@ -197,15 +197,15 @@ import { emitter } from '../../utils/emitter';
 import { onMounted, ref } from 'vue';
 import Auth from '../../utils/auth';
 const count = ref('')
-emitter.on('basicInfo',()=>{
-  Auth.getBasicInfo({task:async function(re){
-    return await new Promise((resolve,reject)=>{
-      setTimeout(()=>{
+emitter.on('basicInfo',(re)=>{
+  // Auth.getBasicInfo({task:async function(re){
+  //   return await new Promise((resolve,reject)=>{
+  //     setTimeout(()=>{
         count.value = re.visitInfo.count+'次';
-        resolve()
-      },1000)
-    })
-  }})
+  //       resolve()
+  //     },1000)
+  //   })
+  // }})
 })
 </script>
 
