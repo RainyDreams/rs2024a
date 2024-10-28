@@ -692,10 +692,12 @@ let Auth = {
     return await this.basicAuth('/api/getIP', JSON.stringify({ip:ip}));
   }
 }
-Auth.copyText = navigator.clipboard?(text) => {
+Auth.copyText = navigator.clipboard?(text,fn,er) => {
   window.clarity("event",'copy')
   navigator.clipboard.writeText(text).then(() => {
+    fn()
   }).catch((error) => {
+    er()
     console.error('Error copying text to clipboard:', error);
   });
 }:(text)=>{
@@ -706,7 +708,9 @@ Auth.copyText = navigator.clipboard?(text) => {
   textarea.select();
   try {
     document.execCommand('copy');
+    fn()
   } catch (err) {
+    er()
     console.error('复制操作失败', err);
   }
   document.body.removeChild(textarea);

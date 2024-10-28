@@ -18,7 +18,7 @@
                 <template v-for="(item,i) in chatList" class="chatList">
                   <div class="user" v-if="item.role == 'user'">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="chatcontent" v-html="md.render(item.content)"></div>
+                    <div class="chatcontent md:text-base/tight lg:text-lg/snug" v-html="md.render(item.content)"></div>
                     <div class="analysis" v-show="item.status != 'no_analysis'"> 
                       <p v-show="item.status == 'analysis'">正在思考和分析问题...</p>
                       <div class="_text text-gray-500 text-sm " v-show="item.status != 'analysised'" v-html="md.render(item.analysis || '')"></div>
@@ -35,7 +35,21 @@
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     
-                    <div class="chatcontent md:text-xl" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
+                    <div class="chatcontent md:text-base/tight lg:text-lg/snug" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
+                    <div>
+                      <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        content="复制Markdown"
+                        placement="top-start"
+                      >
+                        <div 
+                          @click="copyText(item.content)"
+                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
+                        </div>
+                      </el-tooltip>
+                    </div>
                     <!-- </el-watermark> -->
                   </div>
                 </template>
@@ -82,14 +96,15 @@
 </template>
 <script setup>
 import markdownIt from 'markdown-it';
-// import markdownItHighlightjs from 'markdown-it-highlightjs'
+import markdownItHighlightjs from 'markdown-it-highlightjs'
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
 import Auth from "../../utils/auth";
 import { throttle } from '../../utils/helpers'
-import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton } from "element-plus"; 
+import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up } from '@icon-park/vue-next';
+import { Down,Up,Copy } from '@icon-park/vue-next';
 const md = new markdownIt()
+md.use(markdownItHighlightjs)
 const route = useRoute()
 const router = useRouter()
 const chatList = ref([]);
@@ -105,6 +120,13 @@ const welcome_loading = ref(true)
 const sessionID = ref()
 const onFocus = () => {
   throttledScrollToBottom();
+}
+function copyText(text){
+  Auth.copyText(text,()=>{
+    ElMessage.success("复制成功")
+  },()=>{
+    ElMessage.error("复制失败")
+  })
 }
 watch(input, () => {
   // now.value = input.value.length;
