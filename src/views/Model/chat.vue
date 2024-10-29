@@ -15,8 +15,8 @@
                     <p><router-link to="/model/history">聊天历史</router-link></p>
                   </div>
                 </div>
-                <template v-for="(item,i) in chatList" class="chatList">
-                  <div class="user" v-if="item.role == 'user'">
+                <template v-for="(item,i) in chatList" class="chatList" id="ai_chatList">
+                  <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                     <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" v-html="md.render(item.content)"></div>
                     <div>
@@ -27,9 +27,14 @@
                         placement="top-end"
                       >
                         <div 
-                          @click="copyText(item.content)"
+                          @click="copyHtml(i)"
                           class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
                           <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
+                        </div>
+                        <div 
+                          @click="copyText(item.content)"
+                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          <DocDetail theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
                     </div>
@@ -47,7 +52,7 @@
                     </div>
                     <!-- </el-watermark> -->
                   </div>
-                  <div class="assistant " v-if="item.role == 'assistant'">
+                  <div class="assistant " v-if="item.role == 'assistant'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar> -->
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
@@ -61,9 +66,14 @@
                         placement="top-start"
                       >
                         <div 
-                          @click="copyText(item.content)"
+                          @click="copyHtml(i)"
                           class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
                           <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
+                        </div>
+                        <div 
+                          @click="copyText(item.content)"
+                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          <DocDetail theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
                     </div>
@@ -119,7 +129,7 @@ import Auth from "../../utils/auth";
 import { throttle } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail } from '@icon-park/vue-next';
 const md = new markdownIt()
 md.use(markdownItHighlightjs)
 const route = useRoute()
@@ -145,13 +155,23 @@ function copyText(text){
     ElMessage.error("复制失败")
   })
 }
+function copyHtml(i){
+  const html = document.querySelector('#ai_chatList>div[data-id="'+i+'"] chatcontent').innerHTML
+  Auth.copyHtml(html,()=>{
+    ElMessage.success("复制成功")
+  },()=>{
+    ElMessage.error("复制失败")
+  })
+}
 watch(input, () => {
   // now.value = input.value.length;
   askRef.value.style.height=0;
   if(askRef.value.scrollHeight > askRef.value.clientHeight && askRef.value.scrollHeight < 200){
     askRef.value.style.height = askRef.value.scrollHeight+'px'
-  } else if(askRef.value.scrollHeight < askRef.value.clientHeight && askRef.value.scrollHeight < 200) {
+  } else if(askRef.value.scrollHeight <= askRef.value.clientHeight && askRef.value.scrollHeight < 200) {
     askRef.value.style.height = askRef.value.scrollHeight+'px'
+  } else {
+    askRef.value.style.height = '200px'
   }
 })
 const handleEnter = async (event) => {
@@ -187,6 +207,11 @@ const send = async (param)=>{
   })
   const targetValue = input.value
   input.value = '';
+  setTimeout(()=>{
+    // throttledScrollToBottom()
+    askRef.value.style.height = 0 + 'px';
+  },100)
+  // askRef.value.style.height = askRef.value.scrollHeight+'px'
   loading.value = true;
   askRef.value.focus();
   placeholder.value = "正在回复中...";

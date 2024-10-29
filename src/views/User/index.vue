@@ -346,8 +346,10 @@ async function logout(){
     showCancelButton:true,
     callback: async (action) => {
       if (action === 'confirm') {
+        loading.value=true;
         const res = await Auth.logout();
         if(res.status == 'sus'){
+          sessionStorage.removeItem('userInfo')
           ElMessageBox.alert('退出成功', '提示', {
             confirmButtonText: '确定',
             showClose:false,
@@ -356,6 +358,8 @@ async function logout(){
               // window.location.href = 'https://auth.chiziingiin.top/relogin';
             }
           })
+        } else {
+          loading.value=false;
         }
       }
     },

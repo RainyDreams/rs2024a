@@ -135,6 +135,7 @@ function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
 const update = (next,to) => {
+  // console.log('updateBasicAuth')
   (Auth.getBasicInfo({router,route,to,next,task:async function(re){
     basicInfo.value = re;
     emitter.emit('basicInfo',re)
@@ -228,6 +229,7 @@ router.beforeEach((to, from, next) => {
   if(to.meta.title){
     document.title = to.meta.title + ' - 零本智协';
   }
+  // next()
   update(next,to)
 });
 router.afterEach(async (to, from) => {

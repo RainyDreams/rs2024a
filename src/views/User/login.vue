@@ -4,9 +4,11 @@
       <h1 class="text-2xl font-semibold mb-3 md:text-6xl/tight md:mb-6">零本智协项目统一身份验证</h1>
       <h5 class="hidden md:block md:text-6xl font-semibold mb-20">登录平台</h5>
     </div>
-    <div class="flex-1 px-6 py-9 flex flex-col bg-white md:px-20 xxl:px-28">
+    <div class="flex-1 px-6 py-9 flex flex-col bg-white md:px-20 xxl:px-28 md:overflow-y-auto">
       <h2 class="text-4xl mb-9 text-blue-900 font-semibold mt-3 md:mt-16 md:text-5xl">欢迎！</h2>
+      <el-skeleton  v-show="loading" animated :rows="5" />
       <el-form 
+        v-show="!loading" 
         :model="form" 
         label-width="auto"
         :rules="rules"
@@ -46,14 +48,16 @@
 import Cookies from 'js-cookie';
 import { ref,onMounted,reactive, onActivated, onDeactivated } from 'vue'
 import Auth from "../../utils/auth.js";
-import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElAlert, ElMessageBox,ElSelect,ElOption} from 'element-plus';
+import { ElMessage,ElForm, ElFormItem,ElInput,ElButton,ElSkeleton} from 'element-plus';
 import CryptoJS from 'crypto-js';
 import { useRoute, useRouter,RouterLink } from 'vue-router';
+import { emitter } from '../../utils/emitter.js';
 const ruleFormRef = ref(null);
 const formloading = ref(false);
 const route = useRoute()
 const router = useRouter()
 const verifyToken = ref()
+const loading = ref(false);
 const form = reactive({
   username: '',
   password: ''
@@ -86,6 +90,7 @@ const submitForm = (formEl) => {
       }
       ElMessage.info('正在登录')
       const encode = CryptoJS.MD5(form.username+form.password).toString().toUpperCase();
+      loading.value=true;
       const createTeam = await Auth.userLogin({
         username:form.username,
         password:encode,
@@ -101,14 +106,28 @@ const submitForm = (formEl) => {
           secure: true,
           domain:'.chiziingiin.top'
         });
+        await Auth.getPrtoken('force')
+        // Auth.mainTaskThread.add(async ()=>{
+        //   // await Auth.getBasicInfo()
+        //   // emitter.emit('updateBasicAuth')
+        // })
         sessionStorage.removeItem('userInfo')
-        ElMessageBox.alert('登录成功！', '提示', {}).then(() => {
-          router.push(route.query.url || '/login-success')
-        })
+        ElMessage.success('登录成功')
+        router.push(route.query.url || '/login-success')
+
+        // ElMessageBox.alert('登录成功！', '提示', {}).then(() => {
+        // })
       } else {
+        Cookies.set("czigauth", "NeedPrtoken", {
+          // expires: new Date(createTeam.content.expires),
+          path: "/",
+          secure: true,
+          domain:'.chiziingiin.top'
+        });
+        loading.value=false;
         turnstile.remove('#turnstile-box')
         ElMessage({
-          message: '创建失败',
+          message: '登录失败',
           type: 'error',
         })
       }

@@ -201,9 +201,18 @@ let Auth = {
     Auth.route = route;
     window.clarity("event", 'getBasicInfo')
     // const getPr = await Auth.getPrtoken();
+    // debugger;
+    if((!Cookies.get('czigauth'))){
+      Cookies.set('czigauth','logout',{
+        expires: 7,
+        path: "/",
+        secure: true,
+        domain:'.chiziingiin.top'
+      })
+    }
     const info = sessionStorage.getItem('userInfo');
     let mode;
-    if(to.meta?.nologin){
+    if(to?.meta?.nologin){
       next()
     }
     if(this.getBasicInfoStatus){
@@ -211,11 +220,12 @@ let Auth = {
       return;
     }
     if(info){
-      if(JSON.parse(info).avatar){
+      if(JSON.parse(info).avatar || JSON.parse(info).AlreadyAuthenticated){
         mode = 'exist';
         next()
       }
     }
+    this.getBasicInfoStatus = true
     const res = (await Auth.basicAuth("/api/getBasicInfo",`{"mode":"${mode}"}`)).content;
     sessionStorage.setItem('userInfo',JSON.stringify({
       ...JSON.parse(info),
@@ -224,8 +234,8 @@ let Auth = {
     }))
     if(!res.isLogined){
       if(res.AlreadyAuthenticated == true){
-        await this.getPrtoken('force')
         next()
+        await this.getPrtoken('force')
       } else {
         next('/login-needed?url='+encodeURIComponent(Auth.route.fullPath))
       }
@@ -234,6 +244,7 @@ let Auth = {
     }
     // debugger;
     window.clarity("set", 'userTag', res.identityType || 'normal');
+    this.getBasicInfoStatus = false;
     return task({
       ...JSON.parse(info),
       ...res,
@@ -728,6 +739,41 @@ Auth.copyText = navigator.clipboard?(text,fn,er) => {
   }
   document.body.removeChild(textarea);
 }
+Auth.copyHtml = navigator.clipboard? (html, fn, er) => {
+  window.clarity("event", 'copy');
+  // 对于现代浏览器，尝试使用Clipboard API复制HTML（如果支持）
+  navigator.clipboard.write([
+      new ClipboardItem({
+          "text/html": new Blob([html], {type: "text/html"})
+      })
+  ]).then(() => {
+      fn();
+  }).catch((error) => {
+      er();
+      console.error('Error copying HTML to clipboard:', error);
+  });
+} : (html) => {
+  window.clarity("event", 'copy');
+  // 对于旧浏览器，使用document.execCommand方式
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  div.style.position = 'absolute';
+  div.style.left = '-9999px';
+  document.body.appendChild(div);
+  const range = document.createRange();
+  range.selectNode(div);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  try {
+      document.execCommand('copy');
+      fn();
+  } catch (err) {
+      er();
+      console.error('复制HTML操作失败', err);
+  }
+  document.body.removeChild(div);
+};
 
 window.onloadTurnstileCallback = function () {
   console.log('onload?')
