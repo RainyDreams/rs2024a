@@ -19,18 +19,25 @@
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                     <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" v-html="md.render(item.content)"></div>
-                    <div>
+                    <div class="flex">
                       <el-tooltip
                         class="box-item"
                         effect="dark"
-                        content="复制Markdown"
-                        placement="top-end"
+                        content="复制"
+                        placement="top-start"
                       >
                         <div 
                           @click="copyHtml(i)"
                           class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
                           <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
+                      </el-tooltip>
+                      <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        content="复制Markdown"
+                        placement="top-start"
+                      >
                         <div 
                           @click="copyText(item.content)"
                           class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
@@ -58,11 +65,11 @@
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     
                     <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
-                    <div>
+                    <div class="flex">
                       <el-tooltip
                         class="box-item"
                         effect="dark"
-                        content="复制Markdown"
+                        content="复制"
                         placement="top-start"
                       >
                         <div 
@@ -70,6 +77,13 @@
                           class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
                           <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
+                      </el-tooltip>
+                      <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        content="复制Markdown"
+                        placement="top-start"
+                      >
                         <div 
                           @click="copyText(item.content)"
                           class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
