@@ -220,7 +220,7 @@ let Auth = {
       return;
     }
     if(info){
-      if(JSON.parse(info).avatar || JSON.parse(info).AlreadyAuthenticated){
+      if(JSON.parse(info).avatar){
         mode = 'exist';
         next()
       }
@@ -582,7 +582,8 @@ let Auth = {
     let _this = this;
     await this.getStreamText('/api/ai/stream_chat_analysis', { sessionID: param.sessionID, content: param.content,vf:param.vf}, {
       onmessage:param.onmessage,
-      onclose:param.onclose
+      onclose:param.onclose,
+      stopStatus:param.stopStatus
     });
   },
   chatWithAI:async function chatWithAI(param) {
@@ -591,7 +592,8 @@ let Auth = {
     let _this = this;
     await this.getStreamText('/api/ai/stream', { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf}, {
       onmessage:param.onmessage,
-      onclose:param.onclose
+      onclose:param.onclose,
+      stopStatus:param.stopStatus
     });
   },
   chatWithAI_test:async function chatWithAI(param) {
@@ -600,7 +602,8 @@ let Auth = {
     let _this = this;
     await this.getStreamText('/api/ai/stream_test', { sessionID: param.sessionID, content: param.content,vf:param.vf}, {
       onmessage:param.onmessage,
-      onclose:param.onclose
+      onclose:param.onclose,
+      stopStatus:param.stopStatus
     });
   },
   getStreamText:async function getStreamText(url,postData,param) {
@@ -624,6 +627,9 @@ let Auth = {
       let tmp=''
       // debugger;
       while (true) {
+        if(param.stopStatus){
+          if(param.stopStatus.value) { param.onclose(); break; }
+        }
         try{
           const { done, value } = await reader.read();
           if (done) { param.onclose(); break; }
@@ -638,7 +644,8 @@ let Auth = {
         }
       }
     } catch (error) {
-      defaultFailed(error,2)
+      console.error(error)
+      // defaultFailed(error,2)
     }
   },
   getAIGuestList:async function getAIGuestList() {
@@ -724,7 +731,7 @@ Auth.copyText = navigator.clipboard?(text,fn,er) => {
     er()
     console.error('Error copying text to clipboard:', error);
   });
-}:(text)=>{
+}:(text,fn,er)=>{
   window.clarity("event",'copy')
   const textarea = document.createElement('textarea');
   textarea.value = text;
@@ -739,20 +746,20 @@ Auth.copyText = navigator.clipboard?(text,fn,er) => {
   }
   document.body.removeChild(textarea);
 }
-Auth.copyHtml = navigator.clipboard? (html, fn, er) => {
+Auth.copyHtml = false? (html, fn, er) => {
   window.clarity("event", 'copy');
   // 对于现代浏览器，尝试使用Clipboard API复制HTML（如果支持）
   navigator.clipboard.write([
-      new ClipboardItem({
-          "text/html": new Blob([html], {type: "text/html"})
-      })
+    new ClipboardItem({
+      "text/html": new Blob([html], {type: "text/html"})
+    })
   ]).then(() => {
-      fn();
+    fn();
   }).catch((error) => {
-      er();
-      console.error('Error copying HTML to clipboard:', error);
+    er();
+    console.error('Error copying HTML to clipboard:', error);
   });
-} : (html) => {
+} : (html,fn,er) => {
   window.clarity("event", 'copy');
   // 对于旧浏览器，使用document.execCommand方式
   const div = document.createElement('div');
@@ -766,13 +773,13 @@ Auth.copyHtml = navigator.clipboard? (html, fn, er) => {
   selection.removeAllRanges();
   selection.addRange(range);
   try {
-      document.execCommand('copy');
-      fn();
+    document.execCommand('copy');
+    fn();
   } catch (err) {
-      er();
-      console.error('复制HTML操作失败', err);
+    er();
+    console.error('复制HTML操作失败', err);
   }
-  document.body.removeChild(div);
+  // document.body.removeChild(div);
 };
 
 window.onloadTurnstileCallback = function () {

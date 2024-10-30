@@ -6,7 +6,7 @@
           <div class="panel aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, .03)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
-              <div class="chatList" style="min-height: 200px;">
+              <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <div class="system">
                   <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar>
                   <div class="chatcontent" style="font-size:14px;width:100%;">
@@ -15,7 +15,7 @@
                     <p><router-link to="/model/history">聊天历史</router-link></p>
                   </div>
                 </div>
-                <template v-for="(item,i) in chatList" class="chatList" id="ai_chatList">
+                <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                     <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" v-html="md.render(item.content)"></div>
@@ -124,9 +124,15 @@
             <!-- <el-input ></el-input> -->
             <div class="_number">
               <!-- <span>{{ now }} / 1000</span> -->
-              <el-button @click="send()" :loading="loading" type="primary"
+              <el-button @click="send()" :loading="loading" v-show="!loading" type="primary"
                 color="rgba(144, 77, 245,1)" class="ml-1" >
                 发送
+              </el-button>
+              <el-button @click="stop()" v-show="loading && !welcome_loading" type="primary"
+                color="rgba(144, 77, 245,1)" class="ml-1" >
+                <!-- 终止 -->
+                <!-- <forbid theme="outline" size="24" fill="#555" :strokeWidth="3" strokeLinejoin="bevel"/> -->
+                <PauseOne theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/>
               </el-button>
             </div>
           </div>
@@ -143,7 +149,7 @@ import Auth from "../../utils/auth";
 import { throttle } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne } from '@icon-park/vue-next';
 const md = new markdownIt()
 md.use(markdownItHighlightjs)
 const route = useRoute()
@@ -159,6 +165,7 @@ const fingerprint = ref("")
 const welcome = ref('')
 const welcome_loading = ref(true)
 const sessionID = ref()
+const stopStatus = ref(false)
 const onFocus = () => {
   throttledScrollToBottom();
 }
@@ -170,7 +177,7 @@ function copyText(text){
   })
 }
 function copyHtml(i){
-  const html = document.querySelector('#ai_chatList>div[data-id="'+i+'"] chatcontent').innerHTML
+  const html = document.querySelector('#ai_chatList>div[data-id="'+i+'"] .chatcontent').innerHTML
   Auth.copyHtml(html,()=>{
     ElMessage.success("复制成功")
   },()=>{
@@ -204,6 +211,10 @@ const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
   scrollElement.scrollTop = scrollElement.scrollHeight;
 };
+const stop = async (param)=>{
+  stopStatus.value=true;
+  loading.value=false;
+}
 const send = async (param)=>{
   if(input.value.trim() == '') {
     ElMessage.warning("请输入内容")
@@ -239,30 +250,43 @@ const send = async (param)=>{
     sessionID:sessionID.value,
     content:targetValue,
     vf:fingerprint.value,
+    stopStatus,
     onclose:async (source) => {
       throttledScrollToBottom()
-      await Auth.chatWithAI({
-        sessionID:sessionID.value,
-        content:targetValue,
-        vf:fingerprint.value,
-        analysis:chatList.value[index-1].analysis,
-        onclose:(source) => {
-          loading.value = false;
-          Auth.setAIChatResponse({
-            sessionID:sessionID.value,
-            content:chatList.value[index].content,
-            // analysis:chatList.value[index].analysis,
-          })
-          throttledScrollToBottom()
-          chatList.value[index-1].status = 'analysised'
-          placeholder.value = "还有什么想聊的";
-          askRef.value.focus()
-        },
-        onmessage:(source) => {
-          chatList.value[index].content+=JSON.parse(source).choices[0].delta?.content || '';
-          throttledScrollToBottom()
-        },
-      })
+      if(stopStatus.value==true){
+        stopStatus.value=false;
+        placeholder.value = "还有什么想聊的";
+        chatList.value[index-1].status = 'analysised'
+        chatList.value[index].content+='[回答已终止]';
+      } else {
+        await Auth.chatWithAI({
+          sessionID:sessionID.value,
+          content:targetValue,
+          vf:fingerprint.value,
+          analysis:chatList.value[index-1].analysis,
+          stopStatus,
+          onclose:(source) => {
+            stopStatus.value=false;
+            loading.value = false;
+            if(!chatList.value[index].content){
+              chatList.value[index].content+='[回答已终止]';
+            }
+            Auth.setAIChatResponse({
+              sessionID:sessionID.value,
+              content:chatList.value[index].content,
+              // analysis:chatList.value[index].analysis,
+            })
+            throttledScrollToBottom()
+            chatList.value[index-1].status = 'analysised'
+            placeholder.value = "还有什么想聊的";
+            askRef.value.focus()
+          },
+          onmessage:(source) => {
+            chatList.value[index].content+=JSON.parse(source).choices[0].delta?.content || '';
+            throttledScrollToBottom()
+          },
+        })
+    }
     },
     onmessage:(source) => {
       chatList.value[index-1].analysis+=JSON.parse(source).choices[0].delta?.content || '';
