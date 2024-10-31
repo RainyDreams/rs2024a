@@ -39,9 +39,13 @@ const defaultFailed = async function (response,code) {
   } else {
     ElMessage.error('服务器错误');
     try{
-      if(code==2)
-      {}
-        // throw response;
+      if(code==2){
+
+      }
+      if(code==3){
+        throw response;
+      }
+        // 
       if(code==0){
         throw {
           status: 0b00000011,
@@ -64,8 +68,8 @@ const defaultFailed = async function (response,code) {
       //   'show-close':false,
       //   beforeClose:async (value,instance, done)=>{
       //     if(value=='confirm'){
-            instance.confirmButtonLoading = true
-            instance.confirmButtonText = '上传错误信息'
+            // instance.confirmButtonLoading = true
+            // instance.confirmButtonText = '上传错误信息'
             const ua = navigator.userAgent;
             const r = await Auth.reportErrlog(JSON.stringify({
               ua,
@@ -627,7 +631,7 @@ let Auth = {
       };
       const response = await fetch(url, postOptions);
       if (!response.ok) {
-        defaultFailed(response.statusText,2)
+        defaultFailed(response.statusText,3)
         throw new Error("Network response was not ok");
       }
       const model = response.headers.get("Model-Line");
@@ -664,7 +668,7 @@ let Auth = {
           errorCount++;
           if(errorCount > 100){
             param.onclose();
-            defaultFailed(e,2)
+            defaultFailed(e,3)
             break;
           }
           console.warn('getStreamText - ',e)
@@ -672,6 +676,7 @@ let Auth = {
       }
     } catch (error) {
       param.onclose();
+      defaultFailed(e,3)
       console.error(error)
       // defaultFailed(error,2)
     }
