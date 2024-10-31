@@ -18,7 +18,7 @@
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" v-html="md.render(item.content)"></div>
+                    <div class="chatcontent text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(item.content)"></div>
                     <div class="flex">
                       <el-tooltip
                         class="box-item"
@@ -64,7 +64,7 @@
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     
-                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
+                    <div class="chatcontent text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
                     <div class="flex">
                       <el-tooltip
                         class="box-item"
@@ -251,6 +251,14 @@ const send = async (param)=>{
     content:targetValue,
     vf:fingerprint.value,
     stopStatus,
+    onmessage:(source) => {
+      const decode = JSON.parse(source);
+      chatList.value[index-1].analysis+=
+        decode.response
+        // decode.choices[0].delta?.content || 
+        // '';
+      throttledScrollToBottom()
+    },
     onclose:async (source) => {
       throttledScrollToBottom()
       if(stopStatus.value==true){
@@ -265,6 +273,10 @@ const send = async (param)=>{
           vf:fingerprint.value,
           analysis:chatList.value[index-1].analysis,
           stopStatus,
+          onmessage:(source) => {
+            chatList.value[index].content+=JSON.parse(source).candidates[0].content.parts[0].text || '';
+            throttledScrollToBottom()
+          },
           onclose:(source) => {
             stopStatus.value=false;
             loading.value = false;
@@ -281,16 +293,8 @@ const send = async (param)=>{
             placeholder.value = "还有什么想聊的";
             askRef.value.focus()
           },
-          onmessage:(source) => {
-            chatList.value[index].content+=JSON.parse(source).choices[0].delta?.content || '';
-            throttledScrollToBottom()
-          },
         })
     }
-    },
-    onmessage:(source) => {
-      chatList.value[index-1].analysis+=JSON.parse(source).choices[0].delta?.content || '';
-      throttledScrollToBottom()
     },
   })
   

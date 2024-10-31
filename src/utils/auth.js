@@ -590,11 +590,14 @@ let Auth = {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
     let _this = this;
-    await this.getStreamText('/api/ai/stream', { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf}, {
-      onmessage:param.onmessage,
-      onclose:param.onclose,
-      stopStatus:param.stopStatus
-    });
+    await this.getStreamText('/api/ai/stream', 
+      { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf },
+      {
+        onmessage:param.onmessage,
+        onclose:param.onclose,
+        stopStatus:param.stopStatus
+      }
+    );
   },
   chatWithAI_test:async function chatWithAI(param) {
     window.clarity("event", 'chatWithAI')
@@ -620,24 +623,31 @@ let Auth = {
       };
       const response = await fetch(url, postOptions);
       if (!response.ok) {
+        defaultFailed(response.statusText,2)
         throw new Error("Network response was not ok");
       }
+      const model = response.headers.get("Model-Line");
+      // console.log(model)
       const reader = response.body.getReader();
       let decoder = new TextDecoder();
       let tmp=''
-      // debugger;
       while (true) {
         if(param.stopStatus){
           if(param.stopStatus.value) { param.onclose(); break; }
         }
         try{
           const { done, value } = await reader.read();
+          // console.log('1',value)
           if (done) { param.onclose(); break; }
-          let textArray = (tmp+decoder.decode(value, { stream: true }).replace(/\n/g,"").trim()).split('data: ');
-          tmp = textArray.pop();
+          let textArray = (decoder.decode(value, { stream: true }).replace(/\n/g,"").trim()).split('data: ');
+          // tmp = textArray.pop();
+          // console.log(textArray);
           for (const text of textArray) {
-            if(text == '[DONE]') continue;
-            param.onmessage(text);
+            // if(text == '[DONE]') continue;
+            // console.log(text)
+            if(text){
+              param.onmessage(text,model);
+            }
           }
         } catch(e) {
           console.warn('getStreamText - ',e)

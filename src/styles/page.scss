@@ -495,20 +495,20 @@ a[href]{
       margin-bottom: 0.5em;
     }
     h1{
-      line-height: 2.2em;
-      font-size: 1.8em !important;
+      line-height: 2em;
+      font-size: 1.55em !important;
       font-weight: 700;
       margin-bottom: 1em;
     }
     h2{
-      line-height: 1.8em;
-      font-size: 1.55em !important;
+      line-height: 1.7em;
+      font-size: 1.45em !important;
       font-weight: 700;
       margin-bottom: 0.7em;
     }
     h3{
       line-height: 1.6em;
-      font-size: 1.4em !important;
+      font-size: 1.35em !important;
       margin-bottom: 0.7em;
     }
     h4{
@@ -572,6 +572,12 @@ a[href]{
     .hljs{
       border-radius: 8px;
       margin: 8px 0;
+      font-size: 1em !important;
+      line-height: 1.25em !important;
+      *{
+        font-size: 1em !important;
+        line-height: 1.25em !important;
+      }
       // overflow: auto;
     }
     // *:not(pre)>code,blockquote{
