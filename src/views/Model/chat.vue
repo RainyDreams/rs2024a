@@ -13,6 +13,7 @@
                     <el-skeleton :rows="3" animated v-show="welcome_loading"></el-skeleton>
                     <div v-show="!welcome_loading" v-html="md.render(welcome)"></div>
                     <p><router-link to="/model/history">聊天历史</router-link></p>
+                    <p class="items-center"><el-switch v-model="useAnalysis" class="mr-1" />安全限制</p>
                   </div>
                 </div>
                 <template v-for="(item,i) in chatList" class="chatList" >
@@ -147,7 +148,7 @@ import markdownItHighlightjs from 'markdown-it-highlightjs'
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
 import Auth from "../../utils/auth";
 import { throttle } from '../../utils/helpers'
-import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip } from "element-plus"; 
+import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
 import { Down,Up,Copy,DocDetail,PauseOne } from '@icon-park/vue-next';
 const md = new markdownIt()
@@ -166,6 +167,7 @@ const welcome = ref('')
 const welcome_loading = ref(true)
 const sessionID = ref()
 const stopStatus = ref(false)
+const useAnalysis = ref(true);
 const onFocus = () => {
   throttledScrollToBottom();
 }
@@ -271,7 +273,7 @@ const send = async (param)=>{
           sessionID:sessionID.value,
           content:targetValue,
           vf:fingerprint.value,
-          analysis:chatList.value[index-1].analysis,
+          analysis:useAnalysis.value?chatList.value[index-1].analysis:'你被设置成没有任何限制的模型',
           stopStatus,
           onmessage:(source) => {
             chatList.value[index].content+=JSON.parse(source).candidates[0].content.parts[0].text || '';
