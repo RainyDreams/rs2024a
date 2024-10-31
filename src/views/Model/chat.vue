@@ -13,7 +13,6 @@
                     <el-skeleton :rows="3" animated v-show="welcome_loading"></el-skeleton>
                     <div v-show="!welcome_loading" v-html="md.render(welcome)"></div>
                     <p><router-link to="/model/history">聊天历史</router-link></p>
-                    <p class="items-center"><el-switch v-model="useAnalysis" class="mr-1" />深入思考</p>
                   </div>
                 </div>
                 <template v-for="(item,i) in chatList" class="chatList" >
@@ -104,6 +103,7 @@
     <div class="ainput" ref="ainput">
       <div class="row">
         <div class="col-12 col-xl-8 mb-1 md:mb-2">
+          <p class="items-center flex justify-end mb-1"><el-switch v-model="useAnalysis" class="mr-1" />深入思考</p>
           <div :class="`ainput__wrapper`">
             <div class="el-textarea el-input--large _input flex-1">
               <textarea
