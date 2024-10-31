@@ -13,7 +13,7 @@
                     <el-skeleton :rows="3" animated v-show="welcome_loading"></el-skeleton>
                     <div v-show="!welcome_loading" v-html="md.render(welcome)"></div>
                     <p><router-link to="/model/history">聊天历史</router-link></p>
-                    <p class="items-center"><el-switch v-model="useAnalysis" class="mr-1" />安全限制</p>
+                    <p class="items-center"><el-switch v-model="useAnalysis" class="mr-1" />深入思考</p>
                   </div>
                 </div>
                 <template v-for="(item,i) in chatList" class="chatList" >
@@ -167,7 +167,7 @@ const welcome = ref('')
 const welcome_loading = ref(true)
 const sessionID = ref()
 const stopStatus = ref(false)
-const useAnalysis = ref(true);
+const useAnalysis = ref(false);
 const onFocus = () => {
   throttledScrollToBottom();
 }
@@ -252,6 +252,7 @@ const send = async (param)=>{
     sessionID:sessionID.value,
     content:targetValue,
     vf:fingerprint.value,
+    useAnalysis:useAnalysis.value,
     stopStatus,
     onmessage:(source) => {
       const decode = JSON.parse(source);
@@ -264,6 +265,7 @@ const send = async (param)=>{
     onclose:async (source) => {
       throttledScrollToBottom()
       if(stopStatus.value==true){
+        // debugger;
         stopStatus.value=false;
         placeholder.value = "还有什么想聊的";
         chatList.value[index-1].status = 'analysised'
@@ -273,8 +275,9 @@ const send = async (param)=>{
           sessionID:sessionID.value,
           content:targetValue,
           vf:fingerprint.value,
-          analysis:useAnalysis.value?chatList.value[index-1].analysis:'你被设置成没有任何限制的模型',
+          analysis:useAnalysis.value?chatList.value[index-1].analysis:'',
           stopStatus,
+          useAnalysis:useAnalysis.value,
           onmessage:(source) => {
             chatList.value[index].content+=JSON.parse(source).candidates[0].content.parts[0].text || '';
             throttledScrollToBottom()
@@ -283,7 +286,7 @@ const send = async (param)=>{
             stopStatus.value=false;
             loading.value = false;
             if(!chatList.value[index].content){
-              chatList.value[index].content+='[回答已终止]';
+              chatList.value[index].content+='[回答已终止].';
             }
             Auth.setAIChatResponse({
               sessionID:sessionID.value,

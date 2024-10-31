@@ -206,15 +206,15 @@ const update = (next,to) => {
         } 
       })
       setTimeout(()=>{
-        update()
-      },100000)
+        update(next,to)
+      },200000)
     }).catch(()=>{
       re.NotificationList.forEach(e=>{
         ElMessage.info('收到一条消息')
       })
       setTimeout(()=>{
-        update()
-      },100000)
+        update(next,to)
+      },200000)
     })
   }}));
 }

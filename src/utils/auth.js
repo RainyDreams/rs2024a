@@ -11,8 +11,9 @@ import Cookies from 'js-cookie';
 import Dexie from 'dexie';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRoute, useRouter } from "vue-router";
-import { da } from "element-plus/es/locales.mjs";
+// import { da } from "element-plus/es/locales.mjs";
 import { asyncThrottle } from "./helpers";
+// import { use } from "echarts/types/src/extension.js";
 const router = useRouter()
 const route = useRoute()
 const BASICURL = ''
@@ -580,6 +581,9 @@ let Auth = {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
     let _this = this;
+    if(!param.useAnalysis){
+      return param.onclose();
+    }
     await this.getStreamText('/api/ai/stream_chat_analysis', { sessionID: param.sessionID, content: param.content,vf:param.vf}, {
       onmessage:param.onmessage,
       onclose:param.onclose,
@@ -591,7 +595,7 @@ let Auth = {
     await this.getPrtoken();
     let _this = this;
     await this.getStreamText('/api/ai/stream', 
-      { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf },
+      { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf,useAnalysis:param.useAnalysis },
       {
         onmessage:param.onmessage,
         onclose:param.onclose,
@@ -631,6 +635,7 @@ let Auth = {
       const reader = response.body.getReader();
       let decoder = new TextDecoder();
       let tmp=''
+      let errorCount = 0;
       while (true) {
         if(param.stopStatus){
           if(param.stopStatus.value) { param.onclose(); break; }
@@ -638,22 +643,35 @@ let Auth = {
         try{
           const { done, value } = await reader.read();
           // console.log('1',value)
-          if (done) { param.onclose(); break; }
-          let textArray = (decoder.decode(value, { stream: true }).replace(/\n/g,"").trim()).split('data: ');
-          // tmp = textArray.pop();
+          if (done) { 
+            if(tmp != '[DONE]'){
+              param.onmessage(tmp,model);
+            }
+            param.onclose(); 
+            break; 
+          }
+          let textArray = (tmp+decoder.decode(value, { stream: true }).replace(/\n/g,"").trim()).split('data: ');
+          tmp = textArray.pop();
           // console.log(textArray);
           for (const text of textArray) {
-            // if(text == '[DONE]') continue;
+            if(text == '[DONE]') continue;
             // console.log(text)
             if(text){
               param.onmessage(text,model);
             }
           }
         } catch(e) {
+          errorCount++;
+          if(errorCount > 100){
+            param.onclose();
+            defaultFailed(e,2)
+            break;
+          }
           console.warn('getStreamText - ',e)
         }
       }
     } catch (error) {
+      param.onclose();
       console.error(error)
       // defaultFailed(error,2)
     }
