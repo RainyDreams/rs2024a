@@ -23,12 +23,13 @@ const defaultFailed = async function (response,code) {
   if (response.status === 401) {
     const getPr = await Auth.getPrtoken();
     if(getPr.status=='sus'){
-      ElMessageBox.alert('网络遇到问题，请刷新页面', '错误', {
-        confirmButtonText: '确定',
-        callback:()=>{
-          window.location.reload()
-        }
-      })
+      ElMessage.error('发生错误');
+      // ElMessageBox.alert('网络遇到问题，请刷新页面', '错误', {
+      //   confirmButtonText: '确定',
+      //   callback:()=>{
+      //     window.location.reload()
+      //   }
+      // })
     } else {
       ElMessage.error('未登录或登录过期');
       // console.log(router)
@@ -588,7 +589,10 @@ let Auth = {
     if(!param.useAnalysis){
       return param.onclose();
     }
-    await this.getStreamText('/api/ai/stream_chat_analysis', { sessionID: param.sessionID, content: param.content,vf:param.vf}, {
+    await this.getStreamText('/api/ai/stream_chat_analysis', 
+      { sessionID: param.sessionID, content: param.content,vf:param.vf,
+        model:param.line,
+      }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
       stopStatus:param.stopStatus
@@ -599,7 +603,10 @@ let Auth = {
     await this.getPrtoken();
     let _this = this;
     await this.getStreamText('/api/ai/stream', 
-      { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf,useAnalysis:param.useAnalysis },
+      { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf,
+        useAnalysis:param.useAnalysis,
+        model:param.line,
+      },
       {
         onmessage:param.onmessage,
         onclose:param.onclose,
@@ -634,7 +641,7 @@ let Auth = {
         defaultFailed(response.statusText,3)
         throw new Error("Network response was not ok");
       }
-      const model = response.headers.get("Model-Line");
+      const model = postData.model;
       // console.log(model)
       const reader = response.body.getReader();
       let decoder = new TextDecoder();

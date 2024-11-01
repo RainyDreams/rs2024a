@@ -102,8 +102,39 @@
     </div>
     <div class="ainput" ref="ainput">
       <div class="row">
-        <div class="col-12 col-xl-8 mb-1 md:mb-2">
-          <p class="items-center flex justify-end mb-1"><el-switch v-model="useAnalysis" class="mr-1" />深入思考</p>
+        <div class="col-12 col-xl-8 mb-1 md:mb-2 lg:mb-3 ">
+          <div class="flex flex-col items-end mb-1">
+            <div class="max-w-md w-full">
+              <p v-show="show_menu">
+                <p class="flex gap-1 justify-end pt-3" >
+                  <el-select v-model="analysis_line" placeholder="分析线路" class="mb-1">
+                    <el-option
+                      v-for="item in options_analysis"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                  <el-select v-model="chat_line" placeholder="回答线路" class="mb-1">
+                    <el-option
+                      v-for="item in options_chat"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </p>
+              </p>
+              <p class="items-center flex justify-end mt-1 mb-1 h-6">
+                <span v-show="show_menu">深入思考<el-switch v-model="useAnalysis" class="ml-1 mr-2" /></span>
+                <span @click="show_menu=!show_menu" type="text" style="color:rgba(144, 77, 245,1)" class="cursor-pointer flex items-center text-sm">
+                  <span class="">{{show_menu?'隐藏':'更多'}}</span>
+                  <Down v-show="show_menu" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
+                  <Up v-show="!show_menu" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
+                </span>
+              </p>
+            </div>
+          </div>
           <div :class="`ainput__wrapper`">
             <div class="el-textarea el-input--large _input flex-1">
               <textarea
@@ -148,7 +179,7 @@ import markdownItHighlightjs from 'markdown-it-highlightjs'
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
 import Auth from "../../utils/auth";
 import { throttle } from '../../utils/helpers'
-import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch } from "element-plus"; 
+import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
 import { Down,Up,Copy,DocDetail,PauseOne } from '@icon-park/vue-next';
 const md = new markdownIt()
@@ -168,6 +199,19 @@ const welcome_loading = ref(true)
 const sessionID = ref()
 const stopStatus = ref(false)
 const useAnalysis = ref(false);
+const show_menu = ref(false)
+const options_analysis = [
+  // {value: 'line-1', label: '线路1 Gemini'},
+  {value: 'line-2', label: '分析线路2 Doubao'},
+  {value: 'line-3', label: '分析线路3 Qwen-8b'},
+];
+const options_chat = [
+  {value: 'line-1', label: '回复线路1 Gemini'},
+  {value: 'line-2', label: '回复线路2 Doubao'},
+  {value: 'line-3', label: '回复线路3 Qwen-8b'},
+];
+const analysis_line = ref('line-2')
+const chat_line = ref('line-1')
 const onFocus = () => {
   throttledScrollToBottom();
 }
@@ -254,12 +298,23 @@ const send = async (param)=>{
     vf:fingerprint.value,
     useAnalysis:useAnalysis.value,
     stopStatus,
-    onmessage:(source) => {
+    line:analysis_line.value,
+    onmessage:(source,model) => {
       const decode = JSON.parse(source);
-      chatList.value[index-1].analysis+=
-        decode.response
-        // decode.choices[0].delta?.content || 
-        // '';
+      let tmp='';
+      switch (model) {
+        case 'line-1':
+          // tmp=decode.response;
+          tmp=decode.candidates[0].content.parts[0].text ;
+          break;
+        case 'line-2':
+          tmp=decode.choices[0].delta?.content;
+          break;
+        case 'line-3':
+          tmp=decode.response;
+          break;
+      }
+      chatList.value[index-1].analysis+=tmp;
       throttledScrollToBottom()
     },
     onclose:async (source) => {
@@ -278,8 +333,22 @@ const send = async (param)=>{
           analysis:useAnalysis.value?chatList.value[index-1].analysis:'',
           stopStatus,
           useAnalysis:useAnalysis.value,
-          onmessage:(source) => {
-            chatList.value[index].content+=JSON.parse(source).candidates[0].content.parts[0].text || '';
+          line:chat_line.value,
+          onmessage:(source,model) => {
+            let decode = JSON.parse(source);
+            let tmp='';
+            switch (model) {
+              case 'line-1':
+                tmp=decode.candidates[0].content.parts[0].text ;
+                break;
+              case 'line-2':
+                tmp=decode.choices[0].delta?.content;
+                break;
+              case 'line-3':
+                tmp=decode.response;
+                break;
+            }
+            chatList.value[index].content+=tmp;
             throttledScrollToBottom()
           },
           onclose:(source) => {
