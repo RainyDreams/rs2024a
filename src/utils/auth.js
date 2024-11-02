@@ -146,7 +146,7 @@ let Auth = {
         const data = await response.json();
         if (data.status === "sus") {
           window.clarity("event", 'auth_success')
-          return { status: "sus", content: await success(data) };
+          return { ...data,status: "sus", content: await success(data), };
         } else {
           return await failed(data, 0);
         }
@@ -519,20 +519,29 @@ let Auth = {
     }, 1000);
   },
   /* 实验性功能 */
-  getAIWelcome: async function getAIWelcome(){
+  getModelList: async function getModelList(){
+    window.clarity("event", 'getModelList');
+    return this.basicAuth('/api/ai/modelList', '', );
+  },
+  createModel: async function createModel(param){
+    window.clarity("event", 'createModel')
+    return this.basicAuth('/api/ai/createModel', JSON.stringify(param), );
+  },
+  getAIWelcome: async function getAIWelcome(param){
     window.clarity("event", 'getAIWelcome')
-    return this.basicAuth('/api/ai/welcome', '', );
+    return this.basicAuth('/api/ai/welcome', JSON.stringify(param || {}), );
   },
-  getAIAnlysisWelcome: async function getAIAnlysisWelcome(){
+  getAIAnlysisWelcome: async function getAIAnlysisWelcome(param){
     window.clarity("event", 'getAIAnlysisWelcome')
-    return this.basicAuth('/api/ai/anlysisWelcome', '', );
+    return this.basicAuth('/api/ai/anlysisWelcome', JSON.stringify(param || {}), );
   },
-  getAISessionID: async function getAISessionID(){
+  getAISessionID: async function getAISessionID(param){
     window.clarity("event", 'ApplyForAISessionID')
     await this.getPrtoken();
     let _this = this;
     return this.basicAuth('/api/ai/apply_for_sessionID', JSON.stringify({
-      vf: await _this.getUserFingerprint()
+      vf: await _this.getUserFingerprint(),
+      model:param.model,
     }));
   },
   getAiChatHistory: async function getAiChatHistory(param){

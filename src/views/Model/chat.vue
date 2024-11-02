@@ -8,10 +8,25 @@
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <div class="system">
-                  <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar>
+                  <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar> -->
                   <div class="chatcontent" style="font-size:14px;width:100%;">
                     <el-skeleton :rows="3" animated v-show="welcome_loading"></el-skeleton>
-                    <div v-show="!welcome_loading" v-html="md.render(welcome)"></div>
+                    <div v-show="!welcome_loading" class="modelbox p-3 sm:p-4 cursor-pointer md:rounded-lg h-full border nohover w-fit pr-5">
+                      <div class="flex items-center h-full">
+                        <div class="mr-1 md:mr-2">
+                          <img alt="头像" :src="model_info.img" class="mr-1" :size="38" />
+                        </div>
+                        <div class="flex flex-col justify-between h-full">
+                          <div class="text-xl font-bold mb-1">{{ model_info.name }}</div>
+                          <div class="text-sm/snug mb-2 flex-1">{{ model_info.desc }}</div>
+                          <div class="flex items-center opacity-80 text-xs">
+                            <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
+                            <div class="username">{{ model_info.createUser.nickname }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-show="!welcome_loading" class="text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(welcome)"></div>
                     <p><router-link to="/model/history">聊天历史</router-link></p>
                   </div>
                 </div>
@@ -200,6 +215,16 @@ const sessionID = ref()
 const stopStatus = ref(false)
 const useAnalysis = ref(false);
 const show_menu = ref(false)
+const model_info = ref({
+  img:'/logo_sm.webp',
+  name:'默认模型',
+  desc:'零本智协AI大模型',
+  createUser:{
+    nickname:'零本智协团队',
+    avatar:'/logo_sm.webp'
+  },
+  createuser:''
+})
 const options_analysis = [
   // {value: 'line-1', label: '线路1 Gemini'},
   {value: 'line-2', label: '分析线路2 Doubao-32k'},
@@ -376,9 +401,10 @@ const send = async (param)=>{
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
 const throttledScrollToBottom = throttle(scrollToBottom, 800); // 调整 300 为所需的毫秒数
 onActivated(async ()=>{
-  let id = route.params.id
+  let id = route.params.id;
+  let model = route.query.model
   if(!id || id=='new'){
-    const {content} = await Auth.getAISessionID()
+    const {content} = await Auth.getAISessionID({model})
     id = route.params.id
     if(route.path=='/model/chat/new') {
       router.push('/model/chat/'+content)
@@ -390,11 +416,29 @@ onActivated(async ()=>{
     // onChange()
     // await Auth.init()
     fingerprint.value = await Auth.getUserFingerprint();
-    welcome.value = (await Auth.getAIWelcome()).content;
-    chatList.value = (await Auth.getAIChatList({sessionID:id})).content.map(e=>{
-      e.status = e.analysis?'analysised':'no_analysis';
-      return e
-    });
+    const welcomeOnline = (await Auth.getAIWelcome({sessionID:id}))
+    console.log(welcomeOnline)
+    welcome.value = welcomeOnline.content;
+    model_info.value = {
+      ...model_info.value,
+      name:welcomeOnline.model.name,
+      desc:welcomeOnline.model.desc,
+      createuser:welcomeOnline.model.createuser,
+    };
+    await Promise.all([async ()=>{
+      // console.log(1)
+      console.log(model_info.value)
+      model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
+      return 0;
+    },async ()=>{
+      chatList.value = (await Auth.getAIChatList({sessionID:id})).content.map(e=>{
+        e.status = e.analysis?'analysised':'no_analysis';
+        return e
+      });
+    }].map(async(e)=>{
+      return e()
+    }))
+    
     welcome_loading.value = false;
     loading.value = false;
     askRef.value.focus()
