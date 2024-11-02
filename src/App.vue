@@ -98,7 +98,7 @@ console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已�
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
 import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRoute,useRouter } from 'vue-router'
-import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji, Log, CooperativeHandshake } from '@icon-park/vue-next';
+import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji, Log, CooperativeHandshake,History } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
 import { ElConfigProvider,ElAvatar,ElProgress,ElBadge, ElMessage, ElMessageBox } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
@@ -107,6 +107,8 @@ import { emitter } from './utils/emitter';
 import NProgress from 'nprogress';
 import Cookies from 'js-cookie';
 import 'nprogress/nprogress.css';
+import { configList,rightList } from './utils/config';
+
 const router = useRouter();
 const route = useRoute();
 const TabBarHide = ref(false);
@@ -309,154 +311,13 @@ const iconList = {
   SmartOptimization,
   ApplicationOne,
   MessageEmoji,
-  Log
+  Log,
+  History
 }
 function getIcon(name){
   return iconList[name];
 }
-const configList = [
-  {
-    name:'Projects',
-    title:'项目管理',
-    icon:'AllApplication',
-    to:"/projects/dashboard",
-    tabs:[
-      {
-        title:'创建项目',
-        icon:'Plus',
-        to:'/projects/create',
-        type:'primary'
-      },
-      {
-        title:'仪表盘',
-        icon:'DashboardOne',
-        to:'/projects/dashboard'
-      },
-      {
-        title:'项目列表',
-        icon:'FormOne',
-        to:'/projects/list'
-      },
-      // {
-      //   title:'待办事项',
-      //   icon:'AlignTextLeftOne',
-      //   to:'/projects/todo'
-      // },
-    ]
-  },
-  {
-    name:'Team',
-    title:'团队管理',
-    icon:'EveryUser',
-    to:"/team/list",
-    tabs:[
-      {
-        title:'创建团队',
-        icon:'Plus',
-        to:'/team/create',
-        type:'primary'
-      },
-      {
-        title:'我的团队',
-        icon:'AddressBook',
-        to:'/team/list'
-      },
-      {
-        title:'团队设置',
-        icon:'EditName',
-        to:'/team/settings'
-      },
 
-    ]
-  },
-  {
-    name:'Model',
-    title:'零本AI',
-    icon:'SmartOptimization',
-    to:"/model/chat/new",
-    tabs:[
-      {
-        title:'聊天',
-        icon:'MessageEmoji',
-        to:'/model/chat/new'
-      },
-      {
-        title:'分析',
-        icon:'ApplicationOne',
-        to:'/model/anlysis'
-      },
-      
-    ]
-  },
-  {
-    name:'About',
-    title:'关于软件',
-    icon:'Info',
-    to:"/about/info",
-    tabs:[
-      {
-        title:'软件信息',
-        icon:'Info',
-        to:'/about/info'
-      },
-      {
-        title:'创作历程',
-        icon:'Info',
-        to:'/about/progress'
-      },
-      {
-        title:'更新日志',
-        icon:'Info',
-        to:'/about/log'
-      },
-    ]
-  },
-  // {
-  //   name:'Test',
-  //   title:'实验性功能',
-  //   icon:'Tool',
-  //   to:"/test/ai",
-  //   tabs:[
-  //     {
-  //       title:'AI公测',
-  //       icon:'Tool',
-  //       to:'/test/ai'
-  //     },
-  //     {
-  //       title:'新功能测试区',
-  //       icon:'Tool',
-  //       to:'/test/new-feature'
-  //     },
-  //   ]
-  // },
-  
-];
-const rightList = [
-  {
-    name:'Notification',
-    icon:"Notification",
-    to:"/notification",
-    tabs:[
-
-    ]
-  },
-  {
-    name:'User',
-    to:"/user/profile",
-    tabs:[
-      {
-        title:"个人资料",
-        icon:"DocDetail",
-        to:"/user/profile"
-      },
-      {
-        title:"账户设置",
-        icon:"SettingConfig",
-        to:"/user/settings"
-      }
-    ]
-  }
-]
 const tabbarList = ref(configList[0].tabs);
 
 </script>

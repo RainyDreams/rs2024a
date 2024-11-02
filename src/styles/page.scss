@@ -292,7 +292,7 @@ a[href]{
   background: #fff;
   border:1px solid transparent;
   box-shadow: none;
-  transition: all .3s ease-in;
+  transition: all .3s ease;
   // transition-delay: .1s;
   &:hover{
     background: linear-gradient(220deg, #f3f7ff .79%, #fff 63.4%);
@@ -697,5 +697,20 @@ a[href]{
       position: relative;
       z-index: 1;
     }
+  }
+}
+
+
+.modelbox{
+  display: block;
+  background: #fff;
+  // border:1px solid transparent;
+  box-shadow: none;
+  transition: all .3s ease;
+  border-color: #635bff66;
+  &:hover{
+    background: linear-gradient(220deg, #f3f7ff .79%, #fff 63.4%);
+    border-color: #635bff;
+    box-shadow: 0 15px 35px -2px rgba(72, 117, 231, .1), 0 5px 15px 0 rgba(66, 81, 162, .1);
   }
 }

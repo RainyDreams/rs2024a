@@ -11,13 +11,16 @@
           <p v-else>没有聊天历史</p>
         </template>
       </el-empty>   
-      <div class="h-full flex flex-col" v-if="chatList.length > 0">
-        <router-link class="text-slate-950 border-b py-4 px-5 border-slate-100 hover:bg-slate-50 transition-all first:rounded-t-xl last:rounded-b-xl bg-white"
-         v-for="item in chatList"
-         :to="`/model/chat/${item.sessionID}`">
-          <p class="text-lg mb-2">{{ item.title }}</p>
-          <p class="text-base text-slate-500">{{ item.formatCreateTime }}</p>
-        </router-link>
+      <div class="h-full row" v-if="chatList.length > 0">
+        <div class="col-12 col-md-6 col-xl-4 mb-2 md:mb-3" v-for="item in chatList">
+          <router-link 
+            class="block h-full  text-slate-950 border-b py-4 px-5 border-slate-100 hover:bg-slate-50 transition-all rounded-lg bg-white" 
+            :to="`/model/chat/${item.sessionID}`"
+          >
+            <p class="text-base mb-1">{{ item.title }}</p>
+            <p class="text-sm text-slate-500">{{ item.formatCreateTime }}</p>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
