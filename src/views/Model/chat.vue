@@ -9,9 +9,9 @@
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <div class="system">
                   <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar> -->
-                  <div class="chatcontent" style="font-size:14px;width:100%;">
+                  <div class="" style="font-size:14px;width:100%;">
                     <el-skeleton :rows="3" animated v-show="welcome_loading"></el-skeleton>
-                    <div v-show="!welcome_loading" class="modelbox p-3 sm:p-4 cursor-pointer md:rounded-lg h-full border nohover w-fit pr-5">
+                    <div v-show="!welcome_loading" class="modelbox p-3 sm:p-4 cursor-pointer rounded-lg h-full border m-2 shadow-none force">
                       <div class="flex items-center h-full">
                         <div class="mr-1 md:mr-2">
                           <img alt="头像" :src="model_info.img" class="mr-1" :size="38" />
