@@ -6,14 +6,20 @@
     <div class="panel" v-if="!loading">
       <h1 class="text-2xl font-bold">当日信息</h1>
       <p class="mt-4 mb-1 text-lg font-bold">模型请求数</p>
-      <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.request }}</p>
+      <p class="text-2xl mb-2 font-bold w-fit">
+        <span class="text-3xl primary-text">{{ serverStatus.request }}</span>
+        / 1500
+      </p>
       <el-progress
         :stroke-width="16"
         :percentage="Math.floor(10000*(serverStatus.request / 1500))/100"
         :color="[{ color: '#904df5', percentage: 100 }]"
       ></el-progress>
       <p class="mt-4 mb-1 text-lg font-bold">模型已用TOKEN数</p>
-      <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.tokens }}</p>
+      <p class="text-2xl mb-2 font-bold w-fit">
+        <span class="text-3xl primary-text">{{ serverStatus.tokens }}</span>
+        / {{ (1e6*24*60) }}
+      </p>
       <el-progress
         :stroke-width="16"
         :percentage="Math.floor(10000*(serverStatus.tokens / (1e6*24*60)))/100"
