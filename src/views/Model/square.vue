@@ -1,5 +1,5 @@
 <template>
-  <div class="commonPage h-full bg-white md:px-5">
+  <div class="commonPage h-full  md:px-5">
     <div class="row">
       <div class="col-sm-12">
         <!-- <div class="big_header">
@@ -9,28 +9,16 @@
         <div class="panel" v-if="loading">
           <el-skeleton class="mt-3" animated :rows="5" />
         </div>
-        <div class="panel" v-if="!loading && teamList.length==0">
-          <el-empty :image-size="150" >
-            <template #description>
-              <p>没有加入团队</p>
-            </template>
-            <template #default>
-              <router-link to="/team/create"><el-button type="primary">
-                去创建团队<el-icon class="el-icon--right"><Right /></el-icon>
-              </el-button></router-link>
-            </template>
-          </el-empty>
-        </div>
-        <div class="row md:pt-6" v-if="!loading && teamList.length>0" >
-          <div class="col-12 col-xl-4 col-md-6 mb-0 md:mb-4" v-for="(item,i) in teamList">
-            <div class="modelbox p-3 border-b sm:p-4 cursor-pointer md:rounded-lg h-full md:border"
+        <div class="row pt-2 md:pt-4" v-if="!loading" >
+          <div class="col-12 col-xl-4 col-md-6 " v-for="(item,i) in teamList">
+            <div class="modelbox p-3 sm:p-4 cursor-pointer rounded-lg h-full border"
               @click="chat(item.id)">
               <div class="flex items-center h-full">
                 <div class="mr-1 md:mr-2">
                   <el-avatar alt="头像" :src="item.img || '/logo_sm.webp'" class="mr-1" :size="38" />
                 </div>
                 <div class="flex flex-col justify-between h-full">
-                  <div class="text-xl font-bold mb-1">{{ item.name }}</div>
+                  <div class="text-lg md:text-xl font-bold mb-1">{{ item.name }}</div>
                   <div class="text-sm/snug mb-2 flex-1">{{ item.desc }}</div>
                   <div class="flex items-center opacity-80 text-xs">
                     <el-avatar alt="头像" :src="item.createUser.avatar || '/logo_sm.webp'" class="mr-1" :size="18" />
@@ -41,8 +29,8 @@
             </div>
           </div>
 
-          <div class="col-12 col-xl-4 col-md-6 mb-0 md:mb-4" >
-            <div class="modelbox p-3 py-8 border-b sm:p-4 sm:py-8 cursor-pointer md:rounded-lg h-full md:border lg:py-5"
+          <div class="col-12 col-xl-4 col-md-6 " >
+            <div class="modelbox p-3 sm:p-4 cursor-pointer rounded-lg h-full border"
               @click="dialogVisible = true">
               <div class="flex items-center h-full md:justify-center">
                 <div class="mr-1">
@@ -50,7 +38,7 @@
                   <!-- <el-avatar alt="头像" :src="item.img" class="mr-1" :size="38" /> -->
                 </div>
                 <div class="flex flex-col justify-center h-full">
-                  <div class="text-xl font-bold">新建智能体</div>
+                  <div class="text-lg md:text-xl font-bold">新建智能体</div>
                   <!-- <div class="text-sm/snug mb-2 flex-1">{{ item.desc }}</div>
                   <div class="flex items-center opacity-80 text-xs">
                     <el-avatar alt="头像" :src="item.userAvatar" class="mr-1" :size="18" />

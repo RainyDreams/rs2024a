@@ -284,12 +284,7 @@ a.login_tab[href]{
       flex-wrap: wrap;
       align-content: flex-start;
       background-color: rgb(240, 248, 255);;
-      // background-color: rgba(255,255,255,0.1);
-      // -webkit-backdrop-filter:blur(10px);
-      // backdrop-filter: blur(10px);
-      // background-position: 0 -60px;
-      // background-image: linear-gradient(to right bottom, rgba(244,245,231,0.85), rgba(226, 240,254,0.85));
-      &>.nav{
+      &>.nav.animate__animated {
         width:fit-content;
         height:60px;
         cursor: pointer;
@@ -300,6 +295,8 @@ a.login_tab[href]{
           height:100%;
           border-radius: 0;
           // display: none;
+          visibility:hidden;
+          opacity: 0;
         }
         &.router-link-active{
           color:rgba(34, 98, 251, 1);
@@ -309,6 +306,14 @@ a.login_tab[href]{
           color: transparent;
         }
       }
+      &.show{
+        &>.nav.animate__animated.router-link-active::after,
+        &>.nav.animate__animated:hover::after{
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+      
       &>.tabbar{
         padding-top: 0;
         width: 100%;
