@@ -171,11 +171,11 @@
             <!-- <el-input ></el-input> -->
             <div class="_number">
               <!-- <span>{{ now }} / 1000</span> -->
-              <el-button @click="send()" :loading="loading" v-show="!loading" type="primary"
+              <el-button @click="send()" :loading="loading" v-show="!showStop" type="primary"
                 color="rgba(144, 77, 245,1)" class="ml-1" >
                 发送
               </el-button>
-              <el-button @click="stop()" v-show="loading && !welcome_loading" type="primary"
+              <el-button @click="stop()" v-show="loading && !welcome_loading && showStop" type="primary"
                 color="rgba(144, 77, 245,1)" class="ml-1" >
                 <!-- 终止 -->
                 <!-- <forbid theme="outline" size="24" fill="#555" :strokeWidth="3" strokeLinejoin="bevel"/> -->
@@ -215,6 +215,7 @@ const sessionID = ref()
 const stopStatus = ref(false)
 const useAnalysis = ref(false);
 const show_menu = ref(false)
+const showStop = ref(false);
 const model_info = ref({
   img:'/logo_sm.webp',
   name:'默认模型',
@@ -325,6 +326,7 @@ const send = async (param)=>{
     stopStatus,
     line:analysis_line.value,
     onmessage:(source,model) => {
+      showStop.value=true;
       const decode = JSON.parse(source);
       let tmp='';
       switch (model) {
@@ -360,6 +362,7 @@ const send = async (param)=>{
           useAnalysis:useAnalysis.value,
           line:chat_line.value,
           onmessage:(source,model) => {
+            showStop.value=true;
             let decode = JSON.parse(source);
             let tmp='';
             switch (model) {
@@ -378,6 +381,7 @@ const send = async (param)=>{
           },
           onclose:(source) => {
             stopStatus.value=false;
+            showStop.value=false;
             loading.value = false;
             if(!chatList.value[index].content){
               chatList.value[index].content+='[回答已终止].';
