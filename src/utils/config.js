@@ -79,6 +79,11 @@ export const configList = [
         icon:'ApplicationOne',
         to:'/model/anlysis'
       },
+      {
+        title:'服务器状态',
+        icon:'Server',
+        to:'/model/status'
+      },
       
     ]
   },

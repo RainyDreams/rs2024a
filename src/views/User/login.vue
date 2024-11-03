@@ -94,7 +94,8 @@ const submitForm = (formEl) => {
       const createTeam = await Auth.userLogin({
         username:form.username,
         password:encode,
-        token:verifyToken.value
+        token:verifyToken.value,
+        force:'ewbiuweuicvewiuc'
       })
       if(createTeam.status == 'sus'){
         window.clarity("identify", createTeam.content.id, createTeam.content.sessionID,'login',createTeam.content.id)

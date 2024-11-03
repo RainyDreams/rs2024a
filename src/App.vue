@@ -98,7 +98,7 @@ console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已�
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
 import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRoute,useRouter } from 'vue-router'
-import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji, Log, CooperativeHandshake,History } from '@icon-park/vue-next';
+import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji, Log, CooperativeHandshake,History, Server } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
 import { ElConfigProvider,ElAvatar,ElProgress,ElBadge, ElMessage, ElMessageBox } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
@@ -108,6 +108,7 @@ import NProgress from 'nprogress';
 import Cookies from 'js-cookie';
 import 'nprogress/nprogress.css';
 import { configList,rightList } from './utils/config';
+import Status from './views/Model/status.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -312,7 +313,8 @@ const iconList = {
   ApplicationOne,
   MessageEmoji,
   Log,
-  History
+  History,
+  Server
 }
 function getIcon(name){
   return iconList[name];

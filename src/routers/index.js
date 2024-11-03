@@ -29,6 +29,7 @@ import ModelChat from '../views/Model/chat.vue';
 import ModelTest from '../views/Model/test.vue';
 import ModelAnlysis from '../views/Model/anlysis.vue';
 import ModelHistory from '../views/Model/history.vue';
+import ModelStatus from '../views/Model/status.vue';
 import Notification from '../views/Notification/index.vue';
 import LoginSuccess from '../views/Status/LoginSuccess.vue';
 import LoginNeeded from '../views/Status/LoginNeeded.vue';
@@ -74,6 +75,7 @@ const router = createRouter({
       { path: "test/:id", name: "ModelTest", component: ModelTest,meta:{title:'零本AI 聊天 专用测试版'}},
       { path: "anlysis", name: "ModelAnlysis", component: ModelAnlysis,meta:{title:'零本AI 分析'}},
       { path: "history", name: "ModelHistory", component: ModelHistory,meta:{title:'零本AI 历史'}},
+      { path: "status", name: "ModelStatus", component: ModelStatus,meta:{title:'零本AI服务器状态'}},
     ]},
     { path: "/about/", name: "About", children: [
       { path: "info", name: "AboutInfo", component: AboutInfo,meta:{title:'软件信息',nologin:true} },

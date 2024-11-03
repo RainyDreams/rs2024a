@@ -227,12 +227,12 @@ const model_info = ref({
   createuser:''
 })
 const options_analysis = [
-  // {value: 'line-1', label: '线路1 Gemini'},
+  {value: 'line-1', label: '线路1 Gemini-002'},
   {value: 'line-2', label: '分析线路2 Doubao-32k'},
   {value: 'line-3', label: '分析线路3 Qwen-8b'},
 ];
 const options_chat = [
-  {value: 'line-1', label: '回复线路1 Gemini-1.5-flash'},
+  {value: 'line-1', label: '回复线路1 Gemini-1.5-flash-001'},
   {value: 'line-2', label: '回复线路2 Doubao-32k'},
   {value: 'line-3', label: '回复线路3 Qwen-8b'},
 ];
