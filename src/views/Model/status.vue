@@ -12,7 +12,7 @@
         :percentage="Math.floor(10000*(serverStatus.request / 1500))/100"
         :color="[{ color: '#904df5', percentage: 100 }]"
       ></el-progress>
-      <p class="mt-4 mb-1 text-lg font-bold">模型TOKEN数</p>
+      <p class="mt-4 mb-1 text-lg font-bold">模型已用TOKEN数</p>
       <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.tokens }}</p>
       <el-progress
         :stroke-width="16"
@@ -30,6 +30,11 @@
       <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.b }}ms</p>
       <p class="mt-4 mb-1 text-lg font-bold">指标R 响应时间</p>
       <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.r }}ms</p>
+      <p class="mt-4 mb-1 text-lg font-bold">指标H 响应时间</p>
+      <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.h }}ms</p>
+      <p class="mt-4 mb-1 text-lg font-bold">服务器IP</p>
+      <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.ip.ip }}</p>
+      <p class="text-2xl mb-2 font-bold primary-text w-fit">{{ serverStatus.ip.nation }}</p>
     </div>
   </div>
 </template>
