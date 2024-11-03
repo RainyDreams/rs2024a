@@ -83,11 +83,11 @@ const submitForm = (formEl) => {
   formloading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
-      if(!verifyToken.value){
-        ElMessage.warning('请等待人机验证完成')
-        formloading.value = false;
-        return;
-      }
+      // if(!verifyToken.value){
+      //   ElMessage.warning('请等待人机验证完成')
+      //   formloading.value = false;
+      //   return;
+      // }
       ElMessage.info('正在登录')
       const encode = CryptoJS.MD5(form.username+form.password).toString().toUpperCase();
       loading.value=true;
