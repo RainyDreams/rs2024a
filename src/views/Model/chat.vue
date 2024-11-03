@@ -216,6 +216,8 @@ const stopStatus = ref(false)
 const useAnalysis = ref(false);
 const show_menu = ref(false)
 const showStop = ref(false);
+const tokensCount = ref(0)
+const tokensCount2 = ref(0)
 const model_info = ref({
   img:'/logo_sm.webp',
   name:'默认模型',
@@ -333,6 +335,7 @@ const send = async (param)=>{
         case 'line-1':
           // tmp=decode.response;
           tmp=decode.candidates[0].content.parts[0].text ;
+          tokensCount.value=decode.usageMetadata.totalTokenCount;
           break;
         case 'line-2':
           tmp=decode.choices[0].delta?.content;
@@ -367,7 +370,8 @@ const send = async (param)=>{
             let tmp='';
             switch (model) {
               case 'line-1':
-                tmp=decode.candidates[0].content.parts[0].text ;
+                tmp=decode.candidates[0].content.parts[0].text;
+                tokensCount2.value=decode.usageMetadata.totalTokenCount;
                 break;
               case 'line-2':
                 tmp=decode.choices[0].delta?.content;
@@ -389,6 +393,7 @@ const send = async (param)=>{
             Auth.setAIChatResponse({
               sessionID:sessionID.value,
               content:chatList.value[index].content,
+              tokens:tokensCount.value+tokensCount2.value
               // analysis:chatList.value[index].analysis,
             })
             throttledScrollToBottom()

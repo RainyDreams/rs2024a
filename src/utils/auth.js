@@ -544,6 +544,10 @@ let Auth = {
       model:param.model,
     }));
   },
+  getServerStatus:async function getServerStatus(){
+    window.clarity("event", 'getServerStatus')
+    return this.basicAuth('/api/getServerStatus', '', );
+  },
   getAiChatHistory: async function getAiChatHistory(param){
     window.clarity("event", 'getAiChatHistory')
     await this.getPrtoken();
@@ -561,7 +565,8 @@ let Auth = {
     await this.getPrtoken();
     return this.basicAuth('/api/ai/set_chat_response', JSON.stringify({
       sessionID: param.sessionID,
-      content: param.content
+      content: param.content,
+      tokens:param.tokens
     }));
   },
   setAIChatResponse_test: async function setAIChatResponse(param){

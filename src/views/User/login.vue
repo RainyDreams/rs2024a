@@ -25,6 +25,7 @@
         <el-form-item label="密码" prop="password">
           <el-input v-model="form.password" type="password" placeholder="请输入密码"/>
         </el-form-item>
+        <div>公测期间可免除验证</div>
         <div id="turnstile-box"></div>
         <div class="text-slate-400 text-xs/tight mt-2">登录即代表同意<a target="_blank" href="https://www.chiziingiin.top/license/auth">《零本智协统一身份验证用户协议》</a></div>
         <div class="text-slate-400 text-xs/tight mt-2">没有账号？前往<router-link to="/reg">用户注册平台</router-link></div>
