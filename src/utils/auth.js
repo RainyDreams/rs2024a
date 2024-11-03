@@ -135,6 +135,9 @@ let Auth = {
     }
   ) {
     try {
+      if(!navigator.onLine){
+        return { status: 'offline' }
+      }
       const response = await fetch(BASICURL + url, {
         method: "POST",
         headers: {
