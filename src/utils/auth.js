@@ -546,7 +546,9 @@ let Auth = {
   },
   getServerStatus:async function getServerStatus(){
     window.clarity("event", 'getServerStatus')
-    return this.basicAuth('/api/getServerStatus', '', );
+    return this.basicAuth('/api/getServerStatus', JSON.stringify({
+      time:(new Date()).getTime()
+    }), );
   },
   getAiChatHistory: async function getAiChatHistory(param){
     window.clarity("event", 'getAiChatHistory')
