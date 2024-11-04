@@ -18,7 +18,7 @@
       <p class="mt-4 mb-1 text-lg font-bold">模型已用TOKEN数</p>
       <p class="text-2xl mb-2 font-bold w-fit">
         <span class="text-3xl primary-text">{{ serverStatus.tokens }}</span>
-        / {{ (1e6*24*60) }}
+        / 1.44×10⁹
       </p>
       <el-progress
         :stroke-width="16"
@@ -27,7 +27,7 @@
       ></el-progress>
      
       <p class="mt-4 mb-1 text-lg font-bold">服务器延迟</p>
-      <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.m }}ms</p>
+      <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.m>0?(serverStatus.m+'ms'):'错误' }}</p>
       <p class="mt-4 mb-1 text-lg font-bold">指标S 响应时间</p>
       <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ timer - serverStatus.s }}ms</p>
       <p class="mt-4 mb-1 text-lg font-bold">指标A 响应时间</p>
@@ -39,8 +39,8 @@
       <p class="mt-4 mb-1 text-lg font-bold">指标H 响应时间</p>
       <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.h }}ms</p>
       <p class="mt-4 mb-1 text-lg font-bold">服务器IP</p>
-      <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.ip.ip }}</p>
-      <p class="text-2xl mb-2 font-bold primary-text w-fit">{{ serverStatus.ip.nation }}</p>
+      <p class="text-3xl mb-2 font-bold w-fit">{{ serverStatus.ip.ip }}</p>
+      <p class="text-2xl mb-2 font-bold w-fit">{{ serverStatus.ip.nation }}</p>
     </div>
   </div>
 </template>

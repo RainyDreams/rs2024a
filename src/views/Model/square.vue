@@ -94,6 +94,9 @@
               placeholder="他的身份，技能或者需要TA记住的一些事情"
             />
           </el-form-item>
+          <el-form-item label="是否公开" prop="tag">
+            <el-switch v-model="form.tag" />
+          </el-form-item>
           <el-form-item>
             <el-button @click="dialogVisible = false">取消</el-button>
             <el-button type="primary" :loading="formloading" @click="submitForm(ruleFormRef)">
@@ -110,7 +113,7 @@
 <script setup>
 import { AddressBook, Right,Order,Plus, ChargingTreasure } from "@icon-park/vue-next";
 import { ref, onMounted, onActivated,reactive } from "vue";
-import { ElAvatar,ElSkeleton,ElEmpty,ElButton,ElRow,ElCol,ElIcon,ElDialog,ElForm,ElFormItem,ElInput,ElMessage, ElMessageBox} from "element-plus";
+import { ElAvatar,ElSkeleton,ElEmpty,ElButton,ElSwitch,ElDialog,ElForm,ElFormItem,ElInput,ElMessage, ElMessageBox} from "element-plus";
 import Auth from "../../utils/auth";
 import { getDateDiff,getRole } from "../../utils/helpers";
 import { useRouter } from "vue-router";
@@ -123,7 +126,8 @@ const ruleFormRef = ref(null)
 const form = reactive({
   name: '',
   desc: '',
-  prompt:''
+  prompt:'',
+  tag:false
 });
 const rules = reactive({
   name: [
@@ -138,6 +142,9 @@ const rules = reactive({
     { required: true, message: '请输入智能体提示词', trigger: 'blur' }, 
     { min: 10, max: 1500, message: '长度在 10 到 1500 个字符', trigger: 'blur' }
   ],
+  tag: [
+    { required: true, message: '请选择是否公开', trigger: 'change' }
+  ]
 })
 const chat = (e)=>{
   router.push('/model/chat/new?model='+e)
@@ -150,7 +157,8 @@ const submitForm = (formEl)=>{
       const res = await Auth.createModel({
         name:form.name,
         desc:form.desc,
-        text:form.prompt
+        text:form.prompt,
+        tag:form.tag?'public':'private'
       })
       if(res.status == 'sus'){
         teamList.value = (await Auth.getModelList({})).content.map((item)=>{
@@ -174,6 +182,7 @@ const submitForm = (formEl)=>{
             form.name = ''
             form.desc = ''
             form.prompt = ''
+            form.tag = false
           }
         })
         teamList.value = await Promise.all(teamList.value.map(async (item)=>{
