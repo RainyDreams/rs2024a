@@ -796,13 +796,13 @@ let Auth = {
         const link = items[i].getElementsByTagName('link')[0].textContent;
         const description = items[i].getElementsByTagName('description')[0].textContent;
         const pubDate = items[i].getElementsByTagName('pubDate')[0].textContent;
-        const content = items[i].getElementsByTagName('content:encoded')[0].textContent;
+        // const content = items[i].getElementsByTagName('content:encoded')[0].textContent;
         list.push({
           title: title,
           link: link,
           description: description,
           pubDate: pubDate,
-          content: content
+          // content: content
         })
       }
       return list;

@@ -22,6 +22,12 @@
   -webkit-background-clip: text;
   color: transparent !important;
 }
+*:hover>.hover-primary-text{
+  background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent !important;
+}
 .primary-bg{
   background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
 }
@@ -742,4 +748,8 @@ a[href]{
   -webkit-line-clamp: 4; /* 限制为3行 */
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.normal-color-force{
+  color:#3c3e55 !important;
 }

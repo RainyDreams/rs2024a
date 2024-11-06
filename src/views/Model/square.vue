@@ -59,12 +59,11 @@
         </div>
         <div class="row">
           <div class="col-12 col-md-6 col-xl-4" v-for="(item,i) in newsList">
-            <div class="w-full h-full p-3 sm:p-4 cursor-pointer rounded-lg  modelbox border">
-              <h2 class="text-lg font-semibold">{{ item.title }}</h2>
-              <p class="text-gray-600">{{ item.description }}</p>
-              <p class="text-xs text-gray-500">发布时间：{{ item.pubDate }}</p>
-              <a :href="item.link" class="text-blue-500 mt-2 block">查看详情</a>
-            </div>
+            <a :href="item.link" class="normal-color-force flex flex-col w-full h-full p-3 sm:p-4 cursor-pointer rounded-lg  modelbox border">
+              <h2 class="text-lg font-semibold hover-primary-text">{{ item.title }}</h2>
+              <p class="text-gray-700 mt-1 text-xs md:text-sm/tight flex-1">{{ item.description }}</p>
+              <p class="text-xs text-gray-600 mt-2">发布时间：{{ item.pubDate }}</p>
+            </a>
           </div>
         </div>
       </div>
