@@ -714,4 +714,23 @@ a[href]{
     border-color: #635bff;
     box-shadow: 0 15px 35px -2px rgba(72, 117, 231, .1), 0 5px 15px 0 rgba(66, 81, 162, .1);
   }
+  position: relative;
+  overflow: hidden;
+  .banner{
+    background: linear-gradient(270deg, #b05bff -8.33%, #2951ff 118.18%);
+    border-radius: 0 0 0 8px;
+    color: var(--fill-color-bg-white, #fff);
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 500;
+    height: 25px;
+    letter-spacing: .6px;
+    line-height: 25px;
+    padding: 0 8px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    white-space: nowrap;
+  }
 }

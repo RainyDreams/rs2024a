@@ -110,7 +110,9 @@ onMounted(async ()=>{
           loading2.value = false
         },
         onmessage:(e)=>{
-          anlysis.value += JSON.parse(e).response;
+          const decode = JSON.parse(e);
+          // anlysis.value += JSON.parse(e).response;
+          anlysis.value += decode.candidates[0].content.parts[0].text ;
         }
       }))
     })()

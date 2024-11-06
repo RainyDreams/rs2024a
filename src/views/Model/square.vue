@@ -11,8 +11,11 @@
         </div>
         <div class="row pt-2 md:pt-4" v-if="!loading" >
           <div class="col-12 col-xl-4 col-md-6 " v-for="(item,i) in teamList">
-            <div class="modelbox p-3 sm:p-4 cursor-pointer rounded-lg h-full border"
-              @click="chat(item.id)">
+            <div 
+              class="modelbox p-3 sm:p-4 cursor-pointer rounded-lg h-full border"
+              @click="chat(item.id)"
+            >
+              <div class="banner" v-if="item.tag == 'public'">公开</div>
               <div class="flex items-center h-full">
                 <div class="mr-1 md:mr-2">
                   <el-avatar alt="头像" :src="item.img || '/logo_sm.webp'" class="mr-1" :size="38" />
@@ -208,6 +211,8 @@ onActivated(async ()=>{
       desc:item.desc,
       createuser:item.createuser,
       createTime:getDateDiff(item.createtime).str,
+      tag:item.tag,
+      prompt:JSON.parse(item.prompt || '{}')
     }
   });
   teamList.value = await Promise.all(teamList.value.map(async (item)=>{
