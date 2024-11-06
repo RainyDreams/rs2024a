@@ -25,6 +25,7 @@ import AboutInfo from '../views/About/info.vue';
 import AboutProgress from '../views/About/progress.vue';
 import AboutLog from '../views/About/log.vue';
 import ModelSquare from '../views/Model/square.vue';
+// import Model from '../views/Model/model.vue';
 import ModelChat from '../views/Model/chat.vue';
 import ModelTest from '../views/Model/test.vue';
 import ModelAnlysis from '../views/Model/anlysis.vue';
@@ -72,6 +73,7 @@ const router = createRouter({
     { path: "/model/", name: "Model", children:[
       { path: "square", name: "ModelSquare", component: ModelSquare,meta:{title:'零本AI 智能体广场'} },
       { path: "chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'零本AI 聊天'}},
+      // { path: "m/:id", name: "ModelType", component: Model,meta:{title:'零本AI'}},
       { path: "test/:id", name: "ModelTest", component: ModelTest,meta:{title:'零本AI 聊天 专用测试版'}},
       { path: "anlysis", name: "ModelAnlysis", component: ModelAnlysis,meta:{title:'零本AI 分析'}},
       { path: "history", name: "ModelHistory", component: ModelHistory,meta:{title:'零本AI 历史'}},

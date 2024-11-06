@@ -13,9 +13,9 @@
           <div class="col-12 col-xl-4 col-md-6 " v-for="(item,i) in teamList">
             <div 
               class="modelbox p-3 sm:p-4 cursor-pointer rounded-lg h-full border"
-              @click="chat(item.id)"
+              @click="chat(item)"
             >
-              <div class="banner" v-if="item.tag == 'public'">公开</div>
+              <div class="model_banner" v-if="item.tag == 'public'">公开</div>
               <div class="flex items-center h-full">
                 <div class="mr-1 md:mr-2">
                   <el-avatar alt="头像" :src="item.img || '/logo_sm.webp'" class="mr-1" :size="38" />
@@ -56,6 +56,36 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      v-model="showModel.show"
+      width="92%"
+      :show-close="false"
+      class="max-w-2xl p-8 rounded-xl border relative overflow-hidden"
+    >
+      <div class="flex flex-col min-h-3.5">
+        <div class="model_banner" v-if="showModel.tag == 'public'">公开</div>
+        <div class="flex items-center h-full flex-1 mb-3">
+          <div class="mr-1 md:mr-2 ">
+            <el-avatar alt="头像" :src="showModel.img || '/logo_sm.webp'" class="mr-1" :size="38" />
+          </div>
+          <div class="flex flex-col justify-between h-full">
+            <div class="text-lg md:text-xl font-bold mb-1">{{ showModel.name }}</div>
+            <div class="text-sm/snug mb-2 flex-1">{{ showModel.desc }}</div>
+            <div class="flex items-center opacity-80 text-xs mb-2">
+              <el-avatar alt="头像" :src="showModel.createUser.avatar || '/logo_sm.webp'" class="mr-1" :size="18" />
+              <div class="username">{{ showModel.createUser.nickname }}</div>
+            </div>
+            <div class="opacity-80 text-xs">创建时间：{{ showModel.createTime }}</div>
+          </div>
+        </div>
+        <div class="mb-4">
+          <p class="truncate-multiline">{{ showModel.prompt.text }}</p>
+        </div>
+        <div>
+          <el-button @click="to(showModel.id)" type="primary" size="large" class="w-full rounded-lg" color="#626aef">新建对话</el-button>
+        </div>
+      </div>
+    </el-dialog>
     <el-dialog
       v-model="dialogVisible"
       title="新建智能体"
@@ -132,6 +162,7 @@ const form = reactive({
   prompt:'',
   tag:false
 });
+const showModel = ref({show:false})
 const rules = reactive({
   name: [
     { required: true, message: '请输入智能体名称', trigger: 'blur' },
@@ -149,8 +180,18 @@ const rules = reactive({
     { required: true, message: '请选择是否公开', trigger: 'change' }
   ]
 })
-const chat = (e)=>{
+
+const to = (e)=>{
+  // router.push('/model/m/'+e)
   router.push('/model/chat/new?model='+e)
+}
+const chat = (e)=>{
+  showModel.value = {
+    ...e,
+    show:true
+  }
+  // router.push('/model/chat/new?model='+e)
+  // router.push('/model/m/'+e)
 }
 const submitForm = (formEl)=>{
   if (!formEl) return;
