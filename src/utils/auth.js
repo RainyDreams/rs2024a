@@ -780,7 +780,36 @@ let Auth = {
   getIP:async function getIP(ip){
     // const res = fetch('https://apis.map.qq.com/ws/location/v1/ip?key=L66BZ-OHFCU-DVZVU-BNPTD-KPAF5-CCFPO&ip='+ip)
     return await this.basicAuth('/api/getIP', JSON.stringify({ip:ip}));
-  }
+  },
+  loadRss:async function loadRss(){
+    try {
+      const response = await fetch(BASICURL +'/api/news/tech-sci.xml',{
+        method:'POST'
+      });
+      const xmlData = await response.text();
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlData, 'application/xml');
+      const items = xmlDoc.getElementsByTagName('item');
+      let list = []
+      for (let i = 0; i < items.length; i++) {
+        const title = items[i].getElementsByTagName('title')[0].textContent;
+        const link = items[i].getElementsByTagName('link')[0].textContent;
+        const description = items[i].getElementsByTagName('description')[0].textContent;
+        const pubDate = items[i].getElementsByTagName('pubDate')[0].textContent;
+        const content = items[i].getElementsByTagName('content:encoded')[0].textContent;
+        list.push({
+          title: title,
+          link: link,
+          description: description,
+          pubDate: pubDate,
+          content: content
+        })
+      }
+      return list;
+    } catch (error) {
+      console.error('获取 RSS 数据出错：', error);
+    }
+  },
 }
 Auth.copyText = navigator.clipboard?(text,fn,er) => {
   window.clarity("event",'copy')

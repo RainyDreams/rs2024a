@@ -54,6 +54,19 @@
             </div>
           </div>
         </div>
+        <div class="mt-16">
+          <h2 class="text-lg font-semibold mb-4">最新资讯</h2>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-6 col-xl-4" v-for="(item,i) in newsList">
+            <div class="w-full h-full p-3 sm:p-4 cursor-pointer rounded-lg  modelbox border">
+              <h2 class="text-lg font-semibold">{{ item.title }}</h2>
+              <p class="text-gray-600">{{ item.description }}</p>
+              <p class="text-xs text-gray-500">发布时间：{{ item.pubDate }}</p>
+              <a :href="item.link" class="text-blue-500 mt-2 block">查看详情</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <el-dialog
@@ -62,9 +75,9 @@
       :show-close="false"
       class="max-w-2xl p-8 rounded-xl border relative overflow-hidden"
     >
-      <div class="flex flex-col min-h-3.5">
+      <div class="flex flex-col min-h-60">
         <div class="model_banner" v-if="showModel.tag == 'public'">公开</div>
-        <div class="flex items-center h-full flex-1 mb-3">
+        <div class="flex items-center h-full mb-3">
           <div class="mr-1 md:mr-2 ">
             <el-avatar alt="头像" :src="showModel.img || '/logo_sm.webp'" class="mr-1" :size="38" />
           </div>
@@ -78,7 +91,7 @@
             <div class="opacity-80 text-xs">创建时间：{{ showModel.createTime }}</div>
           </div>
         </div>
-        <div class="mb-4">
+        <div class="mb-8 flex-1">
           <p class="truncate-multiline">{{ showModel.prompt.text }}</p>
         </div>
         <div>
@@ -156,6 +169,7 @@ const loading = ref(true)
 const dialogVisible = ref(false)
 const formloading = ref(false)
 const ruleFormRef = ref(null)
+const newsList = ref([])
 const form = reactive({
   name: '',
   desc: '',
@@ -264,6 +278,7 @@ onActivated(async ()=>{
     }
   }))
   loading.value = false;
+  newsList.value = await Auth.loadRss()
 })
 
 </script>
