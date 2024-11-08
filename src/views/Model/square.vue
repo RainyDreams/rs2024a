@@ -59,7 +59,7 @@
         </div>
         <div class="row">
           <div class="col-12 col-md-6 col-xl-4" v-for="(item,i) in newsList">
-            <a :href="item.link" class="normal-color-force flex flex-col w-full h-full p-3 sm:p-4 cursor-pointer rounded-lg  modelbox border">
+            <a :href="item.link" target="_blank" class="normal-color-force flex flex-col w-full h-full p-3 sm:p-4 cursor-pointer rounded-lg  modelbox border">
               <h2 class="text-lg font-semibold hover-primary-text">{{ item.title }}</h2>
               <p class="text-gray-700 mt-1 text-xs md:text-sm/tight flex-1">{{ item.description }}</p>
               <p class="text-xs text-gray-600 mt-2">发布时间：{{ item.pubDate }}</p>

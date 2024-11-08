@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12 col-xl-8" style="margin-bottom: 0;">
           <div class="panel aichat">
-            <el-watermark :font="{color:'rgba(0, 0, 0, .03)'}" :gap="[0,0]" :rotate="-12"
+            <el-watermark :font="{color:'rgba(0, 0, 0, .038)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <div class="system">
