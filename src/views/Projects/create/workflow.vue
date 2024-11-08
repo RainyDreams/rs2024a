@@ -20,7 +20,7 @@
             <el-timeline v-show="!loading" style="max-width: 600px">
               <el-timeline-item placement="top" v-for="(item,i) in ai_workflow_list">
                 <div class="normal-color">
-                  <div class="font-light text-sm">步骤 {{ item.index+1 }}</div>
+                  <div class="font-light text-sm">步骤 {{ item.index}}</div>
                   <div class="py-3 px-3 bg-white border rounded-xl mb-2 last:mb-0" v-for="task in item.task">
                     <div class="font-semibold text-lg md:text-xl">{{ task.name }}</div>
                     <div class="text-base md:text-lg mb-1">{{ task.desc }}</div>
@@ -63,7 +63,7 @@
               @keydown.enter="handleEnter"
             ></el-input>
             <div class="_number">
-              <span v-show="mode == 'input'">{{ now }} / 1000</span>
+              <!-- <span v-show="mode == 'input'">{{ now }} / 1000</span> -->
               <el-button 
                 v-show="mode == 'input'"
                 @click="send()" 
@@ -160,7 +160,7 @@ async function set(){
   })
   if(res.status == 'sus'){
     ElMessage.success('创建成功')
-    router.push('/projects/'+projectId.value+'')
+    router.push('/projects/detail/'+projectId.value+'')
     // routerBack.back()
   } else {
     ElMessage.error('创建失败')
@@ -174,29 +174,49 @@ async function send(){
     loading.value = false
     return;
   }
-  const res = await Auth.AI_createWorkflow({
+  await Auth.AI_createWorkflow({
     projectId:projectId.value,
-    content:input.value
-  })
-  ai_workflow_name.value = res.content.name
-  ai_workflow_desc.value = res.content.desc
-  let members = [];
-  ai_workflow_list.value = res.content.workflows.map((e)=>{
-    members.push(e.user.id)
-    e.user = {
-      ...e.user,
-      avatar:"",
-      username:"",
-      nickname:""
+    content:input.value,
+    onmessage:async (source,model) => {
+      const decode = JSON.parse(source);
+      // console.log(decode)
+      // chatList.value[index-1].analysis+=tmp;
+      const res = JSON.parse(decode.candidates[0].content.parts[0].text);
+      ai_workflow_name.value = res.name;
+      ai_workflow_desc.value = res.desc;
+      ai_workflow_list.value = res.workflows;
+      let members = [];
+      ai_workflow_list.value = await Promise.all(res.workflows.map(async(e)=>{
+        members.push(e.user.id)
+        e.user = await Auth.getUserInfoByID(e.user)
+        return e;
+      }))
+      ai_workflow_list.value.members = members;
+      console.log(ai_workflow_list.value)
+    },
+    onclose:()=>{
+
     }
-    return e;
-  });
+  })
+  // ai_workflow_name.value = res.content.name
+  // ai_workflow_desc.value = res.content.desc
+  let members = [];
+  // ai_workflow_list.value = res.content.workflows.map((e)=>{
+  //   members.push(e.user.id)
+  //   e.user = {
+  //     ...e.user,
+  //     avatar:"",
+  //     username:"",
+  //     nickname:""
+  //   }
+  //   return e;
+  // });
   loading.value = false;
-  ai_workflow_list.value = await Promise.all(res.content.workflows.map(async(e)=>{
-    e.user = await Auth.getUserInfoByID(e.user)
-    return e;
-  }))
-  ai_workflow_list.value.members = members;
+  // ai_workflow_list.value = await Promise.all(res.content.workflows.map(async(e)=>{
+  //   e.user = await Auth.getUserInfoByID(e.user)
+  //   return e;
+  // }))
+  // ai_workflow_list.value.members = members;
   
   mode.value = 'set'
 }

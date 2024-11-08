@@ -585,7 +585,18 @@ let Auth = {
   AI_createWorkflow:async function AI_createWorkflow(param){
     window.clarity("event", 'AI_createWorkflow')
     await this.getPrtoken();
-    return this.basicAuth('/api/ai/createWorkflow', JSON.stringify(param), );
+    // return this.basicAuth('/api/ai/createWorkflow', JSON.stringify(param), );
+    // debugger;
+    // console.log('AI_createWorkflow', param)
+    await this.getStreamText('/api/ai/createWorkflow', 
+      { projectId: param.projectId, content: param.content,
+      },
+      {
+        onmessage:param.onmessage,
+        onclose:param.onclose,
+        // stopStatus:param.stopStatus
+      }
+    );
   },
   chatWithAIAnlysis:async function chatWithAIAnlysis(list, param){
     window.clarity("event", 'chatWithAIAnlysis')
