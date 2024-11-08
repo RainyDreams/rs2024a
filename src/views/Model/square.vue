@@ -76,7 +76,25 @@
     >
       <div class="flex flex-col min-h-60">
         <div class="model_banner" v-if="showModel.tag == 'public'">公开</div>
-        <div class="flex items-center h-full mb-3">
+        <div class="flex justify-between items-center">
+          <div class="text-lg">
+            {{ (showModel?.share)?'来自分享':'' }}
+          </div>
+          <el-tooltip
+            class="box-item"
+            effect="dark"
+            content="复制"
+            placement="top-start"
+          >
+            <div 
+              @click="copyText(showModel)"
+              class="py-1 px-2 hover:bg-slate-100 border-slate-100 border flex items-center transition-all rounded-md cursor-pointer">
+              <Share theme="outline" class="mr-1" size="16" fill="#0005" strokeLinejoin="bevel"/>
+              分享
+            </div>
+          </el-tooltip>
+        </div>
+        <div class="flex items-center h-full mb-3 p-3 sm:p-4 cursor-pointer rounded-lg mt-3 border">
           <div class="mr-1 md:mr-2 ">
             <el-avatar alt="头像" :src="showModel.img || '/logo_sm.webp'" class="mr-1" :size="38" />
           </div>
@@ -156,13 +174,14 @@
 
 
 <script setup>
-import { AddressBook, Right,Order,Plus, ChargingTreasure } from "@icon-park/vue-next";
+import { AddressBook, Right,Order,Plus, Share } from "@icon-park/vue-next";
 import { ref, onMounted, onActivated,reactive } from "vue";
 import { ElAvatar,ElSkeleton,ElEmpty,ElButton,ElSwitch,ElDialog,ElForm,ElFormItem,ElInput,ElMessage, ElMessageBox} from "element-plus";
 import Auth from "../../utils/auth";
 import { getDateDiff,getRole } from "../../utils/helpers";
-import { useRouter } from "vue-router";
+import { useRouter,useRoute } from "vue-router";
 const router = useRouter();
+const route = useRoute();
 const teamList = ref([]);
 const loading = ref(true)
 const dialogVisible = ref(false)
@@ -194,6 +213,13 @@ const rules = reactive({
   ]
 })
 
+const copyText = (e)=>{
+  Auth.copyText(`分享给你一个智能体【${e.name}】\nhttps://lingben.chiziingiin.top/model/square?model=${e.id}`,()=>{
+    ElMessage.success("复制成功")
+  },()=>{
+    ElMessage.error("复制失败")
+  })
+}
 const to = (e)=>{
   // router.push('/model/m/'+e)
   router.push('/model/chat/new?model='+e)
@@ -201,7 +227,8 @@ const to = (e)=>{
 const chat = (e)=>{
   showModel.value = {
     ...e,
-    show:true
+    show:true,
+    share:false,
   }
   // router.push('/model/chat/new?model='+e)
   // router.push('/model/m/'+e)
@@ -257,6 +284,7 @@ const submitForm = (formEl)=>{
   })
 }
 onActivated(async ()=>{
+  let model = route.query.model;
   // await // Auth.getPrtoken();
   teamList.value = (await Auth.getModelList({})).content.map((item)=>{
     return {
@@ -270,14 +298,24 @@ onActivated(async ()=>{
     }
   });
   teamList.value = await Promise.all(teamList.value.map(async (item)=>{
-    // console.log()
     return {
       ...item,
       createUser:await Auth.getUserInfoByID({id:item.createuser})
     }
-  }))
+  }));
+  if(model){
+    const search = teamList.value.find(e=>e.id==model)
+    if(search){
+      showModel.value = {
+        ...search,
+        show:true,
+        share:true,
+      }
+    }
+  }
   loading.value = false;
-  newsList.value = await Auth.loadRss()
+  newsList.value = await Auth.loadRss();
+
 })
 
 </script>
