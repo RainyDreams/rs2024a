@@ -194,12 +194,13 @@ import markdownIt from 'markdown-it';
 import markdownItHighlightjs from 'markdown-it-highlightjs'
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
 import Auth from "../../utils/auth";
-import { throttle } from '../../utils/helpers'
-import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY } from "element-plus"; 
+import { throttle,functionCallPlugin } from '../../utils/helpers'
+import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
 import { Down,Up,Copy,DocDetail,PauseOne } from '@icon-park/vue-next';
 const md = new markdownIt()
-md.use(markdownItHighlightjs)
+md.use(markdownItHighlightjs);
+// md.use(functionCallPlugin);
 const route = useRoute()
 const router = useRouter()
 const chatList = ref([]);
@@ -372,7 +373,21 @@ const send = async (param)=>{
             switch (model) {
               case 'line-1':
                 tmp=decode.candidates[0].content.parts[0].text;
-                tokensCount2.value=decode.usageMetadata.totalTokenCount;
+                if(tmp){
+                  tokensCount2.value=decode.usageMetadata.totalTokenCount;
+                } else if(decode.candidates[0].content.parts[0].functionCall){
+                  Auth.chatTaskThread.add(async ()=>{
+                    const text = (await Auth.functionCall(decode.candidates[0].content.parts[0].functionCall))
+                    ElMessageBox.alert(md.render(text), '任务执行结果',{
+                      confirmButtonText: '确定',
+                      showCancelButton: false,
+                      dangerouslyUseHTMLString: true,
+                      showClose:false
+                    })
+                    chatList.value[index].content += '\n```\n\n';
+                  })
+                  tmp = '\n\n```FunctionCall\n'
+                }
                 break;
               case 'line-2':
                 tmp=decode.choices[0].delta?.content;
@@ -390,13 +405,17 @@ const send = async (param)=>{
             loading.value = false;
             if(!chatList.value[index].content){
               chatList.value[index].content+='[回答已终止].';
+            } else {
+              Auth.chatTaskThread.add(async ()=>{
+                throttledScrollToBottom()
+                Auth.setAIChatResponse({
+                  sessionID:sessionID.value,
+                  content:chatList.value[index].content,
+                  tokens:tokensCount.value+tokensCount2.value
+                })
+              })
             }
-            Auth.setAIChatResponse({
-              sessionID:sessionID.value,
-              content:chatList.value[index].content,
-              tokens:tokensCount.value+tokensCount2.value
-              // analysis:chatList.value[index].analysis,
-            })
+            
             throttledScrollToBottom()
             chatList.value[index-1].status = 'analysised'
             placeholder.value = "还有什么想聊的";

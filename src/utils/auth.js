@@ -113,6 +113,7 @@ let Auth = {
     Cookies.set('permission',false,{expires:7})
   },
   mainTaskThread: new Scheduler(5),
+  chatTaskThread: new Scheduler(1),
   router: null,
   route: null,
   init: async function init() {
@@ -636,6 +637,7 @@ let Auth = {
       { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf,
         useAnalysis:param.useAnalysis,
         model:param.line,
+        time:new Date().toTimeString()
       },
       {
         onmessage:param.onmessage,
@@ -880,7 +882,17 @@ Auth.copyHtml = false? (html, fn, er) => {
   }
   // document.body.removeChild(div);
 };
+Auth.functionCall = async function(obj){
+  console.log(obj)
+  if(obj.name == 'get_weather'){
+    let info = await Auth.basicAuth('/api/getWeather', JSON.stringify({
+      city:obj.args.city
+    }))
+    return `\n\n更新时间${info.content.update_time}\n\n城市：${info.content.city}\n\n天气：${info.content.infos.weather}\n\n温度：${info.content.infos.temperature}℃\n\n风向：${info.content.infos.wind_direction}\n\n风力：${info.content.infos.wind_power}\n\n湿度：${info.content.infos.humidity}%\n\n`
+  }
+  // 
 
+}
 window.onloadTurnstileCallback = function () {
   console.log('onload?')
 }

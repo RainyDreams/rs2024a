@@ -108,3 +108,23 @@ export function asyncThrottle(func, delay, defaultFunc) {
     }
   };
 }
+
+export function functionCallPlugin(md) {
+  const fence = md.renderer.rules.fence;
+  md.renderer.rules.fence = function (tokens, idx, options, env, self) {
+      const token = tokens[idx];
+      if (token.info === 'Function call') {
+          try {
+              const jsonObj = JSON.parse(token.content);
+              if (jsonObj.name && jsonObj.args) {
+                  // 调用 call(jsonObj) 函数并返回结果
+                  // return call(jsonObj);
+                  console.log('nb')
+              }
+          } catch (e) {
+              console.error("Error parsing FUNCTION CALL JSON:", e);
+          }
+      }
+      return fence(tokens, idx, options, env, self);
+  };
+}
