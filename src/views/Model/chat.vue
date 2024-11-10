@@ -33,7 +33,9 @@
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="chatcontent text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(item.content)"></div>
+                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" >
+                      {{item.content}}
+                    </div>
                     <div class="flex">
                       <el-tooltip
                         class="box-item"
@@ -47,7 +49,7 @@
                           <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
-                      <el-tooltip
+                      <!-- <el-tooltip
                         class="box-item"
                         effect="dark"
                         content="复制Markdown"
@@ -58,7 +60,7 @@
                           class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
                           <DocDetail theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
-                      </el-tooltip>
+                      </el-tooltip> -->
                     </div>
                     <div class="analysis" v-show="item.status != 'no_analysis'" style="max-width: 60%;">
                       <p v-show="item.status == 'analysis'">正在思考和分析问题...</p>
@@ -79,7 +81,7 @@
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     
-                    <div class="chatcontent text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
+                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
                     <div class="flex">
                       <el-tooltip
                         class="box-item"
@@ -191,15 +193,87 @@
 </template>
 <script setup>
 import markdownIt from 'markdown-it';
-import markdownItHighlightjs from 'markdown-it-highlightjs'
+import markdownItHighlightjs from 'markdown-it-highlightjs';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
 import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
 import { Down,Up,Copy,DocDetail,PauseOne } from '@icon-park/vue-next';
-const md = new markdownIt()
-md.use(markdownItHighlightjs);
+// hljs.registerLanguage('FunctionCall', {
+//   'name': 'MyLang',
+//   'case_insensitive': true,
+//   'keywords': {
+//     'keyword': 'var let const if else for while true false null',
+//     'built_in': 'print input',
+//   },
+//   'contains': [
+//     {
+//       'className': 'string',
+//       'begin': '"',
+//       'end': '"',
+//     },
+//     {
+//       'className': 'number',
+//       'begin': '\\b\\d+(\\.\\d+)?\\b',
+//     },
+//     {
+//       'className': 'comment',
+//       'begin': '#',
+//       'end': '$',
+//     },
+//   ],
+// });
+const md = new markdownIt({
+  typographer: true, // 使用高级的打字排版
+  html: true,
+})
+hljs.registerLanguage('lingben_bash', (hljs) => ({
+  keywords: {
+    keyword: 'if else for while switch case break continue return',
+    built_in: 'true false'
+  },
+  contains: [
+    hljs.QUOTE_STRING_MODE,
+    hljs.NUMBER_MODE,
+  ]
+}));
+md.use(markdownItHighlightjs,{
+  inline: true,
+  hljs,
+});
+md.renderer.rules.fence = function(tokens, idx, options, env, self) {
+  var token = tokens[idx];
+  var info = token.info.trim().split(/\s+/);
+  var langName = info[0];
+  var highlightedCode;
+  if (langName.toLowerCase().indexOf('lingben_bash')>-1) {
+    highlightedCode = md.render(token.content);
+    return `<div class="czig-news-block">
+      <div class="language-label sticky bg-slate-200 px-3 py-2">零本智协智能查询</div>
+      <div class="bg-slate-50 px-3 py-2">${highlightedCode}</div>
+    </div>`
+  } else if (hljs.getLanguage(langName)) {
+    try {
+      highlightedCode = hljs.highlight(token.content, { language: langName }).value;
+    } catch (err) {
+      highlightedCode = token.content;
+    }
+  } else {
+    return self.renderToken(tokens, idx, options);
+  }
+  return `<div class="czig-code-block sticky text-base rounded-lg overflow-auto my-2">
+    <div class="language-label sticky bg-slate-200 px-3 py-2">${langName}</div>
+    <pre class="px-3 bg-slate-50"><code class="hljs bg-slate-50 text-sm ${langName}">${highlightedCode}</code></pre>
+  </div>`;
+};
+// md.renderer.rules.code_inline = function(tokens, idx, options, env, self) {
+//   const token = tokens[idx];
+//   return `<code class="my-special-class">${hljs.highlight(token.content).value}</code>`;
+// };
+
 // md.use(functionCallPlugin);
 const route = useRoute()
 const router = useRouter()
@@ -246,7 +320,7 @@ const onFocus = () => {
   throttledScrollToBottom();
 }
 function copyText(text){
-  Auth.copyText(text,()=>{
+  Auth.copyText(text.trim(),()=>{
     ElMessage.success("复制成功")
   },()=>{
     ElMessage.error("复制失败")
@@ -372,21 +446,30 @@ const send = async (param)=>{
             let tmp='';
             switch (model) {
               case 'line-1':
+                if(!decode.candidates[0].content.parts){
+                  break;
+                }
                 tmp=decode.candidates[0].content.parts[0].text;
                 if(tmp){
+                  tmp = tmp.replace(/\`\`\`lingben_bash[\s\S]*?\`\`\`/, '')
                   tokensCount2.value=decode.usageMetadata.totalTokenCount;
                 } else if(decode.candidates[0].content.parts[0].functionCall){
                   Auth.chatTaskThread.add(async ()=>{
-                    const text = (await Auth.functionCall(decode.candidates[0].content.parts[0].functionCall))
-                    ElMessageBox.alert(md.render(text), '任务执行结果',{
-                      confirmButtonText: '确定',
-                      showCancelButton: false,
-                      dangerouslyUseHTMLString: true,
-                      showClose:false
+                    await Auth.functionCall(decode.candidates[0].content.parts[0].functionCall,{
+                      alert:(obj)=>{
+                        ElMessageBox.alert(md.render(obj.content), obj.title||'任务执行结果',{
+                          confirmButtonText: '确定',
+                          showCancelButton: false,
+                          dangerouslyUseHTMLString: true,
+                          showClose:false
+                        })
+                      },
+                      renderHtml:(html)=>{
+                        chatList.value[index].content+=html
+                      }
                     })
-                    chatList.value[index].content += '\n```\n\n';
                   })
-                  tmp = '\n\n```FunctionCall\n'
+                  tmp = '\n\n'
                 }
                 break;
               case 'line-2':

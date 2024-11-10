@@ -794,10 +794,14 @@ let Auth = {
     // const res = fetch('https://apis.map.qq.com/ws/location/v1/ip?key=L66BZ-OHFCU-DVZVU-BNPTD-KPAF5-CCFPO&ip='+ip)
     return await this.basicAuth('/api/getIP', JSON.stringify({ip:ip}));
   },
-  loadRss:async function loadRss(){
+  loadRss:async function loadRss(opt){
     try {
-      const response = await fetch(BASICURL +'/api/news/tech-sci.xml',{
-        method:'POST'
+      const response = await fetch(BASICURL +'/api/news.xml',{
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(opt)
       });
       const xmlData = await response.text();
       const parser = new DOMParser();
@@ -882,16 +886,38 @@ Auth.copyHtml = false? (html, fn, er) => {
   }
   // document.body.removeChild(div);
 };
-Auth.functionCall = async function(obj){
+Auth.functionCall = async function(obj,opt){
   console.log(obj)
   if(obj.name == 'get_weather'){
     let info = await Auth.basicAuth('/api/getWeather', JSON.stringify({
       city:obj.args.city
     }))
-    return `\n\n更新时间${info.content.update_time}\n\n城市：${info.content.city}\n\n天气：${info.content.infos.weather}\n\n温度：${info.content.infos.temperature}℃\n\n风向：${info.content.infos.wind_direction}\n\n风力：${info.content.infos.wind_power}\n\n湿度：${info.content.infos.humidity}%\n\n`
+    return opt.alert({
+      title:'天气信息',
+      content:`\n\n更新时间${info.content.update_time}\n\n城市：${info.content.city}\n\n天气：${info.content.infos.weather}\n\n温度：${info.content.infos.temperature}℃\n\n风向：${info.content.infos.wind_direction}\n\n风力：${info.content.infos.wind_power}\n\n湿度：${info.content.infos.humidity}%\n\n`
+    })
+  } else if (obj.name == 'get_news'){
+    let type = {
+      'china':'时政',
+      'scroll-news':'即时',
+      'world':'国际',
+      'finance':'财经'
+    }
+    let str = `\n\n\`\`\`lingben_bash\n\n> \`get_news(type=${obj.args.type})\`\n\n# ${type[obj.args.type]}新闻 \n\n`
+    const list = await Auth.loadRss({type:obj.args.type});
+    list.slice(0,5).forEach(item => {
+      str+=
+      // `<a href="${item.link}" target="_blank" class="normal-color-force flex flex-col w-full h-full p-3 sm:p-4 cursor-pointer rounded-lg  modelbox border">
+      //   <h2 class="text-lg font-semibold hover-primary-text">${ item.title }</h2>
+      //   <p class="text-gray-700 mt-1 text-xs md:text-sm/tight flex-1">${ item.description }</p>
+      //   <p class="text-xs text-gray-600 mt-2">发布时间：${ item.pubDate }</p>
+      // </a>`
+      `### ${item.title}\n\n> ${ item.pubDate }\n${ item.description }\n\n`
+    });
+    // console.log(str);
+    str+='\`\`\`\n\n'
+    return opt.renderHtml(str)
   }
-  // 
-
 }
 window.onloadTurnstileCallback = function () {
   console.log('onload?')
