@@ -636,6 +636,7 @@ let Auth = {
     await this.getStreamText('/api/ai/stream', 
       { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf,
         useAnalysis:param.useAnalysis,
+        useFunction:param.useFunction,
         model:param.line,
         time:new Date().toTimeString()
       },

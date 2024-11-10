@@ -144,6 +144,7 @@
                 </p>
               </p>
               <p class="items-center flex justify-end mt-1 mb-1 h-6">
+                <span v-show="show_menu">联网<el-switch v-model="useFunction" class="ml-1 mr-2" /></span>
                 <span v-show="show_menu">深入思考<el-switch v-model="useAnalysis" class="ml-1 mr-2" /></span>
                 <span @click="show_menu=!show_menu" type="text" style="color:rgba(144, 77, 245,1)" class="cursor-pointer flex items-center text-sm">
                   <span class="">{{show_menu?'隐藏':'更多'}}</span>
@@ -290,6 +291,7 @@ const welcome_loading = ref(true)
 const sessionID = ref()
 const stopStatus = ref(false)
 const useAnalysis = ref(false);
+const useFunction = ref(false);
 const show_menu = ref(false)
 const showStop = ref(false);
 const tokensCount = ref(0)
@@ -394,6 +396,9 @@ const send = async (param)=>{
   setTimeout(()=>{
     throttledScrollToBottom();
   },100)
+  if(targetValue.indexOf('新闻')>-1){
+    useFunction.value=true;
+  }
   // onChange();
   const index = chatList.value.length - 1;
   await Auth.chatWithAI_Analysis({
@@ -439,6 +444,7 @@ const send = async (param)=>{
           analysis:useAnalysis.value?chatList.value[index-1].analysis:'',
           stopStatus,
           useAnalysis:useAnalysis.value,
+          useFunction:useFunction.value,
           line:chat_line.value,
           onmessage:(source,model) => {
             showStop.value=true;
@@ -469,7 +475,8 @@ const send = async (param)=>{
                       }
                     })
                   })
-                  tmp = '\n\n'
+                  tmp = '\n\n';
+                  useFunction.value=false;
                 }
                 break;
               case 'line-2':
