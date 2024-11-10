@@ -54,7 +54,8 @@
             </div>
           </div>
         </div>
-        <div class="mt-16">
+        <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center mt-40 mb-20">站在巨人的肩膀上</h2>
+        <!-- <div class="mt-16">
           <h2 class="text-lg font-semibold mb-4">最新资讯</h2>
         </div>
         <div class="row">
@@ -65,7 +66,7 @@
               <p class="text-xs text-gray-600 mt-2">发布时间：{{ item.pubDate }}</p>
             </a>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <el-dialog

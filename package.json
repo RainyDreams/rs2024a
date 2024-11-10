@@ -9,10 +9,10 @@
   "description": "CF2Z RS 2024 2312-A",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rainyddreams/rs2024-a.git"
+    "url": "https://github.com/rainyddreams/rs2024a.git"
   },
-  "homepage": "https://github.com/rainydreams/rs2024-a.git",
-  "version": "0.0.0",
+  "homepage": "https://github.com/rainydreams/rs2024a.git",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
