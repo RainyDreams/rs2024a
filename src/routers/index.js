@@ -22,6 +22,7 @@ import UserLogin from '../views/User/login.vue';
 import UserRegister from '../views/User/register.vue';
 import UserSettings from '../views/User/settings.vue';
 import AboutInfo from '../views/About/info.vue';
+import AboutNews from '../views/About/news.vue';
 import AboutProgress from '../views/About/progress.vue';
 import AboutLog from '../views/About/log.vue';
 import ModelSquare from '../views/Model/square.vue';
@@ -81,6 +82,7 @@ const router = createRouter({
     ]},
     { path: "/about/", name: "About", children: [
       { path: "info", name: "AboutInfo", component: AboutInfo,meta:{title:'软件信息',nologin:true} },
+      { path: "news", name: "AboutNews", component: AboutNews,meta:{title:'新闻',nologin:true} },
       { path: "progress", name: "AboutProgress", component: AboutProgress,meta:{title:'创作历程',nologin:true} },
       { path: "log", name: "AboutLog", component: AboutLog,meta:{title:'更新日志',nologin:true} }
     ] },

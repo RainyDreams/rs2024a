@@ -1,3 +1,42 @@
+<template>
+<div class="aichat">
+  <div class="chatList">
+    <div class="panel px-3 py-6 md:py-12 lg:py-16 xl:py-22">
+      <div>
+        <div class=" text-center">
+          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">圆满完成赤峰二中<span class="primary-text">百年校庆科技节</span>展示活动</h2>
+          <ul class="columns-1 md:columns-2 mb-0 md:gap-1 md:mb-1">
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnvP3t.jpg"/>
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjH91.jpg"/>
+          </ul>
+          <!-- <ul  class="columns-3 mb-2 gap-0 md:gap-1"> -->
+            <!-- <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjb1x.jpg"/>
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjThR.jpg"/>
+            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjoN9.jpg"/> -->
+          <!-- </ul> -->
+          <p class="text-slate-500">赤峰二中摄影社团 姚懿轩 摄</p>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3 mt-8">相关资料</p>
+          <p class="text-lg/loose"><a href="https://github.com/RainyDreams/rs2024a">软件前端开源地址</a></p>
+          <p class="text-lg/loose"><a href="https://docs.qq.com/pdf/DVWdteVFOaERMT0xP?">课题展示PPT（PDF）</a></p>
+          <p class="text-lg/loose"><a href="https://mp.weixin.qq.com/s/o8-AmYUw8WYAXiojc0sY9g">课题展示文档</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="panel chatcontent bg-white px-3 md:px-4 lg:px-5">
+      <div v-html="render"></div>
+    </div>
+  </div>
+</div>
+
+</template>
+<script setup>
+// import { ElAvatar } from 'element-plus';
+import markdownIt from 'markdown-it';
+const md = new markdownIt({
+  typographer: true, // 使用高级的打字排版
+  html: true,
+})
+const render = md.render(`
 # 零本智协项目 前端部分
 
 > 本文由零本智协大模型自动生成，仅供参考
@@ -61,3 +100,6 @@
 - 项目团队积极倡导社区参与，鼓励开发者和用户共同参与项目讨论。您可以在GitHub仓库中发起Discussion，分享您的使用经验、技术见解或创意想法。同时，也欢迎参与已有讨论，与其他社区成员共同交流，共同推动项目不断完善和发展。我们相信，通过社区的力量，能够使“零本智协”项目不断成长，为更多用户提供优质的服务。
 
 感谢您对“零本智协”项目的关注和支持！希望本前端程序与零本智协智能助手（小灵）的紧密结合能够为您带来高效便捷、智能创新的使用体验，共同开启零成本构建创新高效应用程序的新篇章。
+
+`)
+</script>

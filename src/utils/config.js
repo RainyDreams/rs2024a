@@ -89,10 +89,15 @@ export const configList = [
   },
   {
     name:'About',
-    title:'关于软件',
+    title:'关于我们',
     icon:'Info',
     to:"/about/info",
     tabs:[
+      {
+        title:'新闻',
+        icon:'NewspaperFolding',
+        to:'/about/news'
+      },
       {
         title:'软件信息',
         icon:'Info',

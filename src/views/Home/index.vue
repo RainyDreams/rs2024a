@@ -20,6 +20,7 @@
       <div class="row">
         <div class="col-12 text-center">
           <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">「梦想可以大，第一步总是小」</h2>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">站在巨人的肩膀上</p>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">以AI驱动项目流程的解决方案</p>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">项目发展至今仍<span class="primary-text">零支出</span></p>
         </div>
@@ -132,27 +133,6 @@
         </router-link>
       </h5>
     </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12 text-center">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">圆满完成赤峰二中<span class="primary-text">百年校庆科技节</span>展示活动</h2>
-          <ul class="columns-1 md:columns-2 mb-0 md:gap-1 md:mb-1">
-            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnvP3t.jpg"/>
-            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjH91.jpg"/>
-          </ul>
-          <!-- <ul  class="columns-3 mb-2 gap-0 md:gap-1"> -->
-            <!-- <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjb1x.jpg"/>
-            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjThR.jpg"/>
-            <img class="" src="https://s21.ax1x.com/2024/09/13/pAnjoN9.jpg"/> -->
-          <!-- </ul> -->
-          <p class="text-slate-500">赤峰二中摄影社团 姚懿轩 摄</p>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3 mt-8">相关资料</p>
-          <p class="text-lg/loose"><a href="https://github.com/RainyDreams/rs2024a">软件前端开源地址</a></p>
-          <p class="text-lg/loose"><a href="https://docs.qq.com/pdf/DVWdteVFOaERMT0xP?">课题展示PPT（PDF）</a></p>
-          <p class="text-lg/loose"><a href="https://mp.weixin.qq.com/s/o8-AmYUw8WYAXiojc0sY9g">课题展示文档</a></p>
-        </div>
-      </div>
-    </div>
     <div class="panel bs-container flex items-center justify-center flex-col py-10" v-show="count">
       <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">
         自2024年8月18日开始统计，已累计稳定提供服务
@@ -173,7 +153,7 @@
       <span class="md:block"></span>
         截流 防抖 反馈 验证 Session SQLite 响应式
       <span class="md:block"></span>
-        假跳转 缓存 原子化 Notification API
+        假跳转 缓存 原子化 FunctionCall
       </p>
     </div>
     <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vmin;">
