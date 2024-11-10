@@ -893,9 +893,11 @@ Auth.functionCall = async function(obj,opt){
     let info = await Auth.basicAuth('/api/getWeather', JSON.stringify({
       city:obj.args.city
     }))
+    let str = `\n\n\`\`\`lingben_bash\n\n> \`get_weather(${info.content.adcode})\`\n\n# ${info.content.city}${info.content.district}天气\n\n${info.content.infos.weather}\n\n温度：${info.content.infos.temperature}℃\n\n风向：${info.content.infos.wind_direction}\n\n风力：${info.content.infos.wind_power}\n\n湿度：${info.content.infos.humidity}%\n\n\`\`\` `
+    opt.renderHtml(str)
     return opt.alert({
       title:'天气信息',
-      content:`\n\n更新时间${info.content.update_time}\n\n城市：${info.content.city}\n\n天气：${info.content.infos.weather}\n\n温度：${info.content.infos.temperature}℃\n\n风向：${info.content.infos.wind_direction}\n\n风力：${info.content.infos.wind_power}\n\n湿度：${info.content.infos.humidity}%\n\n`
+      content:`\n\n更新时间${info.content.update_time}\n\n城市：${info.content.city} ${info.content.district}\n\n天气：${info.content.infos.weather}\n\n温度：${info.content.infos.temperature}℃\n\n风向：${info.content.infos.wind_direction}\n\n风力：${info.content.infos.wind_power}\n\n湿度：${info.content.infos.humidity}%\n\n`
     })
   } else if (obj.name == 'get_news'){
     let type = {

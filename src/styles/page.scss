@@ -505,7 +505,10 @@ a[href]{
     code.hljs{
       // --tw-bg-opacity: 1 !important;
       border-radius:4px;
-      background-color: rgb(248 250 252 / 1 ) !important;
+      background-color: rgb(241 245 249 / 1 ) !important;
+    }
+    pre code.hljs{
+      background-color: transparent !important;;
     }
     *:not(.czig-code-block *){
       font-size: inherit;

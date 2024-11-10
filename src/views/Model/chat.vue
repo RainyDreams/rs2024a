@@ -122,9 +122,17 @@
       <div class="row">
         <div class="col-12 col-xl-8 mb-1 md:mb-2 lg:mb-3 ">
           <div class="flex flex-col items-end mb-1">
-            <div class="max-w-md w-full">
+            <div class="max-w-lg w-full">
               <p v-show="show_menu">
                 <p class="flex gap-1 justify-end pt-3" >
+                  <el-select v-model="useInternet" placeholder="" class="mb-1">
+                    <el-option
+                      v-for="item in options_internet"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
                   <el-select v-model="analysis_line" placeholder="分析线路" class="mb-1">
                     <el-option
                       v-for="item in options_analysis"
@@ -144,7 +152,10 @@
                 </p>
               </p>
               <p class="items-center flex justify-end mt-1 mb-1 h-6">
-                <span v-show="show_menu">联网<el-switch v-model="useFunction" class="ml-1 mr-2" /></span>
+                <!-- <p v-show="show_menu">
+                  
+                  
+                </p> -->
                 <span v-show="show_menu">深入思考<el-switch v-model="useAnalysis" class="ml-1 mr-2" /></span>
                 <span @click="show_menu=!show_menu" type="text" style="color:rgba(144, 77, 245,1)" class="cursor-pointer flex items-center text-sm">
                   <span class="">{{show_menu?'隐藏':'更多'}}</span>
@@ -203,30 +214,6 @@ import { throttle,functionCallPlugin } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
 import { Down,Up,Copy,DocDetail,PauseOne } from '@icon-park/vue-next';
-// hljs.registerLanguage('FunctionCall', {
-//   'name': 'MyLang',
-//   'case_insensitive': true,
-//   'keywords': {
-//     'keyword': 'var let const if else for while true false null',
-//     'built_in': 'print input',
-//   },
-//   'contains': [
-//     {
-//       'className': 'string',
-//       'begin': '"',
-//       'end': '"',
-//     },
-//     {
-//       'className': 'number',
-//       'begin': '\\b\\d+(\\.\\d+)?\\b',
-//     },
-//     {
-//       'className': 'comment',
-//       'begin': '#',
-//       'end': '$',
-//     },
-//   ],
-// });
 const md = new markdownIt({
   typographer: true, // 使用高级的打字排版
   html: true,
@@ -254,7 +241,7 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
     highlightedCode = md.render(token.content);
     return `<div class="czig-news-block">
       <div class="language-label sticky bg-slate-200 px-3 py-2">零本智协智能查询</div>
-      <div class="bg-slate-50 px-3 py-2">${highlightedCode}</div>
+      <div class="bg-slate-100 px-3 py-2">${highlightedCode}</div>
     </div>`
   } else if (hljs.getLanguage(langName)) {
     try {
@@ -267,15 +254,10 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
   }
   return `<div class="czig-code-block sticky text-base rounded-lg overflow-auto my-2">
     <div class="language-label sticky bg-slate-200 px-3 py-2">${langName}</div>
-    <pre class="px-3 bg-slate-50"><code class="hljs bg-slate-50 text-sm ${langName}">${highlightedCode}</code></pre>
+    <pre class="px-3 bg-slate-100"><code class="hljs bg-slate-100 text-sm ${langName}">${highlightedCode}</code></pre>
   </div>`;
 };
-// md.renderer.rules.code_inline = function(tokens, idx, options, env, self) {
-//   const token = tokens[idx];
-//   return `<code class="my-special-class">${hljs.highlight(token.content).value}</code>`;
-// };
 
-// md.use(functionCallPlugin);
 const route = useRoute()
 const router = useRouter()
 const chatList = ref([]);
@@ -291,7 +273,6 @@ const welcome_loading = ref(true)
 const sessionID = ref()
 const stopStatus = ref(false)
 const useAnalysis = ref(false);
-const useFunction = ref(false);
 const show_menu = ref(false)
 const showStop = ref(false);
 const tokensCount = ref(0)
@@ -307,17 +288,25 @@ const model_info = ref({
   createuser:''
 })
 const options_analysis = [
-  {value: 'line-1', label: '线路1 Gemini-002'},
-  {value: 'line-2', label: '分析线路2 Doubao-32k'},
-  {value: 'line-3', label: '分析线路3 Qwen-8b'},
+  {value: 'line-1', label: '分析 Gemini-002'},
+  {value: 'line-2', label: '分析 Doubao-32k'},
+  {value: 'line-3', label: '分析 Qwen-8b'},
 ];
 const options_chat = [
-  {value: 'line-1', label: '回复线路1 Gemini-1.5-flash-001'},
-  {value: 'line-2', label: '回复线路2 Doubao-32k'},
-  {value: 'line-3', label: '回复线路3 Qwen-8b'},
+  {value: 'line-1', label: '回复 Gemini-1.5-flash-001'},
+  {value: 'line-2', label: '回复 Doubao-32k'},
+  {value: 'line-3', label: '回复 Qwen-8b'},
+];
+const options_internet = [
+  {value: 'AUTO', label: '自动联网'},
+  {value: 'DISABLE', label: '禁止联网'},
+  {value: 'ENABLE', label: '始终联网'},
 ];
 const analysis_line = ref('line-2')
 const chat_line = ref('line-1')
+const useInternet = ref('AUTO');
+const useFunction = ref(false);
+
 const onFocus = () => {
   throttledScrollToBottom();
 }
@@ -392,11 +381,19 @@ const send = async (param)=>{
   loading.value = true;
   askRef.value.focus();
   placeholder.value = "正在回复中...";
-  window.clarity("identify", fingerprint.value, null, "TEST-AI", null)
+  window.clarity("identify", fingerprint.value, null, "CHAT-AI", null)
   setTimeout(()=>{
     throttledScrollToBottom();
   },100)
-  if(targetValue.indexOf('新闻')>-1){
+  if (
+    useInternet.value=='AUTO'
+    && (targetValue.indexOf('新闻')>-1 || targetValue.indexOf('news')>-1 || targetValue.indexOf('weather')>-1)
+    && targetValue.length <= 8
+  ) {
+    useFunction.value=true;
+  } else if (useInternet.value=='ENABLE'){
+    useFunction.value=true;
+  } else if (targetValue.indexOf('联网回答')>-1){
     useFunction.value=true;
   }
   // onChange();
@@ -476,7 +473,6 @@ const send = async (param)=>{
                     })
                   })
                   tmp = '\n\n';
-                  useFunction.value=false;
                 }
                 break;
               case 'line-2':
@@ -493,6 +489,7 @@ const send = async (param)=>{
             stopStatus.value=false;
             showStop.value=false;
             loading.value = false;
+            useFunction.value=false;
             if(!chatList.value[index].content){
               chatList.value[index].content+='[回答已终止].';
             } else {
