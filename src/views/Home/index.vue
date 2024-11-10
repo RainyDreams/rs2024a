@@ -177,8 +177,8 @@
       </p>
     </div>
     <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vmin;">
-      <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">梦想只是开始 探索永不止步</h2>
-      <p class="mt-4 text-center text-wrap break-words" style="word-break: normal;">Designed by Zhang Xinyue, Chiziingiin.</p>
+      <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">站在巨人的肩膀上</h2>
+      <!-- <p class="mt-4 text-center text-wrap break-words" style="word-break: normal;">Designed by Zhang Xinyue, Chiziingiin.</p> -->
     </div>
     <div class="copyright py-5 px-2">
       <p class="text-center"><span class="">赤子英金</span> · <span class="primary-text">零本智协</span></p>
