@@ -12,6 +12,8 @@
 <script setup>
 
 import markdownIt from 'markdown-it';
+import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
+
 const md = new markdownIt({
   typographer: true, // 使用高级的打字排版
   html: true,

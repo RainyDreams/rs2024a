@@ -156,7 +156,7 @@
         假跳转 缓存 原子化 FunctionCall
       </p>
     </div>
-    <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vmin;">
+    <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vh;">
       <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">站在巨人的肩膀上</h2>
       <!-- <p class="mt-4 text-center text-wrap break-words" style="word-break: normal;">Designed by Zhang Xinyue, Chiziingiin.</p> -->
     </div>

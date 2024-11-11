@@ -26,9 +26,9 @@
         :color="[{ color: '#904df5', percentage: 100 }]"
       ></el-progress>
      
-      <p class="mt-4 mb-1 text-lg font-bold">服务器延迟</p>
-      <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.m>0?(serverStatus.m+'ms'):'错误' }}</p>
-      <p class="mt-4 mb-1 text-lg font-bold">指标S 响应时间</p>
+      <p class="mt-4 mb-1 text-lg font-bold">服务器往时差</p>
+      <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.m }}ms</p>
+      <p class="mt-4 mb-1 text-lg font-bold">服务器反时差</p>
       <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ timer - serverStatus.s }}ms</p>
       <p class="mt-4 mb-1 text-lg font-bold">指标A 响应时间</p>
       <p class="text-3xl mb-2 font-bold primary-text w-fit">{{ serverStatus.a }}ms</p>
