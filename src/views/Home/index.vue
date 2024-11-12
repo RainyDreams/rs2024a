@@ -10,7 +10,12 @@
         </div>
         <div class="col-12 col-lg-6">
           <div class="flex h-full items-center">
-            <iframe class="aspect-video" style="width:100%;" src="https://player.bilibili.com/player.html?bvid=BV1b1pQeCEcm&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+            <div v-if="!show_video" class="h-full w-full flex flex-col items-center justify-center min-h-64 hover:bg-slate-400 max-h-96 transition-all bg-slate-300 cursor-pointer"
+              @click="show_video=true">
+              <play-one theme="filled" size="50" fill="#fff" />
+              <span class="text-white text-lg mt-2">观看宣传短片</span>
+            </div>
+            <iframe v-else class="aspect-video" style="width:100%;" src="https://player.bilibili.com/player.html?bvid=BV1b1pQeCEcm&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
           </div>  
         </div>
       </div>
@@ -80,8 +85,147 @@
           <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">我们的优势</h2>
           <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-5">依托我们卓越的设计和技术能力以及 Cloudflare 提供的免费云服务</h5>
         </div>
-        <div class="col-12">
-          <div class="row cursor-default">
+        <div class="col-12 col-lg-8">
+          <div>
+            <h3 class="text-2xl/snug md:text-3xl/snug lg:text-4xl/snug font-medium mb-3">回复效率</h3>
+            <p class="text-base md:text-lg lg:text-xl mb-2">其他商业大模型</p>
+            <el-progress
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="100"
+              :color="[{ color: '#7a7a81', percentage: 100 }]"
+            >
+              <span></span>
+            </el-progress>
+            <p class="text-base md:text-lg lg:text-xl mb-2 mt-3 primary-text w-fit">零本智协大模型</p>
+            <el-progress
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="80"
+              :color="[{ color: '#904df5', percentage: 80 }]"
+            >
+              <span></span>
+            </el-progress>
+          </div>
+          <div class="mt-8">
+            <h3 class="text-2xl/snug md:text-3xl/snug lg:text-4xl/snug font-medium mb-3">回复质量</h3>
+            <p class="text-base md:text-lg lg:text-xl mb-2">其他商业大模型</p>
+            <el-progress
+              class="mb-5"
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="86"
+              :color="[{ color: '#7a7a81', percentage: 100 }]"
+            >
+              <span></span>
+            </el-progress>
+            <el-progress
+              class="mb-5"
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="83"
+              :color="[{ color: '#7a7a81', percentage: 100 }]"
+            >
+              <span></span>
+            </el-progress>
+            <el-progress
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="90"
+              :color="[{ color: '#7a7a81', percentage: 100 }]"
+            >
+              <span></span>
+            </el-progress>
+            <p class="text-base md:text-lg lg:text-xl mb-2 mt-3 primary-text w-fit">零本智协大模型</p>
+            <el-progress
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="86"
+              :color="[{ color: '#904df5', percentage: 80 }]"
+            >
+              <span></span>
+            </el-progress>
+          </div>
+          <div class="mt-8">
+            <h3 class="text-2xl/snug md:text-3xl/snug lg:text-4xl/snug font-medium mb-3">情感能力</h3>
+            <p class="text-base md:text-lg lg:text-xl mb-2">其他商业大模型</p>
+            <el-progress
+              class="mb-5"
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="83"
+              :color="[{ color: '#7a7a81', percentage: 100 }]"
+            >
+              <span></span>
+            </el-progress>
+            <el-progress
+              class="mb-5"
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="89"
+              :color="[{ color: '#7a7a81', percentage: 100 }]"
+            >
+              <span></span>
+            </el-progress>
+            <el-progress
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="79"
+              :color="[{ color: '#7a7a81', percentage: 100 }]"
+            >
+              <span></span>
+            </el-progress>
+            <p class="text-base md:text-lg lg:text-xl mb-2 mt-3 primary-text w-fit">零本智协大模型</p>
+            <el-progress
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="84.5"
+              :color="[{ color: '#904df5', percentage: 80 }]"
+            >
+              <span></span>
+            </el-progress>
+          </div>
+          <div class="mt-8">
+            <h3 class="text-2xl/snug md:text-3xl/snug lg:text-4xl/snug font-medium mb-3">总Token数</h3>
+            <p class="text-base md:text-lg lg:text-xl mb-2">其他商业大模型</p>
+            <el-progress
+              class="mb-5"
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="90"
+              :color="[{ color: '#7a7a81', percentage: 100 }]"
+            >
+              <span></span>
+            </el-progress>
+            <el-progress
+              class="mb-5"
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="95"
+              :color="[{ color: '#7a7a81', percentage: 100 }]"
+            >
+              <span></span>
+            </el-progress>
+            <el-progress
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="86"
+              :color="[{ color: '#7a7a81', percentage: 100 }]"
+            >
+              <span></span>
+            </el-progress>
+            <p class="text-base md:text-lg lg:text-xl mb-2 mt-3 primary-text w-fit">零本智协大模型</p>
+            <el-progress
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="40"
+              :color="[{ color: '#904df5', percentage: 80 }]"
+            >
+              <span></span>
+            </el-progress>
+          </div>
+          <p class="text-slate-300 text-xs mt-3">以上数据（除token数量）通过调查问卷主观获得，仅供参考</p>
+          <!-- <div class="row cursor-default">
             <div class="col-12 col-md-4">
               <div class="px-6 bg-white py-8 rounded-xl border-slate-200 border group">
                 <h3 class="font-semibold text-2xl/tight lg:text-3xl/tight w-fit">
@@ -109,7 +253,7 @@
                 <p class="text-base mt-3">从主题色选择，到每一个交互步骤，我们都用心雕琢</p>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -141,25 +285,28 @@
     </div>
     <div class="panel bs-container items-center justify-center flex-col py-6 md:py-8 lg:py-16" style="">
       <p class="mt-2 mb-2 text-sm/loose md:mt-3 md:mb-3 md:text-lg/loose lg:text-xl/loose break-normal text-center text-slate-700">
-        网页加载速度 流式传输 权限管理
+        <span class="hover-self-primary-text cursor-pointer">网页加载速度</span> <span class="hover-self-primary-text cursor-pointer">流式传输</span> <span class="hover-self-primary-text cursor-pointer">权限管理</span>
       <span class="md:block"></span>
-        最大化减小服务器压力 预加载 多次请求
+        <span class="hover-self-primary-text cursor-pointer">最大化减小服务器压力</span> <span class="hover-self-primary-text cursor-pointer">预加载</span> <span class="hover-self-primary-text cursor-pointer">多次请求</span>
       <span class="md:block"></span>
-        操作实时反馈 错误报告 通知 并发 用户心理学
+        <span class="hover-self-primary-text cursor-pointer">操作实时反馈</span> <span class="hover-self-primary-text cursor-pointer">错误报告</span> <span class="hover-self-primary-text cursor-pointer">通知</span> <span class="hover-self-primary-text cursor-pointer">并发</span> <span class="hover-self-primary-text cursor-pointer">用户心理学</span>
       </p>
       <h2 class="mt-2 mb-2 text-2xl/snug md:mt-4 md:mb-4 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">我们努力解决每一个技术问题</h2>
       <p class="mt-2 mb-2 text-sm/loose md:mt-3 md:mb-3 md:text-lg/loose lg:text-xl/loose break-normal text-center text-slate-700">
-        异步 队列 指纹 标签 Cookie Redis IndexDB PWA
+        <span class="hover-self-primary-text cursor-pointer">异步</span> <span class="hover-self-primary-text cursor-pointer">队列</span> <span class="hover-self-primary-text cursor-pointer">指纹</span> <span class="hover-self-primary-text cursor-pointer">标签</span> <span class="hover-self-primary-text cursor-pointer">Cookie</span> <span class="hover-self-primary-text cursor-pointer">Redis</span> <span class="hover-self-primary-text cursor-pointer">IndexDB</span> <span class="hover-self-primary-text cursor-pointer">PWA</span>
       <span class="md:block"></span>
-        截流 防抖 反馈 验证 Session SQLite 响应式
+        <span class="hover-self-primary-text cursor-pointer">截流</span> <span class="hover-self-primary-text cursor-pointer">防抖</span> <span class="hover-self-primary-text cursor-pointer">反馈</span> <span class="hover-self-primary-text cursor-pointer">验证</span> <span class="hover-self-primary-text cursor-pointer">Session</span> <span class="hover-self-primary-text cursor-pointer">SQLite</span> <span class="hover-self-primary-text cursor-pointer">响应式</span>
       <span class="md:block"></span>
-        假跳转 缓存 原子化 FunctionCall
+        <span class="hover-self-primary-text cursor-pointer">假跳转</span> <span class="hover-self-primary-text cursor-pointer">缓存</span> <span class="hover-self-primary-text cursor-pointer">原子化</span> <span class="hover-self-primary-text cursor-pointer">FunctionCall</span>
       </p>
     </div>
     <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vh;">
       <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">站在巨人的肩膀上</h2>
       <!-- <p class="mt-4 text-center text-wrap break-words" style="word-break: normal;">Designed by Zhang Xinyue, Chiziingiin.</p> -->
     </div>
+    <!-- Wenjuan Layer Begin --> 
+     <div id="idy_floatdiv" style="position:fixed;display:flex;right:0;bottom:10%;width:30px;border-top-left-radius:6px;border-bottom-left-radius:6px;height:100px;background:#0052d9;line-height: 24px;writing-mode:vertical-rl;align-items:center;justify-content:center;font-family:PingFangSC-Regular;font-size:16px;"> <a href="https://wj.qq.com/s2/16266998/95a2/" target="blank" style="color:#FFFFFF;text-decoration:none;">问卷调查</a> </div> 
+    <!-- Wenjuan Layer End -->
     <div class="copyright py-5 px-2">
       <p class="text-center"><span class="">赤子英金</span> · <span class="primary-text">零本智协</span></p>
       <p class="text-center text-xs md:text-sm">Copyright © 2024 赤峰二中2023级12班研究性学习零本智协项目组 All rights reserved.</p>
@@ -175,11 +322,13 @@
 </template>
 
 <script setup>
-import { ElButton } from 'element-plus';
+import { ElButton,ElProgress } from 'element-plus';
 import { emitter } from '../../utils/emitter';
 import { onMounted, ref } from 'vue';
+import { PlayOne } from '@icon-park/vue-next';
 import Auth from '../../utils/auth';
 const count = ref('')
+const show_video = ref(false)
 emitter.on('basicInfo',(re)=>{
   // Auth.getBasicInfo({task:async function(re){
   //   return await new Promise((resolve,reject)=>{
