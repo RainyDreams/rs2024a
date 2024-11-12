@@ -4,8 +4,40 @@
   <div class="panel" style="padding-top: 12px;">
     <div class="_content">
       <el-skeleton v-show="loading" :rows="8" animated></el-skeleton>
-      <el-tabs v-show="!loading">
-        <el-tab-pane label="基本信息">
+      <div class="flex gap-2 pb-2 mb-3 flex-wrap pt-2 border-b border-slate-100">
+        <div 
+          :class="`tab-item px-4 py-2 hover:bg-slate-50 normal-color rounded-md cursor-pointer relative ${panel==0?'primary-text active':''}`"
+          @click="panel = 0"  
+        >
+          基本信息
+        </div>
+        <div 
+          :class="`tab-item px-4 py-2 hover:bg-slate-50 normal-color rounded-md cursor-pointer relative ${panel==1?'primary-text active':''}`"
+          @click="panel = 1"  
+        >
+          工作流
+        </div>
+        <div 
+          :class="`tab-item px-4 py-2 hover:bg-slate-50 normal-color rounded-md cursor-pointer relative ${panel==2?'primary-text active':''}`"
+          @click="panel = 2"  
+        >
+          任务
+        </div>
+        <div 
+          :class="`tab-item px-4 py-2 hover:bg-slate-50 normal-color rounded-md cursor-pointer relative ${panel==3?'primary-text active':''}`"
+          @click="panel = 3"  
+        >
+          问题
+        </div>
+        <div 
+          :class="`tab-item px-4 py-2 hover:bg-slate-50 normal-color rounded-md cursor-pointer relative ${panel==4?'primary-text active':''}`"
+          @click="panel = 4"  
+        >
+          讨论
+        </div>
+      </div>
+      <div v-show="!loading">
+        <div v-show="panel == 0">
           <div class="infoList">
             <div class="text-xs mb-1 text-slate-400">项目名称</div>
             <div class="text-2xl/tight font-semibold mb-2">{{ projectDetail.name }}</div>
@@ -27,13 +59,13 @@
               </router-link>
             </ul>
           </div>
-        </el-tab-pane>
-        <el-tab-pane>
-          <template #label>
+        </div>
+        <div v-show="panel == 1">
+          <!-- <template #label>
             <el-badge value="特色功能" class="item" :offset="[0, -2]" type="primary">
               <span>工作流</span>
             </el-badge>
-          </template>
+          </template> -->
           <div v-if="projectDetail.workflow.length>0">
             <view-workflow></view-workflow>
           </div>
@@ -49,11 +81,11 @@
               去创建<el-icon class="el-icon--right"><Right /></el-icon>
             </el-button></p>
           </div>
-        </el-tab-pane>
-        <el-tab-pane >
-          <template #label>
+        </div>
+        <div v-show="panel == 2">
+          <!-- <template #label>
             <span class="ml-4 mr-4">任务</span>
-          </template>
+          </template> -->
           <div v-if="projectDetail.task.length>0">
             <view-task></view-task>
           </div>
@@ -69,8 +101,8 @@
               去创建<el-icon class="el-icon--right"><Right /></el-icon>
             </el-button></p>
           </div>
-        </el-tab-pane>
-        <el-tab-pane label="问题">
+        </div>
+        <div v-show="panel == 3">
           <div v-if="projectDetail.issue.length>0">
             <view-issue></view-issue>
           </div>
@@ -86,8 +118,8 @@
               去创建<el-icon class="el-icon--right"><Right /></el-icon>
             </el-button></p>
           </div>
-        </el-tab-pane>
-        <el-tab-pane label="讨论">
+        </div>
+        <div v-show="panel == 4 ">
           <div>
             <view-discussion></view-discussion>
           </div>
@@ -96,8 +128,8 @@
               去创建<el-icon class="el-icon--right"><Right /></el-icon>
             </el-button></p>
           </div>
-        </el-tab-pane>
-      </el-tabs>
+        </div>
+      </div>
     </div>
   </div>
  </div>
@@ -117,6 +149,7 @@ const route = useRoute();
 const loading = ref(true)
 const router = useRouter();
 const projectId = ref(route.params.projectId);
+const panel = ref(0)
 const projectDetail = ref({
   name:'',
   desc:'',
@@ -138,3 +171,26 @@ onActivated(async ()=>{
   loading.value = false;
 })
 </script>
+
+<style scoped>
+.tab-item::after{
+  content: "";
+  position: absolute;
+  display: block;
+  /* bottom: 3px; */
+  /* z-index: -1; */
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  background-image: linear-gradient(105deg, rgba(34, 99, 251, 0.0823529412) 20%, rgba(128, 31, 255, 0.0823529412) 88.8%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.1s ease-in-out;
+}
+.tab-item.active::after{
+  opacity: 1;
+  visibility: visible;
+}
+</style>
