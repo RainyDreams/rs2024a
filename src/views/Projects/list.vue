@@ -23,7 +23,7 @@
         </div>
         <div class="row" v-if="!loading && projectList.length>0" >
           <div class="col-12 col-sm-6" v-for="item in projectList">
-            <div class="panel projectbox">
+            <div class="panel projectbox border">
               <div class="text-xs mb-1 text-slate-400">项目名称</div>
               <div class="text-2xl/tight font-semibold">{{ item.name }}</div>
               <div class="text-xs text-slate-400 mb-2 break-all">ID:{{ item.project }}</div>
