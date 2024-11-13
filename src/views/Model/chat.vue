@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12 col-xl-8" style="margin-bottom: 0;">
           <div class="panel aichat">
-            <el-watermark :font="{color:'rgba(0, 0, 0, .038)'}" :gap="[0,0]" :rotate="-12"
+            <el-watermark :font="{color:'rgba(0, 0, 0, .008)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <div class="system">
@@ -33,15 +33,15 @@
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" >
+                    <div class="chatcontent whitespace-pre text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-screen-sm bg-slate-50 px-4 md:px-5 py-3" >
                       {{item.content}}
                     </div>
-                    <div class="flex">
+                    <div class="flex mt-2">
                       <el-tooltip
                         class="box-item"
                         effect="dark"
                         content="复制"
-                        placement="top-start"
+                        placement="bottom-end"
                       >
                         <div 
                           @click="copyHtml(i)"
@@ -81,7 +81,7 @@
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     
-                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/loose" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
+                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
                     <div class="flex">
                       <el-tooltip
                         class="box-item"
@@ -206,6 +206,7 @@
 <script setup>
 import markdownIt from 'markdown-it';
 import markdownItHighlightjs from 'markdown-it-highlightjs';
+import markdownItKatex from 'markdown-it-katex';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
@@ -217,7 +218,14 @@ import { Down,Up,Copy,DocDetail,PauseOne } from '@icon-park/vue-next';
 const md = new markdownIt({
   typographer: true, // 使用高级的打字排版
   html: true,
-})
+  highlight: function (str, lang) {
+    if (lang && !markdownIt.utils.isStringEmpty(lang)) {
+      return `<pre class="language-${lang}"><code>${md.utils.escapeHtml(str)}</code></pre>`;
+    } else {
+      return `<pre class="language-text"><code>${md.utils.escapeHtml(str)}</code></pre>`;
+    }
+  }
+});
 hljs.registerLanguage('lingben_bash', (hljs) => ({
   keywords: {
     keyword: 'if else for while switch case break continue return',
@@ -247,16 +255,23 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
     try {
       highlightedCode = hljs.highlight(token.content, { language: langName }).value;
     } catch (err) {
-      highlightedCode = token.content;
+      // highlightedCode = token.content;
+      highlightedCode = md.utils.escapeHtml(token.content); // 发生错误时，转义内容
     }
   } else {
-    return self.renderToken(tokens, idx, options);
+    highlightedCode = md.utils.escapeHtml(token.content);
+    // return self.renderToken(tokens, idx, options);
+    // else {
+        // 未知语言，直接渲染
+        // highlightedCode = md.utils.escapeHtml(content);
+      // }
   }
   return `<div class="czig-code-block sticky text-base rounded-lg overflow-auto my-2">
     <div class="language-label sticky bg-slate-200 px-3 py-2">${langName}</div>
     <pre class="px-3 bg-slate-100"><code class="hljs bg-slate-100 text-sm ${langName}">${highlightedCode}</code></pre>
   </div>`;
 };
+md.use(markdownItKatex);
 
 const route = useRoute()
 const router = useRouter()

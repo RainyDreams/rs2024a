@@ -565,6 +565,7 @@ a[href]{
       overflow-anchor: auto;
     }
     li{
+      padding-left: 4px;
       margin-bottom: 6px;
       &::marker{
         color: rgba(0, 0, 0, .5);

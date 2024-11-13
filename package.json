@@ -34,6 +34,7 @@
     "js-cookie": "^3.0.5",
     "markdown-it": "^14.1.0",
     "markdown-it-highlightjs": "^4.2.0",
+    "markdown-it-katex": "^2.0.3",
     "mitt": "^3.0.1",
     "nprogress": "^0.2.0",
     "sass": "^1.77.8",
