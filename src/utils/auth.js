@@ -638,7 +638,8 @@ let Auth = {
         useAnalysis:param.useAnalysis,
         useFunction:param.useFunction,
         model:param.line,
-        time:new Date().toTimeString()
+        time:new Date().toTimeString(),
+        sendTime:param.time
       },
       {
         onmessage:param.onmessage,

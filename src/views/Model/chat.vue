@@ -33,7 +33,8 @@
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="chatcontent whitespace-pre-line text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-full md:max-w-md bg-slate-100 px-4 md:px-5 py-3" >
+                    <div class="text-xs text-slate-400 w-full text-center">{{ item.formatSendTime }}</div>
+                    <div class="chatcontent whitespace-pre-wrap text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-full md:max-w-md lg:max-w-lg bg-slate-100 px-4 md:px-5 py-3" >
                       {{item.content}}
                     </div>
                     <div class="flex mt-2">
@@ -68,7 +69,7 @@
                         class="_text text-gray-500 text-sm " v-show="item.status != 'analysised'" 
                         v-html="md.render(item.analysis || '')"
                       ></div>
-                      <p v-show="item.status == 'analysised' || item.status == 'show_analysis'" @click="item.status = item.status=='show_analysis'?'analysised':'show_analysis'" class="flex items-center cursor-pointer justify-end">
+                      <p v-if="item.analysis" v-show="item.status == 'analysised' || item.status == 'show_analysis'" @click="item.status = item.status=='show_analysis'?'analysised':'show_analysis'" class="flex items-center cursor-pointer justify-end">
                         {{item.status == 'analysised'?'展开':'收起'}}思考过程
                         <Down v-show="item.status == 'analysised'" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
                         <Up v-show="item.status != 'analysised'" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
@@ -213,7 +214,7 @@ import hljs from 'highlight.js';
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
 import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin } from '../../utils/helpers'
-import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox } from "element-plus"; 
+import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
 import { Down,Up,Copy,DocDetail,PauseOne } from '@icon-park/vue-next';
 const md = new markdownIt({
@@ -269,14 +270,14 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
     <pre class="px-3 bg-slate-100"><code class="hljs bg-slate-100 text-sm ${langName}">${highlightedCode}</code></pre>
   </div>`;
 };
-// md.use(math,{
-//   engine: Katex,
-//   delimiters: 'dollars',
-//   blockClass: 'katex-block',
-//   inlineClass: 'katex-inline',
-//   errorClass: 'error',
-//   katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
-// });
+md.use(math,{
+  engine: Katex,
+  delimiters: 'dollars',
+  blockClass: 'katex-block',
+  inlineClass: 'katex-inline',
+  errorClass: 'error',
+  katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
+});
 
 const route = useRoute()
 const router = useRouter()
@@ -381,11 +382,20 @@ const send = async (param)=>{
     ElMessage.warning("请输入内容")
     return;
   }
+  const targetTime = new Date().getTime()
+  let formatSendTime;
+  if(chatList.value.length>0){
+    formatSendTime=(targetTime-chatList.value.findLast(e=>e.role=='user').sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):''
+  } else {
+    formatSendTime=dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss')
+  }
   chatList.value.push({
     role: "user",
     content: input.value.trim(),
     status:'analysis',
-    analysis:""
+    analysis:"",
+    sendTime:targetTime,
+    formatSendTime
   })
   chatList.value.push({
     role: "assistant",
@@ -463,6 +473,7 @@ const send = async (param)=>{
           useAnalysis:useAnalysis.value,
           useFunction:useFunction.value,
           line:chat_line.value,
+          time:targetTime,
           onmessage:(source,model) => {
             showStop.value=true;
             let decode = JSON.parse(source);
@@ -567,10 +578,21 @@ onActivated(async ()=>{
       model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
       return 0;
     },async ()=>{
-      chatList.value = (await Auth.getAIChatList({sessionID:id})).content.map(e=>{
+      let tmp = 0;
+      chatList.value = (await Auth.getAIChatList({sessionID:id})).content.map((e,i)=>{
         e.status = e.analysis?'analysised':'no_analysis';
         return e
       });
+      chatList.value.forEach((e,i)=>{
+        if(e.role == 'user'){
+          if(i == 0){
+            e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
+          } else {
+            e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
+            tmp=i;
+          }
+        }
+      })
     }].map(async(e)=>{
       return e()
     }))
