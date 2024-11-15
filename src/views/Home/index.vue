@@ -302,7 +302,8 @@
     </div>
     <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vh;">
       <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">站在巨人的肩膀上</h2>
-      <!-- <p class="mt-4 text-center text-wrap break-words" style="word-break: normal;">Designed by Zhang Xinyue, Chiziingiin.</p> -->
+      <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center mt-10 text-red-600">我们要求公平公正的评审！</h2>
+
     </div>
     <!-- Wenjuan Layer Begin --> 
      <div id="idy_floatdiv" style="position:fixed;display:flex;right:0;bottom:10%;width:30px;border-top-left-radius:6px;border-bottom-left-radius:6px;height:100px;background:#0052d9;line-height: 24px;writing-mode:vertical-rl;align-items:center;justify-content:center;font-family:PingFangSC-Regular;font-size:16px;"> <a href="https://wj.qq.com/s2/16266998/95a2/" target="blank" style="color:#FFFFFF;text-decoration:none;">问卷调查</a> </div> 

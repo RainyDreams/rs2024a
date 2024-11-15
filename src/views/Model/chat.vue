@@ -33,7 +33,7 @@
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="chatcontent whitespace-pre text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-screen-sm bg-slate-100 px-4 md:px-5 py-3" >
+                    <div class="chatcontent whitespace-pre-line text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-full md:max-w-md bg-slate-100 px-4 md:px-5 py-3" >
                       {{item.content}}
                     </div>
                     <div class="flex mt-2">
