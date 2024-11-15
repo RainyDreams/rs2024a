@@ -33,7 +33,7 @@
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="chatcontent whitespace-pre text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-screen-sm bg-slate-50 px-4 md:px-5 py-3" >
+                    <div class="chatcontent whitespace-pre text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-screen-sm bg-slate-100 px-4 md:px-5 py-3" >
                       {{item.content}}
                     </div>
                     <div class="flex mt-2">
@@ -76,7 +76,7 @@
                     </div>
                     <!-- </el-watermark> -->
                   </div>
-                  <div class="assistant " v-if="item.role == 'assistant'" :data-id="i">
+                  <div class="assistant overflow-hidden" v-if="item.role == 'assistant'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar> -->
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
@@ -206,9 +206,10 @@
 <script setup>
 import markdownIt from 'markdown-it';
 import markdownItHighlightjs from 'markdown-it-highlightjs';
-import markdownItKatex from 'markdown-it-katex';
+import math from 'markdown-it-texmath';
+import Katex from 'katex';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
+// import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
 import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin } from '../../utils/helpers'
@@ -218,6 +219,7 @@ import { Down,Up,Copy,DocDetail,PauseOne } from '@icon-park/vue-next';
 const md = new markdownIt({
   typographer: true, // 使用高级的打字排版
   html: true,
+  linkify: true,
   highlight: function (str, lang) {
     if (lang && !markdownIt.utils.isStringEmpty(lang)) {
       return `<pre class="language-${lang}"><code>${md.utils.escapeHtml(str)}</code></pre>`;
@@ -261,17 +263,20 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
   } else {
     highlightedCode = md.utils.escapeHtml(token.content);
     // return self.renderToken(tokens, idx, options);
-    // else {
-        // 未知语言，直接渲染
-        // highlightedCode = md.utils.escapeHtml(content);
-      // }
   }
   return `<div class="czig-code-block sticky text-base rounded-lg overflow-auto my-2">
     <div class="language-label sticky bg-slate-200 px-3 py-2">${langName}</div>
     <pre class="px-3 bg-slate-100"><code class="hljs bg-slate-100 text-sm ${langName}">${highlightedCode}</code></pre>
   </div>`;
 };
-md.use(markdownItKatex);
+// md.use(math,{
+//   engine: Katex,
+//   delimiters: 'dollars',
+//   blockClass: 'katex-block',
+//   inlineClass: 'katex-inline',
+//   errorClass: 'error',
+//   katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
+// });
 
 const route = useRoute()
 const router = useRouter()
@@ -534,10 +539,10 @@ const throttledScrollToBottom = throttle(scrollToBottom, 800); // 调整 300 为
 onActivated(async ()=>{
   let id = route.params.id;
   let model = route.query.model
-  if(!id || id=='new'){
+  if(!id || id==='new'){
     const {content} = await Auth.getAISessionID({model})
     id = route.params.id
-    if(route.path=='/model/chat/new') {
+    if(route.path==='/model/chat/new') {
       router.push('/model/chat/'+content)
       id = content;
     }
@@ -548,7 +553,7 @@ onActivated(async ()=>{
     // await Auth.init()
     fingerprint.value = await Auth.getUserFingerprint();
     const welcomeOnline = (await Auth.getAIWelcome({sessionID:id}))
-    console.log(welcomeOnline)
+    // console.log(welcomeOnline)
     welcome.value = welcomeOnline.content;
     model_info.value = {
       ...model_info.value,
@@ -558,7 +563,7 @@ onActivated(async ()=>{
     };
     await Promise.all([async ()=>{
       // console.log(1)
-      console.log(model_info.value)
+      // console.log(model_info.value)
       model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
       return 0;
     },async ()=>{

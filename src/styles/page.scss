@@ -520,7 +520,7 @@ a[href]{
     pre code.hljs{
       background-color: transparent !important;;
     }
-    *:not(.czig-code-block *){
+    *:not(.czig-code-block *,.katex *){
       font-size: inherit;
       line-height: inherit;
     }

@@ -30,7 +30,7 @@
 
 </template>
 <script setup>
-import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
+// import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
 
 // import { ElAvatar } from 'element-plus';
 import markdownIt from 'markdown-it';
