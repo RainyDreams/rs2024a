@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12 col-xl-8" style="margin-bottom: 0;">
           <div class="panel aichat">
-            <el-watermark :font="{color:'rgba(0, 0, 0, .008)'}" :gap="[0,0]" :rotate="-12"
+            <el-watermark :font="{color:'rgba(0, 0, 0, .01)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <div class="system">
@@ -151,19 +151,20 @@
                     />
                   </el-select>
                 </p>
+                <span v-show="show_menu">深入思考<el-switch v-model="useAnalysis" class="ml-1 mr-2" /></span>
+
               </p>
-              <p class="items-center flex justify-end mt-1 mb-1 h-6">
+              <!-- <p class="items-center flex justify-end mt-1 mb-1 h-6"> -->
                 <!-- <p v-show="show_menu">
                   
                   
                 </p> -->
-                <span v-show="show_menu">深入思考<el-switch v-model="useAnalysis" class="ml-1 mr-2" /></span>
-                <span @click="show_menu=!show_menu" type="text" style="color:rgba(144, 77, 245,1)" class="cursor-pointer flex items-center text-sm">
+                <!-- <span @click="show_menu=!show_menu" type="text" style="color:rgba(144, 77, 245,1)" class="cursor-pointer flex items-center text-sm">
                   <span class="">{{show_menu?'隐藏':'更多'}}</span>
                   <Down v-show="show_menu" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
                   <Up v-show="!show_menu" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
-                </span>
-              </p>
+                </span> -->
+              <!-- </p> -->
             </div>
           </div>
           <div :class="`ainput__wrapper`">
@@ -185,8 +186,10 @@
               </textarea>
             </div>
             <!-- <el-input ></el-input> -->
-            <div class="_number">
+            <div class="_number ml-2">
               <!-- <span>{{ now }} / 1000</span> -->
+              <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
+              <component @click="show_menu=!show_menu" :is="show_menu?DeleteMode:AddMode" class="mr-1 cursor-pointer" theme="outline" size="24" fill="rgb(144, 77, 245)"/>
               <el-button @click="send()" :loading="loading" v-show="!showStop" type="primary"
                 color="rgba(144, 77, 245,1)" class="ml-1" >
                 发送
@@ -216,7 +219,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode } from '@icon-park/vue-next';
 const md = new markdownIt({
   typographer: true, // 使用高级的打字排版
   html: true,

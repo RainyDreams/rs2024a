@@ -20,6 +20,9 @@ const BASICURL = ''
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async function (response,code) {
   window.clarity("event", 'auth_error')
+  if(!navigator.onLine){
+    return { status: 'offline' }
+  }
   if (response.status === 401) {
     const getPr = await Auth.getPrtoken();
     if(getPr.status=='sus'){
@@ -114,6 +117,7 @@ let Auth = {
   },
   mainTaskThread: new Scheduler(5),
   chatTaskThread: new Scheduler(1),
+  basicInfoTaskThread: new Scheduler(1),
   router: null,
   route: null,
   init: async function init() {
@@ -717,7 +721,8 @@ let Auth = {
       }
     } catch (error) {
       param.onclose();
-      defaultFailed(e,3)
+      if(param.onerror)param.onerror(error);
+      defaultFailed(error,3)
       console.error(error)
       // defaultFailed(error,2)
     }

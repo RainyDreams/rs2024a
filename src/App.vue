@@ -208,19 +208,43 @@ const update = (next,to) => {
           localStorage.setItem('notificationList',JSON.stringify(decode))
         } 
       })
-      setTimeout(()=>{
+      Auth.basicInfoTaskThread.add(async ()=>{
+        await new Promise(resolve=>{
+          setTimeout(()=>{
+            resolve()
+          },30000)
+        });
         update(next,to)
-      },200000)
+      })
+      // setTimeout(()=>{
+      //   update(next,to)
+      // },200000)
     }).catch(()=>{
       re.NotificationList.forEach(e=>{
         ElMessage.info('收到一条消息')
       })
-      setTimeout(()=>{
+      Auth.basicInfoTaskThread.add(async ()=>{
+        await new Promise(resolve=>{
+          setTimeout(()=>{
+            resolve()
+          },30000)
+        });
         update(next,to)
-      },200000)
+      })
+      // setTimeout(()=>{
+      //   update(next,to)
+      // },200000)
     })
   }}));
 }
+// Auth.basicInfoTaskThread.add(async ()=>{
+//   await new Promise(resolve=>{
+//     setTimeout(()=>{
+//       resolve()
+//     },3000)
+//   });
+//   update()
+// })
 emitter.on('updateBasicAuth',update)
 NProgress.configure({
   showSpinner: false,

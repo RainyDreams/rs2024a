@@ -20,10 +20,12 @@ import { RouterLink, useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter()
 const url = ref('')
+emitter.emit('updateBasicAuth')
 async function open(){
   router.push(`/login?url=${url.value}&mode=window`);
   // await Auth.openWindow(`https://auth.chiziingiin.top/?url=${url.value}&mode=window`)
 } 
+
 onMounted(()=>{
   url.value = encodeURIComponent(route.query.url || '')
 })

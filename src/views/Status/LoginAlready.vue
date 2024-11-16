@@ -14,4 +14,5 @@
 <script setup>
 import { ElResult,ElButton } from 'element-plus';
 import { RouterLink } from 'vue-router';
+emitter.emit('updateBasicAuth')
 </script>

@@ -23,8 +23,9 @@
     
     <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
       <div class="row">
-        <div class="col-12 text-center">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">「梦想可以大，第一步总是小」</h2>
+        <div class="col-12">
+          <h2 class="mt-10 text-3xl/snug md:text-5xl/snug lg:text-6xl/snug font-semibold">专注于思考</h2>
+          <h2 class="mb-3 text-3xl/snug md:text-5xl/snug lg:text-6xl/snug font-semibold primary-text w-fit">把剩下的工作交给我们</h2>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">站在巨人的肩膀上</p>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">以AI驱动项目流程的解决方案</p>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">项目发展至今仍<span class="primary-text">零支出</span></p>
