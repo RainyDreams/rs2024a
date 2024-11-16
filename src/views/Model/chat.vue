@@ -481,8 +481,6 @@ const send = async (param)=>{
             // ElMessage.warning('出现错误，正在尝试更换模型');
             // window.clarity("identify", fingerprint.value, null, "CHAT-AI-ERROR", null)
             window.clarity("event", 'CHAT-AI-ERROR')
-
-            chat_line.value='line-2'
             Auth.chatWithAI({
               sessionID:sessionID.value,
               content:targetValue,
