@@ -134,7 +134,7 @@
                       :value="item.value"
                     />
                   </el-select>
-                  <el-select v-model="analysis_line" placeholder="分析线路" class="mb-1">
+                  <!--<el-select v-model="analysis_line" placeholder="分析线路" class="mb-1">
                     <el-option
                       v-for="item in options_analysis"
                       :key="item.value"
@@ -149,7 +149,7 @@
                       :label="item.label"
                       :value="item.value"
                     />
-                  </el-select>
+                  </el-select>-->
                 </p>
                 <span v-show="show_menu">深入思考<el-switch v-model="useAnalysis" class="ml-1 mr-2" /></span>
 
@@ -461,7 +461,6 @@ const send = async (param)=>{
     onclose:async (source) => {
       throttledScrollToBottom()
       if(stopStatus.value==true){
-        // debugger;
         stopStatus.value=false;
         placeholder.value = "还有什么想聊的";
         chatList.value[index-1].status = 'analysised'
@@ -477,6 +476,67 @@ const send = async (param)=>{
           useFunction:useFunction.value,
           line:chat_line.value,
           time:targetTime,
+          onerror:(source,model)=>{
+            console.log('错误')
+            // ElMessage.warning('出现错误，正在尝试更换模型');
+            // window.clarity("identify", fingerprint.value, null, "CHAT-AI-ERROR", null)
+            window.clarity("event", 'CHAT-AI-ERROR')
+
+            chat_line.value='line-2'
+            Auth.chatWithAI({
+              sessionID:sessionID.value,
+              content:targetValue,
+              vf:fingerprint.value,
+              analysis:useAnalysis.value?chatList.value[index-1].analysis:'',
+              stopStatus,
+              useAnalysis:useAnalysis.value,
+              useFunction:useFunction.value,
+              line:'line-2',
+              time:targetTime,
+              onerror:(source,model)=>{
+                console.log('错误')
+                ElMessage.warning('错误重新尝试失败')
+              },
+              onmessage:(source,model) => {
+                showStop.value=true;
+                let decode = JSON.parse(source);
+                let tmp='';
+                switch (model) {
+                  case 'line-2':
+                    tmp=decode.choices[0].delta?.content;
+                    break;
+                  case 'line-3':
+                    tmp=decode.response;
+                    break;
+                }
+                chatList.value[index].content+=tmp;
+                throttledScrollToBottom()
+              },
+              onclose:(error) => {
+                stopStatus.value=false;
+                showStop.value=false;
+                loading.value = false;
+                useFunction.value=false;
+                if(!chatList.value[index].content){
+                  chatList.value[index].content+='[回答已终止].';
+                } else {
+                  Auth.chatTaskThread.add(async ()=>{
+                    throttledScrollToBottom()
+                    Auth.setAIChatResponse({
+                      sessionID:sessionID.value,
+                      content:chatList.value[index].content,
+                      tokens:tokensCount.value+tokensCount2.value
+                    })
+                  })
+                }
+                
+                throttledScrollToBottom()
+                chatList.value[index-1].status = 'analysised'
+                placeholder.value = "还有什么想聊的";
+                askRef.value.focus()
+              },
+            })
+          },
           onmessage:(source,model) => {
             showStop.value=true;
             let decode = JSON.parse(source);
@@ -519,24 +579,28 @@ const send = async (param)=>{
             chatList.value[index].content+=tmp;
             throttledScrollToBottom()
           },
-          onclose:(source) => {
+          onclose:(error) => {
             stopStatus.value=false;
             showStop.value=false;
             loading.value = false;
             useFunction.value=false;
             if(!chatList.value[index].content){
-              chatList.value[index].content+='[回答已终止].';
+              if(!error){
+                chatList.value[index].content+='[回答已终止].';
+              }
             } else {
-              Auth.chatTaskThread.add(async ()=>{
-                throttledScrollToBottom()
-                Auth.setAIChatResponse({
-                  sessionID:sessionID.value,
-                  content:chatList.value[index].content,
-                  tokens:tokensCount.value+tokensCount2.value
+              if(!error){
+                Auth.chatTaskThread.add(async ()=>{
+                  throttledScrollToBottom()
+                  Auth.setAIChatResponse({
+                    sessionID:sessionID.value,
+                    content:chatList.value[index].content,
+                    tokens:tokensCount.value+tokensCount2.value
+                  })
                 })
-              })
+              }
+              
             }
-            
             throttledScrollToBottom()
             chatList.value[index-1].status = 'analysised'
             placeholder.value = "还有什么想聊的";

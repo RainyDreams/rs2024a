@@ -208,14 +208,17 @@ const update = (next,to) => {
           localStorage.setItem('notificationList',JSON.stringify(decode))
         } 
       })
-      Auth.basicInfoTaskThread.add(async ()=>{
-        await new Promise(resolve=>{
-          setTimeout(()=>{
-            resolve()
-          },30000)
-        });
-        update(next,to)
-      })
+      if(document.visibilityState === 'visible'){
+        Auth.basicInfoTaskThread.add(async ()=>{
+          await new Promise(resolve=>{
+            setTimeout(()=>{
+              resolve()
+            },30000)
+          });
+          update(next,to)
+        })
+      }
+      
       // setTimeout(()=>{
       //   update(next,to)
       // },200000)
@@ -223,14 +226,16 @@ const update = (next,to) => {
       re.NotificationList.forEach(e=>{
         ElMessage.info('收到一条消息')
       })
-      Auth.basicInfoTaskThread.add(async ()=>{
-        await new Promise(resolve=>{
-          setTimeout(()=>{
-            resolve()
-          },30000)
-        });
-        update(next,to)
-      })
+      if(document.visibilityState === 'visible'){
+        Auth.basicInfoTaskThread.add(async ()=>{
+          await new Promise(resolve=>{
+            setTimeout(()=>{
+              resolve()
+            },30000)
+          });
+          update(next,to)
+        })
+      }
       // setTimeout(()=>{
       //   update(next,to)
       // },200000)

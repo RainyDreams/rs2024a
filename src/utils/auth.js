@@ -59,7 +59,7 @@ const defaultFailed = async function (response,code) {
       let text = (await response.text());
       throw new Error(response.url+"<br/>" + text)
     } catch (err){
-      console.error(err)
+      console.error(err.message+'\n'+err.stack)
       // ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
       //   dangerouslyUseHTMLString:true,
       //   customClass:'czigerr',
@@ -78,7 +78,7 @@ const defaultFailed = async function (response,code) {
             const r = await Auth.reportErrlog(JSON.stringify({
               ua,
               link:window.location.href,
-              content:`${response.status}:${err.message+err.stack+''}`,
+              content:`${response.status}:${err.message+'\n'+err.stack+''}`,
               time:new Date().getTime()
             }))
             console.info('[errId]',r)
@@ -648,7 +648,8 @@ let Auth = {
       {
         onmessage:param.onmessage,
         onclose:param.onclose,
-        stopStatus:param.stopStatus
+        stopStatus:param.stopStatus,
+        onerror:param.onerror||(()=>{})
       }
     );
   },
@@ -676,7 +677,8 @@ let Auth = {
       };
       const response = await fetch(url, postOptions);
       if (!response.ok) {
-        defaultFailed(response.statusText,3)
+        if(param.onerror) param.onerror();
+        // defaultFailed(response.statusText,3)
         throw new Error("Network response was not ok");
       }
       const model = postData.model;
@@ -720,9 +722,9 @@ let Auth = {
         }
       }
     } catch (error) {
-      param.onclose();
-      if(param.onerror)param.onerror(error);
-      defaultFailed(error,3)
+      param.onclose(true);
+      // if(param.onerror) param.onerror(error);
+      // defaultFailed(error,3)
       console.error(error)
       // defaultFailed(error,2)
     }
