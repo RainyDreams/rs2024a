@@ -1,0 +1,64 @@
+.dark{
+  background-color: rgb(37, 39, 40);
+  color:#b8bad6;
+  // .mainpage{
+    .navlist{
+      @media (max-width: 1000px) {
+        background-color:rgb(37, 39, 40) !important;
+      }
+      .nav{
+        color:#b8bad6 !important;
+        &.router-link-active{
+          background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+          background-clip: text;
+          -webkit-background-clip: text;
+          color: transparent !important;
+        }
+      }
+    }
+    .tablist li{
+      &.primary a{
+        background-color: rgba(68, 86, 131, 0.3) !important;
+        color:rgba(34, 98, 251, 1) !important;
+      }
+      a{
+        color:#9a9cbd !important;
+        &.router-link-active{
+          background-color: rgba(152, 157, 171, 0.433) !important;
+          // background-color:rgb(44, 50, 60) !important;
+          color:rgba(34, 98, 251, 1) !important;
+          // color:rgb(77, 130, 255) !important;
+        }
+      }
+    }
+  // }
+  .commonPage .panel{
+    background-color: rgb(51, 56, 68) !important;
+    color:#b8bad6 !important;
+    .title{
+      color:#b8bad6 !important;
+    }
+  }
+  .modelbox{
+    background-color: rgb(51, 56, 68) !important;
+    box-shadow: 0 15px 35px -2px rgba(57, 58, 59, 0.1), 0 5px 15px 0 rgba(96, 99, 104, 0.1);
+    &:not(.nohover):hover,&.force{
+      background: linear-gradient(220deg, #282e3b .79%, rgb(51, 56, 68) 63.4%);
+      box-shadow: 0 15px 35px -2px rgba(26, 35, 58, 0.1), 0 5px 15px 0 rgba(66, 81, 162, .1);
+    }
+  }
+  .teambox{
+    background-color: rgb(51, 56, 68) !important;
+    &:not(.nohover):hover,&.force{
+      background: linear-gradient(220deg, #282e3b .79%, rgb(51, 56, 68) 63.4%);
+      box-shadow: 0 15px 35px -2px rgba(26, 35, 58, 0.1), 0 5px 15px 0 rgba(66, 81, 162, .1);
+    }
+    .teamname,.teamShow{
+      color:#b8bad6 !important;
+    }
+    .teamdesc,.teamtitle{
+      color:#9496ae !important;
+    }
+  }
+
+}

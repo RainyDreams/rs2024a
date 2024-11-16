@@ -1,5 +1,5 @@
 <template >
-  <div class="page" :data-theme="isDarkMode?'dark':'light'" >
+  <div :class="'page '+(isDarkMode?'dark':'light')" :data-theme="isDarkMode?'dark':'light'" >
     <div class="mainpage">
       <div class="header" v-if="!TabBarHide">
         <div :class="{navlist:1,show:showMenu}" :style="showMenu?'':'transition-delay: 0.20s;'">
@@ -116,7 +116,15 @@ const TabBarHide = ref(false);
 const SideBarHide = ref(false);
 const isDarkMode = ref(0);
 const activeName = ref(0);
-const showMenu = ref(false)
+const showMenu = ref(false);
+//检测暗色模式
+if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  if(!sessionStorage.getItem('darkMode') || sessionStorage.getItem('darkMode')=='dark'){
+    isDarkMode.value=1;
+  }
+}
+
+
 const basicInfo = ref({
   isLogined:false,
   avatar:'',
