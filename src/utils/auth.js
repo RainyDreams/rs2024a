@@ -689,7 +689,7 @@ let Auth = {
       let errorCount = 0;
       while (true) {
         if(param.stopStatus){
-          if(param.stopStatus.value) { param.onclose(); break; }
+          if(param.stopStatus.value) { param.onclose(false,postData.model); break; }
         }
         try{
           const { done, value } = await reader.read();
@@ -698,7 +698,7 @@ let Auth = {
             if(tmp != '[DONE]'){
               param.onmessage(tmp,model);
             }
-            param.onclose(); 
+            param.onclose(false,postData.model); 
             break; 
           }
           let textArray = (tmp+decoder.decode(value, { stream: true }).replace(/\n/g,"").trim()).split('data: ');
@@ -722,7 +722,7 @@ let Auth = {
         }
       }
     } catch (error) {
-      param.onclose(true);
+      param.onclose(true,postData.model);
       // if(param.onerror) param.onerror(error);
       // defaultFailed(error,3)
       console.error(error)

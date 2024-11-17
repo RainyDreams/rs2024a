@@ -33,7 +33,7 @@
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="text-xs text-slate-400 w-full text-center">{{ item.formatSendTime }}</div>
+                    <div class="text-xs text-slate-400 w-full text-center mb-2 font-thin">{{ item.formatSendTime }}</div>
                     <div class="chatcontent whitespace-pre-wrap text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-full md:max-w-md lg:max-w-lg bg-slate-100 px-4 md:px-5 py-3" >
                       {{item.content}}
                     </div>
@@ -81,8 +81,19 @@
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar> -->
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
-                    
-                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(item.content) || `<span class='i-loading'></span>`"></div>
+                    <!-- <div></div> -->
+                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" >
+                      <!-- <div v-for="(e,i2) in contentRendered" :key="i2" v-if="i == chatList.length-1">
+                        <div v-html="md.render(e.content)" :class="{ 'fade-in': e.fresh }" @animationend="e.fresh = false"></div>
+                      </div> -->
+                      <!-- 动画 -->
+                      <div v-if="animateMode && i == chatList.length-1">
+                        <div v-for="(e,i2) in contentRendered" :key="i2" class="hhh" style="--animate-duration:3.2s">
+                          <div v-html="md.render(e.content)" class="animate__animated animate__fadeIn"></div>
+                        </div>
+                      </div>
+                      <div v-else v-html="md.render(item.content)"></div>
+                    </div>
                     <div class="flex">
                       <el-tooltip
                         class="box-item"
@@ -225,10 +236,8 @@ const md = new markdownIt({
   html: true,
   linkify: true,
   highlight: function (str, lang) {
-    if (lang && !markdownIt.utils.isStringEmpty(lang)) {
-      return `<pre class="language-${lang}"><code>${md.utils.escapeHtml(str)}</code></pre>`;
-    } else {
-      return `<pre class="language-text"><code>${md.utils.escapeHtml(str)}</code></pre>`;
+    if (lang && markdownIt.utils.isStringEmpty(lang)) { return `<pre class="language-${lang}"><code>${md.utils.escapeHtml(str)}</code></pre>`; } else if (lang && hljs.getLanguage(lang)) { try { return `<pre class="language-${lang}"><code>${hljs.highlight(lang, str, true).value}</code></pre>`; } catch (__) { } } else { // 未知语言，使用默认渲染 
+      return `<pre class="language-unknown"><code>${md.utils.escapeHtml(str)}</code></pre>`;
     }
   }
 });
@@ -281,7 +290,10 @@ md.use(math,{
   errorClass: 'error',
   katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
 });
+// const contentRendered = ref([]);
 
+
+/* 主要渲染部分结束 */
 const route = useRoute()
 const router = useRouter()
 const chatList = ref([]);
@@ -372,14 +384,190 @@ const handleEnter = async (event) => {
     }
   }
 }
+
 const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
   scrollElement.scrollTop = scrollElement.scrollHeight;
 };
+
 const stop = async (param)=>{
   stopStatus.value=true;
   loading.value=false;
 }
+
+/* chat */
+async function handleChatWithAI_Analysis(opt) {
+  await Auth.chatWithAI_Analysis({
+    sessionID: sessionID.value,
+    content: opt.targetValue,
+    vf: fingerprint.value,
+    useAnalysis: useAnalysis.value,
+    stopStatus,
+    line: analysis_line.value,
+    onmessage: (source, model) => {
+      showStop.value = true;
+      const decode = JSON.parse(source);
+      let tmp = '';
+      switch (model) {
+        case 'line-1':
+          tmp = decode.candidates[0].content.parts[0].text;
+          tokensCount.value = decode.usageMetadata.totalTokenCount;
+          break;
+        case 'line-2':
+          tmp = decode.choices[0].delta?.content;
+          break;
+        case 'line-3':
+          tmp = decode.response;
+          break;
+      }
+      chatList.value[opt.index - 1].analysis += tmp;
+      throttledScrollToBottom();
+    },
+    onclose: async (source) => {
+      throttledScrollToBottom();
+      if (stopStatus.value == true) {
+        stopStatus.value = false;
+        placeholder.value = "还有什么想聊的";
+        chatList.value[opt.index - 1].status = 'analysised';
+        chatList.value[opt.index].content += '[回答已终止]';
+      } else {
+        await initiateChatWithAI(opt);
+      }
+    },
+  });
+}
+
+async function initiateChatWithAI(opt) {
+  await Auth.chatWithAI({
+    sessionID: sessionID.value,
+    content: opt.targetValue,
+    vf: fingerprint.value,
+    analysis: useAnalysis.value ? chatList.value[opt.index - 1].analysis : '',
+    stopStatus,
+    useAnalysis: useAnalysis.value,
+    useFunction: useFunction.value,
+    line: chat_line.value,
+    time: opt.targetTime,
+    onerror: (source, model) => {
+      console.log('错误');
+      window.clarity('event', 'CHAT-AI-ERROR');
+      retryChatWithAI(opt);
+    },
+    onmessage: (source, model) => {
+      handleOnMessage(source, model, opt);
+    },
+    onclose: (error,model) => {
+      handleOnClose(error,model, opt);
+    },
+  });
+}
+
+function retryChatWithAI(opt) {
+  Auth.chatWithAI({
+    sessionID: sessionID.value,
+    content: opt.targetValue,
+    vf: fingerprint.value,
+    analysis: useAnalysis.value ? chatList.value[opt.index - 1].analysis : '',
+    stopStatus,
+    useAnalysis: useAnalysis.value,
+    useFunction: useFunction.value,
+    line: 'line-2',
+    time: opt.targetTime,
+    onerror: (source, model) => {
+      console.log('错误');
+      ElMessage.warning('错误重新尝试失败');
+    },
+    onmessage: (source, model) => {
+      handleOnMessage(source, model, opt);
+    },
+    onclose: (error,model) => {
+      handleOnClose(error, model ,opt);
+    },
+  });
+}
+
+function handleOnMessage(source, model, opt) {
+  showStop.value = true;
+  const decode = JSON.parse(source);
+  let tmp = '';
+  switch (model) {
+    case 'line-1':
+      if (!decode.candidates[0].content.parts) {
+        break;
+      }
+      tmp = decode.candidates[0].content.parts[0].text;
+      if (tmp) {
+        tmp = tmp.replace(/\`\`\`lingben_bash[\s\S]*?\`\`\`/, '');
+        tokensCount2.value = decode.usageMetadata.totalTokenCount;
+      } else if (decode.candidates[0].content.parts[0].functionCall) {
+        Auth.chatTaskThread.add(async () => {
+          await Auth.functionCall(decode.candidates[0].content.parts[0].functionCall, {
+            alert: (obj) => {
+              ElMessageBox.alert(md.render(obj.content), obj.title || '任务执行结果', {
+                confirmButtonText: '确定',
+                showCancelButton: false,
+                dangerouslyUseHTMLString: true,
+                showClose: false,
+              });
+            },
+            renderHtml: (html) => {
+              chatList.value[opt.index].content += html;
+            },
+          });
+        });
+        tmp = '\n\n';
+      }
+      if(!animateMode.value) animateMode.value = true;
+      contentRendered.value.push({content:tmp,fresh:true});
+      break;
+    case 'line-2':
+      tmp = decode.choices[0].delta?.content;
+      break;
+    case 'line-3':
+      tmp = decode.response;
+      break;
+  }
+  chatList.value[opt.index].content += tmp;
+  throttledScrollToBottom();
+}
+const contentRendered = ref([])
+const animateMode = ref(false)
+
+function handleOnClose(error,model,opt) {
+  stopStatus.value = false;
+  showStop.value = false;
+  loading.value = false;
+  useFunction.value = false;
+  if (!chatList.value[opt.index].content) {
+    if (!error) {
+      chatList.value[opt.index].content += '[回答已终止].';
+    }
+  } else {
+    if (!error) {
+      Auth.chatTaskThread.add(async () => {
+        throttledScrollToBottom();
+        await Auth.setAIChatResponse({
+          sessionID: sessionID.value,
+          content: chatList.value[opt.index].content,
+          tokens: tokensCount.value + tokensCount2.value,
+        });
+      });
+      if(model == 'line-1'){
+        // animateMode.value = false;
+        contentRendered.value=ref([])
+        setTimeout(()=>{
+          animateMode.value = false;
+        },3200)
+      }
+    }
+  }
+  // throttledScrollToBottom();
+  scrollToBottom()
+  chatList.value[opt.index - 1].status = 'analysised';
+  placeholder.value = '还有什么想聊的';
+  askRef.value.focus();
+}
+
 const send = async (param)=>{
   if(input.value.trim() == '') {
     ElMessage.warning("请输入内容")
@@ -415,9 +603,9 @@ const send = async (param)=>{
   askRef.value.focus();
   placeholder.value = "正在回复中...";
   window.clarity("identify", fingerprint.value, null, "CHAT-AI", null)
-  setTimeout(()=>{
-    throttledScrollToBottom();
-  },100)
+  // setTimeout(()=>{
+  //   throttledScrollToBottom();
+  // },100)
   if (
     useInternet.value=='AUTO'
     && (targetValue.indexOf('新闻')>-1 || targetValue.indexOf('news')>-1 || targetValue.indexOf('weather')>-1)
@@ -431,187 +619,13 @@ const send = async (param)=>{
   }
   // onChange();
   const index = chatList.value.length - 1;
-  await Auth.chatWithAI_Analysis({
-    sessionID:sessionID.value,
-    content:targetValue,
-    vf:fingerprint.value,
-    useAnalysis:useAnalysis.value,
-    stopStatus,
-    line:analysis_line.value,
-    onmessage:(source,model) => {
-      showStop.value=true;
-      const decode = JSON.parse(source);
-      let tmp='';
-      switch (model) {
-        case 'line-1':
-          // tmp=decode.response;
-          tmp=decode.candidates[0].content.parts[0].text ;
-          tokensCount.value=decode.usageMetadata.totalTokenCount;
-          break;
-        case 'line-2':
-          tmp=decode.choices[0].delta?.content;
-          break;
-        case 'line-3':
-          tmp=decode.response;
-          break;
-      }
-      chatList.value[index-1].analysis+=tmp;
-      throttledScrollToBottom()
-    },
-    onclose:async (source) => {
-      throttledScrollToBottom()
-      if(stopStatus.value==true){
-        stopStatus.value=false;
-        placeholder.value = "还有什么想聊的";
-        chatList.value[index-1].status = 'analysised'
-        chatList.value[index].content+='[回答已终止]';
-      } else {
-        await Auth.chatWithAI({
-          sessionID:sessionID.value,
-          content:targetValue,
-          vf:fingerprint.value,
-          analysis:useAnalysis.value?chatList.value[index-1].analysis:'',
-          stopStatus,
-          useAnalysis:useAnalysis.value,
-          useFunction:useFunction.value,
-          line:chat_line.value,
-          time:targetTime,
-          onerror:(source,model)=>{
-            console.log('错误')
-            // ElMessage.warning('出现错误，正在尝试更换模型');
-            // window.clarity("identify", fingerprint.value, null, "CHAT-AI-ERROR", null)
-            window.clarity("event", 'CHAT-AI-ERROR')
-            Auth.chatWithAI({
-              sessionID:sessionID.value,
-              content:targetValue,
-              vf:fingerprint.value,
-              analysis:useAnalysis.value?chatList.value[index-1].analysis:'',
-              stopStatus,
-              useAnalysis:useAnalysis.value,
-              useFunction:useFunction.value,
-              line:'line-2',
-              time:targetTime,
-              onerror:(source,model)=>{
-                console.log('错误')
-                ElMessage.warning('错误重新尝试失败')
-              },
-              onmessage:(source,model) => {
-                showStop.value=true;
-                let decode = JSON.parse(source);
-                let tmp='';
-                switch (model) {
-                  case 'line-2':
-                    tmp=decode.choices[0].delta?.content;
-                    break;
-                  case 'line-3':
-                    tmp=decode.response;
-                    break;
-                }
-                chatList.value[index].content+=tmp;
-                throttledScrollToBottom()
-              },
-              onclose:(error) => {
-                stopStatus.value=false;
-                showStop.value=false;
-                loading.value = false;
-                useFunction.value=false;
-                if(!chatList.value[index].content){
-                  chatList.value[index].content+='[回答已终止].';
-                } else {
-                  Auth.chatTaskThread.add(async ()=>{
-                    throttledScrollToBottom()
-                    Auth.setAIChatResponse({
-                      sessionID:sessionID.value,
-                      content:chatList.value[index].content,
-                      tokens:tokensCount.value+tokensCount2.value
-                    })
-                  })
-                }
-                
-                throttledScrollToBottom()
-                chatList.value[index-1].status = 'analysised'
-                placeholder.value = "还有什么想聊的";
-                askRef.value.focus()
-              },
-            })
-          },
-          onmessage:(source,model) => {
-            showStop.value=true;
-            let decode = JSON.parse(source);
-            let tmp='';
-            switch (model) {
-              case 'line-1':
-                if(!decode.candidates[0].content.parts){
-                  break;
-                }
-                tmp=decode.candidates[0].content.parts[0].text;
-                if(tmp){
-                  tmp = tmp.replace(/\`\`\`lingben_bash[\s\S]*?\`\`\`/, '')
-                  tokensCount2.value=decode.usageMetadata.totalTokenCount;
-                } else if(decode.candidates[0].content.parts[0].functionCall){
-                  Auth.chatTaskThread.add(async ()=>{
-                    await Auth.functionCall(decode.candidates[0].content.parts[0].functionCall,{
-                      alert:(obj)=>{
-                        ElMessageBox.alert(md.render(obj.content), obj.title||'任务执行结果',{
-                          confirmButtonText: '确定',
-                          showCancelButton: false,
-                          dangerouslyUseHTMLString: true,
-                          showClose:false
-                        })
-                      },
-                      renderHtml:(html)=>{
-                        chatList.value[index].content+=html
-                      }
-                    })
-                  })
-                  tmp = '\n\n';
-                }
-                break;
-              case 'line-2':
-                tmp=decode.choices[0].delta?.content;
-                break;
-              case 'line-3':
-                tmp=decode.response;
-                break;
-            }
-            chatList.value[index].content+=tmp;
-            throttledScrollToBottom()
-          },
-          onclose:(error) => {
-            stopStatus.value=false;
-            showStop.value=false;
-            loading.value = false;
-            useFunction.value=false;
-            if(!chatList.value[index].content){
-              if(!error){
-                chatList.value[index].content+='[回答已终止].';
-              }
-            } else {
-              if(!error){
-                Auth.chatTaskThread.add(async ()=>{
-                  throttledScrollToBottom()
-                  Auth.setAIChatResponse({
-                    sessionID:sessionID.value,
-                    content:chatList.value[index].content,
-                    tokens:tokensCount.value+tokensCount2.value
-                  })
-                })
-              }
-              
-            }
-            throttledScrollToBottom()
-            chatList.value[index-1].status = 'analysised'
-            placeholder.value = "还有什么想聊的";
-            askRef.value.focus()
-          },
-        })
-    }
-    },
-  })
-  
+  await handleChatWithAI_Analysis({ targetValue, targetTime, index });
+  // await handleChatWithAI_Analysis({targetValue,targetTime,index});
 }
+
+
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
-const throttledScrollToBottom = throttle(scrollToBottom, 800); // 调整 300 为所需的毫秒数
+const throttledScrollToBottom = throttle(scrollToBottom, 100); // 调整 300 为所需的毫秒数
 onActivated(async ()=>{
   let id = route.params.id;
   let model = route.query.model
