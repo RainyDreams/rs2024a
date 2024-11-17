@@ -37,13 +37,16 @@ const loading = ref(true)
 onActivated(async ()=>{
   const { content,code } = await Auth.getAiChatHistory();
   // console.log(content, code)
+  const now = new Date().getTime();
   if(code == 'ok' || content){
     chatList.value = content.map(e=>{
-      return {
-        ...e,
-        formatCreateTime:dayjs(e.createTime).format('YYYY年M月DD日 HH:mm:ss')
+      if(e.expirationTime>now){
+        return {
+          ...e,
+          formatCreateTime:dayjs(e.createTime).format('YYYY年M月DD日 HH:mm:ss')
+        }
       }
-    })
+    }).filter(e=>e)
     loading.value = false
   }
 })

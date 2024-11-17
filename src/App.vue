@@ -270,8 +270,8 @@ router.beforeEach((to, from, next) => {
     document.title = to.meta.title + ' - 零本智协';
   }
   // next()
+  update(next,to);
   Auth.basicInfoTaskThread.add(async ()=>{
-    update(next,to);
     await new Promise(resolve=>{
       setTimeout(()=>{
         resolve()
