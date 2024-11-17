@@ -218,12 +218,12 @@ const update = (next,to) => {
       })
       if(document.visibilityState === 'visible'){
         Auth.basicInfoTaskThread.add(async ()=>{
+          update(next,to)
           await new Promise(resolve=>{
             setTimeout(()=>{
               resolve()
-            },30000)
+            },120000)
           });
-          update(next,to)
         })
       }
       
@@ -236,12 +236,12 @@ const update = (next,to) => {
       })
       if(document.visibilityState === 'visible'){
         Auth.basicInfoTaskThread.add(async ()=>{
+          update(next,to)
           await new Promise(resolve=>{
             setTimeout(()=>{
               resolve()
-            },30000)
+            },120000)
           });
-          update(next,to)
         })
       }
       // setTimeout(()=>{
@@ -270,7 +270,14 @@ router.beforeEach((to, from, next) => {
     document.title = to.meta.title + ' - 零本智协';
   }
   // next()
-  update(next,to)
+  Auth.basicInfoTaskThread.add(async ()=>{
+    update();
+    await new Promise(resolve=>{
+      setTimeout(()=>{
+        resolve()
+      },3000)
+    });
+  })
 });
 router.afterEach(async (to, from) => {
   const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
