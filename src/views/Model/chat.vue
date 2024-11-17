@@ -92,7 +92,7 @@
                           <div v-html="md.render(e.content)" class="animate__animated animate__fadeIn"></div>
                         </div>
                       </div>
-                      <div v-else class="animate__animated animate__fadeIn" style="--animate-duration:3.2s" v-html="md.render(item.content)"></div>
+                      <div v-else class="animate__animated animate__fadeIn" style="--animate-duration:2s" v-html="md.render(item.content)"></div>
                     </div>
                     <div class="flex">
                       <el-tooltip
