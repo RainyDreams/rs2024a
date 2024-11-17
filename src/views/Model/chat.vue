@@ -92,7 +92,7 @@
                           <div v-html="md.render(e.content)" class="animate__animated animate__fadeIn"></div>
                         </div>
                       </div>
-                      <div v-else v-html="md.render(item.content)"></div>
+                      <div v-else class="animate__animated animate__fadeIn" style="--animate-duration:3.2s" v-html="md.render(item.content)"></div>
                     </div>
                     <div class="flex">
                       <el-tooltip
@@ -231,6 +231,9 @@ import { throttle,functionCallPlugin } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
 import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode } from '@icon-park/vue-next';
+const contentRendered = ref([])
+const animateMode = ref(false)
+
 const md = new markdownIt({
   typographer: true, // 使用高级的打字排版
   html: true,
@@ -452,6 +455,7 @@ async function initiateChatWithAI(opt) {
       console.log('错误');
       window.clarity('event', 'CHAT-AI-ERROR');
       retryChatWithAI(opt);
+      loading.value = false;
     },
     onmessage: (source, model) => {
       handleOnMessage(source, model, opt);
@@ -476,6 +480,7 @@ function retryChatWithAI(opt) {
     onerror: (source, model) => {
       console.log('错误');
       ElMessage.warning('错误重新尝试失败');
+      loading.value = false;
     },
     onmessage: (source, model) => {
       handleOnMessage(source, model, opt);
@@ -530,8 +535,7 @@ function handleOnMessage(source, model, opt) {
   chatList.value[opt.index].content += tmp;
   throttledScrollToBottom();
 }
-const contentRendered = ref([])
-const animateMode = ref(false)
+
 
 function handleOnClose(error,model,opt) {
   stopStatus.value = false;
@@ -554,9 +558,9 @@ function handleOnClose(error,model,opt) {
       });
       if(model == 'line-1'){
         // animateMode.value = false;
-        contentRendered.value=ref([])
         setTimeout(()=>{
           animateMode.value = false;
+          contentRendered.value=[]
         },3200)
       }
     }
