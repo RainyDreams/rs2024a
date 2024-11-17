@@ -271,7 +271,7 @@ router.beforeEach((to, from, next) => {
   }
   // next()
   Auth.basicInfoTaskThread.add(async ()=>{
-    update();
+    update(next,to);
     await new Promise(resolve=>{
       setTimeout(()=>{
         resolve()
