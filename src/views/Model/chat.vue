@@ -2,9 +2,9 @@
   <div class="commonPage bg-white md:rounded-lg" style="height:calc(100dvh - 60px);display: flex;flex-direction: column;">
     <div class="scroll">
       <div class="row">
-        <div class="col-12 col-xl-8" style="margin-bottom: 0;">
+        <div class="col-12  col-xl-9" style="margin-bottom: 0;">
           <div class="panel aichat">
-            <el-watermark :font="{color:'rgba(0, 0, 0, .01)'}" :gap="[0,0]" :rotate="-12"
+            <el-watermark :font="{color:'rgba(0, 0, 0, .009)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <div class="system">
@@ -82,7 +82,7 @@
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     <!-- <div></div> -->
-                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" >
+                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug xl:text-xl/loose" >
                       <!-- <div v-for="(e,i2) in contentRendered" :key="i2" v-if="i == chatList.length-1">
                         <div v-html="md.render(e.content)" :class="{ 'fade-in': e.fresh }" @animationend="e.fresh = false"></div>
                       </div> -->
@@ -92,7 +92,7 @@
                           <div v-html="md.render(e.content)" class="animate__animated animate__fadeIn"></div>
                         </div>
                       </div>
-                      <div v-else class="animate__animated animate__fadeIn" style="--animate-duration:2s" v-html="md.render(item.content)"></div>
+                      <div v-else class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="md.render(item.content)"></div>
                     </div>
                     <div class="flex">
                       <el-tooltip
@@ -132,7 +132,7 @@
     </div>
     <div class="ainput" ref="ainput">
       <div class="row">
-        <div class="col-12 col-xl-8 mb-1 md:mb-2 lg:mb-3 ">
+        <div class="col-12 col-xl-9 mb-1 md:mb-2 lg:mb-3 ">
           <div class="flex flex-col items-end mb-1">
             <div class="max-w-lg w-full">
               <p v-show="show_menu">
@@ -424,10 +424,10 @@ async function handleChatWithAI_Analysis(opt) {
           break;
       }
       chatList.value[opt.index - 1].analysis += tmp;
-      throttledScrollToBottom();
+      // throttledScrollToBottom();
     },
     onclose: async (source) => {
-      throttledScrollToBottom();
+      // throttledScrollToBottom();
       if (stopStatus.value == true) {
         stopStatus.value = false;
         placeholder.value = "还有什么想聊的";
@@ -533,7 +533,7 @@ function handleOnMessage(source, model, opt) {
       break;
   }
   chatList.value[opt.index].content += tmp;
-  throttledScrollToBottom();
+  // throttledScrollToBottom();
 }
 
 
@@ -549,7 +549,7 @@ function handleOnClose(error,model,opt) {
   } else {
     if (!error) {
       Auth.chatTaskThread.add(async () => {
-        throttledScrollToBottom();
+        // throttledScrollToBottom();
         await Auth.setAIChatResponse({
           sessionID: sessionID.value,
           content: chatList.value[opt.index].content,
@@ -561,12 +561,12 @@ function handleOnClose(error,model,opt) {
         setTimeout(()=>{
           animateMode.value = false;
           contentRendered.value=[]
-        },3200)
+        },100)
       }
     }
   }
   // throttledScrollToBottom();
-  scrollToBottom()
+  // scrollToBottom()
   chatList.value[opt.index - 1].status = 'analysised';
   placeholder.value = '还有什么想聊的';
   askRef.value.focus();
@@ -599,7 +599,7 @@ const send = async (param)=>{
   const targetValue = input.value
   input.value = '';
   setTimeout(()=>{
-    // throttledScrollToBottom()
+    throttledScrollToBottom()
     askRef.value.style.height = 0 + 'px';
   },100)
   // askRef.value.style.height = askRef.value.scrollHeight+'px'
