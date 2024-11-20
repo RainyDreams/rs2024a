@@ -334,7 +334,7 @@ const options_analysis = [
 const options_chat = [
   {value: 'line-1', label: '回复 Gemini-1.5-flash-001'},
   {value: 'line-2', label: '回复 Doubao-32k'},
-  {value: 'line-3', label: '回复 Qwen-8b'},
+  {value: 'line-3', label: '回复 X AI'},
 ];
 const options_internet = [
   {value: 'AUTO', label: '自动联网'},
@@ -455,7 +455,7 @@ async function initiateChatWithAI(opt) {
       console.log('错误');
       window.clarity('event', 'CHAT-AI-ERROR');
       retryChatWithAI(opt);
-      loading.value = false;
+      // loading.value = false;
     },
     onmessage: (source, model) => {
       handleOnMessage(source, model, opt);
@@ -466,7 +466,7 @@ async function initiateChatWithAI(opt) {
   });
 }
 
-function retryChatWithAI(opt) {
+function retryChatWithAI(opt,line='line-3') {
   Auth.chatWithAI({
     sessionID: sessionID.value,
     content: opt.targetValue,
@@ -475,18 +475,25 @@ function retryChatWithAI(opt) {
     stopStatus,
     useAnalysis: useAnalysis.value,
     useFunction: useFunction.value,
-    line: 'line-2',
+    line: line,
     time: opt.targetTime,
     onerror: (source, model) => {
       console.log('错误');
-      ElMessage.warning('错误重新尝试失败');
-      loading.value = false;
+      // ElMessage.warning('错误重新尝试失败');
+      if(line=='line-3'){
+        retryChatWithAI(opt,'line-2');
+      } else {
+        ElMessage.warning('错误重新尝试失败');
+        loading.value = false;
+      }
+      // loading.value = false;
     },
     onmessage: (source, model) => {
       handleOnMessage(source, model, opt);
     },
     onclose: (error,model) => {
       handleOnClose(error, model ,opt);
+      // loading.value = false;
     },
   });
 }
@@ -529,6 +536,9 @@ function handleOnMessage(source, model, opt) {
       tmp = decode.choices[0].delta?.content;
       break;
     case 'line-3':
+      tmp = decode.choices[0].delta?.content;
+      break;
+    case 'line-4':
       tmp = decode.response;
       break;
   }
