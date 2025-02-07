@@ -341,7 +341,7 @@ const options_internet = [
   {value: 'DISABLE', label: '禁止联网'},
   {value: 'ENABLE', label: '始终联网'},
 ];
-const analysis_line = ref('line-2')
+const analysis_line = ref('line-1')
 const chat_line = ref('line-1')
 const useInternet = ref('AUTO');
 const useFunction = ref(false);
