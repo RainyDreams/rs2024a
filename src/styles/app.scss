@@ -210,8 +210,8 @@
         font-size:0;
         margin-bottom: 10px;
         &.primary a{
-          background-color: rgba(187, 206, 255, 0.3);
-          color:rgba(34, 98, 251, 1);
+          background-color: #006b2c15;
+          color:#006b2c;
         }
         a{
           display: flex;
@@ -225,7 +225,7 @@
           &.router-link-active{
             background:#fff;
             // box-shadow: 0px 8px 14px  rgba(62, 107, 224, 0.12);
-            color:rgba(34, 98, 251, 1);
+            color:#006b2c
           }
           p{
             margin-left: 8px;
@@ -303,7 +303,7 @@ a.login_tab[href]{
           opacity: 0;
         }
         &.router-link-active{
-          color:rgba(34, 98, 251, 1);
+          // color:rgba(34, 98, 251, 1);
           // background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);;
           background-image: linear-gradient(125deg, #006b2c 20%, #1a842f 88.8%);;
           background-clip: text;

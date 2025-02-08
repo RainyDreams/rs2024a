@@ -498,6 +498,9 @@ a[href]{
     }
   }
   .chatList .chatcontent{
+    &.userchatbg{
+      background-color: #f5ebdb !important;
+    }
     font-size: 15px;
     line-height: 1.45em;
     color:#3c3e55;

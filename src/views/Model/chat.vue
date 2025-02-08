@@ -33,9 +33,9 @@
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="text-xs text-slate-400 w-full text-center mb-2 font-thin">{{ item.formatSendTime }}</div>
-                    <div class="chatcontent whitespace-pre-wrap text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-full md:max-w-md lg:max-w-lg bg-slate-100 px-4 md:px-5 py-3" >
-                      {{item.content}}
+                    <div class="text-xs text-green-800 w-full text-center mb-2 font-thin">{{ item.formatSendTime }}</div>
+                    <div class="chatcontent userchatbg whitespace-pre-wrap text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-full md:max-w-md lg:max-w-lg px-4 md:px-5 py-3">
+                      {{item.content}} 
                     </div>
                     <div class="flex mt-2">
                       <el-tooltip
@@ -46,7 +46,7 @@
                       >
                         <div 
                           @click="copyHtml(i)"
-                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          class="p-2 hover:bg-bgprimary-700  transition-all rounded-md cursor-pointer">
                           <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
@@ -64,7 +64,7 @@
                       </el-tooltip> -->
                     </div>
                     <div class="analysis" v-show="item.status != 'no_analysis'" style="max-width: 60%;">
-                      <p v-show="item.status == 'analysis'">正在思考和分析问题...</p>
+                      <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                       <div 
                         class="_text text-gray-500 text-sm " v-show="item.status != 'analysised'" 
                         v-html="md.render(item.analysis || '')"
@@ -103,7 +103,7 @@
                       >
                         <div 
                           @click="copyHtml(i)"
-                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          class="p-2 hover:bg-bgprimary-700  transition-all rounded-md cursor-pointer">
                           <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
@@ -115,7 +115,7 @@
                       >
                         <div 
                           @click="copyText(item.content)"
-                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          class="p-2 hover:bg-bgprimary-700  transition-all rounded-md cursor-pointer">
                           <DocDetail theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
