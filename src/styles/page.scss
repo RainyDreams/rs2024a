@@ -11,35 +11,37 @@
   color: transparent;
 }
 :hover>.hover-primary-text{
-  background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+  // background-image: linear-gradient(125deg, #006b2c 20%, #1a842f 88.8%);
+  // background-image: linear-gradient(125deg, #00471b 20%, #b8860b 88.8%);
+  background-image: linear-gradient(125deg, #006b2c 20%, #1a842f 88.8%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent !important;
 }
 .hover-self-primary-text:hover{
-  background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+  background-image: linear-gradient(125deg, #006b2c 20%, #1a842f 88.8%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent !important;
 }
 .primary-text{
-  background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+  background-image: linear-gradient(125deg, #006b2c 20%, #1a842f 88.8%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent !important;
 }
 *:hover>.hover-primary-text{
-  background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+  background-image: linear-gradient(125deg, #006b2c 20%, #1a842f 88.8%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent !important;
 }
 .primary-bg{
-  background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+  background-image: linear-gradient(125deg, #006b2c 20%, #1a842f 88.8%);
 }
 .primary-bg-10{
-  background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
-  background-image: linear-gradient(105deg, rgba(34, 99, 251, 0.0823529412) 20%, rgba(128, 31, 255, 0.0823529412) 88.8%);
+  background-image: linear-gradient(125deg, #006b2c 20%, #1a842f 88.8%);
+  background-image: linear-gradient(125deg, rgba(34, 99, 251, 0.0823529412) 20%, rgba(128, 31, 255, 0.0823529412) 88.8%);
 }
 .normal-color{
   color:#3c3e55
@@ -233,7 +235,8 @@
   }
 }
 a[href]{
-  color:rgba(34, 98, 251, 1);
+  // color:rgba(34, 98, 251, 1);
+  color:#006b2c;
 }
 .interactivePage{
   display: flex;
@@ -656,13 +659,16 @@ a[href]{
     width:100%;
     background-color: #fff;
     border-radius: 8px;
-    padding:8px 10px;
+    padding:8px 16px;
+    padding-right: 8px;
     display: flex;
     // flex-direction: column;
     align-items: flex-end;
     transition: all 0.25s ease;
     position: relative;
     border:2px solid transparent;
+    border-radius: 25px;
+
     box-shadow: 0px 1px 5px 3px #3c3e5511;
     .clickWrapper{
       position: absolute;
@@ -672,16 +678,18 @@ a[href]{
       top:0;
       left:0;
     }
-    
     &:hover{
       // cursor: pointer;
-      border-color:rgba(144, 77, 245,0.2);
+      // border-color:rgba(144, 77, 245,0.2);
+      border-color:#006b2c33;
     }
     &:focus-within{
       // background-color: #fffffffc;
       cursor: inherit;
-      box-shadow: 0px 1px 4px 0px rgba(144, 77, 245,0.2);
-      border-color:rgba(144, 77, 245,0.8);
+      border-radius: 25px;
+      box-shadow: 0px 1px 4px 0px #006b2c22;
+      // border-color:rgba(144, 77, 245,0.8);
+      border-color:#006b2c;
     }
     // &::before {
     //   content: "";
@@ -762,11 +770,12 @@ a[href]{
   box-shadow: none;
   transition: all .3s ease;
   border-color: #635bff00;
-  box-shadow: 0 15px 35px -2px rgba(220, 222, 228, 0.1), 0 5px 15px 0 rgba(159, 160, 162, 0.1);
+  // box-shadow: 0 15px 35px -2px rgba(220, 222, 228, 0.1), 0 5px 15px 0 rgba(159, 160, 162, 0.1);
   &:not(.nohover):hover,&.force{
-    background: linear-gradient(220deg, #f3f7ff .79%, #fff 63.4%);
-    border-color: #635bff;
-    box-shadow: 0 15px 35px -2px rgba(72, 117, 231, .1), 0 5px 15px 0 rgba(66, 81, 162, .1);
+    // background: linear-gradient(220deg, #f3f7ff .79%, #fff 63.4%);
+    // border-color: #635bff;
+    border-color:#006b2c;
+    // box-shadow: 0 15px 35px -2px rgba(72, 117, 231, .1), 0 5px 15px 0 rgba(66, 81, 162, .1);
   }
   position: relative;
   overflow: hidden;

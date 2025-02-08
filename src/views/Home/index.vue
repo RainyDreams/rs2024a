@@ -1,6 +1,6 @@
 <template>
   <div class="site-content">
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
+    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22 mb-6">
       <div class="row">
         <div class="col-12 col-lg-6">
           <h1 class="mt-1 text-4xl font-semibold md:mt-10 md:text-6xl/snug lg:text-7xl/snug text-transparent logo_text">零本智协</h1>
@@ -21,33 +21,24 @@
       </div>
     </div>
     
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mt-10 text-3xl/snug md:text-5xl/snug lg:text-6xl/snug font-semibold">专注于思考</h2>
+    <div class="bs-container">
+      <div class="panel bg-white rounded-3xl md:rounded-[45px] py-6 md:py-12 lg:py-16 xl:py-22 px-6 md:px-12 lg:px-16 xl:px-22 mb-6 md:mb-8 lg:mb-12">
+        <!-- <div class="col-12"> -->
+          <h2 class="mt-2 text-3xl/snug md:text-5xl/snug lg:text-6xl/snug font-semibold">专注于思考</h2>
           <h2 class="mb-3 text-3xl/snug md:text-5xl/snug lg:text-6xl/snug font-semibold primary-text w-fit">把剩下的工作交给我们</h2>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">站在巨人的肩膀上</p>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">大模型深度思考的先行者</p>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">以AI驱动项目流程的解决方案</p>
           <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">项目发展至今仍<span class="primary-text">零支出</span></p>
-        </div>
+        <!-- </div> -->
       </div>
     </div>
-    <!-- <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">我们拥有软件完全著作权</h2>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-3">在开发过程中，我们的Workers代码没有借助任何第三方库，完全由我们原创开发</p>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">为了提升开发效率，前端部分使用了业界常用的第三方库</p>
-        </div>
-      </div>
-    </div> -->
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">安全</h2>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">从数据的存储、传输到使用，每一个环节都经过精心设计和严格监控</p>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">
-            采用我们原创的 
+    <div class="bs-container">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 ">
+        <div class="panel bg-white rounded-3xl md:rounded-[45px] py-6 md:py-10 lg:py-16 xl:py-22 px-6 md:px-12 lg:px-16 xl:px-22">
+          <h2 class="mb-3 text-3xl/snug md:mt-6 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">安全</h2>
+          <p class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">从数据的存储、传输到使用，每一个环节都经过精心设计和严格监控</p>
+          <p class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">
+            原创的 
             <span class="primary-text font-semibold text-2xl/tight md:text-4xl/tight lg:text-5xl/tight">3</span>
             <span class="text-xl md:text-2xl/tight lg:text-3xl/tight">token</span>
             + 
@@ -55,221 +46,31 @@
             <span class="text-xl md:text-2xl/tight lg:text-3xl/tight">授权</span>
             + 
             <span class="primary-text font-semibold text-2xl md:text-4xl/tight lg:text-5xl/tight">N</span>
-            <span class="text-xl md:text-2xl/tight lg:text-3xl/tight">验证</span>
-            模式
+            <span class="text-xl md:text-2xl/tight lg:text-3xl/tight">验证</span>模式
           </p>
         </div>
-      </div>
-    </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium"><span class="primary-text">三思</span>而后行</h2>
-          <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">双核*智能架构，思考问题更深入全面。能迅速给出精准的解决方案，大大缩短项目周期，让你的业务<span class="primary-text">降本增效</span></h5>
+        <div class="panel bg-white rounded-3xl md:rounded-[45px] py-6 md:py-12 lg:py-16 xl:py-22 px-6 md:px-12 lg:px-16 xl:px-22">
+          <h2 class="mb-3 text-3xl/snug md:mt-6 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold"><span class="primary-text">三思</span>而后行</h2>
+          <h5 class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">双核智能架构，思考问题更深入全面。能迅速给出精准的解决方案，大大缩短项目周期，让你的业务<span class="primary-text">降本增效</span></h5>
           <p class="text-sm text-gray-500 ">*通过两个大模型分工明确地进行合作剖析、分解、思考问题，从而得到高质量的回答</p>
         </div>
-      </div>
-    </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">创新 & 智能</h2>
-          <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们创新性的在产品的诸多功能中融入了大模型技术，使得工作更加高效</h5>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们坚信<span class="primary-text">创新是引领发展的第一动力</span></p>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">致力于为你提供独特而前沿的项目解决方案</p>
+        <div class="panel bg-white rounded-3xl md:rounded-[45px] py-6 md:py-12 lg:py-16 xl:py-22 px-6 md:px-12 lg:px-16 xl:px-22">
+          <h2 class="mb-3 text-3xl/snug md:mt-6 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">创新 & 智能</h2>
+          <h5 class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">我们创新性的在产品的诸多功能中融入了大模型技术，使得工作更加高效</h5>
+          <p class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">我们坚信<span class="primary-text">创新是引领发展的第一动力</span></p>
+          <p class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">致力于为你提供独特而前沿的项目解决方案</p>
         </div>
-      </div>
-    </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">我们的优势</h2>
-          <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug mb-5">依托我们卓越的设计和技术能力以及 Cloudflare 提供的免费云服务</h5>
-        </div>
-        <div class="col-12 col-lg-8">
-          <div>
-            <h3 class="text-2xl/snug md:text-3xl/snug lg:text-4xl/snug font-medium mb-3">回复效率</h3>
-            <p class="text-base md:text-lg lg:text-xl mb-2">其他商业大模型</p>
-            <el-progress
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="100"
-              :color="[{ color: '#7a7a81', percentage: 100 }]"
-            >
-              <span></span>
-            </el-progress>
-            <p class="text-base md:text-lg lg:text-xl mb-2 mt-3 primary-text w-fit">零本智协大模型</p>
-            <el-progress
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="80"
-              :color="[{ color: '#904df5', percentage: 80 }]"
-            >
-              <span></span>
-            </el-progress>
-          </div>
-          <div class="mt-8">
-            <h3 class="text-2xl/snug md:text-3xl/snug lg:text-4xl/snug font-medium mb-3">回复质量</h3>
-            <p class="text-base md:text-lg lg:text-xl mb-2">其他商业大模型</p>
-            <el-progress
-              class="mb-5"
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="86"
-              :color="[{ color: '#7a7a81', percentage: 100 }]"
-            >
-              <span></span>
-            </el-progress>
-            <el-progress
-              class="mb-5"
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="83"
-              :color="[{ color: '#7a7a81', percentage: 100 }]"
-            >
-              <span></span>
-            </el-progress>
-            <el-progress
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="90"
-              :color="[{ color: '#7a7a81', percentage: 100 }]"
-            >
-              <span></span>
-            </el-progress>
-            <p class="text-base md:text-lg lg:text-xl mb-2 mt-3 primary-text w-fit">零本智协大模型</p>
-            <el-progress
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="86"
-              :color="[{ color: '#904df5', percentage: 80 }]"
-            >
-              <span></span>
-            </el-progress>
-          </div>
-          <div class="mt-8">
-            <h3 class="text-2xl/snug md:text-3xl/snug lg:text-4xl/snug font-medium mb-3">情感能力</h3>
-            <p class="text-base md:text-lg lg:text-xl mb-2">其他商业大模型</p>
-            <el-progress
-              class="mb-5"
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="83"
-              :color="[{ color: '#7a7a81', percentage: 100 }]"
-            >
-              <span></span>
-            </el-progress>
-            <el-progress
-              class="mb-5"
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="89"
-              :color="[{ color: '#7a7a81', percentage: 100 }]"
-            >
-              <span></span>
-            </el-progress>
-            <el-progress
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="79"
-              :color="[{ color: '#7a7a81', percentage: 100 }]"
-            >
-              <span></span>
-            </el-progress>
-            <p class="text-base md:text-lg lg:text-xl mb-2 mt-3 primary-text w-fit">零本智协大模型</p>
-            <el-progress
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="84.5"
-              :color="[{ color: '#904df5', percentage: 80 }]"
-            >
-              <span></span>
-            </el-progress>
-          </div>
-          <div class="mt-8">
-            <h3 class="text-2xl/snug md:text-3xl/snug lg:text-4xl/snug font-medium mb-3">总Token数</h3>
-            <p class="text-base md:text-lg lg:text-xl mb-2">其他商业大模型</p>
-            <el-progress
-              class="mb-5"
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="90"
-              :color="[{ color: '#7a7a81', percentage: 100 }]"
-            >
-              <span></span>
-            </el-progress>
-            <el-progress
-              class="mb-5"
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="95"
-              :color="[{ color: '#7a7a81', percentage: 100 }]"
-            >
-              <span></span>
-            </el-progress>
-            <el-progress
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="86"
-              :color="[{ color: '#7a7a81', percentage: 100 }]"
-            >
-              <span></span>
-            </el-progress>
-            <p class="text-base md:text-lg lg:text-xl mb-2 mt-3 primary-text w-fit">零本智协大模型</p>
-            <el-progress
-              :text-inside="true"
-              :stroke-width="22"
-              :percentage="40"
-              :color="[{ color: '#904df5', percentage: 80 }]"
-            >
-              <span></span>
-            </el-progress>
-          </div>
-          <p class="text-slate-300 text-xs mt-3">以上数据（除token数量）通过调查问卷主观获得，仅供参考</p>
-          <!-- <div class="row cursor-default">
-            <div class="col-12 col-md-4">
-              <div class="px-6 bg-white py-8 rounded-xl border-slate-200 border group">
-                <h3 class="font-semibold text-2xl/tight lg:text-3xl/tight w-fit">
-                  <span class="primary-text">零</span>
-                  <span class="group-hover:text-blue-950 transition-all">成本</span>
-                </h3>
-                <p class="text-base mt-3">我们采用无服务器的Workers，我们在有限的服务内无需支出任何成本当然也不会收取你费用</p>
-              </div>
-            </div>
-            <div class="col-12 col-md-4">
-              <div class="px-6 bg-white py-8 rounded-xl border-slate-200 border group">
-                <h3 class="font-semibold text-2xl/tight lg:text-3xl/tight w-fit">
-                  <span class="primary-text">高速</span>
-                  <span class="group-hover:text-blue-950 transition-all">响应</span>
-                </h3>
-                <p class="text-base mt-3">我们不断地优化我们服务器代码和前端架构，这使得我们软件的平均响应速度&lt;2s</p>
-              </div>
-            </div>
-            <div class="col-12 col-md-4">
-              <div class="px-6 bg-white py-8 rounded-xl border-slate-200 border group">
-                <h3 class="font-semibold text-2xl/tight lg:text-3xl/tight w-fit">
-                  <span class="group-hover:text-blue-950 transition-all">界面</span>
-                  <span class="primary-text">美观</span>
-                </h3>
-                <p class="text-base mt-3">从主题色选择，到每一个交互步骤，我们都用心雕琢</p>
-              </div>
-            </div>
-          </div> -->
-        </div>
-      </div>
-    </div>
-    <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22">
-      <div class="row">
-        <div class="col-12">
-          <h2 class="mt-10 mb-3 text-3xl/snug md:mt-14 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-medium">他们这样说...</h2>
-          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">李世正</p>
-          <p class="text-gray-600 text-base/7 md:text-lg/snug lg:text-xl/snug">《咖啡因和牛磺酸对小鼠运动能力影响》实验小组组长 </p>
+        <div class="panel bg-white rounded-3xl md:rounded-[45px] py-6 md:py-12 lg:py-16 xl:py-22 px-6 md:px-12 lg:px-16 xl:px-22">
+          <h2 class="mb-3 text-3xl/snug md:mt-6 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">他们这样说...</h2>
+          <p class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">李世正</p>
+          <p class="text-gray-600 text-base/7 md:text-lg/snug">《咖啡因和牛磺酸对小鼠运动能力影响》实验小组组长 </p>
           <p class="mt-3 md:mt-4 lg:mt-5 text-xl/7 md:text-3xl/snug lg:text-4xl/snug align-bottom font-bold">
             <span class="primary-text font-bold text-2xl/7 md:text-4xl/snug lg:text-5xl/snug mr-1">“</span>零本智协AI工具与其他十分有名气的AI工具相比可为有过之而无不及，是一款实用性极强的工具<span class="primary-text font-bold text-2xl/7 md:text-4xl/snug lg:text-5xl/snug ml-1">”</span>
           </p>
         </div>
       </div>
     </div>
+    
     <div class="panel bs-container py-10 md:py-16 lg:py-20 xl:py-24">
       <h2 class="mt-14 mb-6 text-4xl/snug md:mt-20 md:mb-10 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">一键开启智慧协作新旅程</h2>
       <h5 class="text-center mb-14 md:mb-20">
@@ -301,18 +102,18 @@
         <span class="hover-self-primary-text cursor-pointer">假跳转</span> <span class="hover-self-primary-text cursor-pointer">缓存</span> <span class="hover-self-primary-text cursor-pointer">原子化</span> <span class="hover-self-primary-text cursor-pointer">FunctionCall</span>
       </p>
     </div>
-    <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vh;">
-      <h2 class="text-sm md:text-xs/snug lg:text-base/snug text-center">站在巨人的肩膀上</h2>
-    </div>
+    <!-- <div class="panel bs-container flex items-center justify-center flex-col" style="height: 100vh;">
+      <h2 class="mt-2 text-3xl/snug md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">站在巨人的肩膀上</h2>
+    </div> -->
     <!-- Wenjuan Layer Begin --> 
-     <div id="idy_floatdiv" style="position:fixed;display:flex;right:0;bottom:10%;width:30px;border-top-left-radius:6px;border-bottom-left-radius:6px;height:100px;background:#0052d9;line-height: 24px;writing-mode:vertical-rl;align-items:center;justify-content:center;font-family:PingFangSC-Regular;font-size:16px;"> <a href="https://wj.qq.com/s2/16266998/95a2/" target="blank" style="color:#FFFFFF;text-decoration:none;">问卷调查</a> </div> 
+     <!-- <div id="idy_floatdiv" style="position:fixed;display:flex;right:0;bottom:10%;width:30px;border-top-left-radius:6px;border-bottom-left-radius:6px;height:100px;background:#0052d9;line-height: 24px;writing-mode:vertical-rl;align-items:center;justify-content:center;font-family:PingFangSC-Regular;font-size:16px;"> <a href="https://wj.qq.com/s2/16266998/95a2/" target="blank" style="color:#FFFFFF;text-decoration:none;">问卷调查</a> </div>  -->
     <!-- Wenjuan Layer End -->
-    <div class="copyright py-5 px-2">
+    <div class="copyright py-5 px-2 mt-20">
       <p class="text-center"><span class="">赤子英金</span> · <span class="primary-text">零本智协</span></p>
       <p class="text-center text-xs md:text-sm">Copyright © 2024 赤峰二中2023级12班研究性学习零本智协项目组 All rights reserved.</p>
       <p class="text-center text-sm mt-2">
-        <a title="本站支持IPv6访问" target='_blank'><img style='display:inline-block;vertical-align:middle' alt="本站支持IPv6访问" src="https://static.ipw.cn/icon/ipv6-certified-s4.svg"></a>
-        <a title="本站支持SSL安全访问" target='_blank'><img style='display:inline-block;vertical-align:middle' alt="本站支持SSL安全访问" src="https://static.ipw.cn/icon/ssl-s4.svg"></a>
+        <!-- <a title="本站支持IPv6访问" target='_blank'><img style='display:inline-block;vertical-align:middle' alt="本站支持IPv6访问" src="https://static.ipw.cn/icon/ipv6-certified-s4.svg"></a>
+        <a title="本站支持SSL安全访问" target='_blank'><img style='display:inline-block;vertical-align:middle' alt="本站支持SSL安全访问" src="https://static.ipw.cn/icon/ssl-s4.svg"></a> -->
         <a href="https://www.chiziingiin.top/license/user" class="mx-2">用户协议</a>
         <a href="https://www.chiziingiin.top/license/private" class="mx-2">隐私政策</a>
         <a href="https://www.chiziingiin.top/project/RS2024/explain" class="mx-2">名词介绍</a>

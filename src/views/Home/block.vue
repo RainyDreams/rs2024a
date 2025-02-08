@@ -13,7 +13,7 @@
         <p class="mb-2 text-lg">感谢你关心我们的项目</p>
         <p class="mb-2 text-lg">零本智协项目启动纪念 </p>
         <p class="mb-2 text-lg">2024年7月22日 雨窗</p>
-        <pre>((hi,)=>{let us = "go and realize our dream"})(/^_^/)</pre>
+        <!-- <pre>((hi,)=>{let us = "go and realize our dream"})(/^_^/)</pre> -->
       </div>
     </template>
   </el-result>

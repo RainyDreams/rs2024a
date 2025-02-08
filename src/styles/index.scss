@@ -2,13 +2,13 @@
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
   $colors: (
     'primary': (
-      'base': rgb(34, 98, 251),
+      'base': #006b2c
     ),
     'info': (
-      'base': rgb(13, 202, 240)
+      'base': #003366
     ),
     'warning': (
-      'base': rgb(255, 193, 7),
+      'base': rgb(199, 150, 4),
     ),
     'danger': (
       'base': rgb(220, 53, 69)
@@ -66,7 +66,8 @@ html{
   --system--height:min(100vh , var(--window--height));
   overflow-x: hidden;
   padding-bottom: calc(100vh - var(--system--height)) !important;
-  background-color: rgb(240, 248, 255);
+  background: #f8f5f0;
+  // background-color: rgb(240, 248, 255);
   // background-image: linear-gradient(to right bottom, rgb(244, 245, 231), rgb(215, 234, 253));
 }
 

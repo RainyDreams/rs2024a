@@ -5,6 +5,9 @@ import legacy from '@vitejs/plugin-legacy'
 
 export default defineConfig((mode) => {
   return {
+    server: {
+      allowedHosts: ['aaa.chiziingiin.top']
+    },
     plugins: [
       vue(),
       legacy({

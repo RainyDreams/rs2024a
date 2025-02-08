@@ -93,7 +93,7 @@
           display: flex;
           align-items: center;
           height:100%;
-          color:#5F6388;
+          color:#5f8880;
           cursor: pointer;
           position: relative;
           p{
@@ -110,15 +110,17 @@
             font-size: 0;
           }
           &:hover{
-            color: #5762ca;
+            // color: #5762ca;
+            color:#308852;
           }
           &.router-link-active{
-            background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);
+            background-image: linear-gradient(125deg, #006b2c 20%, #1a842f 88.8%);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
             .icon{
-              color: rgba(34, 98, 251, 1);
+              // color: rgba(34, 98, 251, 1);
+              color:#006b2c;
             }
           }
           &::after{
@@ -133,7 +135,8 @@
             height:44px;
             border-radius: 5px;
             // background: rgba(34, 98, 251, 1);
-            background-image: linear-gradient(105deg, #2263fb15 20%, #801fff15 88.8%);
+            // background-image: linear-gradient(105deg, #2263fb15 20%, #801fff15 88.8%);
+            background-image: linear-gradient(125deg, #006b2c15 20%, #1a842f15 88.8%);;
             opacity: 0;
             visibility: hidden;
             transition: all 0.1s ease-in-out;
@@ -190,6 +193,7 @@
       }
     }
     .tabbar{
+      display: flex;
       width: 250px;
       // background-color: rgba(251, 250, 255, 1);
       padding-top:28px;
@@ -283,7 +287,7 @@ a.login_tab[href]{
       height:calc(var(--system--height) - 60px);
       flex-wrap: wrap;
       align-content: flex-start;
-      background-color: rgb(240, 248, 255);;
+      background-color: #f8f5f0;
       &>.nav.animate__animated {
         width:fit-content;
         height:60px;
@@ -300,7 +304,8 @@ a.login_tab[href]{
         }
         &.router-link-active{
           color:rgba(34, 98, 251, 1);
-          background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);;
+          // background-image: linear-gradient(105deg, #2262fb 20%, #801fff 88.8%);;
+          background-image: linear-gradient(125deg, #006b2c 20%, #1a842f 88.8%);;
           background-clip: text;
           -webkit-background-clip: text;
           color: transparent;

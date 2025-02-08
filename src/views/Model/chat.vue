@@ -1,8 +1,8 @@
 <template>
-  <div class="commonPage bg-white md:rounded-lg" style="height:calc(100dvh - 60px);display: flex;flex-direction: column;">
+  <div class="commonPage bg-transparent md:rounded-lg" style="height:calc(100dvh - 60px);display: flex;flex-direction: column;">
     <div class="scroll">
-      <div class="row">
-        <div class="col-12  col-xl-9" style="margin-bottom: 0;">
+      <div class="">
+        <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
           <div class="panel aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, .009)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
@@ -131,8 +131,8 @@
       </div>
     </div>
     <div class="ainput" ref="ainput">
-      <div class="row">
-        <div class="col-12 col-xl-9 mb-1 md:mb-2 lg:mb-3 ">
+      <div class="">
+        <div class="max-w-3xl m-auto">
           <div class="flex flex-col items-end mb-1">
             <div class="max-w-lg w-full">
               <p v-show="show_menu">
@@ -200,13 +200,12 @@
             <div class="_number ml-2">
               <!-- <span>{{ now }} / 1000</span> -->
               <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
-              <component @click="show_menu=!show_menu" :is="show_menu?DeleteMode:AddMode" class="mr-1 cursor-pointer" theme="outline" size="24" fill="rgb(144, 77, 245)"/>
+              <!-- <application-menu theme="outline" size="24" fill="#333"/> -->
+              <component @click="show_menu=!show_menu" :is="ApplicationMenu" class="mr-1 cursor-pointer" theme="outline" size="24" fill="#006b2c"/>
               <el-button @click="send()" :loading="loading" v-show="!showStop" type="primary"
-                color="rgba(144, 77, 245,1)" class="ml-1" >
-                发送
-              </el-button>
+                color="#006b2c" class="ml-1 rounded-full w-8 h-8" ><up  v-show="!loading"  theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/></el-button>
               <el-button @click="stop()" v-show="loading && !welcome_loading && showStop" type="primary"
-                color="rgba(144, 77, 245,1)" class="ml-1" >
+                color="#006b2c" class="ml-1 rounded-full w-8 h-8" >
                 <!-- 终止 -->
                 <!-- <forbid theme="outline" size="24" fill="#555" :strokeWidth="3" strokeLinejoin="bevel"/> -->
                 <PauseOne theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/>
@@ -230,7 +229,8 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu } from '@icon-park/vue-next';
+import { emitter } from '../../utils/emitter';
 const contentRendered = ref([])
 const animateMode = ref(false)
 
@@ -239,7 +239,8 @@ const md = new markdownIt({
   html: true,
   linkify: true,
   highlight: function (str, lang) {
-    if (lang && markdownIt.utils.isStringEmpty(lang)) { return `<pre class="language-${lang}"><code>${md.utils.escapeHtml(str)}</code></pre>`; } else if (lang && hljs.getLanguage(lang)) { try { return `<pre class="language-${lang}"><code>${hljs.highlight(lang, str, true).value}</code></pre>`; } catch (__) { } } else { // 未知语言，使用默认渲染 
+    if (lang && markdownIt.utils.isStringEmpty(lang)) { return `<pre class="language-${lang}"><code>${md.utils.escapeHtml(str)}</code></pre>`; } 
+    else if (lang && hljs.getLanguage(lang)) { try { return `<pre class="language-${lang}"><code>${hljs.highlight(lang, str, true).value}</code></pre>`; } catch (__) { } } else { // 未知语言，使用默认渲染 
       return `<pre class="language-unknown"><code>${md.utils.escapeHtml(str)}</code></pre>`;
     }
   }
@@ -294,7 +295,7 @@ md.use(math,{
   katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
 });
 // const contentRendered = ref([]);
-
+emitter.emit('toggleSidebar')
 
 /* 主要渲染部分结束 */
 const route = useRoute()

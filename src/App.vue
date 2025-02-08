@@ -68,20 +68,28 @@
         </el-config-provider>
       </div>
     </div>
-    <div v-if="!SideBarHide" class="tabbar pc" >
+    <div v-if="!SideBarHide" :class="`tabbar pc flex-col `+(sideCollapsed?'sideCollapsed':'')" >
       <router-link class="logo" to="/">
-        <img src="/logo.webp" class="mb-3" style="color:#3c3e55" alt="零本智协">
+        <img src="/logo.webp" class="mb-3 bg" style="color:#3c3e55" alt="零本智协">
+        <img src="/logo_sm.webp" class="mb-3 sm" style="color:#3c3e55" alt="零本智协">
       </router-link>
-      <ul class="tablist">
-        <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
-          <router-link class="" :to="item.to" >
-            <div class="icon">
-              <component :is="getIcon(item.icon)" theme="outline" size="22"/>
-            </div>
-            <p>{{ item.title }}</p>
-          </router-link>
-        </li>
-      </ul>
+      <div class="flex-1">
+        <ul class="tablist">
+          <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
+            <router-link class="" :to="item.to" >
+              <div class="icon">
+                <component :is="getIcon(item.icon)" theme="outline" size="22"/>
+              </div>
+              <p>{{ item.title }}</p>
+            </router-link>
+          </li>
+        </ul>
+      </div>
+      <div style="padding: 16px 28px;">
+        <button class="collapse-btn" @click="toggleSidebar">
+          <component :is="sideCollapsed ?MenuFoldOne: MenuUnfoldOne " theme="outline" size="22" fill="#5F6388"/>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -117,14 +125,25 @@ const SideBarHide = ref(false);
 const isDarkMode = ref(0);
 const activeName = ref(0);
 const showMenu = ref(false);
+const sideCollapsed = ref(false);
 //检测暗色模式
 if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
   if(!sessionStorage.getItem('darkMode') || sessionStorage.getItem('darkMode')=='dark'){
     isDarkMode.value=1;
   }
 }
-
-
+//缩小侧边栏
+emitter.on('toggleSidebar',()=>{
+  sideCollapsed.value = true;
+})
+const toggleSidebar = () => {
+  sideCollapsed.value = !sideCollapsed.value;
+  // if(sideCollapsed.value){
+  //   SideBarHide.value = true;
+  // } else {
+  //   SideBarHide.value = false;
+  // }
+}
 const basicInfo = ref({
   isLogined:false,
   avatar:'',
@@ -155,29 +174,38 @@ const update = (next,to) => {
         if (Cookies.get('permission') == 'accept' || Notification.permission === 'granted'){
           resolve();
         } else if(!Cookies.get('permission')){
-          ElMessageBox.alert('我们申请向您发送通知的权限', '授予权限', {
-            confirmButtonText: '同意',
-            showCancelButton: true,
-            cancelButtonText: '拒绝',
-            showClose: false,
-            callback: action => {
-              if(action=='confirm'){
-                Cookies.set('permission',true,{expires:7})
-                Notification.requestPermission().then(permission => {
-                  if (permission === 'granted') {
-                    resolve();
-                    Auth.acceptPermission()
-                  } else {
-                    Auth.rejectPermission()
-                    reject()
-                  }
-                });
-              } else{
-                Auth.rejectPermission()
-                reject()
-              }
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              resolve();
+              Auth.acceptPermission()
+            } else {
+              Auth.rejectPermission()
+              reject()
             }
-          })
+          });
+          // ElMessageBox.alert('我们申请向您发送通知的权限', '授予权限', {
+          //   confirmButtonText: '同意',
+          //   showCancelButton: true,
+          //   cancelButtonText: '拒绝',
+          //   showClose: false,
+          //   callback: action => {
+          //     if(action=='confirm'){
+          //       Cookies.set('permission',true,{expires:7})
+          //       Notification.requestPermission().then(permission => {
+          //         if (permission === 'granted') {
+          //           resolve();
+          //           Auth.acceptPermission()
+          //         } else {
+          //           Auth.rejectPermission()
+          //           reject()
+          //         }
+          //       });
+          //     } else{
+          //       Auth.rejectPermission()
+          //       reject()
+          //     }
+          //   }
+          // })
         } else if (Notification.permission === 'default') {
           Cookies.set('permission',false,{expires:7})
           Notification.requestPermission().then(permission => {
@@ -368,3 +396,22 @@ function getIcon(name){
 const tabbarList = ref(configList[0].tabs);
 
 </script>
+
+
+<style lang="scss" scoped>
+.logo .sm{
+  display:none;
+}
+.sideCollapsed {
+  .logo .bg{
+    display:none;
+  }
+  .logo .sm{
+    display:block;
+  }
+  li a p{
+    display:none;
+  }
+  width:auto !important;
+}
+</style>

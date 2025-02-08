@@ -9,13 +9,13 @@
         <div class="panel" v-if="loading">
           <el-skeleton class="mt-3" animated :rows="5" />
         </div>
-        <div class="row pt-2 md:pt-4" v-if="!loading" >
-          <div class="col-12 col-xl-4 col-md-6 " v-for="(item,i) in teamList">
+        <div class="grid gap-3 lg:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 pt-2 md:pt-4" v-if="!loading" >
+          <div class="" v-for="(item,i) in teamList">
             <div 
-              class="modelbox p-3 sm:p-4 cursor-pointer rounded-lg h-full border"
+              class="modelbox p-3 sm:p-4  md:py-6 cursor-pointer rounded-lg lg:rounded-3xl h-full border-2"
               @click="chat(item)"
             >
-              <div class="model_banner" v-if="item.tag == 'public'">公开</div>
+              <!-- <div class="model_banner" v-if="item.tag == 'public'">公开</div> -->
               <div class="flex items-center h-full">
                 <div class="mr-1 md:mr-2">
                   <el-avatar alt="头像" :src="item.img || '/logo_sm.webp'" class="mr-1" :size="38" />
@@ -32,8 +32,8 @@
             </div>
           </div>
 
-          <div class="col-12 col-xl-4 col-md-6 " >
-            <div class="modelbox p-3 sm:p-4 cursor-pointer rounded-lg h-full border"
+          <div class="" >
+            <div class="modelbox p-3 sm:p-4  md:py-6 cursor-pointer rounded-lg lg:rounded-3xl h-full border-2"
               @click="dialogVisible = true">
               <div class="flex items-center h-full md:justify-center">
                 <div class="mr-1">
