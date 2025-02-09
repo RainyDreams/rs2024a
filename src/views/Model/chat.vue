@@ -189,7 +189,18 @@
                 <!-- <span>{{ now }} / 1000</span> -->
                 <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
                 <!-- <application-menu theme="outline" size="24" fill="#333"/> -->
-                <component @click="show_menu=!show_menu" :is="ApplicationMenu" :class="`mr-1 cursor-pointer transition `+(show_menu?'opacity-100':'opacity-70')" theme="outline" size="24" fill="#006b2c"/>
+                <touch-ripple
+                  :class="`touch-ripple flex align-middle justify-center h-[32px] w-[32px]  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white':'text-green-900')"
+                  :style="{ clipPath: 'none', backgroundColor: (show_menu)?'#006b2c':'#fff' }"
+                  :color="(show_menu)?'#fff':'#006b2c'"
+                  :opacity="0.4"
+                  transition="ease-out"
+                  :duration="300"
+                  :keep-last-ripple="true"
+                  @click="show_menu=!show_menu"
+                >
+                  <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `+(show_menu?'opacity-100':'opacity-70')" theme="outline" size="18" fill="currentColor"/>
+                </touch-ripple>
                 <el-button @click="send()" :loading="loading" v-show="!showStop" type="primary"
                   color="#006b2c" class="ml-1 rounded-full w-8 h-8" ><up v-show="!loading"  theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/></el-button>
                 <el-button @click="stop()" v-show="loading && !welcome_loading && showStop" type="primary"
