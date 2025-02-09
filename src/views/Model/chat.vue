@@ -137,8 +137,8 @@
     <div class="ainput" ref="ainput">
       <div class="">
         <div class="max-w-3xl m-auto">
-          <div class="flex flex-col items-end mb-1 ">
-            <div class="w-full" v-show="show_menu">
+          <div class="flex flex-col items-end">
+            <div :class="`w-full px-3 bg-bgprimary-700 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100':'opacity-0')" style="position:relative;bottom:-25px;transition: bottom 0.3s,opacity 0.3s;">
               <touch-ripple
                 :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
                 :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
@@ -165,38 +165,40 @@
               <!-- </touch-ripple> -->
             </div>
           </div>
-          <div :class="`ainput__wrapper`">
-            <div class="el-textarea el-input--large _input flex-1">
-              <textarea
-                class="el-textarea__inner"
-                ref="askRef"
-                v-model="input" 
-                type="textarea"
-                resize="none" 
-                size="large" 
-                autofocus 
-                :maxlength="2000"
-                @focus="onFocus"
-                :placeholder="placeholder" 
-                @keydown.enter="handleEnter"
-                style="resize: none; min-height: 30px; height: 30px;"
-              >
-              </textarea>
-            </div>
-            <!-- <el-input ></el-input> -->
-            <div class="_number ml-2">
-              <!-- <span>{{ now }} / 1000</span> -->
-              <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
-              <!-- <application-menu theme="outline" size="24" fill="#333"/> -->
-              <component @click="show_menu=!show_menu" :is="ApplicationMenu" class="mr-1 cursor-pointer" theme="outline" size="24" fill="#006b2c"/>
-              <el-button @click="send()" :loading="loading" v-show="!showStop" type="primary"
-                color="#006b2c" class="ml-1 rounded-full w-8 h-8" ><up v-show="!loading"  theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/></el-button>
-              <el-button @click="stop()" v-show="loading && !welcome_loading && showStop" type="primary"
-                color="#006b2c" class="ml-1 rounded-full w-8 h-8" >
-                <!-- 终止 -->
-                <!-- <forbid theme="outline" size="24" fill="#555" :strokeWidth="3" strokeLinejoin="bevel"/> -->
-                <PauseOne theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/>
-              </el-button>
+          <div :class="`bg-bgprimary-700 transition-all duration-100 `+(show_menu?'rounded-b-[25px]':'rounded-[25px]')">
+            <div :class="`ainput__wrapper`">
+              <div class="el-textarea el-input--large _input flex-1">
+                <textarea
+                  class="el-textarea__inner"
+                  ref="askRef"
+                  v-model="input" 
+                  type="textarea"
+                  resize="none" 
+                  size="large" 
+                  autofocus 
+                  :maxlength="2000"
+                  @focus="onFocus"
+                  :placeholder="placeholder" 
+                  @keydown.enter="handleEnter"
+                  style="resize: none; min-height: 30px; height: 30px;"
+                >
+                </textarea>
+              </div>
+              <!-- <el-input ></el-input> -->
+              <div class="_number ml-2">
+                <!-- <span>{{ now }} / 1000</span> -->
+                <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
+                <!-- <application-menu theme="outline" size="24" fill="#333"/> -->
+                <component @click="show_menu=!show_menu" :is="ApplicationMenu" :class="`mr-1 cursor-pointer transition `+(show_menu?'opacity-100':'opacity-70')" theme="outline" size="24" fill="#006b2c"/>
+                <el-button @click="send()" :loading="loading" v-show="!showStop" type="primary"
+                  color="#006b2c" class="ml-1 rounded-full w-8 h-8" ><up v-show="!loading"  theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/></el-button>
+                <el-button @click="stop()" v-show="loading && !welcome_loading && showStop" type="primary"
+                  color="#006b2c" class="ml-1 rounded-full w-8 h-8" >
+                  <!-- 终止 -->
+                  <!-- <forbid theme="outline" size="24" fill="#555" :strokeWidth="3" strokeLinejoin="bevel"/> -->
+                  <PauseOne theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/>
+                </el-button>
+              </div>
             </div>
           </div>
         </div>
