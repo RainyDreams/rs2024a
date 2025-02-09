@@ -1,5 +1,5 @@
 <template>
-  <div class="commonPage bg-transparent md:rounded-lg" style="height:calc(100dvh - 60px);display: flex;flex-direction: column;">
+  <div class="commonPage bg-transparent md:rounded-lg pb-0" style="height:calc(100dvh - 60px);display: flex;flex-direction: column;">
     <div class="scroll">
       <div class="">
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
@@ -137,8 +137,8 @@
     <div class="ainput" ref="ainput">
       <div class="">
         <div class="max-w-3xl m-auto">
-          <div class="flex flex-col items-end">
-            <div :class="`w-full px-3 bg-bgprimary-700 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100':'opacity-0')" style="position:relative;bottom:-25px;transition: bottom 0.2s,opacity 0.2s;">
+          <div class="relative w-full">
+            <div :class="`flex flex-col w-full px-3 bg-bgprimary-700 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.2s,opacity 0.2s;left:0;">
               <touch-ripple
                 :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
                 :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
@@ -190,7 +190,7 @@
                 <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
                 <!-- <application-menu theme="outline" size="24" fill="#333"/> -->
                 <touch-ripple
-                  :class="`touch-ripple flex align-middle justify-center h-[32px] w-[32px]  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white':'text-green-900')"
+                  :class="`touch-ripple flex items-center justify-center h-[32px] w-[32px]  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white':'text-green-900')"
                   :style="{ clipPath: 'none', backgroundColor: (show_menu)?'#006b2c':'#fff' }"
                   :color="(show_menu)?'#fff':'#006b2c'"
                   :opacity="0.4"
@@ -215,6 +215,7 @@
         </div>
       </div>
     </div>
+    <p class=" text-center text-slate-500 py-1 font-sans" style="font-size: 10px;">内容由 OriginSynq AI 生成，请仔细甄别</p>
   </div>
 </template>
 <script setup>
