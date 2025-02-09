@@ -10,31 +10,35 @@
                 <div class="system">
                   <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar> -->
                   <div class="" style="font-size:14px;width:100%;">
-                    <el-skeleton :rows="3" animated v-show="welcome_loading"></el-skeleton>
-                    <div v-show="!welcome_loading" class="modelbox p-3 sm:p-4 cursor-pointer rounded-lg h-full border m-2 shadow-none force">
-                      <div class="flex items-center h-full">
-                        <div class="mr-1 md:mr-2">
-                          <img alt="头像" :src="model_info.img" class="mr-1" :size="38" />
-                        </div>
-                        <div class="flex flex-col justify-between h-full">
-                          <div class="text-xl font-bold mb-1">{{ model_info.name }}</div>
-                          <div class="text-sm/snug mb-2 flex-1">{{ model_info.desc }}</div>
-                          <div class="flex items-center opacity-80 text-xs">
-                            <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
-                            <div class="username">{{ model_info.createUser.nickname }}</div>
-                          </div>
+                    <!-- <el-skeleton :rows="3" animated v-show="welcome_loading" class="bg-white p-5 rounded-lg"></el-skeleton> -->
+                    <div v-show="!welcome_loading" class="group relative w-fit">
+                      <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition">
+                        <img alt="头像" :src="model_info.img" class="mr-1 w-4 h-4 rounded-full" />
+                        <div class="text-base">{{ model_info.name }}</div>
+                      </div>
+                      <div class="group-hover:opacity-100 group-hover:visible group-hover:flex flex-col hidden opacity-0 max-w-screen-lg invisible absolute top-10 transition-all left-0 bg-white border rounded-xl p-3 duration-500">
+                        <div class="text-sm/snug mb-2 flex-1">{{ model_info.desc }}</div>
+                        <div class="flex items-center opacity-80 text-xs">
+                          <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
+                          <div class="username">{{ model_info.createUser.nickname }}</div>
                         </div>
                       </div>
                     </div>
-                    <div v-show="!welcome_loading" class="text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(welcome)"></div>
-                    <p><router-link to="/model/history">聊天历史</router-link></p>
+                    <!-- <div v-show="!welcome_loading" class="text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(welcome)"></div> -->
+                    <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
+                  </div>
+                  <!-- 欢迎 -->
+                  <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
+                    <div v-if="!welcome_loading" :class="`chat_welcome mt-14 md:mt-18 2xl:mt-24 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
+                      <h2 class="text-center w-full text-2xl md:text-4xl 2xl:text-5xl font-bold">你好！来聊点什么吧</h2>
+                    </div>
                   </div>
                 </div>
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                     <div class="text-xs text-green-800 w-full text-center mb-2 font-thin">{{ item.formatSendTime }}</div>
-                    <div class="chatcontent userchatbg whitespace-pre-wrap text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-full md:max-w-md lg:max-w-lg px-4 md:px-5 py-3">
+                    <div class="chatcontent userchatbg whitespace-pre-wrap text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-full lg:max-w-md px-4 md:px-5 py-3">
                       {{item.content}} 
                     </div>
                     <div class="flex mt-2">
@@ -63,7 +67,7 @@
                         </div>
                       </el-tooltip> -->
                     </div>
-                    <div class="analysis" v-show="item.status != 'no_analysis'" style="max-width: 60%;">
+                    <div class="analysis max-w-full" v-show="item.status != 'no_analysis'">
                       <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                       <div 
                         class="_text text-gray-500 text-sm " v-show="item.status != 'analysised'" 
@@ -82,17 +86,17 @@
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     <!-- <div></div> -->
-                    <div class="chatcontent text-sm/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug xl:text-xl/loose" >
+                    <div class="chatcontent text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug xl:text-lg/loose" >
                       <!-- <div v-for="(e,i2) in contentRendered" :key="i2" v-if="i == chatList.length-1">
                         <div v-html="md.render(e.content)" :class="{ 'fade-in': e.fresh }" @animationend="e.fresh = false"></div>
                       </div> -->
                       <!-- 动画 -->
                       <div v-if="animateMode && i == chatList.length-1">
                         <div v-for="(e,i2) in contentRendered" :key="i2" class="hhh" style="--animate-duration:3.2s">
-                          <div v-html="md.render(e.content)" class="animate__animated animate__fadeIn"></div>
+                          <div v-html="throttledRender(e.content)" class="animate__animated animate__fadeIn"></div>
                         </div>
                       </div>
-                      <div v-else class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="md.render(item.content)"></div>
+                      <div v-else class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="throttledRender(item.content)"></div>
                     </div>
                     <div class="flex">
                       <el-tooltip
@@ -133,49 +137,32 @@
     <div class="ainput" ref="ainput">
       <div class="">
         <div class="max-w-3xl m-auto">
-          <div class="flex flex-col items-end mb-1">
-            <div class="max-w-lg w-full">
-              <p v-show="show_menu">
-                <p class="flex gap-1 justify-end pt-3" >
-                  <el-select v-model="useInternet" placeholder="" class="mb-1">
-                    <el-option
-                      v-for="item in options_internet"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
-                  <!--<el-select v-model="analysis_line" placeholder="分析线路" class="mb-1">
-                    <el-option
-                      v-for="item in options_analysis"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
-                  <el-select v-model="chat_line" placeholder="回答线路" class="mb-1">
-                    <el-option
-                      v-for="item in options_chat"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>-->
-                </p>
-                <span v-show="show_menu">深入思考<el-switch v-model="useAnalysis" class="ml-1 mr-2" /></span>
-
-              </p>
-              <!-- <p class="items-center flex justify-end mt-1 mb-1 h-6"> -->
-                <!-- <p v-show="show_menu">
-                  
-                  
-                </p> -->
-                <!-- <span @click="show_menu=!show_menu" type="text" style="color:rgba(144, 77, 245,1)" class="cursor-pointer flex items-center text-sm">
-                  <span class="">{{show_menu?'隐藏':'更多'}}</span>
-                  <Down v-show="show_menu" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
-                  <Up v-show="!show_menu" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
-                </span> -->
-              <!-- </p> -->
+          <div class="flex flex-col items-end mb-1 ">
+            <div class="w-full">
+              <touch-ripple
+                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
+                :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
+                :color="useAnalysis?'#fff':'#1a842f'"
+                :opacity="0.4"
+                transition="ease-out"
+                :duration="300"
+                :keep-last-ripple="true"
+                @click="useAnalysis=!useAnalysis"
+              >
+                <span>深入思考</span>
+              </touch-ripple>
+              <!-- <touch-ripple
+                :class="`touch-ripple w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
+                :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
+                :color="useAnalysis?'#fff':'#1a842f'"
+                :opacity="0.4"
+                transition="ease-out"
+                :duration="400"
+                :keep-last-ripple="true"
+                @click="useAnalysis=!useAnalysis"
+              >
+                <span>深入思考</span> -->
+              <!-- </touch-ripple> -->
             </div>
           </div>
           <div :class="`ainput__wrapper`">
@@ -203,7 +190,7 @@
               <!-- <application-menu theme="outline" size="24" fill="#333"/> -->
               <component @click="show_menu=!show_menu" :is="ApplicationMenu" class="mr-1 cursor-pointer" theme="outline" size="24" fill="#006b2c"/>
               <el-button @click="send()" :loading="loading" v-show="!showStop" type="primary"
-                color="#006b2c" class="ml-1 rounded-full w-8 h-8" ><up  v-show="!loading"  theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/></el-button>
+                color="#006b2c" class="ml-1 rounded-full w-8 h-8" ><up v-show="!loading"  theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/></el-button>
               <el-button @click="stop()" v-show="loading && !welcome_loading && showStop" type="primary"
                 color="#006b2c" class="ml-1 rounded-full w-8 h-8" >
                 <!-- 终止 -->
@@ -226,13 +213,29 @@ import hljs from 'highlight.js';
 // import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
 import Auth from "../../utils/auth";
-import { throttle,functionCallPlugin } from '../../utils/helpers'
+import { throttle,functionCallPlugin, getRadomString } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu, Thermometer } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
+import { TouchRipple } from 'vue-touch-ripple'
+import 'vue-touch-ripple/style.css'
+
 const contentRendered = ref([])
 const animateMode = ref(false)
+const throttledRender = (e)=>{
+  return md.render(e)
+}
+function copyCode(codeId) {
+  const code = window['czig_code_html' + codeId];
+  console.log(code)
+  window.copyText(code, () => {
+    ElMessage.success("复制成功")
+  }, () => {
+    ElMessage.error("复制失败")
+  })
+}
+window.copyCode = copyCode;
 
 const md = new markdownIt({
   typographer: true, // 使用高级的打字排版
@@ -281,8 +284,14 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
     highlightedCode = md.utils.escapeHtml(token.content);
     // return self.renderToken(tokens, idx, options);
   }
+  const codeid= getRadomString(10)
+  window['czig_code_html'+codeid] = token.content;
+  //on绑定事件
   return `<div class="czig-code-block sticky text-base rounded-lg overflow-auto my-2">
-    <div class="language-label sticky bg-slate-200 px-3 py-2">${langName}</div>
+    <div class="language-label sticky bg-slate-200 px-3 py-2 flex align-middle justify-between items-center"> 
+      <span>${langName}</span>
+      <svg id="code_${codeid}" onclick="copyCode('${codeid}')" class="hover:opacity-80 cursor-pointer trasition opacity-100" width="16" height="16" viewBox="0 0 48 48" fill="none"><path d="M13 12.4316V7.8125C13 6.2592 14.2592 5 15.8125 5H40.1875C41.7408 5 43 6.2592 43 7.8125V32.1875C43 33.7408 41.7408 35 40.1875 35H35.5163" stroke="#0007" stroke-width="4" stroke-linecap="round" stroke-linejoin="bevel"></path><path d="M32.1875 13H7.8125C6.2592 13 5 14.2592 5 15.8125V40.1875C5 41.7408 6.2592 43 7.8125 43H32.1875C33.7408 43 35 41.7408 35 40.1875V15.8125C35 14.2592 33.7408 13 32.1875 13Z" fill="none" stroke="#0007" stroke-width="4" stroke-linejoin="bevel"></path></svg>
+    </div>
     <pre class="px-3 bg-slate-100"><code class="hljs bg-slate-100 text-sm ${langName}">${highlightedCode}</code></pre>
   </div>`;
 };
@@ -313,7 +322,7 @@ const welcome_loading = ref(true)
 const sessionID = ref()
 const stopStatus = ref(false)
 const useAnalysis = ref(false);
-const show_menu = ref(false)
+const show_menu = ref(true)
 const showStop = ref(false);
 const tokensCount = ref(0)
 const tokensCount2 = ref(0)
@@ -365,17 +374,21 @@ function copyHtml(i){
     ElMessage.error("复制失败")
   })
 }
+function updateInputHeight() {
+  const ask = askRef.value;
+  if (!ask) return;
+  let tmp = ask.style.height+'';
+  ask.style.height = '0';
+  let newHeight = ask.scrollHeight;
+  // console.log(newHeight,tmp)
+  if (newHeight > 200) newHeight = parseInt(tmp)
+  ask.style.height = newHeight+'px';
+}
+const throttledUpdateInputHeight = throttle(updateInputHeight, 100);
+
 watch(input, () => {
-  // now.value = input.value.length;
-  askRef.value.style.height=0;
-  if(askRef.value.scrollHeight > askRef.value.clientHeight && askRef.value.scrollHeight < 200){
-    askRef.value.style.height = askRef.value.scrollHeight+'px'
-  } else if(askRef.value.scrollHeight <= askRef.value.clientHeight && askRef.value.scrollHeight < 200) {
-    askRef.value.style.height = askRef.value.scrollHeight+'px'
-  } else {
-    askRef.value.style.height = '200px'
-  }
-})
+  throttledUpdateInputHeight();
+});
 const handleEnter = async (event) => {
   if (event.shiftKey) {
     input.value = askRef.value.value

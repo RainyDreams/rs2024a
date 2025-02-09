@@ -11,7 +11,14 @@ export function dateDiff(fd, sd) {
   return Math.floor(dateDiff / (24 * 3600 * 1000));
 }
 
-
+export function getRadomString(len){
+  let str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let rst = '';
+  for(let i = 0; i < len; i++){
+    rst += str.charAt(Math.floor(Math.random() * str.length));
+  }
+  return rst;
+}
 
 export const commonRoleMap = [
   {

@@ -895,6 +895,8 @@ Auth.copyHtml = false? (html, fn, er) => {
   }
   // document.body.removeChild(div);
 };
+window.copyHtml = Auth.copyHtml;
+window.copyText = Auth.copyText;
 Auth.functionCall = async function(obj,opt){
   console.log(obj)
   if(obj.name == 'get_weather'){

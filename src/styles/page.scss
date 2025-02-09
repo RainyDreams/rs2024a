@@ -584,7 +584,7 @@ a[href]{
       list-style-type: decimal;
     }
     p{
-      margin-bottom: 0.55em; 
+      margin-bottom: 0.8em; 
     }
     table{
       border-collapse: collapse;
@@ -672,7 +672,7 @@ a[href]{
     border:2px solid transparent;
     border-radius: 25px;
 
-    box-shadow: 0px 1px 5px 3px #3c3e5511;
+    box-shadow: none;
     .clickWrapper{
       position: absolute;
       z-index: 0;
@@ -690,7 +690,7 @@ a[href]{
       // background-color: #fffffffc;
       cursor: inherit;
       border-radius: 25px;
-      box-shadow: 0px 1px 4px 0px #006b2c22;
+      // box-shadow: 0px 1px 4px 0px #006b2c22;
       // border-color:rgba(144, 77, 245,0.8);
       border-color:#006b2c;
     }
@@ -816,3 +816,5 @@ a[href]{
 .katex {
   font-size: 1.5em !important;
 }
+
+
