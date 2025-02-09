@@ -12,15 +12,28 @@
                   <div class="" style="font-size:14px;width:100%;">
                     <!-- <el-skeleton :rows="3" animated v-show="welcome_loading" class="bg-white p-5 rounded-lg"></el-skeleton> -->
                     <div v-show="!welcome_loading" class="group relative w-fit">
-                      <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition">
+                      <touch-ripple
+                        :class="`flex touch-ripple items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-orange-950':'text-orange-950')"
+                        :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#ffedd5':'#fff' }"
+                        :color="showModelDetail?'#f7deb7':'#f7deb7'"
+                        :opacity="0.4"
+                        transition="ease-out"
+                        :duration="300"
+                        :keep-last-ripple="true"
+                        @click="showModelDetail=!showModelDetail"
+                      >
+                        <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                         <img alt="头像" :src="model_info.img" class="mr-1 w-4 h-4 rounded-full" />
                         <div class="text-base">{{ model_info.name }}</div>
-                      </div>
-                      <div class="group-hover:opacity-100 group-hover:visible group-hover:flex flex-col hidden opacity-0 max-w-screen-lg invisible absolute top-10 transition-all left-0 bg-white border rounded-xl p-3 duration-500">
-                        <div class="text-sm/snug mb-2 flex-1">{{ model_info.desc }}</div>
-                        <div class="flex items-center opacity-80 text-xs">
-                          <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
-                          <div class="username">{{ model_info.createUser.nickname }}</div>
+                        <!-- </div> -->
+                      </touch-ripple>
+                      <div v-show="showModelDetail">
+                        <div class="min-w-fit w-64 z-10 flex flex-col absolute top-10 left-0 bg-white border rounded-xl p-3 duration-100">
+                          <div class="text-sm/snug mb-2 flex-1">{{ model_info.desc }}</div>
+                          <div class="flex items-center opacity-80 text-xs">
+                            <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
+                            <div class="username">{{ model_info.createUser.nickname }}</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -50,7 +63,7 @@
                       >
                         <div 
                           @click="copyHtml(i)"
-                          class="p-2 hover:bg-bgprimary-700  transition-all rounded-md cursor-pointer">
+                          class="p-2 hover:bg-orange-300  transition-all rounded-md cursor-pointer">
                           <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
@@ -107,7 +120,7 @@
                       >
                         <div 
                           @click="copyHtml(i)"
-                          class="p-2 hover:bg-bgprimary-700  transition-all rounded-md cursor-pointer">
+                          class="p-2 hover:bg-orange-300  transition-all rounded-md cursor-pointer">
                           <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
@@ -119,7 +132,7 @@
                       >
                         <div 
                           @click="copyText(item.content)"
-                          class="p-2 hover:bg-bgprimary-700  transition-all rounded-md cursor-pointer">
+                          class="p-2 hover:bg-orange-300  transition-all rounded-md cursor-pointer">
                           <DocDetail theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
@@ -138,7 +151,7 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="relative w-full">
-            <div :class="`flex flex-col w-full px-3 bg-bgprimary-700 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.2s,opacity 0.2s;left:0;">
+            <div :class="`flex flex-col w-full px-3 bg-orange-300 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.2s,opacity 0.2s;left:0;">
               <touch-ripple
                 :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
                 :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
@@ -165,7 +178,7 @@
               <!-- </touch-ripple> -->
             </div>
           </div>
-          <div :class="`bg-bgprimary-700 transition-all duration-100 `+(show_menu?'rounded-b-[25px]':'rounded-[25px]')">
+          <div :class="`bg-orange-300 transition-all duration-100 `+(show_menu?'rounded-b-[25px]':'rounded-[25px]')">
             <div :class="`ainput__wrapper`">
               <div class="el-textarea el-input--large _input flex-1">
                 <textarea
@@ -234,7 +247,7 @@ import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu, The
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
-
+const showModelDetail = ref(false)
 const contentRendered = ref([])
 const animateMode = ref(false)
 const throttledRender = (e)=>{
@@ -455,7 +468,6 @@ async function handleChatWithAI_Analysis(opt) {
       // throttledScrollToBottom();
     },
     onclose: async (source) => {
-      // throttledScrollToBottom();
       if (stopStatus.value == true) {
         stopStatus.value = false;
         placeholder.value = "还有什么想聊的";
@@ -489,6 +501,7 @@ async function initiateChatWithAI(opt) {
       handleOnMessage(source, model, opt);
     },
     onclose: (error,model) => {
+      throttledScrollToBottom();
       handleOnClose(error,model, opt);
     },
   });

@@ -9,8 +9,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        'bgprimary':{
-          '700': '#f5ebdb'
+        'orange':{
+          '100': '#fff7ed',
+          '200': '#ffedd5',
+          '300': '#f5ebdb',
+          '400': '#f7deb7',
+          '500': '#f8d192',
+          '600': '#fac46e',
+          '700': '#fcb749',
+          '800': '#fdaa25',
+          '900': '#ff9d00',
         },
         'green':{
           '950': '#00471b',
