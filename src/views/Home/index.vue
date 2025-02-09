@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12 col-lg-6">
           <h1 class="mt-1 text-4xl font-semibold md:mt-10 md:text-6xl/snug lg:text-7xl/snug text-transparent logo_text">零本智协</h1>
-          <h3 class="text-lg/7 md:text-xl/snug lg:text-2xl/snug text-slate-500 mb-3 md:mb-1">首个提出多模型思考的团队</h3>
+          <h3 class="text-lg/7 md:text-xl/snug lg:text-2xl/snug text-slate-500 mb-1 ">首个提出多模型思考的团队</h3>
           <h3 class="text-lg/7 md:text-xl/snug lg:text-2xl/snug text-slate-500 mb-3 md:mb-5">20余天开发的研究性学习项目</h3>
           <h3 class="text-lg/7 md:text-2xl/snug lg:text-3xl/snug text-slate-500">我们的愿景</h3>
           <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">依托尖端的 AI 技术驱动力量，构建全面创新的市场项目解决方案体系，致力于让<span class="primary-text">「零成本构建创新高效应用程序」</span>成为现实。</h5>
@@ -52,21 +52,20 @@
         </div>
         <div class="panel bg-white hover:scale-105 transition duration-500 ease rounded-3xl md:rounded-[45px] py-6 md:py-12 lg:py-16 xl:py-22 px-6 md:px-12 lg:px-16 xl:px-22">
           <h2 class="mb-3 text-3xl/snug md:mt-6 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold"><span class="primary-text">三思</span>而后行</h2>
-          <h5 class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">双核智能架构，思考问题更深入全面。能迅速给出精准的解决方案，大大缩短项目周期，让你的业务<span class="primary-text">降本增效</span></h5>
-          <p class="text-sm text-gray-500 ">*通过两个大模型分工明确地进行合作剖析、分解、思考问题，从而得到高质量的回答</p>
+          <h5 class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">三模型，三重分析：理解分析、尝试回复、批判总结。<br/>智能架构，思考问题更深入全面。迅速给出精准的解决方案，大大缩短项目周期，让你的业务<span class="primary-text">降本增效</span></h5>
         </div>
         <div class="panel bg-white hover:scale-105 transition duration-500 ease rounded-3xl md:rounded-[45px] py-6 md:py-12 lg:py-16 xl:py-22 px-6 md:px-12 lg:px-16 xl:px-22">
           <h2 class="mb-3 text-3xl/snug md:mt-6 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">创新 & 智能</h2>
-          <h5 class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">我们创新性的在产品的诸多功能中融入了大模型技术，使得工作更加高效</h5>
-          <p class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">率先提出<span class="primary-text">多模型深度思考</span>方案</p>
-          <p class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">致力于为你提供独特而前沿的项目解决方案</p>
+          <h5 class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">我们创新性的在产品的诸多功能中融入了大模型技术，使得工作更加高效</h5>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">率先提出<span class="primary-text">多模型深度思考</span>方案</p>
+          <p class="text-xl/7 md:text-3xl/snug lg:text-4xl/snug">致力于为你提供独特而前沿的项目解决方案</p>
         </div>
         <div class="panel bg-white hover:scale-105 transition duration-500 ease rounded-3xl md:rounded-[45px] py-6 md:py-12 lg:py-16 xl:py-22 px-6 md:px-12 lg:px-16 xl:px-22">
           <h2 class="mb-3 text-3xl/snug md:mt-6 md:mb-6 md:text-4xl/snug lg:text-5xl/snug font-semibold">他们这样说...</h2>
           <p class="text-xl/7 md:text-2xl/snug lg:text-3xl/snug">李世正</p>
           <p class="text-gray-600 text-base/7 md:text-lg/snug">《咖啡因和牛磺酸对小鼠运动能力影响》实验小组组长 </p>
-          <p class="mt-3 md:mt-4 lg:mt-5 text-xl/7 md:text-3xl/snug lg:text-4xl/snug align-bottom font-bold">
-            <span class="primary-text font-bold text-2xl/7 md:text-4xl/snug lg:text-5xl/snug mr-1">“</span>零本智协AI工具与其他十分有名气的AI工具相比可为有过之而无不及，是一款实用性极强的工具<span class="primary-text font-bold text-2xl/7 md:text-4xl/snug lg:text-5xl/snug ml-1">”</span>
+          <p class="mt-3 md:mt-4 lg:mt-5 text-xl/7 md:text-3xl/snug lg:text-4xl/snug align-bottom ">
+            <span class="primary-text text-2xl/7 md:text-4xl/snug">“</span>零本智协AI工具与其他十分有名气的AI工具相比可为有过之而无不及，是一款实用性极强的工具<span class="primary-text text-2xl/7 md:text-4xl/snug">”</span>
           </p>
         </div>
       </div>

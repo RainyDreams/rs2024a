@@ -440,12 +440,27 @@ const stop = async (param)=>{
 }
 
 /* chat */
-async function handleChatWithAI_Analysis(opt) {
-  await Auth.chatWithAI_Analysis({
+async function deepMind(targetValue, targetTime, index) {
+  if(useAnalysis.value) {
+    analysis_line.value = 'line-3';
+    await Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index},'','分析'));
+    chatList.value[index - 1].analysis += '【尝试回复开始】\n';
+    analysis_line.value = 'line-1';
+    await Auth.deepMind_Try(createOptions({targetValue,targetTime,index},chatList.value[index - 1].analysis+'你要根据以上分析尝试初步进行回复','尝试回复'));
+    chatList.value[index - 1].analysis += '【总结开始】\n';
+    await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index},chatList.value[index - 1].analysis+'你要根据以上分析和初步回复（尝试）进行批判性建设性的总结和必要资料的查询以便于最终回复','总结'));
+    chatList.value[index - 1].analysis += '\n请开始优化后的最终回复\n';
+    await initiateChatWithAI({targetValue,targetTime,index});
+  } else {
+    await initiateChatWithAI({targetValue,targetTime,index});
+  }
+}
+function createOptions(opt,analysis,endTarget) {
+  return {
     sessionID: sessionID.value,
     content: opt.targetValue,
     vf: fingerprint.value,
-    useAnalysis: useAnalysis.value,
+    analysis: analysis,
     stopStatus,
     line: analysis_line.value,
     onmessage: (source, model) => {
@@ -465,19 +480,20 @@ async function handleChatWithAI_Analysis(opt) {
           break;
       }
       chatList.value[opt.index - 1].analysis += tmp;
-      // throttledScrollToBottom();
     },
     onclose: async (source) => {
+      chatList.value[opt.index - 1].analysis += '\n【'+endTarget+'结束】\n';
       if (stopStatus.value == true) {
         stopStatus.value = false;
         placeholder.value = "还有什么想聊的";
         chatList.value[opt.index - 1].status = 'analysised';
         chatList.value[opt.index].content += '[回答已终止]';
-      } else {
-        await initiateChatWithAI(opt);
       }
+      //  else {
+      //   await initiateChatWithAI(opt);
+      // }
     },
-  });
+  }
 }
 
 async function initiateChatWithAI(opt) {
@@ -495,7 +511,6 @@ async function initiateChatWithAI(opt) {
       console.log('错误');
       window.clarity('event', 'CHAT-AI-ERROR');
       retryChatWithAI(opt);
-      // loading.value = false;
     },
     onmessage: (source, model) => {
       handleOnMessage(source, model, opt);
@@ -530,7 +545,23 @@ function retryChatWithAI(opt,line='line-3') {
       // loading.value = false;
     },
     onmessage: (source, model) => {
-      handleOnMessage(source, model, opt);
+      try{
+        handleOnMessage(source, model, opt);
+      } catch(e){
+        setTimeout(()=>{
+          try{
+            retryChatWithAI(opt,'line-3');
+          } catch(e){
+            setTimeout(()=>{
+              try{
+                retryChatWithAI(opt,'line-3');
+              } catch(e){
+                ElMessage.warning('错误重新尝试失败');
+              }
+            },1000)
+          }
+        },1000)
+      }
     },
     onclose: (error,model) => {
       handleOnClose(error, model ,opt);
@@ -639,7 +670,7 @@ const send = async (param)=>{
     role: "user",
     content: input.value.trim(),
     status:'analysis',
-    analysis:"",
+    analysis:"【分析开始】\n",
     sendTime:targetTime,
     formatSendTime
   })
@@ -658,9 +689,6 @@ const send = async (param)=>{
   askRef.value.focus();
   placeholder.value = "正在回复中...";
   window.clarity("identify", fingerprint.value, null, "CHAT-AI", null)
-  // setTimeout(()=>{
-  //   throttledScrollToBottom();
-  // },100)
   if (
     useInternet.value=='AUTO'
     && (targetValue.indexOf('新闻')>-1 || targetValue.indexOf('news')>-1 || targetValue.indexOf('weather')>-1)
@@ -674,9 +702,13 @@ const send = async (param)=>{
   }
   // onChange();
   const index = chatList.value.length - 1;
-  await handleChatWithAI_Analysis({ targetValue, targetTime, index });
+  await deepMind(targetValue, targetTime, index);
+  // await handleChatWithAI_Analysis({ targetValue, targetTime, index });
   // await handleChatWithAI_Analysis({targetValue,targetTime,index});
 }
+
+
+
 
 
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数

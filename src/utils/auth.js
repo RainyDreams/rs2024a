@@ -653,6 +653,51 @@ let Auth = {
       }
     );
   },
+
+
+  deepMind_Analysis:async function chatWithAI_Analysis(param) {
+    window.clarity("event", 'chatWithAI')
+    await this.getPrtoken();
+    await this.getStreamText('/api/ai/stream_chat_analysis', 
+      { sessionID: param.sessionID, content: param.content,vf:param.vf,
+        model:param.line,
+      }, {
+      onmessage:param.onmessage,
+      onclose:param.onclose,
+      stopStatus:param.stopStatus
+    });
+  },
+  deepMind_Try:async function chatWithAI_Analysis(param) {
+    window.clarity("event", 'chatWithAI')
+    await this.getPrtoken();
+    //服务器源代码不在本机，临时折中办法
+    param.content += param.analysis;
+    await this.getStreamText('/api/ai/stream', 
+      { sessionID: param.sessionID, content: param.content,vf:param.vf,
+        model:param.line,
+      }, {
+      onmessage:param.onmessage,
+      onclose:param.onclose,
+      stopStatus:param.stopStatus
+    });
+  },
+  deepMind_Summary:async function chatWithAI_Analysis(param) {
+    window.clarity("event", 'chatWithAI')
+    await this.getPrtoken();
+    param.content += param.analysis;
+    await this.getStreamText('/api/ai/stream', 
+      { sessionID: param.sessionID, content: param.content,vf:param.vf,
+        model:param.line,
+      }, {
+      onmessage:param.onmessage,
+      onclose:param.onclose,
+      stopStatus:param.stopStatus
+    });
+  },
+
+
+
+
   chatWithAI_test:async function chatWithAI(param) {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
