@@ -8,7 +8,7 @@ export default defineConfig((mode) => {
     server: {
       allowedHosts: ['aaa.chiziingiin.top']
     },
-    base:'./',
+    // base:'./',
     plugins: [
       vue(),
       legacy({
