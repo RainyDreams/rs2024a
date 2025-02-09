@@ -138,7 +138,7 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="flex flex-col items-end">
-            <div :class="`w-full px-3 bg-bgprimary-700 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100':'opacity-0')" style="position:relative;bottom:-25px;transition: bottom 0.3s,opacity 0.3s;">
+            <div :class="`w-full px-3 bg-bgprimary-700 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100':'opacity-0')" style="position:relative;bottom:-25px;transition: bottom 0.2s,opacity 0.2s;">
               <touch-ripple
                 :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
                 :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
