@@ -138,7 +138,7 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="flex flex-col items-end mb-1 ">
-            <div class="w-full">
+            <div class="w-full" v-show="show_menu">
               <touch-ripple
                 :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
                 :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
