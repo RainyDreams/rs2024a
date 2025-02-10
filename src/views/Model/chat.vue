@@ -105,7 +105,7 @@
                     <div class="analysis max-w-full" v-show="item.status != 'no_analysis'">
                       <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                       <div 
-                        class="_text text-gray-500 text-sm " v-show="item.status != 'analysised'" 
+                        :class="`_text text-gray-500 text-sm `+(item.status=='analysis'?'active':'')" v-show="item.status != 'analysised'" 
                         v-html="md.render(item.analysis || '')"
                       ></div>
                       <p v-if="item.analysis" v-show="item.status == 'analysised' || item.status == 'show_analysis'" @click="item.status = item.status=='show_analysis'?'analysised':'show_analysis'" class="flex items-center cursor-pointer justify-end">
@@ -467,18 +467,19 @@ async function deepMind(targetValue, targetTime, index) {
   if(useAnalysis.value) {
     analysis_line.value = 'line-1';
     await Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index},'','分析'));
-    chatList.value[index - 1].analysis += '【尝试回复开始】\n';
-    analysis_line.value = 'line-1';
-    await Auth.deepMind_Try(createOptions({targetValue,targetTime,index},chatList.value[index - 1].analysis+'你要根据以上分析尝试初步进行回复','尝试回复'));
-    chatList.value[index - 1].analysis += '【总结开始】\n';
-    await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index},chatList.value[index - 1].analysis+'你要根据以上分析和初步回复（尝试）进行批判性建设性的总结和必要资料的查询以便于最终回复','总结'));
-    chatList.value[index - 1].analysis += '\n请开始优化后的最终回复\n';
+    let _analysis = chatList.value[index - 1].analysis,_analysis2;
+    chatList.value[index - 1].analysis += '\n\n'; 
+    await Auth.deepMind_Try(createOptions({targetValue,targetTime,index},[_analysis],(e)=>{
+      _analysis2 += e;
+    }));
+    chatList.value[index - 1].analysis += '\n\n'; 
+    await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index},[_analysis,_analysis2]));
     await initiateChatWithAI({targetValue,targetTime,index});
   } else {
     await initiateChatWithAI({targetValue,targetTime,index});
   }
 }
-function createOptions(opt,analysis,endTarget) {
+function createOptions(opt,analysis,fn=()=>{}) {
   return {
     sessionID: sessionID.value,
     content: opt.targetValue,
@@ -504,9 +505,9 @@ function createOptions(opt,analysis,endTarget) {
       }
       throttledScrollToBottom();
       chatList.value[opt.index - 1].analysis += tmp;
+      fn(tmp);
     },
     onclose: async (source) => {
-      chatList.value[opt.index - 1].analysis += '\n【'+endTarget+'结束】\n';
       if (stopStatus.value == true) {
         stopStatus.value = false;
         placeholder.value = "还有什么想聊的";
@@ -694,7 +695,7 @@ const send = async (param)=>{
     role: "user",
     content: input.value.trim(),
     status:'analysis',
-    analysis:"【分析开始】\n",
+    analysis:"",
     sendTime:targetTime,
     formatSendTime
   })

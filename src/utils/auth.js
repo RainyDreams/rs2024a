@@ -659,9 +659,9 @@ let Auth = {
   deepMind_Analysis:async function chatWithAI_Analysis(param) {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
-    await this.getStreamText('/api/ai/stream_chat_analysis', 
+    await this.getStreamText('/api/ai/deepMind_Analysis', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
-        model:param.line,
+        model:param.line,time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
@@ -671,9 +671,9 @@ let Auth = {
   deepMind_Try:async function chatWithAI_Analysis(param) {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
-    await this.getStreamText('/api/ai/stream_chat_analysis2', 
+    await this.getStreamText('/api/ai/deepMind_Try', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
-        model:param.line,analysis:param.analysis
+        model:param.line,analysis:param.analysis[0],
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
@@ -683,9 +683,9 @@ let Auth = {
   deepMind_Summary:async function chatWithAI_Analysis(param) {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
-    await this.getStreamText('/api/ai/stream_chat_analysis2', 
+    await this.getStreamText('/api/ai/deepMind_Summary', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
-        model:param.line,analysis:param.analysis
+        model:param.line,analysis:param.analysis[0],analysis2:param.analysis[1],
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
