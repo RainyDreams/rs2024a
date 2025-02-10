@@ -466,7 +466,7 @@ const stop = async (param)=>{
 async function deepMind(targetValue, targetTime, index) {
   if(useAnalysis.value) {
     analysis_line.value = 'line-1';
-    await Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index},'','分析'));
+    await Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index}));
     let _analysis = chatList.value[index - 1].analysis,_analysis2;
     chatList.value[index - 1].analysis += '\n\n'; 
     await Auth.deepMind_Try(createOptions({targetValue,targetTime,index},[_analysis],(e)=>{

@@ -497,30 +497,30 @@ a[href]{
       // min-width: 80px;
     }
     .analysis{
-      ._text.active p{
-        text-fill-color: transparent;
-        -webkit-text-fill-color: transparent;
-        animation-delay: .1s;
-        animation-duration: 1.5s;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
-        animation-name: loading-shimmer;
+      // ._text.active p{
+      //   text-fill-color: transparent;
+      //   -webkit-text-fill-color: transparent;
+      //   animation-delay: .1s;
+      //   animation-duration: 1.5s;
+      //   animation-iteration-count: infinite;
+      //   animation-timing-function: linear;
+      //   animation-name: loading-shimmer;
         
-        background: linear-gradient(to right, #cdcdcd, #474747 50%, #cdcdcd);
-        background-clip: text;
-        -webkit-background-clip: text;
-        // background-repeat: no-repeat;
-        background-size: 500px 100%;
-        display: inline-block;
-      }
-      @keyframes  loading-shimmer{
-        0% {
-          background-position-x: 0;
-        }
-        100% {
-          background-position-x: 500px;
-        }
-      }
+      //   background: linear-gradient(to right, #cdcdcd, #474747 50%, #cdcdcd);
+      //   background-clip: text;
+      //   -webkit-background-clip: text;
+      //   // background-repeat: no-repeat;
+      //   background-size: 500px 100%;
+      //   display: inline-block;
+      // }
+      // @keyframes  loading-shimmer{
+      //   0% {
+      //     background-position-x: 0;
+      //   }
+      //   100% {
+      //     background-position-x: 500px;
+      //   }
+      // }
     }
   }
   .chatList .chatcontent{
