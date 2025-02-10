@@ -4,12 +4,12 @@
       <div class="">
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
           <div class="panel aichat">
-            <el-watermark :font="{color:'rgba(0, 0, 0, .009)'}" :gap="[0,0]" :rotate="-12"
+            <el-watermark :font="{color:'rgba(0, 0, 0, .01)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <div class="system">
                   <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar> -->
-                  <div class="" style="font-size:14px;width:100%;">
+                  <div class="flex items-stretch" style="font-size:14px;width:100%;">
                     <!-- <el-skeleton :rows="3" animated v-show="welcome_loading" class="bg-white p-5 rounded-lg"></el-skeleton> -->
                     <div v-show="!welcome_loading" class="group relative w-fit">
                       <touch-ripple
@@ -27,18 +27,40 @@
                         <div class="text-base">{{ model_info.name }}</div>
                         <!-- </div> -->
                       </touch-ripple>
-                      <div v-show="showModelDetail">
-                        <div class="min-w-fit w-64 z-10 flex flex-col absolute top-10 left-0 bg-white border rounded-xl p-3 duration-100">
-                          <div class="text-sm/snug mb-2 flex-1">{{ model_info.desc }}</div>
-                          <div class="flex items-center opacity-80 text-xs">
-                            <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
-                            <div class="username">{{ model_info.createUser.nickname }}</div>
-                          </div>
-                        </div>
-                      </div>
+                    </div>
+                    <div v-show="!welcome_loading" class="group relative w-fit">
+                      <touch-ripple
+                        :class="`flex touch-ripple h-full items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-orange-950':'text-orange-950')"
+                        :style="{ clipPath: 'none', backgroundColor: showInfo?'#ffedd5':'#fff' }"
+                        :color="showInfo?'#f7deb7':'#f7deb7'"
+                        :opacity="0.4"
+                        transition="ease-out"
+                        :duration="300"
+                        :keep-last-ripple="true"
+                        @click="showInfo=!showInfo"
+                      >
+                        <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                          <info theme="outline" size="18" fill="#ff9d00"/>
+                        <!-- </div> -->
+                      </touch-ripple>
+                      
                     </div>
                     <!-- <div v-show="!welcome_loading" class="text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(welcome)"></div> -->
                     <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
+                  </div>
+                  <div v-show="showModelDetail">
+                    <div class="min-w-fit w-64 z-10 flex flex-col mt-2 top-10 left-0 bg-white border rounded-xl p-3 duration-100">
+                      <div class="text-sm/snug mb-2 flex-1">{{ model_info.desc }}</div>
+                      <div class="flex items-center opacity-80 text-xs">
+                        <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
+                        <div class="username">{{ model_info.createUser.nickname }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-show="showInfo">
+                    <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 mx-auto bg-white border rounded-xl p-3 duration-100">
+                      <div class="w-full text-sm/snug">由于服务器成本原因，对大模型所有用户限制如下：每分钟15次，每天1000次提问。</div>
+                    </div>
                   </div>
                   <!-- 欢迎 -->
                   <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
@@ -153,7 +175,7 @@
           <div class="relative w-full">
             <div :class="`flex flex-col w-full px-3 bg-orange-300 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.2s,opacity 0.2s;left:0;">
               <touch-ripple
-                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
+                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-green-700':'text-green-700 border-green-700')"
                 :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
                 :color="useAnalysis?'#fff':'#1a842f'"
                 :opacity="0.4"
@@ -162,7 +184,7 @@
                 :keep-last-ripple="true"
                 @click="useAnalysis=!useAnalysis"
               >
-                <span>深入思考</span>
+                <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">深入思考</span></span>
               </touch-ripple>
               <!-- <touch-ripple
                 :class="`touch-ripple w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
@@ -228,7 +250,7 @@
         </div>
       </div>
     </div>
-    <p class=" text-center text-slate-500 py-1 font-sans" style="font-size: 10px;">内容由 OriginSynq AI 生成，请仔细甄别</p>
+    <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由 OriginSynq AI 生成，请仔细甄别</p>
   </div>
 </template>
 <script setup>
@@ -243,11 +265,12 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu, Thermometer } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu, Thermometer,Info,SmartOptimization } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
 const showModelDetail = ref(false)
+const showInfo = ref(false)
 const contentRendered = ref([])
 const animateMode = ref(false)
 const throttledRender = (e)=>{
@@ -442,7 +465,7 @@ const stop = async (param)=>{
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
   if(useAnalysis.value) {
-    analysis_line.value = 'line-3';
+    analysis_line.value = 'line-1';
     await Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index},'','分析'));
     chatList.value[index - 1].analysis += '【尝试回复开始】\n';
     analysis_line.value = 'line-1';
@@ -479,6 +502,7 @@ function createOptions(opt,analysis,endTarget) {
           tmp = decode.response;
           break;
       }
+      throttledScrollToBottom();
       chatList.value[opt.index - 1].analysis += tmp;
     },
     onclose: async (source) => {
@@ -649,7 +673,7 @@ function handleOnClose(error,model,opt) {
   }
   // throttledScrollToBottom();
   // scrollToBottom()
-  chatList.value[opt.index - 1].status = 'analysised';
+  // chatList.value[opt.index - 1].status = 'analysised';
   placeholder.value = '还有什么想聊的';
   askRef.value.focus();
 }
@@ -769,3 +793,7 @@ onActivated(async ()=>{
   // }
 })
 </script>
+
+
+
+

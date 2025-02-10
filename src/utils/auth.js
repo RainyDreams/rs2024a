@@ -13,6 +13,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRoute, useRouter } from "vue-router";
 // import { da } from "element-plus/es/locales.mjs";
 import { asyncThrottle } from "./helpers";
+import dayjs, { Dayjs } from "dayjs";
 // import { use } from "echarts/types/src/extension.js";
 const router = useRouter()
 const route = useRoute()
@@ -642,7 +643,7 @@ let Auth = {
         useAnalysis:param.useAnalysis,
         useFunction:param.useFunction,
         model:param.line,
-        time:new Date().toTimeString(),
+        time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
         sendTime:param.time
       },
       {
@@ -670,11 +671,9 @@ let Auth = {
   deepMind_Try:async function chatWithAI_Analysis(param) {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
-    //服务器源代码不在本机，临时折中办法
-    param.content += param.analysis;
-    await this.getStreamText('/api/ai/stream', 
+    await this.getStreamText('/api/ai/stream_chat_analysis2', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
-        model:param.line,
+        model:param.line,analysis:param.analysis
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
@@ -684,10 +683,9 @@ let Auth = {
   deepMind_Summary:async function chatWithAI_Analysis(param) {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
-    param.content += param.analysis;
-    await this.getStreamText('/api/ai/stream', 
+    await this.getStreamText('/api/ai/stream_chat_analysis2', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
-        model:param.line,
+        model:param.line,analysis:param.analysis
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
