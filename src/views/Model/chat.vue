@@ -1,5 +1,5 @@
 <template>
-  <div class="commonPage bg-transparent md:rounded-lg pb-0" style="height:calc(100dvh - 60px);display: flex;flex-direction: column;">
+  <div class="commonPage bg-transparent md:rounded-lg pb-0 h-dvh pt-3" style="display: flex;flex-direction: column;">
     <div class="scroll">
       <div class="">
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
@@ -9,42 +9,88 @@
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <div class="system">
                   <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar> -->
-                  <div class="flex items-stretch" style="font-size:14px;width:100%;">
+                  <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
                     <!-- <el-skeleton :rows="3" animated v-show="welcome_loading" class="bg-white p-5 rounded-lg"></el-skeleton> -->
-                    <div v-show="!welcome_loading" class="group relative w-fit">
+                    <!-- <router-link  class="h-full"> -->
                       <touch-ripple
-                        :class="`flex touch-ripple items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-orange-950':'text-orange-950')"
+                        :class="`flex touch-ripple h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full px-2 py-1 overflow-hidden select-none border `"
                         :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#ffedd5':'#fff' }"
-                        :color="showModelDetail?'#f7deb7':'#f7deb7'"
+                        :color="'#6491fc'"
                         :opacity="0.4"
                         transition="ease-out"
                         :duration="300"
                         :keep-last-ripple="true"
-                        @click="showModelDetail=!showModelDetail"
+                        @click="history.back()"
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                        <img alt="头像" :src="model_info.img" class="mr-1 w-4 h-4 rounded-full" />
-                        <div class="text-base">{{ model_info.name }}</div>
+                        <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                        <left  theme="outline" size="18" fill="#6491fc"/>
                         <!-- </div> -->
                       </touch-ripple>
-                    </div>
-                    <div class="group relative w-fit">
+                    <!-- </router-link> -->
+                    <router-link to="/home" class="h-full">
                       <touch-ripple
-                        :class="`flex touch-ripple h-full items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-orange-950':'text-orange-950')"
-                        :style="{ clipPath: 'none', backgroundColor: showInfo?'#ffedd5':'#fff' }"
-                        :color="showInfo?'#f7deb7':'#f7deb7'"
+                        :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full px-2 py-1 overflow-hidden select-none border `"
+                        :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#ffedd5':'#fff' }"
+                        :color="'#6491fc'"
                         :opacity="0.4"
                         transition="ease-out"
                         :duration="300"
                         :keep-last-ripple="true"
-                        @click="showInfo=!showInfo"
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                          <info theme="outline" size="18" fill="#ff9d00"/>
-                          信息
+                        <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                        <home  theme="outline" size="18" fill="#6491fc"/>
                         <!-- </div> -->
                       </touch-ripple>
-                    </div>
+                    </router-link>
+                    <router-link to="/model/history" class="h-full">
+                      <touch-ripple
+                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
+                        :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#ffedd5':'#fff' }"
+                        :color="'#6491fc'"
+                        :opacity="0.4"
+                        transition="ease-out"
+                        :duration="300"
+                        :keep-last-ripple="true"
+                      >
+                        <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                        <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                        <history  theme="outline" class="mr-1" size="18" fill="#6491fc"/>
+                        <div class="text-base leading-none" style="color:rgb(18,30,60);">聊天历史</div>
+                        <!-- </div> -->
+                      </touch-ripple>
+                    </router-link>
+                    <touch-ripple
+                      :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-orange-950':'text-orange-950')"
+                      :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#ffedd5':'#fff' }"
+                      :color="showModelDetail?'#f7deb7':'#f7deb7'"
+                      :opacity="0.4"
+                      transition="ease-out"
+                      :duration="300"
+                      :keep-last-ripple="true"
+                      @click="showModelDetail=!showModelDetail"
+                    >
+                      <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                      <img alt="头像" :src="model_info.img" class="mr-1 w-4 h-4 rounded-full" />
+                      <div class="text-base leading-none">{{ model_info.name || "获取中" }}</div>
+                      <!-- </div> -->
+                    </touch-ripple>
+                    <touch-ripple
+                      :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-orange-950':'text-orange-950')"
+                      :style="{ clipPath: 'none', backgroundColor: showInfo?'#ffedd5':'#fff' }"
+                      :color="showInfo?'#f7deb7':'#f7deb7'"
+                      :opacity="0.4"
+                      transition="ease-out"
+                      :duration="300"
+                      :keep-last-ripple="true"
+                      @click="showInfo=!showInfo"
+                    >
+                      <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                        <info theme="outline" class="mr-1" size="18" fill="#ff9d00"/>
+                        <div class="text-base leading-none">信息</div>
+                      <!-- </div> -->
+                    </touch-ripple>
                     <!-- <div v-show="!welcome_loading" class="text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(welcome)"></div> -->
                     <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
                   </div>
@@ -64,7 +110,7 @@
                   </div>
                   <!-- 欢迎 -->
                   <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
-                    <div v-if="!welcome_loading" :class="`chat_welcome mt-14 md:mt-18 2xl:mt-24 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
+                    <div :class="`chat_welcome mt-14 md:mt-18 2xl:mt-24 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
                       <h2 class="text-center w-full text-2xl md:text-4xl 2xl:text-5xl font-bold">你好！来聊点什么吧</h2>
                     </div>
                   </div>
@@ -268,7 +314,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu, Thermometer,Info,SmartOptimization } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu,History, Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -373,7 +419,7 @@ md.use(math,{
   katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
 });
 // const contentRendered = ref([]);
-emitter.emit('toggleSidebar')
+// emitter.emit('toggleSidebar')
 
 /* 主要渲染部分结束 */
 const route = useRoute()

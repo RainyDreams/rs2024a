@@ -8,7 +8,11 @@ const router = useRouter()
 onActivated(async () => {
   console.log(1)
   let model = route.query.model
-  const {content} = await Auth.getAISessionID({model})
-  router.push('/chat/'+content)
+  const e = await Auth.getAISessionID({model});
+  console.log(e);
+  const {status, content} = e
+  if(status === "sus"){
+    router.push('/chat/'+content)
+  }
 })
 </script>

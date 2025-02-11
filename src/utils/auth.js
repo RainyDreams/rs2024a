@@ -24,23 +24,29 @@ const defaultFailed = async function (response,code) {
   if(!navigator.onLine){
     return { status: 'offline' }
   }
-  if (response.status === 401) {
-    const getPr = await Auth.getPrtoken();
-    if(getPr.status=='sus'){
-      ElMessage.error('发生错误');
-      // ElMessageBox.alert('网络遇到问题，请刷新页面', '错误', {
-      //   confirmButtonText: '确定',
-      //   callback:()=>{
-      //     window.location.reload()
-      //   }
-      // })
-    } else {
-      ElMessage.error('未登录或登录过期');
-      // console.log(router)
-      Auth.router.push('/login-needed?url='+encodeURIComponent(Auth.route.fullPath))
-      // window.location.href="/login-needed?url="+encodeURIComponent(window.location.href)
-      return { status: 'invalid', content: response };
-    }
+  // debugger;
+  console.dir(response.status+'',response.status+'' == 401+'')
+  if (response.status == 401) {
+    console.wran('401 get prtoken')
+    window.location.href = ('/login-needed?url='+encodeURIComponent(window.location))
+
+    // const getPr = await Auth.getPrtoken();
+    // console.dir(getPr);
+    // if(getPr.status=='sus'){
+    //   ElMessage.error('发生错误');
+    //   // ElMessageBox.alert('网络遇到问题，请刷新页面', '错误', {
+    //   //   confirmButtonText: '确定',
+    //   //   callback:()=>{
+    //   //     window.location.reload()
+    //   //   }
+    //   // })
+    // } else {
+    //   ElMessage.error('未登录或登录过期');
+    //   // console.log(router)
+    //   window.location.href = ('/login-needed?url='+encodeURIComponent(window.location))
+    //   // window.location.href="/login-needed?url="+encodeURIComponent(window.location.href)
+    //   return { status: 'invalid', content: response };
+    // }
   } else {
     ElMessage.error('服务器错误');
     try{
@@ -57,7 +63,7 @@ const defaultFailed = async function (response,code) {
           message: '这块可能是编写程序疏漏引发的错误，请点击报告错误，并把识别码发给我。感谢你的支持',
         };
       } 
-      let text = (await response.text());
+      // let text = (await response.text());
       throw new Error(response.url+"<br/>" + text)
     } catch (err){
       console.error(err.message+'\n'+err.stack)
@@ -156,6 +162,14 @@ let Auth = {
         if (data.status === "sus") {
           window.clarity("event", 'auth_success')
           return { ...data,status: "sus", content: await success(data), };
+        } else if (data.status === "error" && data.code === 4) {
+          let a = await this.getPrtoken();
+          if(a.status == 'notExist'){
+            window.location.href = ('/login-needed?url='+encodeURIComponent(window.location.pathname))
+          } else{
+            return await this.basicAuth(url, body, { success, failed });
+          }
+          console.log(a);
         } else {
           return await failed(data, 0);
         }
@@ -284,7 +298,10 @@ let Auth = {
   reportErrlog:async function reportErrlog(content) {
     await this.getUserFingerprint();
     window.clarity("event", 'reportErrlog')
-    return this.basicAuth("/api/reportErrlog", content);
+    try{
+      this.basicAuth("/api/reportErrlog", content,{failed:async ()=>{}});
+    }catch(err){}
+    return null;
   },
   getPrtoken: async function getPrtoken(mode) {
     // console.log(Cookies.get("czigauth"));

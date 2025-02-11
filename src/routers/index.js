@@ -46,8 +46,8 @@ import Error404 from '../views/Errors/404.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: "/", name: "ModelWelcome", component: ModelWelcome,meta:{title:'OriginSynq AI',hide:['sidebar','navbar']} },
-    { path: "/chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'OriginSynq AI',hide:['navbar']}},
+    { path: "/", name: "ModelWelcome", component: ModelWelcome,meta:{title:'OriginSynq AI',hide:['sidebar','tabbar']} },
+    { path: "/chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'OriginSynq AI',hide:['tabbar','sidebar']}},
     { path: "/model/", name: "Model", children:[
       { path: "square", name: "ModelSquare", component: ModelSquare,meta:{title:'OriginSynq AI 智能体广场'} },
       // { path: "m/:id", name: "ModelType", component: Model,meta:{title:'OriginSynq AI'}},
