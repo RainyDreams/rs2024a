@@ -260,7 +260,8 @@
 import markdownIt from 'markdown-it';
 import markdownItHighlightjs from 'markdown-it-highlightjs';
 import math from 'markdown-it-texmath';
-// import Katex from 'katex';
+import Katex from 'katex';
+import hljs from 'highlight.js';
 // import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
 import Auth from "../../utils/auth";
