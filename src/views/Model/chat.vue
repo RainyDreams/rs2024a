@@ -557,10 +557,13 @@ function createOptions(opt,analysis,fn=()=>{}) {
         chatList.value[opt.index - 1].analysis += tmp;
         fn(tmp);
       }catch(e){
-
+        await Auth.getPrtoken();
       }
       
     },
+    onerror:async ()=>{
+      await Auth.getPrtoken();
+    }
     onclose: async (source) => {
       if (stopStatus.value == true) {
         stopStatus.value = false;

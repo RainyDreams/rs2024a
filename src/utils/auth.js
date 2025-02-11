@@ -664,6 +664,7 @@ let Auth = {
         model:param.line,time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
       }, {
       onmessage:param.onmessage,
+      onerror:param.onerror,
       onclose:param.onclose,
       stopStatus:param.stopStatus
     });
@@ -677,6 +678,7 @@ let Auth = {
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
+      onerror:param.onerror,
       stopStatus:param.stopStatus
     });
   },
@@ -689,6 +691,7 @@ let Auth = {
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
+      onerror:param.onerror,
       stopStatus:param.stopStatus
     });
   },
