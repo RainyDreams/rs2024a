@@ -211,9 +211,7 @@ let Auth = {
     return this.basicAuth("/api/login", JSON.stringify(param))
   },
   getBasicInfoStatus:false,
-  getBasicInfo:/*asyncThrottle(*/async function getBasicInfo({router=Auth.router,route=Auth.route,task,to,next}){
-    Auth.router = router;
-    Auth.route = route;
+  getBasicInfo:/*asyncThrottle(*/async function getBasicInfo({task}){
     window.clarity("event", 'getBasicInfo')
     // const getPr = await Auth.getPrtoken();
     // debugger;
@@ -227,17 +225,9 @@ let Auth = {
     }
     const info = sessionStorage.getItem('userInfo');
     let mode;
-    if(to?.meta?.nologin){
-      next()
-    }
-    if(this.getBasicInfoStatus){
-      next()
-      return;
-    }
     if(info){
       if(JSON.parse(info).avatar){
         mode = 'exist';
-        next()
       }
     }
     this.getBasicInfoStatus = true
@@ -249,13 +239,11 @@ let Auth = {
     }))
     if(!res.isLogined){
       if(res.AlreadyAuthenticated == true){
-        next()
         await this.getPrtoken('force')
       } else {
-        next('/login-needed?url='+encodeURIComponent(Auth.route.fullPath))
+        // next('/login-needed?url='+encodeURIComponent(Auth.route.fullPath))
       }
     } else {
-      next()
     }
     // debugger;
     window.clarity("set", 'userTag', res.identityType || 'normal');

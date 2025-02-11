@@ -3,7 +3,7 @@
     <div class="mainpage">
       <div class="header" v-if="!TabBarHide">
         <div :class="{navlist:1,show:showMenu}" :style="showMenu?'':'transition-delay: 0.20s;'">
-          <router-link class="logo pc" to="/" v-if="SideBarHide" style="margin-left:24px;height:28px;padding:0 8px;">
+          <router-link class="logo pc" to="/home" v-if="SideBarHide" style="margin-left:24px;height:28px;padding:0 8px;">
             <img src="/logo.webp" style="color:#3c3e55" alt="零本智协">
           </router-link>
           <a v-for="(item,i) in configList" :class="`nav ${activeName==item.name?'router-link-active':''} animate__animated ${M(showMenu?'animate__fadeInTopLeft':'animate__fadeOutTopLeft')}`" :style="(showMenu?`animation-duration:0.5s;`:'')+`animation-delay:${0.08*(i)}s`" :key="item.name" @click="isM(item.to,item.name)">
@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="m navMenu">
-          <router-link to="/">
+          <router-link to="/home">
             <img src="/logo.webp" style="color:#3c3e55" alt="零本智协">
           </router-link>
           <MenuFoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="!showMenu"/>
@@ -69,7 +69,7 @@
       </div>
     </div>
     <div v-if="!SideBarHide" :class="`tabbar pc flex-col `+(sideCollapsed?'sideCollapsed':'')" >
-      <router-link class="logo" to="/">
+      <router-link class="logo" to="/home">
         <img src="/logo.webp" class="mb-3 bg" style="color:#3c3e55" alt="零本智协">
         <img src="/logo_sm.webp" class="mb-3 sm" style="color:#3c3e55" alt="零本智协">
       </router-link>
@@ -164,9 +164,8 @@ onMounted(async ()=>{
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
-const update = (next,to) => {
-  // console.log('updateBasicAuth')
-  (Auth.getBasicInfo({router,route,to,next,task:async function(re){
+const update = () => {
+  (Auth.getBasicInfo({task:async function(re){
     basicInfo.value = re;
     emitter.emit('basicInfo',re)
     const ps = new Promise((resolve,reject)=>{
@@ -183,29 +182,6 @@ const update = (next,to) => {
               reject()
             }
           });
-          // ElMessageBox.alert('我们申请向您发送通知的权限', '授予权限', {
-          //   confirmButtonText: '同意',
-          //   showCancelButton: true,
-          //   cancelButtonText: '拒绝',
-          //   showClose: false,
-          //   callback: action => {
-          //     if(action=='confirm'){
-          //       Cookies.set('permission',true,{expires:7})
-          //       Notification.requestPermission().then(permission => {
-          //         if (permission === 'granted') {
-          //           resolve();
-          //           Auth.acceptPermission()
-          //         } else {
-          //           Auth.rejectPermission()
-          //           reject()
-          //         }
-          //       });
-          //     } else{
-          //       Auth.rejectPermission()
-          //       reject()
-          //     }
-          //   }
-          // })
         } else if (Notification.permission === 'default') {
           Cookies.set('permission',false,{expires:7})
           Notification.requestPermission().then(permission => {
@@ -246,7 +222,7 @@ const update = (next,to) => {
       })
       if(document.visibilityState === 'visible'){
         Auth.basicInfoTaskThread.add(async ()=>{
-          update(next,to)
+          update()
           await new Promise(resolve=>{
             setTimeout(()=>{
               resolve()
@@ -254,17 +230,13 @@ const update = (next,to) => {
           });
         })
       }
-      
-      // setTimeout(()=>{
-      //   update(next,to)
-      // },200000)
     }).catch(()=>{
       re.NotificationList.forEach(e=>{
         ElMessage.info('收到一条消息')
       })
       if(document.visibilityState === 'visible'){
         Auth.basicInfoTaskThread.add(async ()=>{
-          update(next,to)
+          update()
           await new Promise(resolve=>{
             setTimeout(()=>{
               resolve()
@@ -273,7 +245,7 @@ const update = (next,to) => {
         })
       }
       // setTimeout(()=>{
-      //   update(next,to)
+      //   update()
       // },200000)
     })
   }}));
@@ -282,7 +254,7 @@ const update = (next,to) => {
 //   await new Promise(resolve=>{
 //     setTimeout(()=>{
 //       resolve()
-//     },3000)
+//     },5000)
 //   });
 //   update()
 // })
@@ -297,16 +269,16 @@ router.beforeEach((to, from, next) => {
   if(to.meta.title){
     document.title = to.meta.title + ' - 零本智协';
   }
-  // next()
-  update(next,to);
-  Auth.basicInfoTaskThread.add(async ()=>{
-    await new Promise(resolve=>{
-      setTimeout(()=>{
-        resolve()
-      },3000)
-    });
-  })
+  next()
 });
+Auth.basicInfoTaskThread.add(async ()=>{
+  update();
+  await new Promise(resolve=>{
+    setTimeout(()=>{
+      resolve()
+    },5000)
+  });
+})
 router.afterEach(async (to, from) => {
   const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
   rightList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1);

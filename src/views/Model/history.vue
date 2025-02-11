@@ -15,7 +15,7 @@
         <div class="col-12 col-md-6 col-xl-4 mb-2 md:mb-3" v-for="item in chatList">
           <router-link 
             class="block h-full  text-slate-950 border-b py-4 px-5 border-slate-100 hover:bg-slate-50 transition-all rounded-lg bg-white" 
-            :to="`/model/chat/${item.sessionID}`"
+            :to="`/chat/${item.sessionID}`"
           >
             <p class="text-base mb-1">{{ item.title }}</p>
             <p class="text-sm text-slate-500">{{ item.formatCreateTime }}</p>

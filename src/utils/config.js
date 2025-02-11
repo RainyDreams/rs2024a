@@ -69,11 +69,11 @@ export const configList = [
         icon:'History',
         to:'/model/history'
       },
-      {
-        title:'新建聊天',
-        icon:'MessageEmoji',
-        to:'/model/chat/new'
-      },
+      // {
+      //   title:'新建聊天',
+      //   icon:'MessageEmoji',
+      //   to:'/'
+      // },
       {
         title:'新建分析',
         icon:'ApplicationOne',

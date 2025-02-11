@@ -28,7 +28,7 @@
                         <!-- </div> -->
                       </touch-ripple>
                     </div>
-                    <div v-show="!welcome_loading" class="group relative w-fit">
+                    <div class="group relative w-fit">
                       <touch-ripple
                         :class="`flex touch-ripple h-full items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-orange-950':'text-orange-950')"
                         :style="{ clipPath: 'none', backgroundColor: showInfo?'#ffedd5':'#fff' }"
@@ -41,9 +41,9 @@
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                           <info theme="outline" size="18" fill="#ff9d00"/>
+                          信息
                         <!-- </div> -->
                       </touch-ripple>
-                      
                     </div>
                     <!-- <div v-show="!welcome_loading" class="text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(welcome)"></div> -->
                     <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
@@ -72,7 +72,7 @@
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="text-xs text-green-800 w-full text-center mb-2 font-thin">{{ item.formatSendTime }}</div>
+                    <div class="text-xs text-green-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
                     <div class="chatcontent userchatbg whitespace-pre-wrap text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-full lg:max-w-md px-4 md:px-5 py-3">
                       {{item.content}} 
                     </div>
@@ -260,8 +260,7 @@
 import markdownIt from 'markdown-it';
 import markdownItHighlightjs from 'markdown-it-highlightjs';
 import math from 'markdown-it-texmath';
-import Katex from 'katex';
-import hljs from 'highlight.js';
+// import Katex from 'katex';
 // import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
 import { onActivated, onMounted, ref,reactive, watch } from "vue"
 import Auth from "../../utils/auth";
@@ -800,17 +799,9 @@ const send = async (param)=>{
 
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
 const throttledScrollToBottom = throttle(scrollToBottom, 100); // 调整 300 为所需的毫秒数
-onActivated(async ()=>{
+onMounted(async ()=>{
   let id = route.params.id;
-  let model = route.query.model
-  if(!id || id==='new'){
-    const {content} = await Auth.getAISessionID({model})
-    id = route.params.id
-    if(route.path==='/model/chat/new') {
-      router.push('/model/chat/'+content)
-      id = content;
-    }
-  }
+  console.log('active'+id)
   // } else {
     sessionID.value = id
     // onChange()

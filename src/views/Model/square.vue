@@ -223,7 +223,7 @@ const copyText = (e)=>{
 }
 const to = (e)=>{
   // router.push('/model/m/'+e)
-  router.push('/model/chat/new?model='+e)
+  router.push('/?model='+e)
 }
 const chat = (e)=>{
   showModel.value = {

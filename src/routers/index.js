@@ -28,6 +28,7 @@ import AboutLog from '../views/About/log.vue';
 import ModelSquare from '../views/Model/square.vue';
 // import Model from '../views/Model/model.vue';
 import ModelChat from '../views/Model/chat.vue';
+import ModelWelcome from '../views/Model/welcome.vue';
 import ModelTest from '../views/Model/test.vue';
 import ModelAnlysis from '../views/Model/anlysis.vue';
 import ModelHistory from '../views/Model/history.vue';
@@ -45,7 +46,17 @@ import Error404 from '../views/Errors/404.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: "/", name: "Home", component: HomeIndex, meta:{title:'首页',hide:['sidebar'],nologin:true} },
+    { path: "/", name: "ModelWelcome", component: ModelWelcome,meta:{title:'OriginSynq AI',hide:['sidebar']} },
+    { path: "/chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'OriginSynq AI'}},
+    { path: "/model/", name: "Model", children:[
+      { path: "square", name: "ModelSquare", component: ModelSquare,meta:{title:'OriginSynq AI 智能体广场'} },
+      // { path: "m/:id", name: "ModelType", component: Model,meta:{title:'OriginSynq AI'}},
+      { path: "test/:id", name: "ModelTest", component: ModelTest,meta:{title:'OriginSynq AI 聊天 专用测试版'}},
+      { path: "anlysis", name: "ModelAnlysis", component: ModelAnlysis,meta:{title:'OriginSynq AI 分析'}},
+      { path: "history", name: "ModelHistory", component: ModelHistory,meta:{title:'OriginSynq AI 历史'}},
+      { path: "status", name: "ModelStatus", component: ModelStatus,meta:{title:'OriginSynq AI服务器状态'}},
+    ]},
+    { path: "/home", name: "Home", component: HomeIndex, meta:{title:'首页',hide:['sidebar'],nologin:true} },
     { path: "/block", name: "Block", component: HomeBlock, meta:{title:'该请求被拦截',hide:['sidebar'],nologin:true} },
     { path: "/projects/", name: "Projects", children: [
       { path: "create", name: "ProjectsCreate", component: ProjectsCreate,meta:{title:'创建项目'} },
@@ -71,15 +82,7 @@ const router = createRouter({
       { path: "profile", name: "UserProfile", component: UserIndex,meta:{title:'用户详情'}},
       { path: "settings", name: "UserSettings", component: UserSettings,meta:{title:'用户设置'} },
     ]},
-    { path: "/model/", name: "Model", children:[
-      { path: "square", name: "ModelSquare", component: ModelSquare,meta:{title:'OriginSynq AI 智能体广场'} },
-      { path: "chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'OriginSynq AI'}},
-      // { path: "m/:id", name: "ModelType", component: Model,meta:{title:'OriginSynq AI'}},
-      { path: "test/:id", name: "ModelTest", component: ModelTest,meta:{title:'OriginSynq AI 聊天 专用测试版'}},
-      { path: "anlysis", name: "ModelAnlysis", component: ModelAnlysis,meta:{title:'OriginSynq AI 分析'}},
-      { path: "history", name: "ModelHistory", component: ModelHistory,meta:{title:'OriginSynq AI 历史'}},
-      { path: "status", name: "ModelStatus", component: ModelStatus,meta:{title:'OriginSynq AI服务器状态'}},
-    ]},
+    
     { path: "/about/", name: "About", children: [
       { path: "info", name: "AboutInfo", component: AboutInfo,meta:{title:'软件信息',nologin:true} },
       { path: "news", name: "AboutNews", component: AboutNews,meta:{title:'新闻',nologin:true} },
