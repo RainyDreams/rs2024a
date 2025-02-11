@@ -563,7 +563,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
     },
     onerror:async ()=>{
       await Auth.getPrtoken();
-    }
+    },
     onclose: async (source) => {
       if (stopStatus.value == true) {
         stopStatus.value = false;
