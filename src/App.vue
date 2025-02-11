@@ -155,11 +155,12 @@ onMounted(async ()=>{
   setTimeout(()=>{
     if(document.querySelector('#loading-container')){
       document.querySelector('#loading-container').classList.add('animate__fadeOut');
+      document.querySelector('#loading-container div').classList.add('animate__fadeOutUp');
       setTimeout(()=>{
         document.querySelector('#loading-container').remove()
-      },2000)
+      },1000)
     }
-  },100)
+  },10)
 })
 function bindShowMenu(){
   showMenu.value=!showMenu.value;

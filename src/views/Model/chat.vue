@@ -14,13 +14,13 @@
                     <!-- <router-link  class="h-full"> -->
                       <touch-ripple
                         :class="`flex touch-ripple h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full px-2 py-1 overflow-hidden select-none border `"
-                        :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#ffedd5':'#fff' }"
+                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                         :color="'#6491fc'"
                         :opacity="0.4"
                         transition="ease-out"
                         :duration="300"
                         :keep-last-ripple="true"
-                        @click="history.back()"
+                        @click="router.go(-2)"
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                         <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
@@ -31,7 +31,7 @@
                     <router-link to="/home" class="h-full">
                       <touch-ripple
                         :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full px-2 py-1 overflow-hidden select-none border `"
-                        :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#ffedd5':'#fff' }"
+                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                         :color="'#6491fc'"
                         :opacity="0.4"
                         transition="ease-out"
@@ -44,10 +44,27 @@
                         <!-- </div> -->
                       </touch-ripple>
                     </router-link>
+                    <router-link to="/model/square" class="h-full">
+                      <touch-ripple
+                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
+                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
+                        :color="'#6491fc'"
+                        :opacity="0.4"
+                        transition="ease-out"
+                        :duration="300"
+                        :keep-last-ripple="true"
+                      >
+                        <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                        <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                        <SmartOptimization theme="outline" class="mr-1" size="18" fill="#6491fc"/>
+                        <div class="text-base leading-none" style="color:rgb(18,30,60);">模型库</div>
+                        <!-- </div> -->
+                      </touch-ripple>
+                    </router-link>
                     <router-link to="/model/history" class="h-full">
                       <touch-ripple
                         :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
-                        :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#ffedd5':'#fff' }"
+                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                         :color="'#6491fc'"
                         :opacity="0.4"
                         transition="ease-out"
@@ -519,6 +536,7 @@ const handleEnter = async (event) => {
 
 const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
+  // 丝滑滑动到最底部
   scrollElement.scrollTop = scrollElement.scrollHeight;
 };
 

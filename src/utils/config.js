@@ -1,5 +1,39 @@
 export const configList = [
   {
+    name:'Model',
+    title:'零本AI',
+    icon:'SmartOptimization',
+    to:"/model/square",
+    tabs:[
+      {
+        title:'模型库',
+        icon:'SmartOptimization',
+        to:'/model/square'
+      },
+      {
+        title:'聊天历史',
+        icon:'History',
+        to:'/model/history'
+      },
+      {
+        title:'新建聊天',
+        icon:'MessageEmoji',
+        to:'/'
+      },
+      {
+        title:'新建分析',
+        icon:'ApplicationOne',
+        to:'/model/anlysis'
+      },
+      {
+        title:'服务器状态',
+        icon:'Server',
+        to:'/model/status'
+      },
+      
+    ]
+  },
+  {
     name:'Projects',
     title:'项目管理',
     icon:'AllApplication',
@@ -51,40 +85,6 @@ export const configList = [
         to:'/team/settings'
       },
 
-    ]
-  },
-  {
-    name:'Model',
-    title:'零本AI',
-    icon:'SmartOptimization',
-    to:"/model/square",
-    tabs:[
-      {
-        title:'模型库',
-        icon:'SmartOptimization',
-        to:'/model/square'
-      },
-      {
-        title:'聊天历史',
-        icon:'History',
-        to:'/model/history'
-      },
-      {
-        title:'新建聊天',
-        icon:'MessageEmoji',
-        to:'/'
-      },
-      {
-        title:'新建分析',
-        icon:'ApplicationOne',
-        to:'/model/anlysis'
-      },
-      {
-        title:'服务器状态',
-        icon:'Server',
-        to:'/model/status'
-      },
-      
     ]
   },
   {
