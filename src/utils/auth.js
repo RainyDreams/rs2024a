@@ -661,7 +661,7 @@ let Auth = {
     await this.getPrtoken();
     await this.getStreamText('/api/ai/deepMind_Analysis', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
-        model:param.line,
+        model:param.line,time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
@@ -685,7 +685,7 @@ let Auth = {
     await this.getPrtoken();
     await this.getStreamText('/api/ai/deepMind_Summary', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
-        model:param.line,analysis:param.analysis[0],analysis2:param.analysis[1]||'无',
+        model:param.line,analysis:param.analysis[0],analysis2:param.analysis[1]||'无',time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
