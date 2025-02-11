@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col md:flex-row h-full">
-    <div class="text-white px-5 pt-4 bg-blue-800 flex flex-col md:justify-center md:w-6/12 md:px-16">
+    <div class="text-white px-5 pt-4 bg-green-800 flex flex-col md:justify-center md:w-6/12 md:px-16">
       <h1 class="text-2xl font-semibold mb-3 md:text-6xl/tight md:mb-6">零本智协项目统一身份验证</h1>
       <h5 class="hidden md:block md:text-6xl font-semibold mb-20">登录平台</h5>
     </div>
     <div class="flex-1 px-6 py-9 flex flex-col bg-white md:px-20 xxl:px-28 md:overflow-y-auto">
-      <h2 class="text-4xl mb-9 text-blue-900 font-semibold mt-3 md:mt-16 md:text-5xl">欢迎！</h2>
+      <h2 class="text-4xl mb-9 text-green-900 font-semibold mt-3 md:mt-16 md:text-5xl">欢迎！</h2>
       <el-skeleton  v-show="loading" animated :rows="5" />
       <el-form 
         v-show="!loading" 
