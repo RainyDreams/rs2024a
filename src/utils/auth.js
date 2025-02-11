@@ -661,7 +661,7 @@ let Auth = {
     await this.getPrtoken();
     await this.getStreamText('/api/ai/deepMind_Analysis', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
-        model:param.line,time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
+        model:param.line,
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
@@ -673,7 +673,7 @@ let Auth = {
     await this.getPrtoken();
     await this.getStreamText('/api/ai/deepMind_Try', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
-        model:param.line,analysis:param.analysis[0],
+        model:param.line,analysis:param.analysis[0],time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
@@ -685,7 +685,7 @@ let Auth = {
     await this.getPrtoken();
     await this.getStreamText('/api/ai/deepMind_Summary', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
-        model:param.line,analysis:param.analysis[0],analysis2:param.analysis[1],
+        model:param.line,analysis:param.analysis[0],analysis2:param.analysis[1]||'无',
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
@@ -973,6 +973,16 @@ Auth.functionCall = async function(obj,opt){
     // console.log(str);
     str+='\`\`\`\n\n'
     return opt.renderHtml(str)
+  } else if (obj.name == 'web_search'){ 
+    for(let i = 0; i < obj.args.keywords.length; i++){
+      let info = await Auth.basicAuth('/api/webSearch', JSON.stringify({
+        keywords:obj.args.keywords[i]
+      }));
+      opt.renderHtml(`**查询到的互联网信息**\n\n`)
+      for (let j = 0; j < info.content.length; j++) {
+        opt.renderHtml(`- [${info.content[j].title}](${info.content[j].link})\n\n> ${info.content[j].snippet}\n\n`)
+      }
+    }
   }
 }
 window.onloadTurnstileCallback = function () {

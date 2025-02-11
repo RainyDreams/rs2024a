@@ -105,16 +105,19 @@
                     <div class="analysis max-w-full" v-show="item.status != 'no_analysis'">
                       <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                       <div 
-                        :class="`_text text-gray-500 text-sm `+(item.status=='analysis'?'active':'')" v-show="item.status != 'analysised'" 
+                        :class="`_text text-gray-500 text-sm `+(item.status=='analysis'?'active':'')" v-show="item.show_thought" 
                         v-html="md.render(item.analysis || '')"
                       ></div>
-                      <p v-if="item.analysis" v-show="item.status == 'analysised' || item.status == 'show_analysis'" @click="item.status = item.status=='show_analysis'?'analysised':'show_analysis'" class="flex items-center cursor-pointer justify-end">
-                        {{item.status == 'analysised'?'展开':'收起'}}思考过程
-                        <Down v-show="item.status == 'analysised'" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
-                        <Up v-show="item.status != 'analysised'" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
+                      <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
+                        {{item.show_thought?'收起':'展开'}}思考过程
+                        <Down v-show="!item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
+                        <Up v-show="item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
                       </p>
                     </div>
                     <!-- </el-watermark> -->
+                  </div>
+                  <div v-if="item.role=='user'" v-show="item.status != 'analysised'" class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-8 font-bold">
+                    <span class="active-text">{{ renderStatus(item.status) }}</span>
                   </div>
                   <div class="assistant overflow-hidden" v-if="item.role == 'assistant'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar> -->
@@ -173,7 +176,7 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="relative w-full">
-            <div :class="`flex flex-col w-full px-3 bg-orange-300 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.2s,opacity 0.2s;left:0;">
+            <div :class="`flex flex-col w-full px-3 bg-orange-300 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
               <touch-ripple
                 :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-green-700':'text-green-700 border-green-700')"
                 :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
@@ -200,7 +203,7 @@
               <!-- </touch-ripple> -->
             </div>
           </div>
-          <div :class="`bg-orange-300 transition-all duration-100 `+(show_menu?'rounded-b-[25px]':'rounded-[25px]')">
+          <div :class="`bg-orange-300 transition-all duration-200 `+(show_menu?'rounded-b-[25px]':'rounded-[25px]')">
             <div :class="`ainput__wrapper`">
               <div class="el-textarea el-input--large _input flex-1">
                 <textarea
@@ -275,6 +278,22 @@ const contentRendered = ref([])
 const animateMode = ref(false)
 const throttledRender = (e)=>{
   return md.render(e)
+}
+function renderStatus(status) {
+  switch (status) {
+    case 'analysising':
+      return '分析问题';
+    case 'thinking':
+      return '思考问题';
+    case 'try':
+      return '尝试回复';
+    case 'summary':
+      return '批判总结';
+    case 'reply':
+      return '综合回复';
+    default:
+      return '';
+  }
 }
 function copyCode(codeId) {
   const code = window['czig_code_html' + codeId];
@@ -466,17 +485,28 @@ const stop = async (param)=>{
 async function deepMind(targetValue, targetTime, index) {
   if(useAnalysis.value) {
     analysis_line.value = 'line-1';
-    await Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index}));
-    let _analysis = chatList.value[index - 1].analysis,_analysis2;
-    chatList.value[index - 1].analysis += '\n\n'; 
-    await Auth.deepMind_Try(createOptions({targetValue,targetTime,index},[_analysis],(e)=>{
-      _analysis2 += e;
-    }));
-    chatList.value[index - 1].analysis += '\n\n'; 
-    await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index},[_analysis,_analysis2]));
-    await initiateChatWithAI({targetValue,targetTime,index});
+    let _analysis2;
+    chatList.value[index - 1].status = 'analysising';
+    chatList.value[index - 1].status = 'thinking';
+    await Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index},[],(e)=>{}));
+    Auth.chatTaskThread.add(async () => {
+      let _analysis = chatList.value[index - 1].analysis;
+      chatList.value[index - 1].status = 'try';
+      await Auth.deepMind_Try(createOptions({targetValue,targetTime,index},[_analysis],(e)=>{
+        _analysis2 += e;
+      }));
+      chatList.value[index - 1].analysis += '\n\n'; 
+      chatList.value[index - 1].status = 'summary';
+      await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index},[_analysis,_analysis2]));
+      chatList.value[index - 1].status = 'reply';
+      await initiateChatWithAI({targetValue,targetTime,index});
+      chatList.value[index - 1].status = 'analysised';
+    })
+   
   } else {
+    chatList.value[index - 1].status = 'analysising';
     await initiateChatWithAI({targetValue,targetTime,index});
+    chatList.value[index - 1].status = 'analysised';
   }
 }
 function createOptions(opt,analysis,fn=()=>{}) {
@@ -487,25 +517,49 @@ function createOptions(opt,analysis,fn=()=>{}) {
     analysis: analysis,
     stopStatus,
     line: analysis_line.value,
-    onmessage: (source, model) => {
+    onmessage: async (source, model) => {
       showStop.value = true;
       const decode = JSON.parse(source);
       let tmp = '';
-      switch (model) {
-        case 'line-1':
-          tmp = decode.candidates[0].content.parts[0].text;
-          tokensCount.value = decode.usageMetadata.totalTokenCount;
-          break;
-        case 'line-2':
-          tmp = decode.choices[0].delta?.content;
-          break;
-        case 'line-3':
-          tmp = decode.response;
-          break;
+      try{
+        switch (model) {
+          case 'line-1':
+            tmp = decode.candidates[0].content.parts[0].text;
+            tokensCount.value = decode.usageMetadata.totalTokenCount;
+            if (decode.candidates[0].content.parts[0].functionCall) {
+              Auth.chatTaskThread.add(async () => {
+                await Auth.functionCall(decode.candidates[0].content.parts[0].functionCall, {
+                  alert: (obj) => {
+                    ElMessageBox.alert(md.render(obj.content), obj.title || '任务执行结果', {
+                      confirmButtonText: '确定',
+                      showCancelButton: false,
+                      dangerouslyUseHTMLString: true,
+                      showClose: false,
+                    });
+                  },
+                  renderHtml: (html) => {
+                    chatList.value[opt.index - 1].analysis += html;
+                    fn(html);
+                  },
+                });
+              });
+              tmp = '\n\n';
+            }
+            break;
+          case 'line-2':
+            tmp = decode.choices[0].delta?.content;
+            break;
+          case 'line-3':
+            tmp = decode.response;
+            break;
+        }
+        throttledScrollToBottom();
+        chatList.value[opt.index - 1].analysis += tmp;
+        fn(tmp);
+      }catch(e){
+
       }
-      throttledScrollToBottom();
-      chatList.value[opt.index - 1].analysis += tmp;
-      fn(tmp);
+      
     },
     onclose: async (source) => {
       if (stopStatus.value == true) {
@@ -599,45 +653,49 @@ function handleOnMessage(source, model, opt) {
   showStop.value = true;
   const decode = JSON.parse(source);
   let tmp = '';
-  switch (model) {
-    case 'line-1':
-      if (!decode.candidates[0].content.parts) {
-        break;
-      }
-      tmp = decode.candidates[0].content.parts[0].text;
-      if (tmp) {
-        tmp = tmp.replace(/\`\`\`lingben_bash[\s\S]*?\`\`\`/, '');
-        tokensCount2.value = decode.usageMetadata.totalTokenCount;
-      } else if (decode.candidates[0].content.parts[0].functionCall) {
-        Auth.chatTaskThread.add(async () => {
-          await Auth.functionCall(decode.candidates[0].content.parts[0].functionCall, {
-            alert: (obj) => {
-              ElMessageBox.alert(md.render(obj.content), obj.title || '任务执行结果', {
-                confirmButtonText: '确定',
-                showCancelButton: false,
-                dangerouslyUseHTMLString: true,
-                showClose: false,
-              });
-            },
-            renderHtml: (html) => {
-              chatList.value[opt.index].content += html;
-            },
+  try{
+    switch (model) {
+      case 'line-1':
+        if (!decode.candidates[0].content.parts) {
+          break;
+        }
+        tmp = decode.candidates[0].content.parts[0].text;
+        if (tmp) {
+          tmp = tmp.replace(/\`\`\`lingben_bash[\s\S]*?\`\`\`/, '');
+          tokensCount2.value = decode.usageMetadata.totalTokenCount;
+        } else if (decode.candidates[0].content.parts[0].functionCall) {
+          Auth.chatTaskThread.add(async () => {
+            await Auth.functionCall(decode.candidates[0].content.parts[0].functionCall, {
+              alert: (obj) => {
+                ElMessageBox.alert(md.render(obj.content), obj.title || '任务执行结果', {
+                  confirmButtonText: '确定',
+                  showCancelButton: false,
+                  dangerouslyUseHTMLString: true,
+                  showClose: false,
+                });
+              },
+              renderHtml: (html) => {
+                chatList.value[opt.index].content += html;
+              },
+            });
           });
-        });
-        tmp = '\n\n';
-      }
-      if(!animateMode.value) animateMode.value = true;
-      contentRendered.value.push({content:tmp,fresh:true});
-      break;
-    case 'line-2':
-      tmp = decode.choices[0].delta?.content;
-      break;
-    case 'line-3':
-      tmp = decode.choices[0].delta?.content;
-      break;
-    case 'line-4':
-      tmp = decode.response;
-      break;
+          tmp = '\n\n';
+        }
+        if(!animateMode.value) animateMode.value = true;
+        contentRendered.value.push({content:tmp,fresh:true});
+        break;
+      case 'line-2':
+        tmp = decode.choices[0].delta?.content;
+        break;
+      case 'line-3':
+        tmp = decode.choices[0].delta?.content;
+        break;
+      case 'line-4':
+        tmp = decode.response;
+        break;
+    }
+  }catch(e){
+    ElMessage.warning('出现错误');
   }
   chatList.value[opt.index].content += tmp;
   // throttledScrollToBottom();
@@ -694,8 +752,9 @@ const send = async (param)=>{
   chatList.value.push({
     role: "user",
     content: input.value.trim(),
-    status:'analysis',
+    status:'sending',
     analysis:"",
+    show_thought:true,
     sendTime:targetTime,
     formatSendTime
   })
@@ -772,6 +831,7 @@ onActivated(async ()=>{
       let tmp = 0;
       chatList.value = (await Auth.getAIChatList({sessionID:id})).content.map((e,i)=>{
         e.status = e.analysis?'analysised':'no_analysis';
+        e.show_thought = false;
         return e
       });
       chatList.value.forEach((e,i)=>{
