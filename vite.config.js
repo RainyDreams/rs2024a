@@ -25,8 +25,8 @@ export default defineConfig((mode) => {
           {
             name: 'highlight.js',
             var: 'hljs',
-            path: 'https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/lib/highlight.min.js',
-            css: 'https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/default.min.css'
+            path: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js',
+            css: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css'
           },
           {
             name: 'katex',
