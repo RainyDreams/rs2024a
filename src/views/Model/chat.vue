@@ -261,6 +261,18 @@
           <div class="relative w-full">
             <div :class="`flex w-full px-3 bg-orange-300 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
               <touch-ripple
+                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border border-blue-800 text-blue-800 `"
+                :style="{ clipPath: 'none', backgroundColor: '#4e81fc' }"
+                :color="'#4e81fc'"
+                :opacity="0.4"
+                transition="ease-out"
+                :duration="300"
+                :keep-last-ripple="true"
+                @click="router.push('/')"
+              >
+                <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
+              </touch-ripple>
+              <touch-ripple
                 :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-green-700':'text-green-700 border-green-700')"
                 :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
                 :color="useAnalysis?'#fff':'#1a842f'"
@@ -364,7 +376,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
