@@ -15,7 +15,7 @@
                       <touch-ripple
                         :class="`flex touch-ripple h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full px-2 py-1 overflow-hidden select-none border `"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                        :color="'#6491fc'"
+                        :color="'#4e81fc'"
                         :opacity="0.4"
                         transition="ease-out"
                         :duration="300"
@@ -24,7 +24,7 @@
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                         <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                        <left  theme="outline" size="18" fill="#6491fc"/>
+                        <left  theme="outline" size="18" fill="#4e81fc"/>
                         <!-- </div> -->
                       </touch-ripple>
                     <!-- </router-link> -->
@@ -32,7 +32,7 @@
                       <touch-ripple
                         :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full px-2 py-1 overflow-hidden select-none border `"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                        :color="'#6491fc'"
+                        :color="'#4e81fc'"
                         :opacity="0.4"
                         transition="ease-out"
                         :duration="300"
@@ -40,7 +40,7 @@
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                         <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                        <home  theme="outline" size="18" fill="#6491fc"/>
+                        <home  theme="outline" size="18" fill="#4e81fc"/>
                         <!-- </div> -->
                       </touch-ripple>
                     </router-link>
@@ -48,7 +48,7 @@
                       <touch-ripple
                         :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                        :color="'#6491fc'"
+                        :color="'#4e81fc'"
                         :opacity="0.4"
                         transition="ease-out"
                         :duration="300"
@@ -56,7 +56,7 @@
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                         <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                        <SmartOptimization theme="outline" class="mr-1" size="18" fill="#6491fc"/>
+                        <SmartOptimization theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
                         <div class="text-base leading-none" style="color:rgb(18,30,60);">模型库</div>
                         <!-- </div> -->
                       </touch-ripple>
@@ -65,7 +65,7 @@
                       <touch-ripple
                         :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                        :color="'#6491fc'"
+                        :color="'#4e81fc'"
                         :opacity="0.4"
                         transition="ease-out"
                         :duration="300"
@@ -73,7 +73,7 @@
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                         <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                        <history  theme="outline" class="mr-1" size="18" fill="#6491fc"/>
+                        <history  theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
                         <div class="text-base leading-none" style="color:rgb(18,30,60);">聊天历史</div>
                         <!-- </div> -->
                       </touch-ripple>
@@ -239,7 +239,7 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="relative w-full">
-            <div :class="`flex flex-col w-full px-3 bg-orange-300 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
+            <div :class="`flex w-full px-3 bg-orange-300 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
               <touch-ripple
                 :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-green-700':'text-green-700 border-green-700')"
                 :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
@@ -881,7 +881,7 @@ const send = async (param)=>{
     && targetValue.length <= 8
   ) {
     useInternet.value=true;
-  } else if (useInternet.indexOf('联网')>-1 || useInternet.indexOf('搜索')>-1) {
+  } else if (targetValue.indexOf('联网')>-1 || targetValue.indexOf('搜索')>-1) {
     useInternet.value=true;
   }
   // onChange();
