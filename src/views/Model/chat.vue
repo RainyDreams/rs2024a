@@ -891,6 +891,7 @@ async function handleOnClose(error,model,opt) {
 }
 
 const send = async (param)=>{
+  input.value = askRef.value.value
   if(input.value.trim() == '') {
     ElMessage.warning("请输入内容")
     return;
