@@ -582,7 +582,8 @@ let Auth = {
     return this.basicAuth('/api/ai/set_chat_response', JSON.stringify({
       sessionID: param.sessionID,
       content: param.content,
-      tokens:param.tokens
+      tokens:param.tokens,
+      title:param.title
     }));
   },
   setAIChatResponse_test: async function setAIChatResponse(param){

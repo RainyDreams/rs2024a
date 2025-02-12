@@ -458,6 +458,7 @@ const show_menu = ref(true)
 const showStop = ref(false);
 const tokensCount = ref(0)
 const tokensCount2 = ref(0)
+const title = ref('无标题');
 const model_info = ref({
   img:'/logo_sm.webp',
   name:'默认模型',
@@ -537,7 +538,11 @@ const handleEnter = async (event) => {
 const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
   // 丝滑滑动到最底部
-  scrollElement.scrollTop = scrollElement.scrollHeight;
+  // scrollElement.scrollTop = scrollElement.scrollHeight;
+  scrollElement.scrollTo({
+    top: scrollElement.scrollHeight,
+    behavior: 'smooth'
+  });
 };
 
 const stop = async (param)=>{
@@ -769,39 +774,44 @@ function handleOnMessage(source, model, opt) {
 }
 
 
-function handleOnClose(error,model,opt) {
+async function handleOnClose(error,model,opt) {
   stopStatus.value = false;
   showStop.value = false;
   loading.value = false;
   useFunction.value = false;
+  placeholder.value = '还有什么想聊的';
+  askRef.value.focus();
   if (!chatList.value[opt.index].content) {
     if (!error) {
       chatList.value[opt.index].content += '[回答已终止].';
     }
   } else {
     if (!error) {
-      Auth.chatTaskThread.add(async () => {
-        // throttledScrollToBottom();
-        await Auth.setAIChatResponse({
-          sessionID: sessionID.value,
-          content: chatList.value[opt.index].content,
-          tokens: tokensCount.value + tokensCount2.value,
-        });
-      });
       if(model == 'line-1'){
         // animateMode.value = false;
         setTimeout(()=>{
           animateMode.value = false;
           contentRendered.value=[]
-        },100)
+        },10)
       }
+      // Auth.chatTaskThread.add(async () => {
+        // throttledScrollToBottom();
+        const res = await Auth.setAIChatResponse({
+          sessionID: sessionID.value,
+          content: chatList.value[opt.index].content,
+          tokens: tokensCount.value + tokensCount2.value,
+          title: title.value,
+        });
+        title.value = res.title;
+        emitter.emit('updateTitle', res.title);
+      // });
+      
     }
   }
   // throttledScrollToBottom();
   // scrollToBottom()
   // chatList.value[opt.index - 1].status = 'analysised';
-  placeholder.value = '还有什么想聊的';
-  askRef.value.focus();
+  
 }
 
 const send = async (param)=>{
@@ -863,7 +873,7 @@ const send = async (param)=>{
 
 
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
-const throttledScrollToBottom = throttle(scrollToBottom, 100); // 调整 300 为所需的毫秒数
+const throttledScrollToBottom = throttle(scrollToBottom, 1000); // 调整 300 为所需的毫秒数
 onMounted(async ()=>{
   let id = route.params.id;
   console.log('active'+id)

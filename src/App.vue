@@ -265,6 +265,9 @@ NProgress.configure({
   trickleSpeed: 200, 
   parent: 'html',
 });
+emitter.on('updateTitle',(e)=>{
+  document.title = e + ' - 零本智协';
+})
 router.beforeEach((to, from, next) => {
   NProgress.start();
   if(to.meta.title){
