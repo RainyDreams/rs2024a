@@ -572,7 +572,7 @@ async function deepMind(targetValue, targetTime, index) {
     chatList.value[index - 1].status = 'thinking';
     await Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index},[],(e)=>{}));
   }
-  if (useAnalysis){
+  if (useAnalysis.value){
     let _analysis2;
     Auth.chatTaskThread.add(async () => {
       let _analysis = chatList.value[index - 1].analysis;
@@ -588,21 +588,23 @@ async function deepMind(targetValue, targetTime, index) {
       chatList.value[index - 1].status = 'analysised';
     })
   }
-  const id1 = setTimeout(() => {
-  if(chatList.value[index - 1].status != 'analysised'){
-      chatList.value[index - 1].status = 'analysising';
-    }
-  }, 2000);
-  chatList.value[index - 1].status = 'reply';
-  const id2 = setTimeout(() => {
-    clearTimeout(id1);
+  Auth.chatTaskThread.add(async () => {
+    const id1 = setTimeout(() => {
     if(chatList.value[index - 1].status != 'analysised'){
-      chatList.value[index - 1].status = 'wait';
-    }
-  }, 7500);
-  await initiateChatWithAI({targetValue,targetTime,index});
-  clearTimeout(id2);
-  chatList.value[index - 1].status = 'analysised';
+        chatList.value[index - 1].status = 'analysising';
+      }
+    }, 2000);
+    chatList.value[index - 1].status = 'reply';
+    const id2 = setTimeout(() => {
+      clearTimeout(id1);
+      if(chatList.value[index - 1].status != 'analysised'){
+        chatList.value[index - 1].status = 'wait';
+      }
+    }, 7500);
+    await initiateChatWithAI({targetValue,targetTime,index});
+    clearTimeout(id2);
+    chatList.value[index - 1].status = 'analysised';
+  })
 }
 function createOptions(opt,analysis,fn=()=>{}) {
   return {
