@@ -129,7 +129,7 @@ const sideCollapsed = ref(false);
 //检测暗色模式
 if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
   if(!sessionStorage.getItem('darkMode') || sessionStorage.getItem('darkMode')=='dark'){
-    isDarkMode.value=1;
+    // isDarkMode.value=1;
   }
 }
 //缩小侧边栏
