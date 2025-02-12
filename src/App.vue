@@ -117,8 +117,8 @@ import Cookies from 'js-cookie';
 import 'nprogress/nprogress.css';
 import { configList,rightList } from './utils/config';
 import Status from './views/Model/status.vue';
-
 const router = useRouter();
+Auth.router = useRouter();
 const route = useRoute();
 const TabBarHide = ref(false);
 const SideBarHide = ref(false);

@@ -7,13 +7,13 @@
             <el-watermark :font="{color:'rgba(0, 0, 0, .01)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
-                <div class="system">
+                <div class="system mb-3 md:mb-4 lg:mb-5">
                   <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar> -->
                   <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
                     <!-- <el-skeleton :rows="3" animated v-show="welcome_loading" class="bg-white p-5 rounded-lg"></el-skeleton> -->
                     <!-- <router-link  class="h-full"> -->
                       <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full px-2 py-1 overflow-hidden select-none border `"
+                        :class="`flex touch-ripple h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full pr-2 pl-3 py-1 overflow-hidden select-none border `"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                         :color="'#4e81fc'"
                         :opacity="0.4"
@@ -30,7 +30,7 @@
                     <!-- </router-link> -->
                     <router-link to="/home" class="h-full">
                       <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full px-2 py-1 overflow-hidden select-none border `"
+                        :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full pl-2 pr-3 py-1 overflow-hidden select-none border `"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                         :color="'#4e81fc'"
                         :opacity="0.4"
@@ -108,8 +108,28 @@
                         <div class="text-base leading-none">信息</div>
                       <!-- </div> -->
                     </touch-ripple>
+                    <router-link to="/login" class="h-full" v-if="!loginStatus" >
+                      <touch-ripple
+                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
+                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
+                        :color="'#4e81fc'"
+                        :opacity="0.4"
+                        transition="ease-out"
+                        :duration="300"
+                        :keep-last-ripple="true"
+                      >
+                        <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                        <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                        <avatar theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
+                        <div class="text-base leading-none" style="color:rgb(18,30,60);">登录</div>
+                        <!-- </div> -->
+                      </touch-ripple>
+                    </router-link>
                     <!-- <div v-show="!welcome_loading" class="text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(welcome)"></div> -->
                     <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
+                  </div>
+                  <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
+                    <div class="text-sm text-green-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
                   </div>
                   <div v-show="showModelDetail">
                     <div class="min-w-fit w-64 z-10 flex flex-col mt-2 top-10 left-0 bg-white border rounded-xl p-3 duration-100">
@@ -250,7 +270,7 @@
                 :keep-last-ripple="true"
                 @click="useAnalysis=!useAnalysis"
               >
-                <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">联网思考</span></span>
+                <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">深入思考</span></span>
               </touch-ripple>
               <touch-ripple
                 :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-white border-green-700':'text-green-700 border-green-700')"
@@ -279,49 +299,50 @@
             </div>
           </div>
           <div :class="`bg-orange-300 transition-all duration-200 `+(show_menu?'rounded-b-[25px]':'rounded-[25px]')">
-            <div :class="`ainput__wrapper`">
-              <div class="el-textarea el-input--large _input flex-1">
-                <textarea
-                  class="el-textarea__inner"
+            <div :class="`ainput__wrapper items-stretch`">
+              <div class="textarea _input flex-1 leading-none h-fit"><textarea
+                  id="input_chat_ai"
+                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-80 min-h-8"
                   ref="askRef"
-                  v-model="input" 
                   type="textarea"
                   resize="none" 
                   size="large" 
                   autofocus 
-                  :maxlength="2000"
+                  :maxlength="2047"
+                  autocomplete="off"
                   @focus="onFocus"
                   :placeholder="placeholder" 
                   @keydown.enter="handleEnter"
                   style="resize: none; min-height: 30px; height: 30px;"
-                >
-                </textarea>
-              </div>
+                ></textarea></div>
               <!-- <el-input ></el-input> -->
-              <div class="_number ml-2">
-                <!-- <span>{{ now }} / 1000</span> -->
-                <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
-                <!-- <application-menu theme="outline" size="24" fill="#333"/> -->
-                <touch-ripple
-                  :class="`touch-ripple flex items-center justify-center h-[32px] w-[32px]  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white':'text-green-900')"
-                  :style="{ clipPath: 'none', backgroundColor: (show_menu)?'#006b2c':'#fff' }"
-                  :color="(show_menu)?'#fff':'#006b2c'"
-                  :opacity="0.4"
-                  transition="ease-out"
-                  :duration="300"
-                  :keep-last-ripple="true"
-                  @click="show_menu=!show_menu"
-                >
-                  <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `+(show_menu?'opacity-100':'opacity-70')" theme="outline" size="18" fill="currentColor"/>
-                </touch-ripple>
-                <el-button @click="send()" :loading="loading" v-show="!showStop" type="primary"
-                  color="#006b2c" class="ml-1 rounded-full w-8 h-8" ><up v-show="!loading"  theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/></el-button>
-                <el-button @click="stop()" v-show="loading && !welcome_loading && showStop" type="primary"
-                  color="#006b2c" class="ml-1 rounded-full w-8 h-8" >
-                  <!-- 终止 -->
-                  <!-- <forbid theme="outline" size="24" fill="#555" :strokeWidth="3" strokeLinejoin="bevel"/> -->
-                  <PauseOne theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/>
-                </el-button>
+              <div class="flex flex-col justify-between items-center">
+                <span class="text-xs text-right opacity-50 text-slate-800 py-2" v-show="(now>200)">{{ now }}</span>
+                <div class="_number ml-2 flex-1">
+                  <!--  -->
+                  <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
+                  <!-- <application-menu theme="outline" size="24" fill="#333"/> -->
+                  <touch-ripple
+                    :class="`touch-ripple flex  items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white':'text-green-900')"
+                    :style="{ clipPath: 'none', backgroundColor: (show_menu)?'#006b2c':'#fff' }"
+                    :color="(show_menu)?'#fff':'#006b2c'"
+                    :opacity="0.4"
+                    transition="ease-out"
+                    :duration="300"
+                    :keep-last-ripple="true"
+                    @click="show_menu=!show_menu"
+                  >
+                    <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `+(show_menu?'opacity-100':'opacity-70')" theme="outline" size="18" fill="currentColor"/>
+                  </touch-ripple>
+                  <el-button @click="send()" :loading="loading" v-show="!showStop" type="primary"
+                    color="#006b2c" class="ml-1 rounded-full w-8 h-8" ><up v-show="!loading"  theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/></el-button>
+                  <el-button @click="stop()" v-show="loading && !welcome_loading && showStop" type="primary"
+                    color="#006b2c" class="ml-1 rounded-full w-8 h-8" >
+                    <!-- 终止 -->
+                    <!-- <forbid theme="outline" size="24" fill="#555" :strokeWidth="3" strokeLinejoin="bevel"/> -->
+                    <PauseOne theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/>
+                  </el-button>
+                </div>
               </div>
             </div>
           </div>
@@ -338,12 +359,12 @@ import math from 'markdown-it-texmath';
 import Katex from 'katex';
 import hljs from 'highlight.js';
 // import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
-import { onActivated, onMounted, ref,reactive, watch } from "vue"
+import { onActivated, onMounted, ref,reactive, watch, nextTick } from "vue"
 import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -460,10 +481,10 @@ const router = useRouter()
 const chatList = ref([]);
 const input = ref("");
 const askRef = ref();
-const placeholder = ref("来和我聊天吧，你可以试着说 你好👋");
+const placeholder = ref("你好👋");
 const loading = ref(true);
 const ainput = ref()
-// const now = ref(0)
+const now = ref(0)
 const fingerprint = ref("")
 const welcome = ref('')
 const welcome_loading = ref(true)
@@ -486,21 +507,21 @@ const model_info = ref({
   },
   createuser:''
 })
-const options_analysis = [
-  {value: 'line-1', label: '分析 Gemini-002'},
-  {value: 'line-2', label: '分析 Doubao-32k'},
-  {value: 'line-3', label: '分析 Qwen-8b'},
-];
-const options_chat = [
-  {value: 'line-1', label: '回复 Gemini-1.5-flash-001'},
-  {value: 'line-2', label: '回复 Doubao-32k'},
-  {value: 'line-3', label: '回复 X AI'},
-];
-const options_internet = [
-  {value: 'AUTO', label: '自动联网'},
-  {value: 'DISABLE', label: '禁止联网'},
-  {value: 'ENABLE', label: '始终联网'},
-];
+// const options_analysis = [
+//   {value: 'line-1', label: '分析 Gemini-002'},
+//   {value: 'line-2', label: '分析 Doubao-32k'},
+//   {value: 'line-3', label: '分析 Qwen-8b'},
+// ];
+// const options_chat = [
+//   {value: 'line-1', label: '回复 Gemini-1.5-flash-001'},
+//   {value: 'line-2', label: '回复 Doubao-32k'},
+//   {value: 'line-3', label: '回复 X AI'},
+// ];
+// const options_internet = [
+//   {value: 'AUTO', label: '自动联网'},
+//   {value: 'DISABLE', label: '禁止联网'},
+//   {value: 'ENABLE', label: '始终联网'},
+// ];
 const analysis_line = ref('line-1')
 const chat_line = ref('line-1')
 
@@ -522,23 +543,29 @@ function copyHtml(i){
     ElMessage.error("复制失败")
   })
 }
-function updateInputHeight() {
-  const ask = askRef.value;
-  if (!ask) return;
-  let tmp = ask.style.height+'';
-  ask.style.height = '0';
-  let newHeight = ask.scrollHeight;
-  // console.log(newHeight,tmp)
-  if (newHeight > 200) newHeight = parseInt(tmp)
-  ask.style.height = newHeight+'px';
-}
-const throttledUpdateInputHeight = throttle(updateInputHeight, 100);
+// function updateInputHeight() {
+//   const ask = askRef.value;
+//   if (!ask) return;
+//   let tmp = ask.style.height+'';
+//   ask.style.height = '0';
+//   let newHeight = ask.scrollHeight;
+//   // console.log(newHeight,tmp)
+//   if (newHeight > 200) newHeight = parseInt(tmp)
+//   ask.style.height = newHeight+'px';
+// }
+// const throttledUpdateInputHeight = throttle(updateInputHeight, 100);
 
-watch(input, () => {
-  throttledUpdateInputHeight();
-});
+// watch(input, () => {
+//   throttledUpdateInputHeight();
+// });
+function isMobile() {
+  const userAgent = navigator.userAgent;
+  const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+  return mobileRegex.test(userAgent);
+}
+const mobile = isMobile();
 const handleEnter = async (event) => {
-  if (event.shiftKey) {
+  if (event.shiftKey || mobile) {
     input.value = askRef.value.value
     return;
   } else if (event.key === 'Enter') {
@@ -549,7 +576,29 @@ const handleEnter = async (event) => {
     }
   }
 }
-
+const throttledGetLength = throttle((i)=>{
+  const textarea = document.getElementById('input_chat_ai');
+  now.value = textarea.value.length;
+}, 100);
+nextTick(()=>{
+  const textarea = document.getElementById('input_chat_ai');
+  // console.log(textarea)
+  textarea.style.height = '32px';
+  const scrollHeight = textarea.scrollHeight;
+  textarea.style.height = scrollHeight + 'px';
+  textarea.addEventListener('input', function () {
+    this.style.height = '32px';
+    const scrollHeight = this.scrollHeight;
+    this.style.height = scrollHeight + 'px';
+    throttledGetLength(textarea.value.length)
+  });
+})
+// textarea.addEventListener('input', function () {
+//   this.style.height = 'auto';
+//   const scrollHeight = this.scrollHeight;
+//   this.style.height = scrollHeight + 'px';
+// });
+// textarea.dispatchEvent(new Event('input'));
 const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
   // 丝滑滑动到最底部
@@ -896,10 +945,16 @@ const send = async (param)=>{
 
 
 
-
+const loginStatus = ref(false);
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
 const throttledScrollToBottom = throttle(scrollToBottom, 1000); // 调整 300 为所需的毫秒数
 onMounted(async ()=>{
+  const info = sessionStorage.getItem('userInfo');
+  if(info){
+    if(JSON.parse(info).avatar){
+      loginStatus.value = true;
+    }
+  }
   let id = route.params.id;
   console.log('active'+id)
   // } else {

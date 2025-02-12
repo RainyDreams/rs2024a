@@ -164,8 +164,15 @@ let Auth = {
           return { ...data,status: "sus", content: await success(data), };
         } else if (data.status === "error" && data.code === 4) {
           let a = await this.getPrtoken();
+          // console.error('401',url)
+          // throw new Error('401',url)
           if(a.status == 'notExist'){
-            window.location.href = ('/login-needed?url='+encodeURIComponent(window.location.pathname))
+            if(Auth.router){
+              Auth.router.push('/login-needed?url='+encodeURIComponent(window.location.pathname))
+            } else {
+              window.location.href = ('/login-needed?url='+encodeURIComponent(window.location.pathname))
+
+            }
           } else{
             return await this.basicAuth(url, body, { success, failed });
           }
