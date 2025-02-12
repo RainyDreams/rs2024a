@@ -268,7 +268,7 @@
                 transition="ease-out"
                 :duration="300"
                 :keep-last-ripple="true"
-                @click="useAnalysis=!useAnalysis"
+                @click="analysisBtn"
               >
                 <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">深入思考</span></span>
               </touch-ripple>
@@ -394,6 +394,9 @@ function renderStatus(status) {
     default:
       return '';
   }
+}
+function analysisBtn() {
+  useAnalysis.value=!useAnalysis.value;if(!useInternet.value){useInternet.value=true}
 }
 function copyCode(codeId) {
   const code = window['czig_code_html' + codeId];
@@ -918,6 +921,7 @@ const send = async (param)=>{
   })
   const targetValue = input.value
   input.value = '';
+  askRef.value.value = '';
   setTimeout(()=>{
     throttledScrollToBottom()
     askRef.value.style.height = 0 + 'px';
