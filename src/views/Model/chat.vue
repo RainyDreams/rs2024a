@@ -261,8 +261,8 @@
           <div class="relative w-full">
             <div :class="`flex w-full px-3 bg-orange-300 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
               <touch-ripple
-                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border border-blue-800 text-blue-800 `"
-                :style="{ clipPath: 'none', backgroundColor: '#4e81fc' }"
+                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-2 py-2 overflow-hidden select-none border border-blue-800 text-blue-800 `"
+                :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#4e81fc'"
                 :opacity="0.4"
                 transition="ease-out"
