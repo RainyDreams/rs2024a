@@ -250,7 +250,19 @@
                 :keep-last-ripple="true"
                 @click="useAnalysis=!useAnalysis"
               >
-                <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">深入思考</span></span>
+                <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">联网思考</span></span>
+              </touch-ripple>
+              <touch-ripple
+                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-white border-green-700':'text-green-700 border-green-700')"
+                :style="{ clipPath: 'none', backgroundColor: useInternet?'#1a842f':'#fff' }"
+                :color="useInternet?'#fff':'#1a842f'"
+                :opacity="0.4"
+                transition="ease-out"
+                :duration="300"
+                :keep-last-ripple="true"
+                @click="useInternet=!useInternet"
+              >
+                <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">联网搜索</span></span>
               </touch-ripple>
               <!-- <touch-ripple
                 :class="`touch-ripple w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
@@ -331,7 +343,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu,History, Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,AddMode,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -344,6 +356,10 @@ const throttledRender = (e)=>{
 }
 function renderStatus(status) {
   switch (status) {
+    case 'sending':
+      return '发送中';
+    case 'wait':
+      return '即将完成';
     case 'analysising':
       return '分析问题';
     case 'thinking':
@@ -454,6 +470,7 @@ const welcome_loading = ref(true)
 const sessionID = ref()
 const stopStatus = ref(false)
 const useAnalysis = ref(false);
+const useInternet = ref(false);
 const show_menu = ref(true)
 const showStop = ref(false);
 const tokensCount = ref(0)
@@ -486,8 +503,6 @@ const options_internet = [
 ];
 const analysis_line = ref('line-1')
 const chat_line = ref('line-1')
-const useInternet = ref('AUTO');
-const useFunction = ref(false);
 
 const onFocus = () => {
   throttledScrollToBottom();
@@ -552,12 +567,13 @@ const stop = async (param)=>{
 
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
-  if(useAnalysis.value) {
+  if(useInternet.value) {
     analysis_line.value = 'line-1';
-    let _analysis2;
-    chatList.value[index - 1].status = 'analysising';
     chatList.value[index - 1].status = 'thinking';
     await Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index},[],(e)=>{}));
+  }
+  if (useAnalysis){
+    let _analysis2;
     Auth.chatTaskThread.add(async () => {
       let _analysis = chatList.value[index - 1].analysis;
       chatList.value[index - 1].status = 'try';
@@ -567,16 +583,26 @@ async function deepMind(targetValue, targetTime, index) {
       chatList.value[index - 1].analysis += '\n\n'; 
       chatList.value[index - 1].status = 'summary';
       await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index},[_analysis,_analysis2]));
-      chatList.value[index - 1].status = 'reply';
+      chatList.value[index - 1].status = '';
       await initiateChatWithAI({targetValue,targetTime,index});
       chatList.value[index - 1].status = 'analysised';
     })
-   
-  } else {
-    chatList.value[index - 1].status = 'analysising';
-    await initiateChatWithAI({targetValue,targetTime,index});
-    chatList.value[index - 1].status = 'analysised';
   }
+  const id1 = setTimeout(() => {
+  if(chatList.value[index - 1].status != 'analysised'){
+      chatList.value[index - 1].status = 'analysising';
+    }
+  }, 2000);
+  chatList.value[index - 1].status = 'reply';
+  const id2 = setTimeout(() => {
+    clearTimeout(id1);
+    if(chatList.value[index - 1].status != 'analysised'){
+      chatList.value[index - 1].status = 'wait';
+    }
+  }, 7500);
+  await initiateChatWithAI({targetValue,targetTime,index});
+  clearTimeout(id2);
+  chatList.value[index - 1].status = 'analysised';
 }
 function createOptions(opt,analysis,fn=()=>{}) {
   return {
@@ -652,10 +678,10 @@ async function initiateChatWithAI(opt) {
     sessionID: sessionID.value,
     content: opt.targetValue,
     vf: fingerprint.value,
-    analysis: useAnalysis.value ? chatList.value[opt.index - 1].analysis : '',
+    analysis: chatList.value[opt.index - 1].analysis || '',
     stopStatus,
     useAnalysis: useAnalysis.value,
-    useFunction: useFunction.value,
+    useInternet: useInternet.value,
     line: chat_line.value,
     time: opt.targetTime,
     onerror: (source, model) => {
@@ -678,10 +704,10 @@ function retryChatWithAI(opt,line='line-3') {
     sessionID: sessionID.value,
     content: opt.targetValue,
     vf: fingerprint.value,
-    analysis: useAnalysis.value ? chatList.value[opt.index - 1].analysis : '',
+    analysis: chatList.value[opt.index - 1].analysis || '',
     stopStatus,
     useAnalysis: useAnalysis.value,
-    useFunction: useFunction.value,
+    useInternet: useInternet.value,
     line: line,
     time: opt.targetTime,
     onerror: (source, model) => {
@@ -778,7 +804,6 @@ async function handleOnClose(error,model,opt) {
   stopStatus.value = false;
   showStop.value = false;
   loading.value = false;
-  useFunction.value = false;
   placeholder.value = '还有什么想聊的';
   askRef.value.focus();
   if (!chatList.value[opt.index].content) {
@@ -855,11 +880,9 @@ const send = async (param)=>{
     && (targetValue.indexOf('新闻')>-1 || targetValue.indexOf('news')>-1 || targetValue.indexOf('weather')>-1)
     && targetValue.length <= 8
   ) {
-    useFunction.value=true;
-  } else if (useInternet.value=='ENABLE'){
-    useFunction.value=true;
-  } else if (targetValue.indexOf('联网回答')>-1){
-    useFunction.value=true;
+    useInternet.value=true;
+  } else if (useInternet.indexOf('联网')>-1 || useInternet.indexOf('搜索')>-1) {
+    useInternet.value=true;
   }
   // onChange();
   const index = chatList.value.length - 1;

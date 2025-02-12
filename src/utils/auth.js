@@ -647,7 +647,7 @@ let Auth = {
     await this.getStreamText('/api/ai/stream', 
       { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf,
         useAnalysis:param.useAnalysis,
-        useFunction:param.useFunction,
+        useInternet:param.useInternet,
         model:param.line,
         time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
         sendTime:param.time
