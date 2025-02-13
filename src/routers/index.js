@@ -28,6 +28,7 @@ import AboutLog from '../views/About/log.vue';
 import ModelSquare from '../views/Model/square.vue';
 // import Model from '../views/Model/model.vue';
 import ModelChat from '../views/Model/chat.vue';
+import ModelQuant from '../views/Model/quant.vue';
 import ModelWelcome from '../views/Model/welcome.vue';
 import ModelTest from '../views/Model/test.vue';
 import ModelAnlysis from '../views/Model/anlysis.vue';
@@ -47,6 +48,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: "/", name: "ModelWelcome", component: ModelWelcome,meta:{title:'OriginSynq AI',hide:['sidebar','tabbar']} },
+    { path: "/quant", name: "ModelQuant", component: ModelQuant,meta:{title:'OriginSynq AI 自然语言量化交易策略',hide:['sidebar','tabbar']} },
     { path: "/chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'OriginSynq AI',hide:['tabbar','sidebar']}},
     { path: "/model/", name: "Model", children:[
       { path: "square", name: "ModelSquare", component: ModelSquare,meta:{title:'OriginSynq AI 智能体广场'} },
