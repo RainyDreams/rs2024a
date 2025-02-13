@@ -314,7 +314,7 @@
             <div :class="`ainput__wrapper items-stretch`">
               <div class="textarea _input flex-1 leading-none h-fit"><textarea
                   id="input_chat_ai"
-                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-80 min-h-8"
+                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-80 min-h-8 transition"
                   ref="askRef"
                   type="textarea"
                   resize="none" 
@@ -656,9 +656,6 @@ async function deepMind(targetValue, targetTime, index) {
       chatList.value[index - 1].analysis += '\n\n'; 
       chatList.value[index - 1].status = 'summary';
       await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index},[_analysis,_analysis2]));
-      chatList.value[index - 1].status = '';
-      await initiateChatWithAI({targetValue,targetTime,index});
-      chatList.value[index - 1].status = 'analysised';
     })
   }
   Auth.chatTaskThread.add(async () => {
@@ -762,7 +759,7 @@ async function initiateChatWithAI(opt) {
     onerror: (source, model) => {
       console.log('错误');
       window.clarity('event', 'CHAT-AI-ERROR');
-      retryChatWithAI(opt);
+      // retryChatWithAI(opt);
     },
     onmessage: (source, model) => {
       handleOnMessage(source, model, opt);
@@ -943,6 +940,7 @@ const send = async (param)=>{
   const targetValue = input.value
   input.value = '';
   askRef.value.value = '';
+  now.value = 0;
   setTimeout(()=>{
     throttledScrollToBottom()
     askRef.value.style.height = 0 + 'px';
