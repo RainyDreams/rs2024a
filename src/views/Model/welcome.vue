@@ -31,10 +31,10 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div :class="` transition-all duration-200 `">
-            <div :class="`ainput__wrapper`">
+            <div :class="`ainput__wrapper cursor-pointer px-3`">
               <div class="textarea el-input--large _input flex-1">
                 <div
-                  class="textarea__inner opacity-40 text-center font-normal"
+                  class="textarea__inner opacity-40 text-center font-normal text-base/8"
                   placeholder="正在连接"
                   type="textarea"
                   resize="none" 
@@ -42,9 +42,7 @@
                   autofocus 
                   :maxlength="2000"
                   style="resize: none; min-height: 30px; height: 30px;"
-                >
-                正在连接
-                </div>
+                >正在连接</div>
               </div>
               <!-- <el-input ></el-input> -->
             </div>

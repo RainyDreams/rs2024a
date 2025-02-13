@@ -148,7 +148,7 @@
                   <!-- 欢迎 -->
                   <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
                     <div :class="`chat_welcome mt-14 md:mt-18 2xl:mt-24 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
-                      <h2 class="text-center w-full text-2xl md:text-4xl 2xl:text-5xl font-bold">你好！来聊点什么吧</h2>
+                      <h2 class="text-center w-full text-3xl md:text-4xl xl:text-5xl font-bold">你好！来聊点什么吧</h2>
                     </div>
                   </div>
                 </div>
@@ -408,7 +408,8 @@ function renderStatus(status) {
   }
 }
 function analysisBtn() {
-  useAnalysis.value=!useAnalysis.value;if(!useInternet.value){useInternet.value=true}
+  useAnalysis.value=!useAnalysis.value;
+  if(!useInternet.value && !useAnalysis.value){useInternet.value=true}
 }
 function copyCode(codeId) {
   const code = window['czig_code_html' + codeId];
@@ -634,7 +635,15 @@ async function deepMind(targetValue, targetTime, index) {
   if(useInternet.value) {
     analysis_line.value = 'line-1';
     chatList.value[index - 1].status = 'thinking';
-    await Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index},[],(e)=>{}));
+    //并行运行
+    await Promise.all([
+      Auth.deepMind_Analysis(createOptions({targetValue,targetTime,index},[],(e)=>{})),
+      Auth.functionCall( {"name": "web_search","args": {"keywords": [targetValue]}}, {
+        renderHtml: (html) => {
+          chatList.value[index - 1].analysis += html;
+        },
+      })
+    ]);
   }
   if (useAnalysis.value){
     let _analysis2;
