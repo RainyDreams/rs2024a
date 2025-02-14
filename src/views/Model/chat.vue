@@ -432,13 +432,6 @@ function renderStatus(status) {
       return '';
   }
 }
-//给所有.touch-ripple加上事件绑定
-const touchRipple = document.querySelectorAll('.touch-ripple');
-touchRipple.forEach((el) => {
-  el.addEventListener('mousedown', function (event) {
-    event.preventDefault();
-  });
-});
 function analysisBtn() {
   useAnalysis.value=!useAnalysis.value;
   if(!useInternet.value && useAnalysis.value){useInternet.value=true}
@@ -648,6 +641,12 @@ nextTick(()=>{
   window.textarea2 = textarea;
   textarea.addEventListener('input', function () {
     setInputHeight();
+  });
+  const touchRipple = document.querySelectorAll('.touch-ripple');
+  touchRipple.forEach((el) => {
+    el.addEventListener('mousedown', function (event) {
+      event.preventDefault();
+    });
   });
 })
 // textarea.addEventListener('input', function () {
