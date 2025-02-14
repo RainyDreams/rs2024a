@@ -393,7 +393,7 @@ import hljs from 'highlight.js';
 // import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
 import { onActivated, onMounted, ref,reactive, watch, nextTick } from "vue"
 import Auth from "../../utils/auth";
-import { throttle,functionCallPlugin, getRadomString } from '../../utils/helpers'
+import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
 import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,Fire,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
@@ -564,7 +564,7 @@ const analysis_line = ref('line-1')
 const chat_line = ref('line-1')
 
 const onFocus = () => {
-  throttledScrollToBottom();
+  debouncedScrollToBottom();
 }
 function copyText(text){
   Auth.copyText(text.trim(),()=>{
@@ -687,7 +687,7 @@ async function deepMind(targetValue, targetTime, index) {
         },
       })
     ]);
-    throttledScrollToBottom();
+    debouncedScrollToBottom();
   }
   if (useAnalysis.value){
     let _analysis2;
@@ -764,7 +764,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
             tmp = decode.response;
             break;
         }
-        throttledScrollToBottom();
+        debouncedScrollToBottom();
         chatList.value[opt.index - 1].analysis += tmp;
         fn(tmp);
       }catch(e){
@@ -807,9 +807,10 @@ async function initiateChatWithAI(opt) {
     },
     onmessage: (source, model) => {
       handleOnMessage(source, model, opt);
+      debouncedScrollToBottom();
     },
     onclose: (error,model) => {
-      throttledScrollToBottom();
+      debouncedScrollToBottom();
       handleOnClose(error,model, opt);
     },
   });
@@ -912,7 +913,7 @@ function handleOnMessage(source, model, opt) {
     ElMessage.warning('出现错误');
   }
   chatList.value[opt.index].content += tmp;
-  // throttledScrollToBottom();
+  // debouncedScrollToBottom();
 }
 
 
@@ -936,7 +937,7 @@ async function handleOnClose(error,model,opt) {
         },10)
       }
       // Auth.chatTaskThread.add(async () => {
-        // throttledScrollToBottom();
+        // debouncedScrollToBottom();
         const res = await Auth.setAIChatResponse({
           sessionID: sessionID.value,
           content: chatList.value[opt.index].content,
@@ -945,13 +946,13 @@ async function handleOnClose(error,model,opt) {
         });
         suggestions.value = res.suggestions;
         title.value = res.title;
-        throttledScrollToBottom();
+        debouncedScrollToBottom();
         emitter.emit('updateTitle', res.title);
       // });
       
     }
   }
-  // throttledScrollToBottom();
+  // debouncedScrollToBottom();
   // scrollToBottom()
   // chatList.value[opt.index - 1].status = 'analysised';
   
@@ -989,7 +990,7 @@ const send = async (param)=>{
   now.value = 0;
   suggestions.value = [];
   setTimeout(()=>{
-    throttledScrollToBottom()
+    debouncedScrollToBottom()
     askRef.value.style.height = 0 + 'px';
   },100)
   // askRef.value.style.height = askRef.value.scrollHeight+'px'
@@ -1018,7 +1019,7 @@ const send = async (param)=>{
 
 const loginStatus = ref(false);
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
-const throttledScrollToBottom = throttle(scrollToBottom, 1000); // 调整 300 为所需的毫秒数
+const debouncedScrollToBottom = debounce(scrollToBottom, 1000); // 调整 300 为所需的毫秒数
 onMounted(async ()=>{
   const info = sessionStorage.getItem('userInfo');
   if(info){
