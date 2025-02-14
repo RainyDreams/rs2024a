@@ -353,7 +353,7 @@
                 ></textarea></div>
               <!-- <el-input ></el-input> -->
               <div class="flex flex-col justify-between items-center">
-                <span class="text-xs text-right opacity-50 text-slate-800 py-2" v-show="(now>200)">{{ now }}</span>
+                <span class="text-xs text-right opacity-50 text-slate-800 py-2" v-show="(now>=99)">{{ now }}</span>
                 <div class="_number ml-2 flex-1">
                   <!--  -->
                   <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
