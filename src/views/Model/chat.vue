@@ -430,7 +430,7 @@ function renderStatus(status) {
 }
 function analysisBtn() {
   useAnalysis.value=!useAnalysis.value;
-  if(!useInternet.value && !useAnalysis.value){useInternet.value=true}
+  if(!useInternet.value && useAnalysis.value){useInternet.value=true}
 }
 function copyCode(codeId) {
   const code = window['czig_code_html' + codeId];
@@ -620,7 +620,7 @@ const throttledGetLength = throttle((i)=>{
 }, 100);
 function ask(q){
   askRef.value=q;
-  now.value.q.length;
+  now.value = q.length;
 }
 nextTick(()=>{
   const textarea = document.getElementById('input_chat_ai');
@@ -807,7 +807,7 @@ async function initiateChatWithAI(opt) {
     },
     onmessage: (source, model) => {
       handleOnMessage(source, model, opt);
-      debouncedScrollToBottom();
+      throttledScrollToBottom();
     },
     onclose: (error,model) => {
       debouncedScrollToBottom();
@@ -1019,7 +1019,8 @@ const send = async (param)=>{
 
 const loginStatus = ref(false);
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
-const debouncedScrollToBottom = debounce(scrollToBottom, 1000); // 调整 300 为所需的毫秒数
+const debouncedScrollToBottom = debounce(scrollToBottom, 700); // 调整 300 为所需的毫秒数
+const throttledScrollToBottom = throttle(scrollToBottom, 700); // 调整 300 为所需的毫秒数
 onMounted(async ()=>{
   const info = sessionStorage.getItem('userInfo');
   if(info){
