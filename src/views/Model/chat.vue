@@ -331,10 +331,14 @@
             </div>
           </div>
           <div :class="`bg-orange-300 transition-all duration-200 `+(show_menu?'rounded-b-[25px]':'rounded-[25px]')">
-            <div :class="`ainput__wrapper items-stretch`">
-              <div class="textarea _input flex-1 leading-none h-fit"><textarea
+            <div :class="`ainput__wrapper items-stretch `">
+              <div 
+                class="textarea _input flex-1 leading-none transition-all" 
+                id="input_chat_ai_div"
+                style="height:var(--inputContainerHeight);--inputContainerHeight:32px;">
+                ><textarea
                   id="input_chat_ai"
-                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-80 min-h-8 transition"
+                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-72 md:max-h-80 min-h-8"
                   ref="askRef"
                   type="textarea"
                   resize="none" 
@@ -345,7 +349,7 @@
                   @focus="onFocus"
                   :placeholder="placeholder" 
                   @keydown.enter="handleEnter"
-                  style="resize: none; min-height: 30px; height: 30px;"
+                  style="resize:none;min-height: 32px;height:var(--inputContainerHeight);"
                 ></textarea></div>
               <!-- <el-input ></el-input> -->
               <div class="flex flex-col justify-between items-center">
@@ -614,26 +618,29 @@ const handleEnter = async (event) => {
     }
   }
 }
-const throttledGetLength = throttle((i)=>{
-  const textarea = document.getElementById('input_chat_ai');
-  now.value = textarea.value.length;
-}, 100);
+// const debouncedGetLength = debounce((i)=>{
+//   const textarea = document.getElementById('input_chat_ai');
+// }, 500);
 function ask(q){
   askRef.value.value=q;
   suggestions.value=[];
   send();
 }
-nextTick(()=>{
-  const textarea = document.getElementById('input_chat_ai');
-  // console.log(textarea)
-  textarea.style.height = '32px';
+function setInputHeight(){
+  const textarea = document.getElementById('input_chat_ai')
+  const textareaCssContainer = document.getElementById('input_chat_ai_div')
+  textareaCssContainer.style.setProperty('--inputContainerHeight', '32px');
   const scrollHeight = textarea.scrollHeight;
-  textarea.style.height = scrollHeight + 'px';
+  console.log(scrollHeight);
+  textareaCssContainer.style.setProperty('--inputContainerHeight', scrollHeight+'px');
+  now.value = textarea.value.length;
+}
+const debouncedSetInputHeight = debounce(setInputHeight, 100);
+nextTick(()=>{
+  const textarea = document.getElementById('input_chat_ai')
+  window.textarea2 = textarea;
   textarea.addEventListener('input', function () {
-    this.style.height = '32px';
-    const scrollHeight = this.scrollHeight;
-    this.style.height = scrollHeight + 'px';
-    throttledGetLength(textarea.value.length)
+    debouncedSetInputHeight();
   });
 })
 // textarea.addEventListener('input', function () {
