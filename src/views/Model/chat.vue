@@ -333,7 +333,7 @@
           <div :class="`bg-orange-300 transition-all duration-200 `+(show_menu?'rounded-b-[25px]':'rounded-[25px]')">
             <div :class="`ainput__wrapper items-stretch `">
               <div 
-                class="textarea _input flex-1 leading-none transition-all" 
+                class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8" 
                 id="input_chat_ai_div"
                 style="height:var(--inputContainerHeight);--inputContainerHeight:32px;">
                 ><textarea
