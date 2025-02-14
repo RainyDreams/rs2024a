@@ -640,7 +640,7 @@ nextTick(()=>{
   const textarea = document.getElementById('input_chat_ai')
   window.textarea2 = textarea;
   textarea.addEventListener('input', function () {
-    debouncedSetInputHeight();
+    setInputHeight();
   });
 })
 // textarea.addEventListener('input', function () {
