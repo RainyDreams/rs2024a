@@ -635,7 +635,7 @@ function setInputHeight(){
   textareaCssContainer.style.setProperty('--inputContainerHeight', scrollHeight+'px');
   now.value = textarea.value.length;
 }
-const debouncedSetInputHeight = debounce(setInputHeight, 100);
+const debouncedSetInputHeight = debounce(setInputHeight, 20);
 nextTick(()=>{
   const textarea = document.getElementById('input_chat_ai')
   window.textarea2 = textarea;
