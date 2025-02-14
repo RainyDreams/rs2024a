@@ -264,6 +264,11 @@
                     <!-- </el-watermark> -->
                   </div>
                 </template>
+                <div class="my-4">
+                  <div class="bg-white opacity-85 rounded-lg cursor-pointer hover:bg-orange-300 transition px-3 py-2 text-sm/tight md:text-base/tight my-2" v-for="(item) in suggestions" @click="ask(item)">
+                    {{ item }}
+                  </div>
+                </div>
               </div>
             </el-watermark>
           </div>
@@ -402,6 +407,7 @@ const animateMode = ref(false)
 const throttledRender = (e)=>{
   return md.render(e)
 }
+
 function renderStatus(status) {
   switch (status) {
     case 'sending':
@@ -528,6 +534,7 @@ const showStop = ref(false);
 const tokensCount = ref(0)
 const tokensCount2 = ref(0)
 const title = ref('无标题');
+const suggestions = ref([])
 const model_info = ref({
   img:'/logo_sm.webp',
   name:'默认模型',
@@ -611,6 +618,10 @@ const throttledGetLength = throttle((i)=>{
   const textarea = document.getElementById('input_chat_ai');
   now.value = textarea.value.length;
 }, 100);
+function ask(q){
+  askRef.value=q;
+  now.value.q.length;
+}
 nextTick(()=>{
   const textarea = document.getElementById('input_chat_ai');
   // console.log(textarea)
@@ -676,6 +687,7 @@ async function deepMind(targetValue, targetTime, index) {
         },
       })
     ]);
+    throttledScrollToBottom();
   }
   if (useAnalysis.value){
     let _analysis2;
@@ -931,7 +943,9 @@ async function handleOnClose(error,model,opt) {
           tokens: tokensCount.value + tokensCount2.value,
           title: title.value,
         });
+        suggestions.value = res.suggestions;
         title.value = res.title;
+        throttledScrollToBottom();
         emitter.emit('updateTitle', res.title);
       // });
       
@@ -973,6 +987,7 @@ const send = async (param)=>{
   input.value = '';
   askRef.value.value = '';
   now.value = 0;
+  suggestions.value = [];
   setTimeout(()=>{
     throttledScrollToBottom()
     askRef.value.style.height = 0 + 'px';

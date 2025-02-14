@@ -100,7 +100,7 @@ const defaultFailed = async function (response,code) {
   }
   return { status: 'error', content: response };
 }
-class Scheduler {
+export class Scheduler {
   constructor(max){
     this.max = max;this.count = 0 ;this.queue = new Array();
   }
