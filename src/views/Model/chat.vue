@@ -264,8 +264,8 @@
                     <!-- </el-watermark> -->
                   </div>
                 </template>
-                <div class="my-4">
-                  <div class="bg-white opacity-85 rounded-lg cursor-pointer hover:bg-orange-300 transition px-3 py-2 text-sm/tight md:text-base/tight my-2" v-for="(item) in suggestions" @click="ask(item)">
+                <div class="my-5">
+                  <div class="bg-white opacity-85 rounded-lg cursor-pointer text-black hover:bg-orange-300 transition px-3 py-2 text-sm/tight md:text-base/tight my-3" v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
                 </div>
@@ -619,8 +619,9 @@ const throttledGetLength = throttle((i)=>{
   now.value = textarea.value.length;
 }, 100);
 function ask(q){
-  askRef.value=q;
-  now.value = q.length;
+  askRef.value.value=q;
+  suggestions.value=[];
+  send();
 }
 nextTick(()=>{
   const textarea = document.getElementById('input_chat_ai');
