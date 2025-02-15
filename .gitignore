@@ -27,3 +27,4 @@ dist-ssr
 /ignore
 /package-lock.json
 /stats.html
+/android

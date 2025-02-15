@@ -20,6 +20,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/android": "^7.0.1",
+    "@capacitor/cli": "^7.0.1",
+    "@capacitor/core": "^7.0.1",
     "@fingerprintjs/fingerprintjs": "^4.4.3",
     "@icon-park/vue-next": "^1.4.2",
     "@vitejs/plugin-legacy": "^5.4.1",

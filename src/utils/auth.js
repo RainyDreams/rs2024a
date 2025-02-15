@@ -17,7 +17,7 @@ import dayjs, { Dayjs } from "dayjs";
 // import { use } from "echarts/types/src/extension.js";
 const router = useRouter()
 const route = useRoute()
-const BASICURL = ''
+const BASICURL = 'https://lb.chiziingiin.top'
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async function (response,code) {
   window.clarity("event", 'auth_error')
@@ -734,7 +734,7 @@ let Auth = {
         body: JSON.stringify(postData),
         credentials: "include",
       };
-      const response = await fetch(url, postOptions);
+      const response = await fetch(BASICURL + url, postOptions);
       if (!response.ok) {
         if(param.onerror) param.onerror();
         // defaultFailed(response.statusText,3)
@@ -771,13 +771,14 @@ let Auth = {
             }
           }
         } catch(e) {
+          console.dir(e);
           errorCount++;
           if(errorCount > 100){
             param.onclose();
             defaultFailed(e,3)
             break;
           }
-          console.warn('getStreamText - ',e)
+          // console.warn('getStreamText - ',e)
         }
       }
     } catch (error) {

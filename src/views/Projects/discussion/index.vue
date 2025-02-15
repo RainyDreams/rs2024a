@@ -1,5 +1,5 @@
 <template>
-  <div class="commonPage dark bg-slate-900 px-1 md:px-3" style="height:calc(100dvh - 0px);display: flex;flex-direction: column;">  
+  <div class="commonPage dark bg-slate-900 px-1 md:px-3" style="height:calc(100vh - 0px);display: flex;flex-direction: column;">  
     <routerBack name="项目详情" theme="dark" back="/projects/list"></routerBack>
     <div class="scroll">
       <div class="panel bg-slate-800 text-slate-200 px-3 md:px-4">
