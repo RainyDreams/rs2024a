@@ -151,6 +151,7 @@ let Auth = {
         return { status: 'offline' }
       }
       const response = await fetch(BASICURL + url, {
+        credentials: 'include'
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -866,6 +867,7 @@ let Auth = {
   loadRss:async function loadRss(opt){
     try {
       const response = await fetch(BASICURL +'/api/news.xml',{
+        credentials: 'include'
         method:'POST',
         headers: {
           'Content-Type': 'application/json',
