@@ -1003,13 +1003,11 @@ const send = async (param)=>{
   askRef.value.value = '';
   now.value = 0;
   suggestions.value = [];
-  setTimeout(()=>{
-    debouncedScrollToBottom()
-    askRef.value.style.height = 0 + 'px';
-  },100)
+  const textareaCssContainer = document.getElementById('input_chat_ai_div')
+  textareaCssContainer.style.setProperty('--inputContainerHeight', '32px');
   // askRef.value.style.height = askRef.value.scrollHeight+'px'
   loading.value = true;
-  askRef.value.focus();
+  askRef.value?.focus();
   placeholder.value = "正在回复中...";
   window.clarity("identify", fingerprint.value, null, "CHAT-AI", null)
   if (
