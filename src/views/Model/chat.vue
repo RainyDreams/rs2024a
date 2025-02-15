@@ -975,7 +975,7 @@ async function handleOnClose(error,model,opt) {
 const send = async (param)=>{
   input.value = askRef.value.value
   if(input.value.trim() == '') {
-    ElMessage.warning("请输入内容")
+    ElMessage.warning("Shift + Enter 换行");
     return;
   }
   const targetTime = new Date().getTime()
