@@ -171,9 +171,8 @@
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                     <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
-                    <div class="chatcontent min-h-8 border border-slate-200 min-w-6 px-4 py-2 rounded-3xl bg-slate-100 text-slate-950 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md">
-                      {{item.content}} 
-                    </div>
+                    <div class="chatcontent min-h-8 border border-slate-200 break-normal w-fit min-w-6 px-4 py-2 rounded-3xl bg-slate-100 text-slate-950 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
+                    >{{item.content}}</div>
                     <!-- <div class="flex mt-2">
                       <el-tooltip
                         class="box-item"
