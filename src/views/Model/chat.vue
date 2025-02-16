@@ -122,7 +122,7 @@
                         <div class="text-base leading-none" style="color:#f20">零本量化</div>
                       </touch-ripple>
                     </router-link> -->
-                    <router-link to="/login" class="h-full" v-if="!loginStatus" >
+                    <router-link :to="`/login?url=/chat/${sessionID}`" class="h-full" v-if="!loginStatus" >
                       <touch-ripple
                         :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
