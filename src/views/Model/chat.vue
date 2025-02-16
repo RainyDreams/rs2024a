@@ -1,10 +1,10 @@
 <template>
-  <div class="commonPage bg-transparent md:rounded-lg pb-0 h-dvh pt-3" style="display: flex;flex-direction: column;">
+  <div class="commonPage bg-slate-50 md:rounded-lg pb-0 h-dvh pt-3" style="display: flex;flex-direction: column;">
     <div class="scroll">
       <div class="">
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
           <div class="panel aichat">
-            <el-watermark :font="{color:'rgba(0, 0, 0, .01)'}" :gap="[0,0]" :rotate="-12"
+            <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <div class="system mb-3 md:mb-4 lg:mb-5">
@@ -18,7 +18,7 @@
                         :color="'#4e81fc'"
                         :opacity="0.4"
                         transition="ease-out"
-                        :duration="300"
+                        :duration="200"
                         :keep-last-ripple="true"
                         @click="router.go(-2)"
                       >
@@ -30,12 +30,12 @@
                     <!-- </router-link> -->
                     <router-link to="/home" class="h-full">
                       <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full pl-2 pr-3 py-1 overflow-hidden select-none border `"
+                        :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full pl-2 pr-3 py-1 overflow-hidden select-none border text-slate-950`"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                         :color="'#4e81fc'"
                         :opacity="0.4"
                         transition="ease-out"
-                        :duration="300"
+                        :duration="200"
                         :keep-last-ripple="true"
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
@@ -46,12 +46,12 @@
                     </router-link>
                     <router-link to="/model/square" class="h-full">
                       <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
+                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                         :color="'#4e81fc'"
                         :opacity="0.4"
                         transition="ease-out"
-                        :duration="300"
+                        :duration="200"
                         :keep-last-ripple="true"
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
@@ -63,12 +63,12 @@
                     </router-link>
                     <router-link to="/model/history" class="h-full"  v-if="loginStatus" >
                       <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
+                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                         :color="'#4e81fc'"
                         :opacity="0.4"
                         transition="ease-out"
-                        :duration="300"
+                        :duration="200"
                         :keep-last-ripple="true"
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
@@ -79,12 +79,12 @@
                       </touch-ripple>
                     </router-link>
                     <touch-ripple
-                      :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-orange-950':'text-orange-950')"
+                      :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-slate-950':'text-slate-950')"
                       :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#ffedd5':'#fff' }"
                       :color="showModelDetail?'#f7deb7':'#f7deb7'"
                       :opacity="0.4"
                       transition="ease-out"
-                      :duration="300"
+                      :duration="200"
                       :keep-last-ripple="true"
                       @click="showModelDetail=!showModelDetail"
                     >
@@ -94,12 +94,12 @@
                       <!-- </div> -->
                     </touch-ripple>
                     <touch-ripple
-                      :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-orange-950':'text-orange-950')"
+                      :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-slate-950':'text-slate-950')"
                       :style="{ clipPath: 'none', backgroundColor: showInfo?'#ffedd5':'#fff' }"
                       :color="showInfo?'#f7deb7':'#f7deb7'"
                       :opacity="0.4"
                       transition="ease-out"
-                      :duration="300"
+                      :duration="200"
                       :keep-last-ripple="true"
                       @click="showInfo=!showInfo"
                     >
@@ -115,7 +115,7 @@
                         :color="'#f206'"
                         :opacity="0.4"
                         transition="ease-out"
-                        :duration="300"
+                        :duration="200"
                         :keep-last-ripple="true"
                       >
                         <fire theme="outline" class="mr-1" size="18" fill="#f20"/>
@@ -124,12 +124,12 @@
                     </router-link> -->
                     <router-link :to="`/login?url=/chat/${sessionID}`" class="h-full" v-if="!loginStatus" >
                       <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
+                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
                         :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                         :color="'#4e81fc'"
                         :opacity="0.4"
                         transition="ease-out"
-                        :duration="300"
+                        :duration="200"
                         :keep-last-ripple="true"
                       >
                         <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
@@ -140,15 +140,15 @@
                       </touch-ripple>
                     </router-link>
                     
-                    <!-- <div v-show="!welcome_loading" class="text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug" v-html="md.render(welcome)"></div> -->
+                    <!-- <div v-show="!welcome_loading" class="text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed" v-html="md.render(welcome)"></div> -->
                     <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
                   </div>
                   <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
-                    <div class="text-sm text-green-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
+                    <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
                   </div>
                   <div v-show="showModelDetail">
                     <div class="min-w-fit w-64 z-10 flex flex-col mt-2 top-10 left-0 bg-white border rounded-xl p-3 duration-100">
-                      <div class="text-sm/snug mb-2 flex-1">{{ model_info.desc }}</div>
+                      <div class="text-sm/relaxed mb-2 flex-1">{{ model_info.desc }}</div>
                       <div class="flex items-center opacity-80 text-xs">
                         <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
                         <div class="username">{{ model_info.createUser.nickname }}</div>
@@ -157,7 +157,7 @@
                   </div>
                   <div v-show="showInfo">
                     <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 mx-auto bg-white border rounded-xl p-3 duration-100">
-                      <div class="w-full text-sm/snug">由于服务器成本原因，对大模型所有用户限制如下：每分钟15次，每天1000次提问。</div>
+                      <div class="w-full text-sm/relaxed">由于服务器成本原因，对大模型所有用户限制如下：每分钟15次，每天1000次提问。</div>
                     </div>
                   </div>
                   <!-- 欢迎 -->
@@ -170,11 +170,11 @@
                 <template v-for="(item,i) in chatList" class="chatList" >
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="text-xs text-green-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
-                    <div class="chatcontent userchatbg whitespace-pre-wrap text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug max-w-full lg:max-w-md px-4 md:px-5 py-3">
+                    <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
+                    <div class="chatcontent min-h-8 px-4 py-2 rounded-3xl bg-slate-200 text-slate-950 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md">
                       {{item.content}} 
                     </div>
-                    <div class="flex mt-2">
+                    <!-- <div class="flex mt-2">
                       <el-tooltip
                         class="box-item"
                         effect="dark"
@@ -183,10 +183,10 @@
                       >
                         <div 
                           @click="copyHtml(i)"
-                          class="p-2 hover:bg-orange-300  transition-all rounded-md cursor-pointer">
-                          <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
+                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                         </div>
-                      </el-tooltip>
+                      </el-tooltip> -->
                       <!-- <el-tooltip
                         class="box-item"
                         effect="dark"
@@ -196,25 +196,27 @@
                         <div 
                           @click="copyText(item.content)"
                           class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
-                          <DocDetail theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
+                          <DocDetail theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip> -->
-                    </div>
-                    <div class="analysis max-w-full" v-show="item.status != 'no_analysis'">
+                    <!-- </div> -->
+                    <div class="analysis max-w-full mt-2" v-show="item.status != 'no_analysis' && item.analysis">
                       <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                       <div 
-                        :class="`_text text-gray-500 text-sm `+(item.status=='analysis'?'active':'')" v-show="item.show_thought" 
+                        :class="`_text text-gray-500 text-xs lg:text-sm  px-4 py-5 bg-white rounded-xl `+(item.status=='analysis'?'active':'')" v-show="item.show_thought" 
                         v-html="md.render(item.analysis || '')"
                       ></div>
                       <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
-                        {{item.show_thought?'收起':'展开'}}思考过程
-                        <Down v-show="!item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
-                        <Up v-show="item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
+                        <span class="p-2 bg-white mt-2 items-center leading-none hover:bg-slate-100  transition-all rounded-md cursor-pointer flex">
+                          <SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>{{item.show_thought?'收起':'展开'}}思考过程
+                        </span>
+                        <!-- <Down v-show="!item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
+                        <Up v-show="item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/> --> 
                       </p>
                     </div>
                     <!-- </el-watermark> -->
                   </div>
-                  <div v-if="item.role=='user'" v-show="item.status != 'analysised'" class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-8 font-bold">
+                  <div v-if="item.role=='user'" v-show="item.status != 'analysised' && item.status != 'no_analysis'" class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-8 font-bold">
                     <span class="active-text">{{ renderStatus(item.status) }}</span>
                   </div>
                   <div class="assistant overflow-hidden" v-if="item.role == 'assistant'" :data-id="i">
@@ -222,7 +224,7 @@
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     <!-- <div></div> -->
-                    <div class="chatcontent text-base/snug sm:text-base/snug md:text-base/snug lg:text-lg/snug xl:text-lg/loose" >
+                    <div class="chatcontent text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                       <!-- <div v-for="(e,i2) in contentRendered" :key="i2" v-if="i == chatList.length-1">
                         <div v-html="md.render(e.content)" :class="{ 'fade-in': e.fresh }" @animationend="e.fresh = false"></div>
                       </div> -->
@@ -239,24 +241,24 @@
                         class="box-item"
                         effect="dark"
                         content="复制"
-                        placement="top-start"
+                        placement="bottom-start"
                       >
                         <div 
-                          @click="copyHtml(i)"
-                          class="p-2 hover:bg-orange-300  transition-all rounded-md cursor-pointer">
-                          <Copy theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
+                          @click="copyText(item.content)"
+                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
                       <el-tooltip
                         class="box-item"
                         effect="dark"
-                        content="复制Markdown"
-                        placement="top-start"
+                        content="按格式复制"
+                        placement="bottom-start"
                       >
                         <div 
-                          @click="copyText(item.content)"
-                          class="p-2 hover:bg-orange-300  transition-all rounded-md cursor-pointer">
-                          <DocDetail theme="outline" size="16" fill="#0005" strokeLinejoin="bevel"/>
+                          @click="copyHtml(i)"
+                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          <DocDetail theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
                       
@@ -265,7 +267,7 @@
                   </div>
                 </template>
                 <div class="my-5">
-                  <div class="bg-white opacity-85 rounded-lg cursor-pointer text-black hover:bg-orange-300 transition px-3 py-2 text-sm/tight md:text-base/tight my-3" v-for="(item) in suggestions" @click="ask(item)">
+                  <div class="bg-white text-blue-950 opacity-85 rounded-lg cursor-pointer hover:bg-slate-100 transition px-3 py-2 text-sm/tight md:text-base/tight my-3" v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
                 </div>
@@ -279,47 +281,44 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="relative w-full">
-            <div :class="`flex w-full px-3 bg-orange-300 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
+            <div :class="`flex w-full px-3 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;background-color: #e0f2fe80;backdrop-filter: blur(4px);">
               <touch-ripple
-                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-2 py-2 overflow-hidden select-none border border-blue-800 text-blue-800 `"
+                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-2 py-2 overflow-hidden select-none border border-blue-500 text-blue-500 `"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#4e81fc'"
                 :opacity="0.4"
                 transition="ease-out"
-                :duration="300"
-                :keep-last-ripple="true"
-                @click="router.push('/')"
+                :duration="200"
+                @start="router.push('/')"
               >
                 <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
               </touch-ripple>
               <touch-ripple
-                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-green-700':'text-green-700 border-green-700')"
-                :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
-                :color="useAnalysis?'#fff':'#1a842f'"
+                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
+                :color="useAnalysis?'#fff':'#3b82f6'"
                 :opacity="0.4"
                 transition="ease-out"
-                :duration="300"
-                :keep-last-ripple="true"
-                @click="analysisBtn"
+                :duration="200"
+                @start="analysisBtn"
               >
                 <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">深入思考</span></span>
               </touch-ripple>
               <touch-ripple
-                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-white border-green-700':'text-green-700 border-green-700')"
-                :style="{ clipPath: 'none', backgroundColor: useInternet?'#1a842f':'#fff' }"
-                :color="useInternet?'#fff':'#1a842f'"
+                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
+                :color="useInternet?'#fff':'#3b82f6'"
                 :opacity="0.4"
                 transition="ease-out"
-                :duration="300"
-                :keep-last-ripple="true"
-                @click="useInternet=!useInternet"
+                :duration="200"
+                @start="useInternet=!useInternet"
               >
                 <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">联网搜索</span></span>
               </touch-ripple>
               <!-- <touch-ripple
                 :class="`touch-ripple w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
-                :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#1a842f':'#fff' }"
-                :color="useAnalysis?'#fff':'#1a842f'"
+                :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
+                :color="useAnalysis?'#fff':'#3b82f6'"
                 :opacity="0.4"
                 transition="ease-out"
                 :duration="400"
@@ -330,7 +329,7 @@
               <!-- </touch-ripple> -->
             </div>
           </div>
-          <div :class="`bg-orange-300 transition-all duration-200 `+(show_menu?'rounded-b-[25px]':'rounded-[25px]')">
+          <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="background-color: #e0f2fe80;">
             <div :class="`ainput__wrapper items-stretch `">
               <div 
                 class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8" 
@@ -359,25 +358,48 @@
                   <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
                   <!-- <application-menu theme="outline" size="24" fill="#333"/> -->
                   <touch-ripple
-                    :class="`touch-ripple flex  items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white':'text-green-900')"
-                    :style="{ clipPath: 'none', backgroundColor: (show_menu)?'#006b2c':'#fff' }"
-                    :color="(show_menu)?'#fff':'#006b2c'"
+                    :class="`touch-ripple flex  items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white border-blue-500':'text-blue-500')"
+                    :style="{ clipPath: 'none', backgroundColor: (show_menu)?'#3b82f6':'#fff' }"
+                    :color="(show_menu)?'#fff':'#3b82f6'"
                     :opacity="0.4"
                     transition="ease-out"
-                    :duration="300"
+                    :duration="200"
                     :keep-last-ripple="true"
-                    @click="show_menu=!show_menu"
+                    @start="show_menu=!show_menu"
                   >
-                    <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `+(show_menu?'opacity-100':'opacity-70')" theme="outline" size="18" fill="currentColor"/>
+                    <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `" theme="outline" size="18" fill="currentColor"/>
                   </touch-ripple>
-                  <el-button @click="send()" :loading="loading" v-show="!showStop" type="primary"
-                    color="#006b2c" class="ml-1 rounded-full w-8 h-8" ><up v-show="!loading"  theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/></el-button>
+                  <touch-ripple
+                    :class="`touch-ripple text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(stopStatus?'hidden':'flex')"
+                    :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
+                    :color="'#fff'"
+                    :opacity="0.4"
+                    transition="ease-out"
+                    :duration="200"
+                    :keep-last-ripple="true"
+                    @start="send()"
+                  >
+                    <up theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/>
+                  </touch-ripple>
+                  <touch-ripple
+                    :class="`touch-ripple text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(stopStatus?'flex':'hidden')"
+                    :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
+                    :color="'#fff'"
+                    :opacity="0.4"
+                    transition="ease-out"
+                    :duration="200"
+                    :keep-last-ripple="true"
+                    @start="stop()"
+                  >
+                    <PauseOne theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/>
+                  </touch-ripple>
+                  <!-- <el-button @click="" :loading="loading" v-show="!showStop" type="primary"
+                    color="#006b2c" class="ml-1 rounded-full w-8 h-8" ></el-button>
                   <el-button @click="stop()" v-show="loading && !welcome_loading && showStop" type="primary"
                     color="#006b2c" class="ml-1 rounded-full w-8 h-8" >
-                    <!-- 终止 -->
-                    <!-- <forbid theme="outline" size="24" fill="#555" :strokeWidth="3" strokeLinejoin="bevel"/> -->
-                    <PauseOne theme="outline" size="18" fill="#fff" :strokeWidth="5" strokeLinejoin="bevel"/>
-                  </el-button>
+                    <-- 终止 -->
+                    <!-- <forbid theme="outline" size="24" fill="#555" :strokeWidth="3" strokeLinejoin="bevel"/> --
+                  </el-button> -->
                 </div>
               </div>
             </div>
@@ -568,7 +590,7 @@ const analysis_line = ref('line-1')
 const chat_line = ref('line-1')
 
 const onFocus = () => {
-  debouncedScrollToBottom();
+  // debouncedScrollToBottom();
 }
 function copyText(text){
   Auth.copyText(text.trim(),()=>{
@@ -826,54 +848,6 @@ async function initiateChatWithAI(opt) {
     onclose: (error,model) => {
       debouncedScrollToBottom();
       handleOnClose(error,model, opt);
-    },
-  });
-}
-
-function retryChatWithAI(opt,line='line-3') {
-  Auth.chatWithAI({
-    sessionID: sessionID.value,
-    content: opt.targetValue,
-    vf: fingerprint.value,
-    analysis: chatList.value[opt.index - 1].analysis || '',
-    stopStatus,
-    useAnalysis: useAnalysis.value,
-    useInternet: useInternet.value,
-    line: line,
-    time: opt.targetTime,
-    onerror: (source, model) => {
-      console.log('错误');
-      // ElMessage.warning('错误重新尝试失败');
-      if(line=='line-3'){
-        retryChatWithAI(opt,'line-2');
-      } else {
-        ElMessage.warning('错误重新尝试失败');
-        loading.value = false;
-      }
-      // loading.value = false;
-    },
-    onmessage: (source, model) => {
-      try{
-        handleOnMessage(source, model, opt);
-      } catch(e){
-        setTimeout(()=>{
-          try{
-            retryChatWithAI(opt,'line-3');
-          } catch(e){
-            setTimeout(()=>{
-              try{
-                retryChatWithAI(opt,'line-3');
-              } catch(e){
-                ElMessage.warning('错误重新尝试失败');
-              }
-            },1000)
-          }
-        },1000)
-      }
-    },
-    onclose: (error,model) => {
-      handleOnClose(error, model ,opt);
-      // loading.value = false;
     },
   });
 }
