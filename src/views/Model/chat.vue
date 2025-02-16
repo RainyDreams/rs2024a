@@ -171,7 +171,7 @@
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                     <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
-                    <div class="chatcontent min-h-8 px-4 py-2 rounded-3xl bg-slate-200 text-slate-950 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md">
+                    <div class="chatcontent min-h-8 border border-slate-200 min-w-6 px-4 py-2 rounded-3xl bg-slate-100 text-slate-950 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md">
                       {{item.content}} 
                     </div>
                     <!-- <div class="flex mt-2">
@@ -370,25 +370,23 @@
                     <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `" theme="outline" size="18" fill="currentColor"/>
                   </touch-ripple>
                   <touch-ripple
-                    :class="`touch-ripple text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(stopStatus?'hidden':'flex')"
+                    :class="`touch-ripple text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(showStop?'hidden':'flex')"
                     :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
                     :color="'#fff'"
                     :opacity="0.4"
-                    transition="ease-out"
+                    transition="ease"
                     :duration="200"
-                    :keep-last-ripple="true"
                     @start="send()"
                   >
                     <up theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/>
                   </touch-ripple>
                   <touch-ripple
-                    :class="`touch-ripple text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(stopStatus?'flex':'hidden')"
+                    :class="`touch-ripple text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(showStop?'flex':'hidden')"
                     :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
                     :color="'#fff'"
                     :opacity="0.4"
-                    transition="ease-out"
+                    transition="ease"
                     :duration="200"
-                    :keep-last-ripple="true"
                     @start="stop()"
                   >
                     <PauseOne theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/>
@@ -635,7 +633,7 @@ const handleEnter = async (event) => {
   } else if (event.key === 'Enter') {
     event.preventDefault();
     input.value = askRef.value.value
-    if(!loading.value){
+    if(!loading.value && input.value.trim()){
       throttledSend()
     }
   }
@@ -689,11 +687,13 @@ const scrollToBottom = () => {
 
 const stop = async (param)=>{
   stopStatus.value=true;
+  showStop.value=false;
   loading.value=false;
 }
 
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
+  debouncedScrollToBottom();
   if(useInternet.value) {
     analysis_line.value = 'line-1';
     chatList.value[index - 1].status = 'thinking';
@@ -710,6 +710,7 @@ async function deepMind(targetValue, targetTime, index) {
             await Auth.functionCall({"name": "web_search","args": {"keywords": list}}, {
               renderHtml: (html) => {
                 chatList.value[index - 1].analysis += html;
+                debouncedScrollToBottom();
               },
             });
           }catch(e){
@@ -720,6 +721,7 @@ async function deepMind(targetValue, targetTime, index) {
       Auth.functionCall( {"name": "web_search","args": {"keywords": [targetValue]}}, {
         renderHtml: (html) => {
           chatList.value[index - 1].analysis += html;
+          debouncedScrollToBottom();
         },
       })
     ]);
@@ -826,6 +828,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
 }
 
 async function initiateChatWithAI(opt) {
+  showStop.value = true;
   await Auth.chatWithAI({
     sessionID: sessionID.value,
     content: opt.targetValue,
@@ -853,14 +856,16 @@ async function initiateChatWithAI(opt) {
 }
 
 function handleOnMessage(source, model, opt) {
-  showStop.value = true;
   const decode = JSON.parse(source);
   let tmp = '';
   try{
+    if (decode.candidates[0].content.parts) { model = 'line-1'}
+    else if(decode.choices[0].delta?.content) { model = 'line-2'}
+    else if(decode.response) {model = 'line-4'};
     switch (model) {
       case 'line-1':
-        if (!decode.candidates[0].content.parts) {
-          break;
+        if(decode.candidates[0].finishReason == 'STOP'){
+          stopStatus.value = true;
         }
         tmp = decode.candidates[0].content.parts[0].text;
         if (tmp) {
@@ -949,7 +954,7 @@ async function handleOnClose(error,model,opt) {
 const send = async (param)=>{
   input.value = askRef.value.value
   if(input.value.trim() == '') {
-    ElMessage.warning("Shift + Enter 换行");
+    // ElMessage.warning("Shift + Enter 换行");
     return;
   }
   const targetTime = new Date().getTime()
