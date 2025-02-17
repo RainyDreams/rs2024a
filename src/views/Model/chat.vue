@@ -206,7 +206,7 @@
                         v-html="md.render(item.analysis || '')"
                       ></div>
                       <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
-                        <span class="p-2 bg-white mt-2 items-center leading-none hover:bg-slate-100  transition-all rounded-md cursor-pointer flex">
+                        <span class="py-2 px-3 border border-slate-200 bg-white mt-2 items-center leading-none hover:bg-slate-100  transition-all rounded-lg cursor-pointer flex">
                           <SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>{{item.show_thought?'收起':'展开'}}思考过程
                         </span>
                         <!-- <Down v-show="!item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
@@ -215,7 +215,8 @@
                     </div>
                     <!-- </el-watermark> -->
                   </div>
-                  <div v-if="item.role=='user'" v-show="item.status != 'analysised' && item.status != 'no_analysis'" class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-8 font-bold">
+                  <div v-if="item.role=='user'" v-show="item.status != 'analysised' && item.status != 'no_analysis'"
+                     class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-8 mb-4 font-bold">
                     <span class="active-text">{{ renderStatus(item.status) }}</span>
                   </div>
                   <div class="assistant overflow-hidden" v-if="item.role == 'assistant'" :data-id="i">
@@ -266,7 +267,7 @@
                   </div>
                 </template>
                 <div class="my-5">
-                  <div class="bg-white text-blue-950 opacity-85 rounded-lg cursor-pointer hover:bg-slate-100 transition px-3 py-2 text-sm/tight md:text-base/tight my-3" v-for="(item) in suggestions" @click="ask(item)">
+                  <div class="bg-white text-blue-950 opacity-85 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 transition px-3 py-2 text-sm/tight md:text-base/tight my-3" v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
                 </div>
@@ -280,7 +281,7 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="relative w-full">
-            <div :class="`flex w-full px-3 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;background-color: #e0f2fe80;backdrop-filter: blur(4px);">
+            <div :class="`flex w-full px-3 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;background-color: #e2e8f080;backdrop-filter: blur(4px);">
               <touch-ripple
                 :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-2 py-2 overflow-hidden select-none border border-blue-500 text-blue-500 `"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
@@ -328,7 +329,7 @@
               <!-- </touch-ripple> -->
             </div>
           </div>
-          <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="background-color: #e0f2fe80;">
+          <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="background-color: #e2e8f080;">
             <div :class="`ainput__wrapper items-stretch `">
               <div 
                 class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8" 
