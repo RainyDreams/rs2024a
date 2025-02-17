@@ -27,10 +27,7 @@ const defaultFailed = async function (response,code) {
   }
   const ua = navigator.userAgent;
   const err = new Error(
-    `Content:${code}\n${response}<br/>
-    UA:${ua}<br/>
-    Link:${window.location.href}<br/>
-    time:${new Date().getTime()}`)
+    `Content:${code}\n${response}<br/> UA:${ua}<br/> Link:${window.location.href}<br/> time:${new Date().getTime()}`)
   const r = await Auth.reportErrlog(`${err.message}<br/>${err.stack}`)
   window.clarity("set", 'reportID', r.id);
   return { status: 'error', content: response };
