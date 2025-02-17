@@ -136,10 +136,10 @@ export function functionCallPlugin(md) {
               if (jsonObj.name && jsonObj.args) {
                   // 调用 call(jsonObj) 函数并返回结果
                   // return call(jsonObj);
-                  console.log('nb')
+                  // // console.log('nb')
               }
           } catch (e) {
-              console.error("Error parsing FUNCTION CALL JSON:", e);
+              // // console.error("Error parsing FUNCTION CALL JSON:", e);
           }
       }
       return fence(tokens, idx, options, env, self);

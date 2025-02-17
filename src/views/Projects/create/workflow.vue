@@ -317,7 +317,7 @@ const send = async (param)=>{
       let tmp='';
           // tmp=decode.response;
       const decode = JSON.parse(source);
-      // console.log(decode)
+      // // console.log(decode)
       // chatList.value[index-1].analysis+=tmp;
       const res = JSON.parse(decode.candidates[0].content.parts[0].text);
       ai_workflow_name.value = res.name;
@@ -372,7 +372,7 @@ onActivated(async ()=>{
     projectId.value = route.params.projectId;
     fingerprint.value = await Auth.getUserFingerprint();
     // const welcomeOnline = (await Auth.getAIWelcome({sessionID:id}))
-    // console.log(welcomeOnline)
+    // // console.log(welcomeOnline)
     // welcome.value = welcomeOnline.content;
     // model_info.value = {
     //   ...model_info.value,
@@ -381,8 +381,8 @@ onActivated(async ()=>{
     //   createuser:welcomeOnline.model.createuser,
     // };
     // await Promise.all([async ()=>{
-    //   // console.log(1)
-    //   console.log(model_info.value)
+    //   // // console.log(1)
+    //   // console.log(model_info.value)
     //   model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
     //   return 0;
     // },async ()=>{

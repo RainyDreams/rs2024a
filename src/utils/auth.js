@@ -14,6 +14,7 @@ import { useRoute, useRouter } from "vue-router";
 // import { da } from "element-plus/es/locales.mjs";
 import { asyncThrottle } from "./helpers";
 import dayjs, { Dayjs } from "dayjs";
+import { status } from "nprogress";
 // import { use } from "echarts/types/src/extension.js";
 const router = useRouter()
 const route = useRoute()
@@ -24,14 +25,24 @@ const defaultFailed = async function (response,code) {
   if(!navigator.onLine){
     return { status: 'offline' }
   }
+  const ua = navigator.userAgent;
+  const r = await Auth.reportErrlog(JSON.stringify({
+    ua,
+    link:window.location.href,
+    content:`${code}\n${response}`,
+    time:new Date().getTime()
+  }))
+  // // console.info('[errId]',r)
+  // Auth.copyText(`${r.content.id}`)
+  window.clarity("set", 'reportID', r.id);
   // debugger;
-  console.dir(response.status+'',response.status+'' == 401+'')
-  if (response.status == 401) {
-    console.wran('401 get prtoken')
-    window.location.href = ('/login-needed?url='+encodeURIComponent(window.location))
+  // // console.dir(response.status+'',response.status+'' == 401+'')
+  // if (response.status == 401) {
+    // // console.wran('401 get prtoken')
+    // window.location.href = ('/login-needed?url='+encodeURIComponent(window.location))
 
     // const getPr = await Auth.getPrtoken();
-    // console.dir(getPr);
+    // // console.dir(getPr);
     // if(getPr.status=='sus'){
     //   ElMessage.error('发生错误');
     //   // ElMessageBox.alert('网络遇到问题，请刷新页面', '错误', {
@@ -42,31 +53,33 @@ const defaultFailed = async function (response,code) {
     //   // })
     // } else {
     //   ElMessage.error('未登录或登录过期');
-    //   // console.log(router)
+    //   // // console.log(router)
     //   window.location.href = ('/login-needed?url='+encodeURIComponent(window.location))
     //   // window.location.href="/login-needed?url="+encodeURIComponent(window.location.href)
     //   return { status: 'invalid', content: response };
     // }
-  } else {
-    ElMessage.error('服务器错误');
-    try{
-      if(code==2){
+  // } else {
+  //   ElMessage.error('服务器错误');
+  //   try{
+  //     if(code==2){
 
-      }
-      if(code==3){
-        throw response;
-      }
-        // 
-      if(code==0){
-        throw {
-          status: 0b00000011,
-          message: '这块可能是编写程序疏漏引发的错误，请点击报告错误，并把识别码发给我。感谢你的支持',
-        };
-      } 
-      // let text = (await response.text());
-      throw new Error(response.url+"<br/>" + text)
-    } catch (err){
-      console.error(err.message+'\n'+err.stack)
+  //     }
+  //     if(code==3){
+  //       throw response;
+  //     }
+  //       // 
+  //     if(code==0){
+  //       throw {
+  //         status: 0b00000011,
+  //         message: '这块可能是编写程序疏漏引发的错误，请点击报告错误，并把识别码发给我。感谢你的支持',
+  //       };
+  //     } 
+  //     let text = ''
+  //     if(response.text)
+  //       text == (await response.text());
+  //     throw new Error(response.url+"\n" + text)
+  //   } catch (err){
+      // // console.error(err.message+'\n'+err.stack)
       // ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
       //   dangerouslyUseHTMLString:true,
       //   customClass:'czigerr',
@@ -81,23 +94,14 @@ const defaultFailed = async function (response,code) {
       //     if(value=='confirm'){
             // instance.confirmButtonLoading = true
             // instance.confirmButtonText = '上传错误信息'
-            const ua = navigator.userAgent;
-            const r = await Auth.reportErrlog(JSON.stringify({
-              ua,
-              link:window.location.href,
-              content:`${response.status}:${err.message+'\n'+err.stack+''}`,
-              time:new Date().getTime()
-            }))
-            console.info('[errId]',r)
-            // Auth.copyText(`${r.content.id}`)
-            window.clarity("set", 'reportID', r.content.id);
+            
             // ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}\n可以将以上信息提供给我，便于分析处理错误`,'提示',{})
           // }
           // done();
         // }
       // })
-    }
-  }
+  //   }
+  // }
   return { status: 'error', content: response };
 }
 export class Scheduler {
@@ -129,7 +133,7 @@ let Auth = {
   route: null,
   init: async function init() {
     const prStatus = (await this.getPrtoken("first")).status;
-    // console.log(prStatus);
+    // // console.log(prStatus);
     if (prStatus == "invalid") {
       ElMessage.info("正在尝试使用访客身份登录，请稍等");
       const res = await this.guestLogin();
@@ -158,33 +162,35 @@ let Auth = {
         body: body,
       });
       if (response.status === 200) {
-        const data = await response.json();
+        let fdata = await response.text();
+        let data = {status:'decodeError'}
+        try{
+           data = JSON.parse(fdata);
+        }catch(err){}
         if (data.status === "sus") {
           window.clarity("event", 'auth_success')
           return { ...data,status: "sus", content: await success(data), };
         } else if (data.status === "error" && data.code === 4) {
           let a = await this.getPrtoken();
-          // console.error('401',url)
+          // // console.error('401',url)
           // throw new Error('401',url)
           if(a.status == 'notExist'){
             if(Auth.router){
               Auth.router.push('/login-needed?url='+encodeURIComponent(window.location.pathname))
             } else {
               window.location.href = ('/login-needed?url='+encodeURIComponent(window.location.pathname))
-
             }
           } else{
             return await this.basicAuth(url, body, { success, failed });
           }
-          console.log(a);
         } else {
-          return await failed(data, 0);
+          return await failed(data.status+'\n'+fdata, url);
         }
       } else {
-        return await failed(response, 1);
+        return await failed(await response.text(), url);
       }
     } catch (error) {
-      return await failed(error, 2);
+      return await failed(error, url);
     }
   },
   getRecaptchaToken:async function getRecaptchaToken({action="default",id='#turnstile-box'}){
@@ -195,11 +201,11 @@ let Auth = {
           sitekey: '0x4AAAAAAAgyM4dGoERAGuG2',
           action: action,
           callback: function(token) {
-            console.log(token);
+            // // console.log(token);
             resolve(token)
           },
           'error-callback': function(err) {
-            console.log(err);
+            // // console.log(err);
             reject(err)
           },
           'refresh-expired':'auto'
@@ -311,7 +317,7 @@ let Auth = {
     return null;
   },
   getPrtoken: async function getPrtoken(mode) {
-    // console.log(Cookies.get("czigauth"));
+    // // console.log(Cookies.get("czigauth"));
     let userAuth = sessionStorage.getItem("userInfo");
     if (userAuth) {
       userAuth = JSON.parse(userAuth);
@@ -606,7 +612,7 @@ let Auth = {
     await this.getPrtoken();
     // return this.basicAuth('/api/ai/createWorkflow', JSON.stringify(param), );
     // debugger;
-    // console.log('AI_createWorkflow', param)
+    // // console.log('AI_createWorkflow', param)
     await this.getStreamText('/api/ai/createWorkflow', 
       { projectId: param.projectId, content: param.content,
       },
@@ -672,15 +678,12 @@ let Auth = {
   deepMind_Analysis:async function chatWithAI_Analysis(param) {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
-    await this.getStreamText('/api/ai/deepMind_Analysis', 
-      { sessionID: param.sessionID, content: param.content,vf:param.vf,
+    const res = await this.basicAuth('/api/ai/deepMind_Analysis', 
+      JSON.stringify({ sessionID: param.sessionID, content: param.content,vf:param.vf,
         model:param.line,time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
-      }, {
-      onmessage:param.onmessage,
-      onerror:param.onerror,
-      onclose:param.onclose,
-      stopStatus:param.stopStatus
-    });
+      }));
+    param.onclose(res.content)
+    return res.content;
   },
   deepMind_Try:async function chatWithAI_Analysis(param) {
     window.clarity("event", 'chatWithAI')
@@ -735,13 +738,13 @@ let Auth = {
         credentials: "include",
       };
       const response = await fetch(url, postOptions);
-      if (!response.ok) {
+      if (response.status != 200) {
         if(param.onerror) param.onerror();
         // defaultFailed(response.statusText,3)
         throw new Error("Network response was not ok");
       }
       const model = postData.model;
-      // console.log(model)
+      // // console.log(model)
       const reader = response.body.getReader();
       let decoder = new TextDecoder();
       let tmp=''
@@ -752,7 +755,7 @@ let Auth = {
         }
         try{
           const { done, value } = await reader.read();
-          // console.log('1',value)
+          // // console.log('1',value)
           if (done) { 
             if(tmp != '[DONE]'){
               param.onmessage(tmp,model);
@@ -762,10 +765,10 @@ let Auth = {
           }
           let textArray = (tmp+decoder.decode(value, { stream: true }).replace(/\n/g,"").trim()).split('data: ');
           tmp = textArray.pop();
-          // console.log(textArray);
+          // // console.log(textArray);
           for (const text of textArray) {
             if(text == '[DONE]') continue;
-            // console.log(text)
+            // // console.log(text)
             if(text){
               param.onmessage(text,model);
             }
@@ -777,14 +780,14 @@ let Auth = {
             defaultFailed(e,3)
             break;
           }
-          console.warn('getStreamText - ',e)
+          // // console.warn('getStreamText - ',e)
         }
       }
     } catch (error) {
       param.onclose(true,postData.model);
       // if(param.onerror) param.onerror(error);
       // defaultFailed(error,3)
-      console.error(error)
+      // // console.error(error)
       // defaultFailed(error,2)
     }
   },
@@ -892,7 +895,7 @@ let Auth = {
       }
       return list;
     } catch (error) {
-      console.error('获取 RSS 数据出错：', error);
+      // // console.error('获取 RSS 数据出错：', error);
     }
   },
 }
@@ -902,7 +905,7 @@ Auth.copyText = navigator.clipboard?(text,fn,er) => {
     fn()
   }).catch((error) => {
     er()
-    console.error('Error copying text to clipboard:', error);
+    // // console.error('Error copying text to clipboard:', error);
   });
 }:(text,fn,er)=>{
   window.clarity("event",'copy')
@@ -915,7 +918,7 @@ Auth.copyText = navigator.clipboard?(text,fn,er) => {
     fn()
   } catch (err) {
     er()
-    console.error('复制操作失败', err);
+    // // console.error('复制操作失败', err);
   }
   document.body.removeChild(textarea);
 }
@@ -930,7 +933,7 @@ Auth.copyHtml = false? (html, fn, er) => {
     fn();
   }).catch((error) => {
     er();
-    console.error('Error copying HTML to clipboard:', error);
+    // // console.error('Error copying HTML to clipboard:', error);
   });
 } : (html,fn,er) => {
   window.clarity("event", 'copy');
@@ -950,14 +953,14 @@ Auth.copyHtml = false? (html, fn, er) => {
     fn();
   } catch (err) {
     er();
-    console.error('复制HTML操作失败', err);
+    // // console.error('复制HTML操作失败', err);
   }
   // document.body.removeChild(div);
 };
 window.copyHtml = Auth.copyHtml;
 window.copyText = Auth.copyText;
 Auth.functionCall = async function(obj,opt){
-  console.log(obj)
+  // // console.log(obj)
   if(obj.name == 'get_weather'){
     let info = await Auth.basicAuth('/api/getWeather', JSON.stringify({
       city:obj.args.city
@@ -986,7 +989,7 @@ Auth.functionCall = async function(obj,opt){
       // </a>`
       `### ${item.title}\n\n> ${ item.pubDate }\n${ item.description }\n\n`
     });
-    // console.log(str);
+    // // console.log(str);
     str+='\`\`\`\n\n'
     return opt.renderHtml(str)
   } else if (obj.name == 'web_search'){ 
@@ -994,7 +997,7 @@ Auth.functionCall = async function(obj,opt){
       let info = await Auth.basicAuth('/api/webSearch', JSON.stringify({
         keywords:obj.args.keywords[i]
       }));
-      opt.renderHtml(`**查询到的互联网信息**\n\n`)
+      // opt.renderHtml(`**查询到的互联网信息**\n\n`)
       for (let j = 0; j < info.content.length; j++) {
         opt.renderHtml(`- [${info.content[j].title}](${info.content[j].link})\n\n> ${info.content[j].snippet}\n\n`)
       }
@@ -1002,7 +1005,7 @@ Auth.functionCall = async function(obj,opt){
   }
 }
 window.onloadTurnstileCallback = function () {
-  console.log('onload?')
+  // // console.log('onload?')
 }
 
 export default Auth;

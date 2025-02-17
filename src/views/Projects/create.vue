@@ -102,7 +102,7 @@ const submitForm = (formEl) => {
   if (!formEl) return
  formEl.validate(async (valid) => {
     if (valid) {
-      // console.log('submit!')
+      // // console.log('submit!')
       // await // Auth.getPrtoken();
       createLoading.value = true;
       const createProject = await Auth.createProject({
@@ -130,7 +130,7 @@ const submitForm = (formEl) => {
         })
       }
     } else {
-      // console.log('error submit!')
+      // // console.log('error submit!')
       return false
     }
   })
@@ -146,7 +146,7 @@ async function remoteMethod(query) {
   })
   loading.value = false
 
-  // console.log(teamList)
+  // // console.log(teamList)
 }
 onActivated(()=>{
   remoteMethod()

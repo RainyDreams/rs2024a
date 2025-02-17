@@ -71,7 +71,7 @@ const tryAgain = async () => {
   }
 }
 onActivated(async () => {
-  console.log(1)
+  // console.log(1)
   await tryAgain()
 })
 </script>

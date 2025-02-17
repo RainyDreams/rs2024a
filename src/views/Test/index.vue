@@ -206,7 +206,7 @@ onMounted(async ()=>{
     let tracks = [];
     self.pc.ontrack = event => {
       tracks.push(event.track);
-      console.debug(`Got track mid=${event.track.mid}`);
+      // console.debug(`Got track mid=${event.track.mid}`);
       if (tracks.length >= 2) {
         // remote video & audio are ready
         resolve(tracks); 

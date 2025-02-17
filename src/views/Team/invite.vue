@@ -59,7 +59,7 @@ const userName = ref('')
 const router = useRouter()
 
 //获取路由param
-// console.log(route)
+// // console.log(route)
 const uid = route.query.uid;
 const pid = route.query.pid;
 

@@ -271,7 +271,7 @@ const submitForm = (formEl)=>{
           }
         })
         teamList.value = await Promise.all(teamList.value.map(async (item)=>{
-          // console.log()
+          // // console.log()
           return {
             ...item,
             createUser:await Auth.getUserInfoByID({id:item.createuser})

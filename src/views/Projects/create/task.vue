@@ -107,7 +107,7 @@ onMounted(async ()=>{
   const res = await Auth.getProjectDetail({id:projectId.value})
   if(res.status == 'sus'){
     // projectDetail.value = res.content;
-    // console.log(res.content)
+    // // console.log(res.content)
     persons.value = res.content.persons.map((item)=>{
       return {label:item.nickname,value:item.id,avatar:item.avatar}
     })

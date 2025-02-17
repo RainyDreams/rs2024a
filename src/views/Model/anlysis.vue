@@ -158,6 +158,6 @@ onActivated(async ()=>{
   loading.value = false;
   askRef.value.focus()
 
-  // console.log(Fingerprint)
+  // // console.log(Fingerprint)
 })
 </script>

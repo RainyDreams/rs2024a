@@ -75,7 +75,7 @@ if(Cookies.get('czigauth') == 'AlreadyAuthenticated'){
   router.push('/login-already')
 }
 onActivated(async ()=>{
-  // console.log(123)
+  // // console.log(123)
   // debugger;
   verifyToken.value = await Auth.getRecaptchaToken({action:'signup',id:'#turnstile-box'})
 })

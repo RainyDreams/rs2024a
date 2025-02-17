@@ -99,11 +99,20 @@
 
 
 
-{console.log('%c零本智协%c\n%c赤峰二中2023级12班2024年研究性学习项目\r%c\n2024-07-25雨窗',
-'font-size:14px;background:#2262fb;color:#fff;font-family:Arial;padding:2px 4px;border-radius:4px;','','font-size:14px;background:#f00;color:#fff;font-family:Arial;padding:2px 4px;border-radius:4px;','font-size:16px;font-family:Arial;');
-console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已经掌握一定的技术能力，我很高兴我的软件能被你们所了解。\n但有以下几点需要注意：%c\n%c1. 我们是学生初创项目，请不要尝试攻击、毁坏或者以任何方式使它停止工作，我们感谢你的善举\n2. 如果你想要研究它的源码和创作历程，请关注“赤子英金”', 
-'font-size:18px;padding:4px;color:#fff;background:#f00;','','font-size:12px;line-height:16px;padding:2px;', '','padding:2px;line-height:16px;font-size:12px;'); 
-console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击','font-size:18px;padding:4px;color:#fff;background:#f00;','font-size:18px;padding:4px;color:#000;background:#ff0;');}
+console.log('%c零本智协 OriginSynq AI%c\n%c赤峰二中2023级12班2024年研究性学习项目\r%c\n2024-07-25雨窗',
+'font-size: 20px; background: #3b82f6; color: #fff; font-family: Arial; padding: 5px 10px; box-shadow: 0 4px 8px rgba(59, 130, 246, 0.5);',
+'',
+'font-size: 16px; background: #dc2626; color: #fff; font-family: Arial; padding: 4px 8px; box-shadow: 0 3px 6px rgba(220, 38, 38, 0.5);',
+'font-size: 18px; font-family: Arial;');
+console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已经掌握一定的技术能力，我很高兴我的软件能被你们所了解。\n但有以下几点需要注意：%c\n%c1. 我们是学生初创项目，请不要尝试攻击、毁坏或者以任何方式使它停止工作，我们感谢你的善举\n2. 如果你想要研究它的源码和创作历程，请关注“赤子英金”',
+'font-size: 22px; padding: 6px; color: #020617; background: #fde047; font-family: Arial; box-shadow: 0 5px 10px rgba(253, 224, 71, 0.5);',
+'',
+'font-size: 14px; line-height: 20px; padding: 4px; font-family: Arial;',
+'',
+'padding: 4px; line-height: 20px; font-size: 14px; font-family: Arial;');
+console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击',
+'font-size: 22px; padding: 6px; color: #fff; background: #dc2626; font-family: Arial; box-shadow: 0 5px 10px rgba(220, 38, 38, 0.5);',
+'font-size: 22px; padding: 6px; color: #020617; background: #fde047; font-family: Arial; box-shadow: 0 5px 10px rgba(253, 224, 71, 0.5);');
 import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRoute,useRouter } from 'vue-router'
 import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji, Log, CooperativeHandshake,History, Server, NewspaperFolding } from '@icon-park/vue-next';
@@ -151,7 +160,7 @@ const basicInfo = ref({
   NotificationList:[]
 })
 onMounted(async ()=>{
-  // console.log(1)
+  // // console.log(1)
   setTimeout(()=>{
     if(document.querySelector('#loading-container')){
       document.querySelector('#loading-container').classList.add('animate__fadeOut');

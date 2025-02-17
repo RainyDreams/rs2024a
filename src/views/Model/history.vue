@@ -36,7 +36,7 @@ const chatList = ref([]);
 const loading = ref(true)
 onActivated(async ()=>{
   const { content,code } = await Auth.getAiChatHistory();
-  // console.log(content, code)
+  // // console.log(content, code)
   const now = new Date().getTime();
   if(code == 'ok' || content){
     chatList.value = content.map(e=>{

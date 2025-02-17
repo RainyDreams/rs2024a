@@ -377,16 +377,16 @@ function handleUpload(options) {
       };
       axios.post('/api/uploadAvatar', data)
       .then(response => {
-        // console.log(response,options);
+        // // console.log(response,options);
         profile.value.avatar = 'https://lingben.chiziingiin.top/api/avatar/'+ response.data.content;
       })
       .catch(error => {
-        console.error(error);
+        // console.error(error);
       });
     };
   } else {
     ElMessage.error('请上传图片文件');
-    console.error('不是图片文件');
+    // console.error('不是图片文件');
   }
 }
 

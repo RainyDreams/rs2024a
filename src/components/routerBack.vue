@@ -28,7 +28,7 @@ const props = defineProps({
     default: 'light'
   }
 })
-// console.log(props.back)
+// // console.log(props.back)
 const routerBack = () => {
   if(props.back){
     router.push(props.back)

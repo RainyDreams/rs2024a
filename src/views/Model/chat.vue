@@ -460,7 +460,7 @@ function analysisBtn() {
 }
 function copyCode(codeId) {
   const code = window['czig_code_html' + codeId];
-  console.log(code)
+  // // console.log(code)
   window.copyText(code, () => {
     ElMessage.success("复制成功")
   }, () => {
@@ -613,7 +613,7 @@ function copyHtml(i){
 //   let tmp = ask.style.height+'';
 //   ask.style.height = '0';
 //   let newHeight = ask.scrollHeight;
-//   // console.log(newHeight,tmp)
+//   // // console.log(newHeight,tmp)
 //   if (newHeight > 200) newHeight = parseInt(tmp)
 //   ask.style.height = newHeight+'px';
 // }
@@ -653,7 +653,7 @@ function setInputHeight(){
   const textareaCssContainer = document.getElementById('input_chat_ai_div')
   textareaCssContainer.style.setProperty('--inputContainerHeight', '32px');
   const scrollHeight = textarea.scrollHeight;
-  console.log(scrollHeight);
+  // console.log(scrollHeight);
   textareaCssContainer.style.setProperty('--inputContainerHeight', scrollHeight+'px');
   now.value = textarea.value.length;
 }
@@ -696,6 +696,7 @@ const stop = async (param)=>{
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
   debouncedScrollToBottom();
+  showStop.value = true;
   if(useInternet.value) {
     analysis_line.value = 'line-1';
     chatList.value[index - 1].status = 'thinking';
@@ -703,29 +704,17 @@ async function deepMind(targetValue, targetTime, index) {
     await Promise.all([
       Auth.deepMind_Analysis({
         ...(createOptions({targetValue,targetTime,index})),
-        onmessage: async (source, model) => {
-          showStop.value = true;
-          const decode = JSON.parse(source);
-          let tmp = '';
-          try{
-            const list  = JSON.parse(decode.candidates[0].content.parts[0].text || []);
-            await Auth.functionCall({"name": "web_search","args": {"keywords": list}}, {
-              renderHtml: (html) => {
-                chatList.value[index - 1].analysis += html;
-                debouncedScrollToBottom();
-              },
-            });
-          }catch(e){
-            await Auth.getPrtoken();
-          }
+        onclose: (source) => {
+          chatList.value[index - 1].analysis += source;
+          debouncedScrollToBottom();
         }
       }),
-      Auth.functionCall( {"name": "web_search","args": {"keywords": [targetValue]}}, {
-        renderHtml: (html) => {
-          chatList.value[index - 1].analysis += html;
-          debouncedScrollToBottom();
-        },
-      })
+      // Auth.functionCall( {"name": "web_search","args": {"keywords": [targetValue]}}, {
+      //   renderHtml: (html) => {
+      //     chatList.value[index - 1].analysis += html;
+      //     debouncedScrollToBottom();
+      //   },
+      // })
     ]);
     debouncedScrollToBottom();
   }
@@ -842,7 +831,7 @@ async function initiateChatWithAI(opt) {
     line: chat_line.value,
     time: opt.targetTime,
     onerror: (source, model) => {
-      console.log('错误');
+      // console.log('错误');
       window.clarity('event', 'CHAT-AI-ERROR');
       // retryChatWithAI(opt);
     },
@@ -861,11 +850,11 @@ function handleOnMessage(source, model, opt) {
   const decode = JSON.parse(source);
   let tmp = '';
   try{
-    console.log(decode);
+    // console.log(decode);
     if (decode.candidates) { model = 'line-1'}
     else if(decode.choices) { model = 'line-2'}
     else if(decode.response || decode.usage) {model = 'line-4'};
-    console.log(model);
+    // console.log(model);
     switch (model) {
       case 'line-1':
         if(decode.candidates[0].finishReason == 'STOP'){
@@ -1024,14 +1013,14 @@ onMounted(async ()=>{
     }
   }
   let id = route.params.id;
-  console.log('active'+id)
+  // console.log('active'+id)
   // } else {
     sessionID.value = id
     // onChange()
     // await Auth.init()
     fingerprint.value = await Auth.getUserFingerprint();
     const welcomeOnline = (await Auth.getAIWelcome({sessionID:id}))
-    // console.log(welcomeOnline)
+    // // console.log(welcomeOnline)
     welcome.value = welcomeOnline.content;
     model_info.value = {
       ...model_info.value,
@@ -1040,8 +1029,8 @@ onMounted(async ()=>{
       createuser:welcomeOnline.model.createuser,
     };
     await Promise.all([async ()=>{
-      // console.log(1)
-      // console.log(model_info.value)
+      // // console.log(1)
+      // // console.log(model_info.value)
       model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
       return 0;
     },async ()=>{

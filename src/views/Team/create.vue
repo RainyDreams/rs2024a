@@ -83,7 +83,7 @@ const rules = reactive({
 const selectAndCopy = () => {
   if (inputRef.value) {
     navigator.clipboard.writeText(inputRef.value.value).then(() => {
-      // console.log('文本已复制到剪贴板');
+      // // console.log('文本已复制到剪贴板');
     }, (err) => {
       inputRef.value.select();
       document.execCommand('copy');
@@ -127,7 +127,7 @@ const submitForm = (formEl) => {
       }
       formloading.value=false;
     } else {
-      // console.log('error submit!')
+      // // console.log('error submit!')
       formloading.value=false;
       return false;
     }
