@@ -7,7 +7,7 @@
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
-                <div class="title text-center w-full text-lg sticky top-0 z-50 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
+                <div class="title text-center w-full text-lg sticky top-0 z-50 bg-slate-50 pb-1 truncate px-5 border-b border-slate-300" >{{ title }}</div>
                 <div class="system mb-3 md:mb-4 lg:mb-5 block">
                   <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar> -->
                   <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
