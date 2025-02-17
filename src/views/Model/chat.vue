@@ -3,11 +3,12 @@
     <div class="scroll">
       <div class="">
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
-          <div class="panel aichat">
+          <div class="aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
-                <div class="system mb-3 md:mb-4 lg:mb-5">
+                <div class="title text-center w-full text-lg sticky top-0 z-50 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
+                <div class="system mb-3 md:mb-4 lg:mb-5 block">
                   <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar> -->
                   <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
                     <!-- <el-skeleton :rows="3" animated v-show="welcome_loading" class="bg-white p-5 rounded-lg"></el-skeleton> -->
@@ -859,9 +860,11 @@ function handleOnMessage(source, model, opt) {
   const decode = JSON.parse(source);
   let tmp = '';
   try{
-    if (decode.candidates[0].content.parts) { model = 'line-1'}
-    else if(decode.choices[0].delta?.content) { model = 'line-2'}
-    else if(decode.response) {model = 'line-4'};
+    console.log(decode);
+    if (decode.candidates) { model = 'line-1'}
+    else if(decode.choices) { model = 'line-2'}
+    else if(decode.response || decode.usage) {model = 'line-4'};
+    console.log(model);
     switch (model) {
       case 'line-1':
         if(decode.candidates[0].finishReason == 'STOP'){
@@ -903,7 +906,7 @@ function handleOnMessage(source, model, opt) {
         break;
     }
   }catch(e){
-    ElMessage.warning('出现错误');
+    // ElMessage.warning('出现错误'+e);
   }
   chatList.value[opt.index].content += tmp;
   // debouncedScrollToBottom();
@@ -939,7 +942,7 @@ async function handleOnClose(error,model,opt) {
         });
         suggestions.value = res.suggestions;
         title.value = res.title;
-        debouncedScrollToBottom();
+        // debouncedScrollToBottom();
         emitter.emit('updateTitle', res.title);
       // });
       
