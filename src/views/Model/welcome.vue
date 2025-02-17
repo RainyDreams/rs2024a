@@ -1,5 +1,5 @@
 <template>
-  <div class="commonPage bg-transparent md:rounded-lg pb-0 h-dvh pt-3" style="display: flex;flex-direction: column;">
+  <div class="commonPage bg-slate-50 md:rounded-lg pb-0 h-dvh pt-3" style="display: flex;flex-direction: column;">
     <div class="scroll">
       <div class="">
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">

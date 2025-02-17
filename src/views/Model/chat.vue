@@ -7,7 +7,7 @@
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
-                <div class="title text-center w-full text-lg sticky top-0 z-50 bg-slate-50 pb-1 truncate px-5 border-b border-slate-300" >{{ title }}</div>
+                <div class="title text-center w-full text-lg sticky top-0 z-50 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
                 <div class="system mb-3 md:mb-4 lg:mb-5 block">
                   <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar> -->
                   <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
@@ -81,8 +81,8 @@
                     </router-link>
                     <touch-ripple
                       :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-slate-950':'text-slate-950')"
-                      :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#ffedd5':'#fff' }"
-                      :color="showModelDetail?'#f7deb7':'#f7deb7'"
+                      :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#4e81fc44':'#fff' }"
+                      :color="showModelDetail?'#fff':'#4e81fc'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
@@ -158,6 +158,7 @@
                   </div>
                   <div v-show="showInfo">
                     <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 mx-auto bg-white border rounded-xl p-3 duration-100">
+                      <p>查看<router-link to="/about/log">更新日志</router-link></p>
                       <div class="w-full text-sm/relaxed">由于服务器成本原因，对大模型所有用户限制如下：每分钟15次，每天1000次提问。</div>
                     </div>
                   </div>
