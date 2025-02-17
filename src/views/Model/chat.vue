@@ -173,7 +173,7 @@
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                     <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
-                    <div class="chatcontent min-h-8 border border-slate-200 break-normal w-fit min-w-6 px-4 py-2 rounded-3xl bg-slate-100 text-slate-950 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
+                    <div class="chatcontent min-h-8 border border-slate-200 break-words w-fit min-w-6 px-4 py-2 rounded-3xl bg-slate-100 text-slate-950 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
                     >{{item.content}}</div>
                     <!-- <div class="flex mt-2">
                       <el-tooltip
@@ -226,7 +226,7 @@
                     <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
                       :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
                     <!-- <div></div> -->
-                    <div class="chatcontent text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                    <div class="chatcontent text-sm/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                       <!-- <div v-for="(e,i2) in contentRendered" :key="i2" v-if="i == chatList.length-1">
                         <div v-html="md.render(e.content)" :class="{ 'fade-in': e.fresh }" @animationend="e.fresh = false"></div>
                       </div> -->
@@ -340,7 +340,6 @@
                 ><textarea
                   id="input_chat_ai"
                   class="textarea__inner w-full text-base/6 py-1 font-medium max-h-72 md:max-h-80 min-h-8"
-                  ref="askRef"
                   type="textarea"
                   resize="none" 
                   size="large" 
@@ -543,7 +542,6 @@ const route = useRoute()
 const router = useRouter()
 const chatList = ref([]);
 const input = ref("");
-const askRef = ref();
 const placeholder = ref("你好👋");
 const loading = ref(true);
 const ainput = ref()
@@ -607,44 +605,26 @@ function copyHtml(i){
     ElMessage.error("复制失败")
   })
 }
-// function updateInputHeight() {
-//   const ask = askRef.value;
-//   if (!ask) return;
-//   let tmp = ask.style.height+'';
-//   ask.style.height = '0';
-//   let newHeight = ask.scrollHeight;
-//   // // console.log(newHeight,tmp)
-//   if (newHeight > 200) newHeight = parseInt(tmp)
-//   ask.style.height = newHeight+'px';
-// }
-// const throttledUpdateInputHeight = throttle(updateInputHeight, 100);
-
-// watch(input, () => {
-//   throttledUpdateInputHeight();
-// });
 function isMobile() {
   const userAgent = navigator.userAgent;
   const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
   return mobileRegex.test(userAgent);
 }
 const mobile = isMobile();
-const handleEnter = async (event) => {
+const handleEnter = (event) => {
   if (event.shiftKey || mobile) {
-    input.value = askRef.value.value
+    input.value = document.getElementById('input_chat_ai').value
     return;
   } else if (event.key === 'Enter') {
     event.preventDefault();
-    input.value = askRef.value.value
+    input.value = document.getElementById('input_chat_ai').value
     if(!loading.value && input.value.trim()){
       throttledSend()
     }
   }
 }
-// const debouncedGetLength = debounce((i)=>{
-//   const textarea = document.getElementById('input_chat_ai');
-// }, 500);
 function ask(q){
-  askRef.value.value=q;
+  document.getElementById('input_chat_ai').value=q;
   suggestions.value=[];
   send();
 }
@@ -908,7 +888,7 @@ async function handleOnClose(error,model,opt) {
   showStop.value = false;
   loading.value = false;
   placeholder.value = '还有什么想聊的';
-  askRef.value.focus();
+  document.getElementById('input_chat_ai').focus();
   if (!chatList.value[opt.index].content) {
     if (!error) {
       chatList.value[opt.index].content += '[回答已终止].';
@@ -945,7 +925,7 @@ async function handleOnClose(error,model,opt) {
 }
 
 const send = async (param)=>{
-  input.value = askRef.value.value
+  input.value = document.getElementById('input_chat_ai').value
   if(input.value.trim() == '') {
     // ElMessage.warning("Shift + Enter 换行");
     return;
@@ -972,14 +952,14 @@ const send = async (param)=>{
   })
   const targetValue = input.value
   input.value = '';
-  askRef.value.value = '';
+  document.getElementById('input_chat_ai').value = '';
   now.value = 0;
   suggestions.value = [];
   const textareaCssContainer = document.getElementById('input_chat_ai_div')
   textareaCssContainer.style.setProperty('--inputContainerHeight', '32px');
-  // askRef.value.style.height = askRef.value.scrollHeight+'px'
+  // document.getElementById('input_chat_ai').style.height = document.getElementById('input_chat_ai').scrollHeight+'px'
   loading.value = true;
-  askRef.value?.focus();
+  document.getElementById('input_chat_ai').focus();
   placeholder.value = "正在回复中...";
   window.clarity("identify", fingerprint.value, null, "CHAT-AI", null)
   if (
@@ -1004,7 +984,7 @@ const send = async (param)=>{
 const loginStatus = ref(false);
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
 const debouncedScrollToBottom = debounce(scrollToBottom, 700); // 调整 300 为所需的毫秒数
-const throttledScrollToBottom = throttle(scrollToBottom, 700); // 调整 300 为所需的毫秒数
+const throttledScrollToBottom = throttle(scrollToBottom, 1500); // 调整 300 为所需的毫秒数
 onMounted(async ()=>{
   const info = sessionStorage.getItem('userInfo');
   if(info){
@@ -1056,7 +1036,7 @@ onMounted(async ()=>{
     
     welcome_loading.value = false;
     loading.value = false;
-    askRef.value.focus()
+    document.getElementById('input_chat_ai').focus()
   // }
 })
 </script>

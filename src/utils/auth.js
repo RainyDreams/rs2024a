@@ -26,82 +26,13 @@ const defaultFailed = async function (response,code) {
     return { status: 'offline' }
   }
   const ua = navigator.userAgent;
-  const r = await Auth.reportErrlog(JSON.stringify({
-    ua,
-    link:window.location.href,
-    content:`${code}\n${response}`,
-    time:new Date().getTime()
-  }))
-  // // console.info('[errId]',r)
-  // Auth.copyText(`${r.content.id}`)
+  const r = await Auth.reportErrlog(new Error(
+    `Content:${code}\n${response}<br/>
+    UA:${ua}<br/>
+    Link:${window.location.href}<br/>
+    time:${new Date().getTime()}`
+  ))
   window.clarity("set", 'reportID', r.id);
-  // debugger;
-  // // console.dir(response.status+'',response.status+'' == 401+'')
-  // if (response.status == 401) {
-    // // console.wran('401 get prtoken')
-    // window.location.href = ('/login-needed?url='+encodeURIComponent(window.location))
-
-    // const getPr = await Auth.getPrtoken();
-    // // console.dir(getPr);
-    // if(getPr.status=='sus'){
-    //   ElMessage.error('发生错误');
-    //   // ElMessageBox.alert('网络遇到问题，请刷新页面', '错误', {
-    //   //   confirmButtonText: '确定',
-    //   //   callback:()=>{
-    //   //     window.location.reload()
-    //   //   }
-    //   // })
-    // } else {
-    //   ElMessage.error('未登录或登录过期');
-    //   // // console.log(router)
-    //   window.location.href = ('/login-needed?url='+encodeURIComponent(window.location))
-    //   // window.location.href="/login-needed?url="+encodeURIComponent(window.location.href)
-    //   return { status: 'invalid', content: response };
-    // }
-  // } else {
-  //   ElMessage.error('服务器错误');
-  //   try{
-  //     if(code==2){
-
-  //     }
-  //     if(code==3){
-  //       throw response;
-  //     }
-  //       // 
-  //     if(code==0){
-  //       throw {
-  //         status: 0b00000011,
-  //         message: '这块可能是编写程序疏漏引发的错误，请点击报告错误，并把识别码发给我。感谢你的支持',
-  //       };
-  //     } 
-  //     let text = ''
-  //     if(response.text)
-  //       text == (await response.text());
-  //     throw new Error(response.url+"\n" + text)
-  //   } catch (err){
-      // // console.error(err.message+'\n'+err.stack)
-      // ElMessageBox.alert('', '很抱歉，遇到了程序性错误', {
-      //   dangerouslyUseHTMLString:true,
-      //   customClass:'czigerr',
-      //   message: 
-      //   `<div class="text-sm ">正像你所看到的这样，我们的软件出现了BUG，但是并不严重，至少我们还能捕获这个错误。软件开发初期，仅用20余天开发，敬请见谅。请联系本项目负责人张新越（赤峰二中202312班）<br/>
-      //   以下是可以提供的错误信息<br/><b>状态码：<span style="color:red">${response.status||'未知错误'}</span></b><br/><b>${(err.message+"</b><i>"+err.stack+"")}</i></div>`,
-      //   confirmButtonText: '报告错误',
-      //   showCancelButton:true,
-      //   cancelButtonText:'忽略错误',
-      //   'show-close':false,
-      //   beforeClose:async (value,instance, done)=>{
-      //     if(value=='confirm'){
-            // instance.confirmButtonLoading = true
-            // instance.confirmButtonText = '上传错误信息'
-            
-            // ElMessageBox.alert(`已尝试上传错误信息\n错误信息代码：${r.content.id}\n可以将以上信息提供给我，便于分析处理错误`,'提示',{})
-          // }
-          // done();
-        // }
-      // })
-  //   }
-  // }
   return { status: 'error', content: response };
 }
 export class Scheduler {
@@ -133,7 +64,6 @@ let Auth = {
   route: null,
   init: async function init() {
     const prStatus = (await this.getPrtoken("first")).status;
-    // // console.log(prStatus);
     if (prStatus == "invalid") {
       ElMessage.info("正在尝试使用访客身份登录，请稍等");
       const res = await this.guestLogin();
@@ -172,8 +102,6 @@ let Auth = {
           return { ...data,status: "sus", content: await success(data), };
         } else if (data.status === "error" && data.code === 4) {
           let a = await this.getPrtoken();
-          // // console.error('401',url)
-          // throw new Error('401',url)
           if(a.status == 'notExist'){
             if(Auth.router){
               Auth.router.push('/login-needed?url='+encodeURIComponent(window.location.pathname))
@@ -181,15 +109,18 @@ let Auth = {
               window.location.href = ('/login-needed?url='+encodeURIComponent(window.location.pathname))
             }
           } else{
-            return await this.basicAuth(url, body, { success, failed });
+            return await this.basicAuth(url, body);
           }
         } else {
+          console.error(url,fdata);
           return await failed(data.status+'\n'+fdata, url);
         }
       } else {
+        console.error(url,fdata);
         return await failed(await response.text(), url);
       }
     } catch (error) {
+      console.error(error);
       return await failed(error, url);
     }
   },
@@ -311,10 +242,11 @@ let Auth = {
   reportErrlog:async function reportErrlog(content) {
     await this.getUserFingerprint();
     window.clarity("event", 'reportErrlog')
+    let t = {}
     try{
-      this.basicAuth("/api/reportErrlog", content,{failed:async ()=>{}});
+      t = this.basicAuth("/api/reportErrlog", content,{failed:async ()=>{}});
     }catch(err){}
-    return null;
+    return t
   },
   getPrtoken: async function getPrtoken(mode) {
     // // console.log(Cookies.get("czigauth"));
