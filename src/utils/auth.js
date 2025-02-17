@@ -26,12 +26,12 @@ const defaultFailed = async function (response,code) {
     return { status: 'offline' }
   }
   const ua = navigator.userAgent;
-  const r = await Auth.reportErrlog(new Error(
+  const err = new Error(
     `Content:${code}\n${response}<br/>
     UA:${ua}<br/>
     Link:${window.location.href}<br/>
-    time:${new Date().getTime()}`
-  ))
+    time:${new Date().getTime()}`)
+  const r = await Auth.reportErrlog(`${err.message}<br/>${err.stack}`)
   window.clarity("set", 'reportID', r.id);
   return { status: 'error', content: response };
 }
