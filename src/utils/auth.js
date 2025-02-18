@@ -724,7 +724,7 @@ let Auth = {
       }
     } catch (error) {
       param.onclose(true,postData.model);
-      // if(param.onerror) param.onerror(error);
+      if(param.onerror) param.onerror(error);
       // defaultFailed(error,3)
       // // console.error(error)
       // defaultFailed(error,2)
