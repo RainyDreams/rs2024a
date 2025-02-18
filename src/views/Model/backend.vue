@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 bg-slate-50 rounded-lg min-h-screen">
+  <div class="p-4 bg-slate-50 rounded-lg min-h-ss">
     <h1 class="text-3xl font-bold mb-4 text-gray-900">会话管理后台</h1>
     <div
       class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
@@ -20,8 +20,8 @@
       </div>
     </div>
 
-    <div v-if="dialogVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-screen">
-      <div class="bg-slate-50 rounded-lg shadow-lg max-w-2xl max-h-screen overflow-y-auto w-full h-full">
+    <div v-if="dialogVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-ss">
+      <div class="bg-slate-50 rounded-lg shadow-lg max-w-2xl max-h-ss overflow-y-auto w-full h-full">
         <div class="p-4 flex justify-between items-center sticky top-0 bg-slate-50">
           <h2 class="text-lg font-semibold">聊天记录</h2>
           <button @click="dialogVisible = false" class="text-gray-500 hover:text-gray-700">
@@ -85,7 +85,7 @@
       </div>
     </div>
 
-    <div v-if="chatListDialogVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-screen">
+    <div v-if="chatListDialogVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-ss">
       <div class="bg-slate-50 rounded-lg shadow-lg max-w-2xl overflow-y-auto w-full h-full">
         <div class="p-4 flex justify-between items-center sticky top-0 bg-slate-50">
           <h2 class="text-lg font-semibold ">聊天详情</h2>
@@ -200,3 +200,11 @@ const openChatListDialog = async (session) => {
   }
 };
 </script>
+
+
+<style>
+
+.h-ss{
+  height: 100vh;
+  height: 100svh;
+}</style>
