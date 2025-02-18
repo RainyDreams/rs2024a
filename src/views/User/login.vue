@@ -72,7 +72,7 @@ const rules = reactive({
   ]
 });
 if(Cookies.get('czigauth') == 'AlreadyAuthenticated'){
-  router.push('/login-already')
+  router.push('/login-already?url='+route.query.url)
 }
 onActivated(async ()=>{
   // // console.log(123)

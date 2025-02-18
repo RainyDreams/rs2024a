@@ -44,11 +44,14 @@ import JoinProcess from '../views/Status/JoinProcess.vue';
 import TestIndex from '../views/Test/index.vue';
 import Error404 from '../views/Errors/404.vue';
 
+import backend from '../views/Model/backend.vue';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: "/", name: "ModelWelcome", component: ModelWelcome,meta:{title:'OriginSynq AI',hide:['sidebar','tabbar']} },
     { path: "/quant", name: "ModelQuant", component: ModelQuant,meta:{title:'OriginSynq AI 自然语言量化交易策略',hide:['sidebar','tabbar']} },
+    { path: "/backend", name: "ModelBackEnd", component: backend,meta:{title:'OriginSynq AI 后台',hide:['sidebar','tabbar']} },
     { path: "/chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'OriginSynq AI',hide:['tabbar','sidebar']}},
     { path: "/model/", name: "Model", children:[
       { path: "square", name: "ModelSquare", component: ModelSquare,meta:{title:'OriginSynq AI 智能体广场'} },

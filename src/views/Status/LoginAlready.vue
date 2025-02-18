@@ -13,6 +13,10 @@
 
 <script setup>
 import { ElResult,ElButton } from 'element-plus';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
+// 获取route.query.url
+const route = useRoute();
+const router = useRouter();
+router.push({  path: route.query.url || '/user/profile',});
 // emitter.emit('updateBasicAuth')
 </script>

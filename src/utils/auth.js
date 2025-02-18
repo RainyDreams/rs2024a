@@ -113,8 +113,9 @@ let Auth = {
           return await failed(data.status+'\n'+fdata, url);
         }
       } else {
+        let fdata = await response.text();
         console.error(url,fdata);
-        return await failed(await response.text(), url);
+        return await failed(fdata, url);
       }
     } catch (error) {
       console.error(error);
@@ -509,7 +510,7 @@ let Auth = {
   getAiChatHistory: async function getAiChatHistory(param){
     window.clarity("event", 'getAiChatHistory')
     await this.getPrtoken();
-    return this.basicAuth('/api/ai/get_history');
+    return this.basicAuth('/api/ai/get_history',param);
   },
   getAIChatList: async function getAIChatList(param){
     window.clarity("event", 'getAIChatList')
@@ -639,6 +640,15 @@ let Auth = {
       onerror:param.onerror,
       stopStatus:param.stopStatus
     });
+  },
+
+
+
+
+  dangerViewGuest:async function dangerViewGuest(param) {
+    window.clarity("event", 'dangerViewGuest')
+    await this.getPrtoken();
+    return this.basicAuth('/api/danger/viewGuest', JSON.stringify({}));
   },
 
 
