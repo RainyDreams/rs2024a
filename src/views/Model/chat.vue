@@ -173,8 +173,22 @@
                   <div class="user" v-if="item.role == 'user'" :data-id="i">
                     <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                     <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
-                    <div class="chatcontent min-h-8 border border-slate-200 break-words w-fit min-w-6 px-4 py-2 rounded-3xl bg-slate-100 text-slate-950 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
-                    >{{item.content}}</div>
+                    <div class="flex items-end">
+                      <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        content="复制Markdown"
+                        placement="bottom-start"
+                      >
+                        <div 
+                          @click="copyText(item.content)"
+                          class="p-2 hover:bg-slate-100 border-transparent mb-1 opacity-50 hover:opacity-100 hover:border-slate-200 border h-[35px] mr-2 w-[35px] transition-all rounded-md cursor-pointer">
+                          <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
+                        </div>
+                      </el-tooltip>
+                      <div class="chatcontent min-h-8 border border-blue-200 break-words w-fit min-w-6 px-4 py-2 rounded-3xl bg-blue-100 text-blue-900 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
+                      >{{item.content}}</div>
+                    </div>
                     <!-- <div class="flex mt-2">
                       <el-tooltip
                         class="box-item"
@@ -188,23 +202,12 @@
                           <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip> -->
-                      <!-- <el-tooltip
-                        class="box-item"
-                        effect="dark"
-                        content="复制Markdown"
-                        placement="top-start"
-                      >
-                        <div 
-                          @click="copyText(item.content)"
-                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
-                          <DocDetail theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
-                        </div>
-                      </el-tooltip> -->
+                      <!--  -->
                     <!-- </div> -->
                     <div class="analysis max-w-full mt-2" v-show="item.status != 'no_analysis' && item.analysis">
                       <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                       <div 
-                        :class="`_text text-gray-500 text-xs lg:text-sm  px-4 py-5 bg-white rounded-xl `+(item.status=='analysis'?'active':'')" v-show="item.show_thought" 
+                        :class="`_text text-gray-500 text-xs lg:text-sm  px-4 py-5  border border-slate-200 bg-white rounded-xl `+(item.status=='analysis'?'active':'')" v-show="item.show_thought" 
                         v-html="md.render(item.analysis || '')"
                       ></div>
                       <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
@@ -247,7 +250,7 @@
                       >
                         <div 
                           @click="copyText(item.content)"
-                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer mr-1">
                           <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
@@ -259,7 +262,7 @@
                       >
                         <div 
                           @click="copyHtml(i)"
-                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                          class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer">
                           <DocDetail theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                         </div>
                       </el-tooltip>
