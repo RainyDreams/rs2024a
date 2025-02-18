@@ -999,19 +999,21 @@ onMounted(async ()=>{
     // onChange()
     // await Auth.init()
     fingerprint.value = await Auth.getUserFingerprint();
-    const welcomeOnline = (await Auth.getAIWelcome({sessionID:id}))
-    // // console.log(welcomeOnline)
-    welcome.value = welcomeOnline.content;
-    model_info.value = {
-      ...model_info.value,
-      name:welcomeOnline.model.name,
-      desc:welcomeOnline.model.desc,
-      createuser:welcomeOnline.model.createuser,
-    };
-    await Promise.all([async ()=>{
+    await Promise.all([
+    async ()=>{
+      const welcomeOnline = (await Auth.getAIWelcome({sessionID:id}))
+      // // console.log(welcomeOnline)
+      welcome.value = welcomeOnline.content;
+      model_info.value = {
+        ...model_info.value,
+        name:welcomeOnline.model.name,
+        desc:welcomeOnline.model.desc,
+        createuser:welcomeOnline.model.createuser,
+      };
       // // console.log(1)
       // // console.log(model_info.value)
       model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
+      welcome_loading.value = false;
       return 0;
     },async ()=>{
       let tmp = 0;
@@ -1033,8 +1035,6 @@ onMounted(async ()=>{
     }].map(async(e)=>{
       return e()
     }))
-    
-    welcome_loading.value = false;
     loading.value = false;
     document.getElementById('input_chat_ai').focus()
   // }
