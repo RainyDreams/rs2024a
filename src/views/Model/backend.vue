@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 bg-slate-50 rounded-lg min-h-screen">
-    <h1 class="text-3xl font-bold mb-4 text-gray-900">后台</h1>
+    <h1 class="text-3xl font-bold mb-4 text-gray-900">会话管理后台</h1>
     <div
       class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
@@ -45,12 +45,48 @@
           <div v-else>
             <p>暂无聊天记录</p>
           </div>
+
+          <!-- 新增：显示用户完整信息 -->
+          <div v-if="selectedUser" class="mt-8">
+            <h3 class="text-2xl font-semibold mb-4">用户信息</h3>
+            <div class="columns-1 sm:columns-2 md:columns-3 gap-2">
+              <div class="bg-white p-4 rounded-lg shadow-md break-inside-avoid shadow-slate-200 mb-2">
+                <p class="font-semibold text-gray-700 mb-2">用户名</p>
+                <p class="text-gray-600">{{ selectedUser.username }}</p>
+              </div>
+              <div class="bg-white p-4 rounded-lg shadow-md break-inside-avoid shadow-slate-200 mb-2">
+                <p class="font-semibold text-gray-700 mb-2">昵称</p>
+                <p class="text-gray-600">{{ selectedUser.nickname }}</p>
+              </div>
+              <div class="bg-white p-4 rounded-lg shadow-md break-inside-avoid shadow-slate-200 mb-2">
+                <p class="font-semibold text-gray-700 mb-2">ID</p>
+                <p class="text-gray-600">{{ selectedUser.id }}</p>
+              </div>
+              <div class="bg-white p-4 rounded-lg shadow-md break-inside-avoid shadow-slate-200 mb-2 flex items-center">
+                <p class="font-semibold text-gray-700 mb-2">头像</p>
+                <img :src="selectedUser.profile.avatar" alt="User Avatar" class="w-12 h-12 object-cover rounded-full ml-2" v-if="selectedUser.profile.avatar" />
+                <p class="text-gray-600" v-else>无头像</p>
+              </div>
+              <div class="bg-white p-4 rounded-lg shadow-md break-inside-avoid shadow-slate-200 mb-2">
+                <p class="font-semibold text-gray-700 mb-2">创建时间</p>
+                <p class="text-gray-600">{{ dayjs(selectedUser.profile.createTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
+              </div>
+              <div class="bg-white p-4 rounded-lg shadow-md break-inside-avoid shadow-slate-200 mb-2">
+                <p class="font-semibold text-gray-700 mb-2">创建信息</p>
+                <p class="text-gray-600 whitespace-pre-line">{{ selectedUser.profile.createInfo }}</p>
+              </div>
+              <div class="bg-white p-4 rounded-lg shadow-md break-inside-avoid shadow-slate-200 mb-2">
+                <p class="font-semibold text-gray-700 mb-2">身份类型</p>
+                <p class="text-gray-600">{{ selectedUser.profile.identityType }}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <div v-if="chatListDialogVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-screen">
-      <div class="bg-slate-50 rounded-lg shadow-lg max-w-2xl max-h-screen overflow-y-auto w-full h-full">
+      <div class="bg-slate-50 rounded-lg shadow-lg max-w-2xl overflow-y-auto w-full h-full">
         <div class="p-4 flex justify-between items-center sticky top-0 bg-slate-50">
           <h2 class="text-lg font-semibold ">聊天详情</h2>
           <button @click="chatListDialogVisible = false" class="text-gray-500 hover:text-gray-700">
@@ -65,7 +101,8 @@
           </div>
           <div v-if="chatList.length > 0 &&!loadingChatList">
             <!-- 显示聊天记录的基本信息 -->
-            <div class="mb-4">
+            <div class="mb-4 text-slate-500 text-sm">
+              <p><strong>标题:</strong> {{ sessionInfo.title }}</p>
               <p><strong>创建时间:</strong> {{ dayjs(sessionInfo.createTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
               <p><strong>最后聊天时间:</strong> {{ dayjs(sessionInfo.lastTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
               <p><strong>过期时间:</strong> {{ dayjs(sessionInfo.expirationTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
@@ -98,18 +135,19 @@ import Auth from '../../utils/auth';
 import dayjs from 'dayjs';
 
 const list = ref([{
-  id:"__guest__",
-  username:"__guest__",
-  nickname:"未登录访客",
-  profile:"{}"
+  id: "__guest__",
+  username: "__guest__",
+  nickname: "未登录访客",
+  profile: "{}"
 }]);
 const dialogVisible = ref(false);
-const chatSessions = ref([]); // 存储聊天会话列表
-const chatList = ref([]); // 存储聊天消息
-const chatListDialogVisible = ref(false); // 控制聊天详情弹窗
+const chatSessions = ref([]);
+const chatList = ref([]);
+const chatListDialogVisible = ref(false);
 const loadingChatSessions = ref(false);
 const loadingChatList = ref(false);
-const sessionInfo = ref({}); // 存储聊天会话的基本信息
+const sessionInfo = ref({});
+const selectedUser = ref(null);
 
 onActivated(async () => {
   list.value = list.value.concat((await Auth.dangerViewGuest()).content || []);
@@ -119,9 +157,13 @@ const getChatHistory = async (item) => {
   try {
     loadingChatSessions.value = true;
     const response = await Auth.getAiChatHistory(JSON.stringify({ user: item.id }));
-    if (response.status === 'sus') {
-      chatSessions.value = response.content.filter(e=>e.title!='无标题')
+    if (response.status ==='sus' && response.content) {
+      chatSessions.value = response.content.filter(e => e.title!== '无标题');
       dialogVisible.value = true;
+      selectedUser.value = {
+        ...item,
+        profile: JSON.parse(item.profile)
+      };
     } else {
       console.error("获取SessionID失败:", response);
     }
@@ -136,11 +178,12 @@ const openChatListDialog = async (session) => {
   try {
     loadingChatList.value = true;
     const sessionResponse = await Auth.getAIChatList({ sessionID: session.sessionID });
-    if (sessionResponse.status === 'sus') {
+    if (sessionResponse.status ==='sus') {
       chatList.value = sessionResponse.content;
       // 存储聊天会话的基本信息
       sessionInfo.value = {
         createTime: session.createTime,
+        title: session.title,
         lastTime: session.lastTime,
         expirationTime: session.expirationTime,
         vf: sessionResponse.vf || [],
