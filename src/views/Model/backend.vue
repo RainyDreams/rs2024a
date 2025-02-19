@@ -34,18 +34,6 @@
           <div v-if="loadingChatSessions" class="flex justify-center items-center">
             <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
           </div>
-          <div v-if="chatSessions.length > 0 &&!loadingChatSessions" class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <div v-for="session in chatSessions" :key="session.sessionID" class="p-4 bg-white rounded-lg shadow-md shadow-slate-200 transition duration-200 cursor-pointer
-                hover:bg-slate-100 active:scale-95"
-              @click="openChatListDialog(session)" >
-              <p>{{ session.title || '无标题' }}</p>
-              <p>{{ dayjs(session.createTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
-            </div>
-          </div>
-          <div v-else>
-            <p>暂无聊天记录</p>
-          </div>
-
           <!-- 新增：显示用户完整信息 -->
           <div v-if="selectedUser" class="mt-8">
             <h3 class="text-2xl font-semibold mb-4">用户信息</h3>
@@ -81,6 +69,18 @@
               </div>
             </div>
           </div>
+          <div v-if="chatSessions.length > 0 &&!loadingChatSessions" class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div v-for="session in chatSessions" :key="session.sessionID" class="p-4 bg-white rounded-lg shadow-md shadow-slate-200 transition duration-200 cursor-pointer
+                hover:bg-slate-100 active:scale-95"
+              @click="openChatListDialog(session)" >
+              <p>{{ session.title || '无标题' }}</p>
+              <p>{{ dayjs(session.createTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
+            </div>
+          </div>
+          <div v-else>
+            <p>暂无聊天记录</p>
+          </div>
+
         </div>
       </div>
     </div>
@@ -158,15 +158,15 @@ const getChatHistory = async (item) => {
     loadingChatSessions.value = true;
     const response = await Auth.getAiChatHistory(JSON.stringify({ user: item.id }));
     if (response.status ==='sus' && response.content) {
-      chatSessions.value = response.content.filter(e => e.title!== '无标题');
-      dialogVisible.value = true;
-      selectedUser.value = {
-        ...item,
-        profile: JSON.parse(item.profile)
-      };
+      chatSessions.value = response.content.filter(e => e.title!== '无标题') || [];
     } else {
       console.error("获取SessionID失败:", response);
     }
+    dialogVisible.value = true;
+    selectedUser.value = {
+      ...item,
+      profile: JSON.parse(item.profile)
+    };
   } catch (error) {
     console.error("Error fetching data:", error);
   } finally {
@@ -184,7 +184,7 @@ const openChatListDialog = async (session) => {
       sessionInfo.value = {
         createTime: session.createTime,
         title: session.title,
-        lastTime: session.lastTime,
+        lastTime: sessionResponse.lastTime,
         expirationTime: session.expirationTime,
         vf: sessionResponse.vf || [],
         pt: sessionResponse.pt || ''
