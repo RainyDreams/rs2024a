@@ -704,6 +704,7 @@ async function deepMind(targetValue, targetTime, index) {
   if (useAnalysis.value){
     let _analysis2;
     Auth.chatTaskThread.add(async () => {
+      chatList.value[index - 1].analysis += '\n\n'; 
       let _analysis = chatList.value[index - 1].analysis;
       chatList.value[index - 1].status = 'try';
       await Auth.deepMind_Try(createOptions({targetValue,targetTime,index},[_analysis],(e)=>{
