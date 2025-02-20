@@ -676,15 +676,17 @@ const stop = async (param)=>{
   loading.value=false;
 }
 function renderAnalysis(index){
-  chatList.value[index].renderAnalysis
+  chatList.value[index].renderedAnalysis
   = md.render(chatList.value[index].analysis)
 }
 function renderContent(index){
-  chatList.value[index].renderContent
+  chatList.value[index].renderedContent
   = md.render(chatList.value[index].content)
 }
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
+  const useAnalysis = useAnalysis.value;
+  const useInternet = useInternet.value;
   debouncedScrollToBottom();
   showStop.value = true;
   if(useInternet.value) {
@@ -693,7 +695,7 @@ async function deepMind(targetValue, targetTime, index) {
     //并行运行
     await Promise.all([
       Auth.deepMind_Analysis({
-        ...(createOptions({targetValue,targetTime,index})),
+        ...(createOptions({targetValue,targetTime,index,useAnalysis,useInternet})),
         onclose: (source) => {
           chatList.value[index - 1].analysis += source;
           renderAnalysis(index - 1);
@@ -710,13 +712,13 @@ async function deepMind(targetValue, targetTime, index) {
       renderAnalysis(index - 1);
       let _analysis = chatList.value[index - 1].analysis;
       chatList.value[index - 1].status = 'try';
-      await Auth.deepMind_Try(createOptions({targetValue,targetTime,index},[_analysis],(e)=>{
+      await Auth.deepMind_Try(createOptions({targetValue,targetTime,index,useAnalysis,useInternet},[_analysis],(e)=>{
         _analysis2 += e;
       }));
       chatList.value[index - 1].analysis += '\n\n'; 
       renderAnalysis(index - 1);
       chatList.value[index - 1].status = 'summary';
-      await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index},[_analysis,_analysis2]));
+      await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,useAnalysis,useInternet},[_analysis,_analysis2]));
     })
   }
   Auth.chatTaskThread.add(async () => {
@@ -732,7 +734,7 @@ async function deepMind(targetValue, targetTime, index) {
         chatList.value[index - 1].status = 'wait';
       }
     }, 7500);
-    await initiateChatWithAI({targetValue,targetTime,index});
+    await initiateChatWithAI({targetValue,targetTime,index,useAnalysis,useInternet });
     clearTimeout(id2);
     chatList.value[index - 1].status = 'analysised';
   })
@@ -743,7 +745,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
     content: opt.targetValue,
     vf: fingerprint.value,
     analysis: analysis,
-    useInternet:useInternet.value,
+    useInternet:opt.useInternet,
     stopStatus,
     line: analysis_line.value,
     onmessage: async (source, model) => {
@@ -797,8 +799,8 @@ async function initiateChatWithAI(opt) {
     vf: fingerprint.value,
     analysis: chatList.value[opt.index - 1].analysis || '',
     stopStatus,
-    useAnalysis: useAnalysis.value,
-    useInternet: useInternet.value,
+    useAnalysis: opt.useAnalysis,
+    useInternet: opt.useInternet,
     line: chat_line.value,
     time: opt.targetTime,
     onerror: (source, model) => {
@@ -1030,12 +1032,17 @@ onMounted(async ()=>{
       });
       chatList.value.forEach((e,i)=>{
         if(e.role == 'user'){
+          if(e.analysis){
+            renderAnalysis(i);
+          }
           if(i == 0){
             e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
           } else {
             e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
             tmp=i;
           }
+        } else {
+          renderContent(i)
         }
       })
     }].map(async(e)=>{
