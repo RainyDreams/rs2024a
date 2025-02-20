@@ -171,10 +171,10 @@
                 </div>
                 <template v-for="(item,i) in chatList" class="chatList" :key="i">
                   <template  v-if="item.role == 'user'">
-                    <div class="user" :data-id="i">
+                    <div class="user group" :data-id="i">
                       <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                       <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
-                      <div class="flex items-end">
+                      <div class="flex items-end opacity-0 group-hover:opacity-100">
                         <el-tooltip
                           class="box-item"
                           effect="dark"
@@ -210,11 +210,8 @@
                     
                   </template>
                   <template v-else-if="item.role == 'assistant'">
-                    <div class="loading-view">
-                      
-                    </div>
                     <div class="assistant overflow-hidden" :data-id="i">
-                      <div class="chatcontent text-sm/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                      <div class="chatcontent text-base/relaxed mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
                       </div>
                       <div v-show="chatList[i-1].status != 'analysised' && chatList[i-1].status != 'no_analysis'"
