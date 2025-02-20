@@ -523,19 +523,7 @@ a[href]{
         }
     }
   }
-  .chatList .chatcontent{
-    &.userchatbg{
-      // background-color: #f5ebdb !important;
-      // color:#26372c !important;
-    }
-    font-size: 15px;
-    line-height: 1.45em;
-    color:#222724;
-    // padding:10px 4px;
-    // background-color: #fffd;
-    // border-radius: 12px;
-    word-break: break-all;
-    // min-height: 40.3px;
+  .chatList{
     .czig-code-block{
       .language-label{
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -560,9 +548,9 @@ a[href]{
     blockquote{
       border-left: 2px solid rgba(0, 0, 0, .25);
       margin: 0;
-      padding: 0 0 0 10px;
-      line-height: 1.1em !important;
-      font-size: 0.8em !important;
+      padding: 0 0 0 0.5em;
+      line-height: 1.4em !important;
+      font-size: 1em !important;
     }
     h1{
       line-height: 2em !important;
@@ -648,25 +636,14 @@ a[href]{
     &>*:last-child{
       margin-bottom: 0 !important;
     }
-    // .hljs{
-    //   border-radius: 8px;
-    //   margin: 8px 0;
-    //   font-size: 1em !important;
-    //   line-height: 1.25em !important;
-    //   *{
-    //     font-size: 1em !important;
-    //     line-height: 1.25em !important;
-    //   }
-    //   // overflow: auto;
-    // }
-    // *:not(pre)>code,blockquote{
-    //   background: #011627;
-    //   color: #d6deeb;
-    //   padding: 3px 5px;
-    //   border-radius: 5px;
-    //   margin-left: 2px;
-    //   margin-right: 2px;
-    // }
+  }
+  .chatList .chatcontent{
+    &.userchatbg{
+    }
+    font-size: 15px;
+    line-height: 1.45em;
+    color:#222724;
+    word-break: break-all;
   }
 }
 .scroll{
