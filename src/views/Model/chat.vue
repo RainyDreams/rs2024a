@@ -190,25 +190,11 @@
                         <div class="chatcontent min-h-8 border border-blue-200 break-words w-fit min-w-6 px-4 py-2 rounded-3xl bg-blue-100 text-blue-900 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
                         >{{item.content}}</div>
                       </div>
-                      <!-- <div class="flex mt-2">
-                        <el-tooltip
-                          class="box-item"
-                          effect="dark"
-                          content="复制"
-                          placement="bottom-end"
-                        >
-                          <div 
-                            @click="copyHtml(i)"
-                            class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
-                            <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
-                          </div>
-                        </el-tooltip> -->
-                        <!--  -->
-                      <!-- </div> -->
                       <div class="analysis max-w-full mt-2" v-show="item.status != 'no_analysis' && item.analysis">
                         <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                         <div 
-                          :class="`_text text-gray-500 text-xs lg:text-sm  px-4 py-5  border border-slate-200 bg-white rounded-xl `+(item.status=='analysis'?'active':'')" v-show="item.show_thought" 
+                          :class="`_text text-gray-500 text-xs lg:text-sm  px-4 py-5  border border-slate-200 bg-white rounded-xl `+(item.status=='analysis'?'active':'')"
+                          v-show="item.analysis.trim()&&item.show_thought" 
                           v-html="item.renderedAnalysis"
                         ></div>
                         <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
@@ -223,25 +209,19 @@
                     </div>
                     <div v-show="item.status != 'analysised' && item.status != 'no_analysis'"
                       class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-8 mb-4 font-bold">
-                      <span class="active-text">{{ renderStatus(item.status) }}</span>
+                      <span class="active-text flex items-center">
+                        <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 duration-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg><span class=" text-lg leading-none align-bottom">{{ renderStatus(item.status)}}</span></span>
                     </div>
                   </template>
                   <template v-else-if="item.role == 'assistant'">
+                    <div class="loading-view">
+                      
+                    </div>
                     <div class="assistant overflow-hidden" :data-id="i">
-                      <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar> -->
-                      <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
-                        :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
-                      <!-- <div></div> -->
                       <div class="chatcontent text-sm/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
-                        <!-- <div v-for="(e,i2) in contentRendered" :key="i2" v-if="i == chatList.length-1">
-                          <div v-html="md.render(e.content)" :class="{ 'fade-in': e.fresh }" @animationend="e.fresh = false"></div>
-                        </div> -->
-                        <!-- 动画 -->
-                        <!-- <div v-if="animateMode && i == chatList.length-1">
-                          <div v-for="(e,i2) in contentRendered" :key="i2" class="hhh" style="--animate-duration:3.2s">
-                            <div v-html="throttledRender(e.content)" class="animate__animated animate__fadeIn"></div>
-                          </div>
-                        </div> -->
                         <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
                       </div>
                       <div class="flex">
@@ -413,7 +393,7 @@
         </div>
       </div>
     </div>
-    <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由 OriginSynq AI 生成，请仔细甄别</p>
+    <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 OriginSynq AI 生成，请仔细甄别</p>
   </div>
 </template>
 <script setup>
@@ -444,6 +424,8 @@ function renderStatus(status) {
   switch (status) {
     case 'sending':
       return '发送中';
+    case 'searching':
+      return '搜索中';
     case 'wait':
       return '即将完成';
     case 'analysising':
@@ -451,7 +433,7 @@ function renderStatus(status) {
     case 'thinking':
       return '思考问题';
     case 'try':
-      return '尝试回复';
+      return '深入思考';
     case 'summary':
       return '批判总结';
     case 'reply':
@@ -695,7 +677,7 @@ async function deepMind(targetValue, targetTime, index) {
   showStop.value = true;
   if(useInternet.value) {
     analysis_line.value = 'line-1';
-    chatList.value[index - 1].status = 'thinking';
+    chatList.value[index - 1].status = 'searching';
     //并行运行
     await Promise.all([
       Auth.deepMind_Analysis({
@@ -726,18 +708,18 @@ async function deepMind(targetValue, targetTime, index) {
     })
   }
   Auth.chatTaskThread.add(async () => {
+    chatList.value[index - 1].status = 'analysising';
     const id1 = setTimeout(() => {
-    if(chatList.value[index - 1].status != 'analysised'){
-        chatList.value[index - 1].status = 'analysising';
+      if(chatList.value[index - 1].status != 'analysised'){
+        chatList.value[index - 1].status = 'reply';
       }
-    }, 2000);
-    chatList.value[index - 1].status = 'reply';
+    }, 4000);
     const id2 = setTimeout(() => {
       clearTimeout(id1);
       if(chatList.value[index - 1].status != 'analysised'){
         chatList.value[index - 1].status = 'wait';
       }
-    }, 7500);
+    }, 8500);
     await initiateChatWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_ });
     clearTimeout(id2);
     chatList.value[index - 1].status = 'analysised';
