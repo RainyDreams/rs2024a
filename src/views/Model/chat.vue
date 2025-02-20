@@ -177,7 +177,7 @@
                       <el-tooltip
                         class="box-item"
                         effect="dark"
-                        content="复制Markdown"
+                        content="复制"
                         placement="bottom-start"
                       >
                         <div 
@@ -208,7 +208,7 @@
                       <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                       <div 
                         :class="`_text text-gray-500 text-xs lg:text-sm  px-4 py-5  border border-slate-200 bg-white rounded-xl `+(item.status=='analysis'?'active':'')" v-show="item.show_thought" 
-                        v-html="md.render(item.analysis || '')"
+                        v-html="item.renderedAnalysis"
                       ></div>
                       <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
                         <span class="py-2 px-3 border border-slate-200 bg-white mt-2 items-center leading-none hover:bg-slate-100  transition-all rounded-lg cursor-pointer flex">
@@ -234,12 +234,12 @@
                         <div v-html="md.render(e.content)" :class="{ 'fade-in': e.fresh }" @animationend="e.fresh = false"></div>
                       </div> -->
                       <!-- 动画 -->
-                      <div v-if="animateMode && i == chatList.length-1">
+                      <!-- <div v-if="animateMode && i == chatList.length-1">
                         <div v-for="(e,i2) in contentRendered" :key="i2" class="hhh" style="--animate-duration:3.2s">
                           <div v-html="throttledRender(e.content)" class="animate__animated animate__fadeIn"></div>
                         </div>
-                      </div>
-                      <div v-else class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="throttledRender(item.content)"></div>
+                      </div> -->
+                      <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
                     </div>
                     <div class="flex">
                       <el-tooltip
@@ -675,7 +675,14 @@ const stop = async (param)=>{
   showStop.value=false;
   loading.value=false;
 }
-
+function renderAnalysis(index){
+  chatList.value[index].renderAnalysis
+  = md.render(chatList.value[index].analysis)
+}
+function renderContent(index){
+  chatList.value[index].renderContent
+  = md.render(chatList.value[index].content)
+}
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
   debouncedScrollToBottom();
@@ -689,15 +696,10 @@ async function deepMind(targetValue, targetTime, index) {
         ...(createOptions({targetValue,targetTime,index})),
         onclose: (source) => {
           chatList.value[index - 1].analysis += source;
+          renderAnalysis(index - 1);
           debouncedScrollToBottom();
         }
       }),
-      // Auth.functionCall( {"name": "web_search","args": {"keywords": [targetValue]}}, {
-      //   renderHtml: (html) => {
-      //     chatList.value[index - 1].analysis += html;
-      //     debouncedScrollToBottom();
-      //   },
-      // })
     ]);
     debouncedScrollToBottom();
   }
@@ -705,12 +707,14 @@ async function deepMind(targetValue, targetTime, index) {
     let _analysis2;
     Auth.chatTaskThread.add(async () => {
       chatList.value[index - 1].analysis += '\n\n'; 
+      renderAnalysis(index - 1);
       let _analysis = chatList.value[index - 1].analysis;
       chatList.value[index - 1].status = 'try';
       await Auth.deepMind_Try(createOptions({targetValue,targetTime,index},[_analysis],(e)=>{
         _analysis2 += e;
       }));
       chatList.value[index - 1].analysis += '\n\n'; 
+      renderAnalysis(index - 1);
       chatList.value[index - 1].status = 'summary';
       await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index},[_analysis,_analysis2]));
     })
@@ -751,25 +755,6 @@ function createOptions(opt,analysis,fn=()=>{}) {
           case 'line-1':
             tmp = decode.candidates[0].content.parts[0].text;
             tokensCount.value = decode.usageMetadata.totalTokenCount;
-            if (decode.candidates[0].content.parts[0].functionCall) {
-              Auth.chatTaskThread.add(async () => {
-                await Auth.functionCall(decode.candidates[0].content.parts[0].functionCall, {
-                  alert: (obj) => {
-                    ElMessageBox.alert(md.render(obj.content), obj.title || '任务执行结果', {
-                      confirmButtonText: '确定',
-                      showCancelButton: false,
-                      dangerouslyUseHTMLString: true,
-                      showClose: false,
-                    });
-                  },
-                  renderHtml: (html) => {
-                    chatList.value[opt.index - 1].analysis += html;
-                    fn(html);
-                  },
-                });
-              });
-              tmp = '\n\n';
-            }
             break;
           case 'line-2':
             tmp = decode.choices[0].delta?.content;
@@ -780,6 +765,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
         }
         debouncedScrollToBottom();
         chatList.value[opt.index - 1].analysis += tmp;
+        renderAnalysis(opt.index - 1);
         fn(tmp);
       }catch(e){
         await Auth.getPrtoken();
@@ -838,7 +824,13 @@ function handleOnMessage(source, model, opt) {
     // console.log(decode);
     if (decode.candidates) { model = 'line-1'}
     else if(decode.choices) { model = 'line-2'}
-    else if(decode.response || decode.usage) {model = 'line-4'};
+    else if(decode.response || decode.usage) {model = 'line-4'}
+    else if(decode.status){
+      if(decode.status == 'error'){
+        await Auth.getPrtoken('force');
+        return await initiateChatWithAI(opt);
+      }
+    }
     // console.log(model);
     switch (model) {
       case 'line-1':
@@ -884,6 +876,7 @@ function handleOnMessage(source, model, opt) {
     // ElMessage.warning('出现错误'+e);
   }
   chatList.value[opt.index].content += tmp;
+  renderContent(opt.index);
   // debouncedScrollToBottom();
 }
 
@@ -947,13 +940,15 @@ const send = async (param)=>{
     content: input.value.trim(),
     status:'sending',
     analysis:"",
+    renderedAnalysis:'',
     show_thought:true,
     sendTime:targetTime,
-    formatSendTime
+    formatSendTime,
   })
   chatList.value.push({
     role: "assistant",
     content: "",
+    renderedContent:''
   })
   const targetValue = input.value
   input.value = '';
