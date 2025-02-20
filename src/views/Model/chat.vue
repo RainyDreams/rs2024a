@@ -194,7 +194,7 @@
                         <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                         <div 
                           :class="`_text text-gray-500 text-xs lg:text-sm  px-4 py-5  border border-slate-200 bg-white rounded-xl `+(item.status=='analysis'?'active':'')"
-                          v-show="item.analysis.trim()&&item.show_thought" 
+                          v-show="item.show_thought" 
                           v-html="item.renderedAnalysis"
                         ></div>
                         <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
@@ -207,14 +207,7 @@
                       </div>
                       <!-- </el-watermark> -->
                     </div>
-                    <div v-show="item.status != 'analysised' && item.status != 'no_analysis'"
-                      class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-8 mb-4 font-bold">
-                      <span class="active-text flex items-center">
-                        <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 duration-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg><span class=" text-lg leading-none align-bottom">{{ renderStatus(item.status)}}</span></span>
-                    </div>
+                    
                   </template>
                   <template v-else-if="item.role == 'assistant'">
                     <div class="loading-view">
@@ -223,6 +216,14 @@
                     <div class="assistant overflow-hidden" :data-id="i">
                       <div class="chatcontent text-sm/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
+                      </div>
+                      <div v-show="chatList[i-1].status != 'analysised' && chatList[i-1].status != 'no_analysis'"
+                        class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-4 mb-4 font-bold">
+                        <span class="active-text flex items-center">
+                          <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 duration-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg><span class=" text-lg leading-none align-bottom">{{ renderStatus(chatList[i-1].status)}}</span></span>
                       </div>
                       <div class="flex">
                         <el-tooltip
@@ -304,18 +305,6 @@
               >
                 <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">联网搜索</span></span>
               </touch-ripple>
-              <!-- <touch-ripple
-                :class="`touch-ripple w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(useAnalysis?'text-white':'text-green-700')"
-                :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
-                :color="useAnalysis?'#fff':'#3b82f6'"
-                :opacity="0.4"
-                transition="ease-out"
-                :duration="400"
-                :keep-last-ripple="true"
-                @click="useAnalysis=!useAnalysis"
-              >
-                <span>深入思考</span> -->
-              <!-- </touch-ripple> -->
             </div>
           </div>
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="background-color: #e2e8f080;">
@@ -671,6 +660,7 @@ function renderContent(index){
 }
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
+  const beforeTime = Date.now();
   const _useAnalysis_ = useAnalysis.value;
   const _useInternet_ = useInternet.value;
   debouncedScrollToBottom();
@@ -705,6 +695,9 @@ async function deepMind(targetValue, targetTime, index) {
       renderAnalysis(index - 1);
       chatList.value[index - 1].status = 'summary';
       await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_},[_analysis,_analysis2]));
+      const diffTime = Date.now(); - beforeTime;
+      chatList.value[index - 1].analysis += '\n\n### 已深度思考 '+dayjs(diffTime).format('ss')+' 秒'; 
+      renderAnalysis(index - 1);
     })
   }
   Auth.chatTaskThread.add(async () => {
