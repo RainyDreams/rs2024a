@@ -830,8 +830,11 @@ function handleOnMessage(source, model, opt) {
     else if(decode.response || decode.usage) {model = 'line-4'}
     else if(decode.status){
       if(decode.status == 'error'){
-        await Auth.getPrtoken('force');
-        return await initiateChatWithAI(opt);
+        Auth.chatTaskThread.add(async () => {
+          await Auth.getPrtoken('force');
+          return await initiateChatWithAI(opt);
+        })
+        return;
       }
     }
     // console.log(model);
@@ -892,7 +895,7 @@ async function handleOnClose(error,model,opt) {
   document.getElementById('input_chat_ai').focus();
   if (!chatList.value[opt.index].content) {
     if (!error) {
-      chatList.value[opt.index].content += '[回答已终止].';
+      // chatList.value[opt.index].content += '[回答已终止].';
     }
   } else {
     if (!error) {
