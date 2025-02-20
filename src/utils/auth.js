@@ -679,7 +679,7 @@ let Auth = {
       };
       const response = await fetch(url, postOptions);
       if (response.status != 200) {
-        if(param.onerror) param.onerror();
+        if(param.onerror) param.onerror(await response.text());
         // defaultFailed(response.statusText,3)
         throw new Error("Network response was not ok");
       }

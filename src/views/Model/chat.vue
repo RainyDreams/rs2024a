@@ -805,6 +805,9 @@ async function initiateChatWithAI(opt) {
       // console.log('错误');
       window.clarity('event', 'CHAT-AI-ERROR');
       // retryChatWithAI(opt);
+      // 服务器错误
+      chatList.value[opt.index].content += '\n\n[服务器繁忙]\n\n'+source;
+      renderContent(opt.index);
     },
     onmessage: (source, model) => {
       handleOnMessage(source, model, opt);
