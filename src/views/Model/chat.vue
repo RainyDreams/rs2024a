@@ -739,6 +739,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
     content: opt.targetValue,
     vf: fingerprint.value,
     analysis: analysis,
+    useInternet:useInternet.value,
     stopStatus,
     line: analysis_line.value,
     onmessage: async (source, model) => {

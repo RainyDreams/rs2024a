@@ -621,6 +621,7 @@ let Auth = {
     await this.getStreamText('/api/ai/deepMind_Try', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
         model:param.line,analysis:param.analysis[0],time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
+        useInternet:param.useInternet,
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
