@@ -171,12 +171,12 @@
                 </div>
                 <template v-for="(item,i) in chatList" class="chatList" :key="i">
                   <template  v-if="item.role == 'user'">
-                    <div class="user group" :data-id="i">
+                    <div class="user " :data-id="i">
                       <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                       <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
-                      <div class="flex items-end opacity-0 group-hover:opacity-100">
+                      <div class="flex items-end group">
                         <el-tooltip
-                          class="box-item"
+                          class="box-item opacity-0 group-hover:opacity-100"
                           effect="dark"
                           content="复制"
                           placement="bottom-start"
