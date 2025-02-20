@@ -1,7 +1,7 @@
 <template>
   <div class="commonPage bg-slate-50 md:rounded-lg pb-0 h-dvh pt-3" style="display: flex;flex-direction: column;">
     <div class="scroll">
-      <div class="">
+      <!-- <div class=""> -->
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
           <div class="aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
@@ -169,107 +169,111 @@
                     </div>
                   </div>
                 </div>
-                <template v-for="(item,i) in chatList" class="chatList" >
-                  <div class="user" v-if="item.role == 'user'" :data-id="i">
-                    <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                    <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
-                    <div class="flex items-end">
-                      <el-tooltip
-                        class="box-item"
-                        effect="dark"
-                        content="复制"
-                        placement="bottom-start"
-                      >
+                <template v-for="(item,i) in chatList" class="chatList" :key="i">
+                  <template  v-if="item.role == 'user'">
+                    <div class="user" :data-id="i">
+                      <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
+                      <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
+                      <div class="flex items-end">
+                        <el-tooltip
+                          class="box-item"
+                          effect="dark"
+                          content="复制"
+                          placement="bottom-start"
+                        >
+                          <div 
+                            @click="copyText(item.content)"
+                            class="p-2 hover:bg-slate-100 border-transparent mb-1 opacity-50 hover:opacity-100 hover:border-slate-200 border h-[35px] mr-2 w-[35px] transition-all rounded-md cursor-pointer">
+                            <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
+                          </div>
+                        </el-tooltip>
+                        <div class="chatcontent min-h-8 border border-blue-200 break-words w-fit min-w-6 px-4 py-2 rounded-3xl bg-blue-100 text-blue-900 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
+                        >{{item.content}}</div>
+                      </div>
+                      <!-- <div class="flex mt-2">
+                        <el-tooltip
+                          class="box-item"
+                          effect="dark"
+                          content="复制"
+                          placement="bottom-end"
+                        >
+                          <div 
+                            @click="copyHtml(i)"
+                            class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
+                            <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
+                          </div>
+                        </el-tooltip> -->
+                        <!--  -->
+                      <!-- </div> -->
+                      <div class="analysis max-w-full mt-2" v-show="item.status != 'no_analysis' && item.analysis">
+                        <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                         <div 
-                          @click="copyText(item.content)"
-                          class="p-2 hover:bg-slate-100 border-transparent mb-1 opacity-50 hover:opacity-100 hover:border-slate-200 border h-[35px] mr-2 w-[35px] transition-all rounded-md cursor-pointer">
-                          <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
-                        </div>
-                      </el-tooltip>
-                      <div class="chatcontent min-h-8 border border-blue-200 break-words w-fit min-w-6 px-4 py-2 rounded-3xl bg-blue-100 text-blue-900 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
-                      >{{item.content}}</div>
+                          :class="`_text text-gray-500 text-xs lg:text-sm  px-4 py-5  border border-slate-200 bg-white rounded-xl `+(item.status=='analysis'?'active':'')" v-show="item.show_thought" 
+                          v-html="item.renderedAnalysis"
+                        ></div>
+                        <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
+                          <span class="py-2 px-3 border border-slate-200 bg-white mt-2 items-center leading-none hover:bg-slate-100  transition-all rounded-lg cursor-pointer flex">
+                            <SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>{{item.show_thought?'收起':'展开'}}思考过程
+                          </span>
+                          <!-- <Down v-show="!item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
+                          <Up v-show="item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/> --> 
+                        </p>
+                      </div>
+                      <!-- </el-watermark> -->
                     </div>
-                    <!-- <div class="flex mt-2">
-                      <el-tooltip
-                        class="box-item"
-                        effect="dark"
-                        content="复制"
-                        placement="bottom-end"
-                      >
-                        <div 
-                          @click="copyHtml(i)"
-                          class="p-2 hover:bg-slate-100  transition-all rounded-md cursor-pointer">
-                          <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
-                        </div>
-                      </el-tooltip> -->
-                      <!--  -->
-                    <!-- </div> -->
-                    <div class="analysis max-w-full mt-2" v-show="item.status != 'no_analysis' && item.analysis">
-                      <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
-                      <div 
-                        :class="`_text text-gray-500 text-xs lg:text-sm  px-4 py-5  border border-slate-200 bg-white rounded-xl `+(item.status=='analysis'?'active':'')" v-show="item.show_thought" 
-                        v-html="item.renderedAnalysis"
-                      ></div>
-                      <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
-                        <span class="py-2 px-3 border border-slate-200 bg-white mt-2 items-center leading-none hover:bg-slate-100  transition-all rounded-lg cursor-pointer flex">
-                          <SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>{{item.show_thought?'收起':'展开'}}思考过程
-                        </span>
-                        <!-- <Down v-show="!item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
-                        <Up v-show="item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/> --> 
-                      </p>
+                    <div v-show="item.status != 'analysised' && item.status != 'no_analysis'"
+                      class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-8 mb-4 font-bold">
+                      <span class="active-text">{{ renderStatus(item.status) }}</span>
                     </div>
-                    <!-- </el-watermark> -->
-                  </div>
-                  <div v-if="item.role=='user'" v-show="item.status != 'analysised' && item.status != 'no_analysis'"
-                     class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-8 mb-4 font-bold">
-                    <span class="active-text">{{ renderStatus(item.status) }}</span>
-                  </div>
-                  <div class="assistant overflow-hidden" v-if="item.role == 'assistant'" :data-id="i">
-                    <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar> -->
-                    <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
-                      :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
-                    <!-- <div></div> -->
-                    <div class="chatcontent text-sm/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
-                      <!-- <div v-for="(e,i2) in contentRendered" :key="i2" v-if="i == chatList.length-1">
-                        <div v-html="md.render(e.content)" :class="{ 'fade-in': e.fresh }" @animationend="e.fresh = false"></div>
-                      </div> -->
-                      <!-- 动画 -->
-                      <!-- <div v-if="animateMode && i == chatList.length-1">
-                        <div v-for="(e,i2) in contentRendered" :key="i2" class="hhh" style="--animate-duration:3.2s">
-                          <div v-html="throttledRender(e.content)" class="animate__animated animate__fadeIn"></div>
-                        </div>
-                      </div> -->
-                      <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
+                  </template>
+                  <template v-else-if="item.role == 'assistant'">
+                    <div class="assistant overflow-hidden" :data-id="i">
+                      <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp" fit="contain">小英</el-avatar> -->
+                      <!-- <el-watermark :font="{color:'rgba(0, 0, 0, .05)'}" :gap="[0,-12]" :rotate="-12"
+                        :content="['零本智协大模型 零本智协大模型', fingerprint]"> -->
+                      <!-- <div></div> -->
+                      <div class="chatcontent text-sm/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                        <!-- <div v-for="(e,i2) in contentRendered" :key="i2" v-if="i == chatList.length-1">
+                          <div v-html="md.render(e.content)" :class="{ 'fade-in': e.fresh }" @animationend="e.fresh = false"></div>
+                        </div> -->
+                        <!-- 动画 -->
+                        <!-- <div v-if="animateMode && i == chatList.length-1">
+                          <div v-for="(e,i2) in contentRendered" :key="i2" class="hhh" style="--animate-duration:3.2s">
+                            <div v-html="throttledRender(e.content)" class="animate__animated animate__fadeIn"></div>
+                          </div>
+                        </div> -->
+                        <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
+                      </div>
+                      <div class="flex">
+                        <el-tooltip
+                          class="box-item"
+                          effect="dark"
+                          content="复制"
+                          placement="bottom-start"
+                        >
+                          <div 
+                            @click="copyText(item.content)"
+                            class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer mr-1">
+                            <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
+                          </div>
+                        </el-tooltip>
+                        <el-tooltip
+                          class="box-item"
+                          effect="dark"
+                          content="按格式复制"
+                          placement="bottom-start"
+                        >
+                          <div 
+                            @click="copyHtml(i)"
+                            class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer">
+                            <DocDetail theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
+                          </div>
+                        </el-tooltip>
+                        
+                      </div>
+                      <!-- </el-watermark> -->
                     </div>
-                    <div class="flex">
-                      <el-tooltip
-                        class="box-item"
-                        effect="dark"
-                        content="复制"
-                        placement="bottom-start"
-                      >
-                        <div 
-                          @click="copyText(item.content)"
-                          class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer mr-1">
-                          <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
-                        </div>
-                      </el-tooltip>
-                      <el-tooltip
-                        class="box-item"
-                        effect="dark"
-                        content="按格式复制"
-                        placement="bottom-start"
-                      >
-                        <div 
-                          @click="copyHtml(i)"
-                          class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer">
-                          <DocDetail theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
-                        </div>
-                      </el-tooltip>
-                      
-                    </div>
-                    <!-- </el-watermark> -->
-                  </div>
+                  </template>
                 </template>
                 <div class="my-5">
                   <div class="bg-white text-blue-950 opacity-85 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 transition px-3 py-2 text-sm/tight md:text-base/tight my-3" v-for="(item) in suggestions" @click="ask(item)">
@@ -280,7 +284,7 @@
             </el-watermark>
           </div>
         </div>
-      </div>
+      <!-- </div> -->
     </div>
     <div class="ainput" ref="ainput">
       <div class="">
@@ -347,7 +351,7 @@
                   resize="none" 
                   size="large" 
                   autofocus 
-                  :maxlength="2047"
+                  :maxlength="40960"
                   autocomplete="off"
                   @focus="onFocus"
                   :placeholder="placeholder" 
@@ -1025,11 +1029,13 @@ onMounted(async ()=>{
       return 0;
     },async ()=>{
       let tmp = 0;
-      chatList.value = (await Auth.getAIChatList({sessionID:id})).content.map((e,i)=>{
+      const getList = (await Auth.getAIChatList({sessionID:id}))
+      chatList.value = getList.content.map((e,i)=>{
         e.status = e.analysis?'analysised':'no_analysis';
         e.show_thought = false;
         return e
       });
+      title.value = getList.title || title.value;
       chatList.value.forEach((e,i)=>{
         if(e.role == 'user'){
           if(e.analysis){
