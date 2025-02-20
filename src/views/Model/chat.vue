@@ -685,8 +685,8 @@ function renderContent(index){
 }
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
-  const useAnalysis = useAnalysis.value;
-  const useInternet = useInternet.value;
+  const _useAnalysis_ = useAnalysis.value;
+  const _useInternet_ = useInternet.value;
   debouncedScrollToBottom();
   showStop.value = true;
   if(useInternet.value) {
@@ -695,7 +695,7 @@ async function deepMind(targetValue, targetTime, index) {
     //并行运行
     await Promise.all([
       Auth.deepMind_Analysis({
-        ...(createOptions({targetValue,targetTime,index,useAnalysis,useInternet})),
+        ...(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_})),
         onclose: (source) => {
           chatList.value[index - 1].analysis += source;
           renderAnalysis(index - 1);
@@ -712,13 +712,13 @@ async function deepMind(targetValue, targetTime, index) {
       renderAnalysis(index - 1);
       let _analysis = chatList.value[index - 1].analysis;
       chatList.value[index - 1].status = 'try';
-      await Auth.deepMind_Try(createOptions({targetValue,targetTime,index,useAnalysis,useInternet},[_analysis],(e)=>{
+      await Auth.deepMind_Try(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_},[_analysis],(e)=>{
         _analysis2 += e;
       }));
       chatList.value[index - 1].analysis += '\n\n'; 
       renderAnalysis(index - 1);
       chatList.value[index - 1].status = 'summary';
-      await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,useAnalysis,useInternet},[_analysis,_analysis2]));
+      await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_},[_analysis,_analysis2]));
     })
   }
   Auth.chatTaskThread.add(async () => {
@@ -734,7 +734,7 @@ async function deepMind(targetValue, targetTime, index) {
         chatList.value[index - 1].status = 'wait';
       }
     }, 7500);
-    await initiateChatWithAI({targetValue,targetTime,index,useAnalysis,useInternet });
+    await initiateChatWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_ });
     clearTimeout(id2);
     chatList.value[index - 1].status = 'analysised';
   })
@@ -745,7 +745,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
     content: opt.targetValue,
     vf: fingerprint.value,
     analysis: analysis,
-    useInternet:opt.useInternet,
+    useInternet:opt._useInternet_,
     stopStatus,
     line: analysis_line.value,
     onmessage: async (source, model) => {
@@ -799,8 +799,8 @@ async function initiateChatWithAI(opt) {
     vf: fingerprint.value,
     analysis: chatList.value[opt.index - 1].analysis || '',
     stopStatus,
-    useAnalysis: opt.useAnalysis,
-    useInternet: opt.useInternet,
+    useAnalysis: opt._useAnalysis_,
+    useInternet: opt._useInternet_,
     line: chat_line.value,
     time: opt.targetTime,
     onerror: (source, model) => {
