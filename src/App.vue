@@ -164,7 +164,7 @@ onMounted(async ()=>{
   setTimeout(()=>{
     if(document.querySelector('#loading-container')){
       document.querySelector('#loading-container').classList.add('animate__fadeOut');
-      document.querySelector('#loading-container div').classList.add('animate__fadeOutUp');
+      document.querySelector('#loading-container div').classList.add('animate__fadeOut');
       setTimeout(()=>{
         document.querySelector('#loading-container').remove()
       },1000)

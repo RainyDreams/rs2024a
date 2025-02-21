@@ -500,7 +500,7 @@ a[href]{
         text-fill-color: transparent;
         -webkit-text-fill-color: transparent;
         animation-delay: .1s;
-        animation-duration: 1.1s;
+        animation-duration: 1s;
         animation-iteration-count: infinite;
         animation-timing-function: linear;
         animation-name: loading-shimmer;
@@ -686,7 +686,8 @@ a[href]{
       top:0;
       left:0;
     }
-    &:hover{
+
+    &._active,&:hover{
       // cursor: pointer;
       // border-color:rgba(144, 77, 245,0.2);
       border-color:#2563eb33;

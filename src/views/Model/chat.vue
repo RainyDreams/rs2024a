@@ -6,169 +6,166 @@
           <div class="aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
-              <div class="chatList" style="min-height: 200px;" id="ai_chatList">
-                <div class="title text-center w-full text-lg sticky top-0 z-50 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
-                <div class="system mb-3 md:mb-4 lg:mb-5 block">
-                  <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像" src="/logo_sm.webp">小英</el-avatar> -->
+              <div class="title text-center w-full text-lg sticky top-0 z-50 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
+              <div class="system mb-3 md:mb-4 lg:mb-5 block">
                   <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
-                    <!-- <el-skeleton :rows="3" animated v-show="welcome_loading" class="bg-white p-5 rounded-lg"></el-skeleton> -->
-                    <!-- <router-link  class="h-full"> -->
-                      <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full pr-2 pl-3 py-1 overflow-hidden select-none border `"
-                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                        :color="'#4e81fc'"
-                        :opacity="0.4"
-                        transition="ease-out"
-                        :duration="200"
-                        :keep-last-ripple="true"
-                        @click="router.go(-2)"
-                      >
-                        <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                        <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                        <left  theme="outline" size="18" fill="#4e81fc"/>
-                        <!-- </div> -->
-                      </touch-ripple>
-                    <!-- </router-link> -->
-                    <router-link to="/home" class="h-full">
-                      <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full pl-2 pr-3 py-1 overflow-hidden select-none border text-slate-950`"
-                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                        :color="'#4e81fc'"
-                        :opacity="0.4"
-                        transition="ease-out"
-                        :duration="200"
-                        :keep-last-ripple="true"
-                      >
-                        <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                        <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                        <home  theme="outline" size="18" fill="#4e81fc"/>
-                        <!-- </div> -->
-                      </touch-ripple>
-                    </router-link>
-                    <router-link to="/model/square" class="h-full">
-                      <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
-                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                        :color="'#4e81fc'"
-                        :opacity="0.4"
-                        transition="ease-out"
-                        :duration="200"
-                        :keep-last-ripple="true"
-                      >
-                        <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                        <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                        <SmartOptimization theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
-                        <div class="text-base leading-none" style="color:rgb(18,30,60);">模型库</div>
-                        <!-- </div> -->
-                      </touch-ripple>
-                    </router-link>
-                    <router-link to="/model/history" class="h-full"  v-if="loginStatus" >
-                      <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
-                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                        :color="'#4e81fc'"
-                        :opacity="0.4"
-                        transition="ease-out"
-                        :duration="200"
-                        :keep-last-ripple="true"
-                      >
-                        <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                        <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                        <history  theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
-                        <div class="text-base leading-none" style="color:rgb(18,30,60);">聊天历史</div>
-                        <!-- </div> -->
-                      </touch-ripple>
-                    </router-link>
                     <touch-ripple
-                      :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-slate-950':'text-slate-950')"
-                      :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#4e81fc44':'#fff' }"
-                      :color="showModelDetail?'#fff':'#4e81fc'"
+                      :class="`flex touch-ripple h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full pr-2 pl-3 py-1 overflow-hidden select-none border `"
+                      :style="{ clipPath: 'none', backgroundColor:'#fff' }"
+                      :color="'#4e81fc'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
                       :keep-last-ripple="true"
-                      @click="showModelDetail=!showModelDetail"
+                      @click="router.go(-2)"
                     >
                       <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                      <img alt="头像" :src="model_info.img" class="mr-1 w-4 h-4 rounded-full" />
-                      <div class="text-base leading-none">{{ model_info.name || "获取中" }}</div>
+                      <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                      <left  theme="outline" size="18" fill="#4e81fc"/>
                       <!-- </div> -->
                     </touch-ripple>
+                  <!-- </router-link> -->
+                  <router-link to="/home" class="h-full">
                     <touch-ripple
-                      :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-slate-950':'text-slate-950')"
-                      :style="{ clipPath: 'none', backgroundColor: showInfo?'#ffedd5':'#fff' }"
-                      :color="showInfo?'#f7deb7':'#f7deb7'"
+                      :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full pl-2 pr-3 py-1 overflow-hidden select-none border text-slate-950`"
+                      :style="{ clipPath: 'none', backgroundColor:'#fff' }"
+                      :color="'#4e81fc'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
                       :keep-last-ripple="true"
-                      @click="showInfo=!showInfo"
                     >
                       <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                        <info theme="outline" class="mr-1" size="18" fill="#ff9d00"/>
-                        <div class="text-base leading-none">信息</div>
+                      <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                      <home  theme="outline" size="18" fill="#4e81fc"/>
                       <!-- </div> -->
                     </touch-ripple>
-                    <!-- <router-link to="/quant" class="h-full" >
-                      <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
-                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                        :color="'#f206'"
-                        :opacity="0.4"
-                        transition="ease-out"
-                        :duration="200"
-                        :keep-last-ripple="true"
-                      >
-                        <fire theme="outline" class="mr-1" size="18" fill="#f20"/>
-                        <div class="text-base leading-none" style="color:#f20">零本量化</div>
-                      </touch-ripple>
-                    </router-link> -->
-                    <router-link :to="`/login?url=/chat/${sessionID}`" class="h-full" v-if="!loginStatus" >
-                      <touch-ripple
-                        :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
-                        :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                        :color="'#4e81fc'"
-                        :opacity="0.4"
-                        transition="ease-out"
-                        :duration="200"
-                        :keep-last-ripple="true"
-                      >
-                        <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                        <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                        <avatar theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
-                        <div class="text-base leading-none" style="color:rgb(18,30,60);">登录</div>
-                        <!-- </div> -->
-                      </touch-ripple>
-                    </router-link>
-                    
-                    <!-- <div v-show="!welcome_loading" class="text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed" v-html="md.render(welcome)"></div> -->
-                    <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
-                  </div>
-                  <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
-                    <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
-                  </div>
-                  <div v-show="showModelDetail">
-                    <div class="min-w-fit w-64 z-10 flex flex-col mt-2 top-10 left-0 bg-white border rounded-xl p-3 duration-100">
-                      <div class="text-sm/relaxed mb-2 flex-1">{{ model_info.desc }}</div>
-                      <div class="flex items-center opacity-80 text-xs">
-                        <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
-                        <div class="username">{{ model_info.createUser.nickname }}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div v-show="showInfo">
-                    <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 mx-auto bg-white border rounded-xl p-3 duration-100">
-                      <p>查看<router-link to="/about/log">更新日志</router-link></p>
-                      <div class="w-full text-sm/relaxed">由于服务器成本原因，对大模型所有用户限制如下：每分钟15次，每天1000次提问。</div>
-                    </div>
-                  </div>
-                  <!-- 欢迎 -->
-                  <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
-                    <div :class="`chat_welcome mt-14 md:mt-18 2xl:mt-24 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
-                      <h2 class="text-center w-full text-3xl md:text-4xl xl:text-5xl font-bold">你好！来聊点什么吧</h2>
+                  </router-link>
+                  <router-link to="/model/square" class="h-full">
+                    <touch-ripple
+                      :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
+                      :style="{ clipPath: 'none', backgroundColor:'#fff' }"
+                      :color="'#4e81fc'"
+                      :opacity="0.4"
+                      transition="ease-out"
+                      :duration="200"
+                      :keep-last-ripple="true"
+                    >
+                      <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                      <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                      <SmartOptimization theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
+                      <div class="text-base leading-none" style="color:rgb(18,30,60);">模型库</div>
+                      <!-- </div> -->
+                    </touch-ripple>
+                  </router-link>
+                  <router-link to="/model/history" class="h-full"  v-if="loginStatus" >
+                    <touch-ripple
+                      :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
+                      :style="{ clipPath: 'none', backgroundColor:'#fff' }"
+                      :color="'#4e81fc'"
+                      :opacity="0.4"
+                      transition="ease-out"
+                      :duration="200"
+                      :keep-last-ripple="true"
+                    >
+                      <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                      <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                      <history  theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
+                      <div class="text-base leading-none" style="color:rgb(18,30,60);">聊天历史</div>
+                      <!-- </div> -->
+                    </touch-ripple>
+                  </router-link>
+                  <touch-ripple
+                    :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-slate-950':'text-slate-950')"
+                    :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#4e81fc44':'#fff' }"
+                    :color="showModelDetail?'#fff':'#4e81fc'"
+                    :opacity="0.4"
+                    transition="ease-out"
+                    :duration="200"
+                    :keep-last-ripple="true"
+                    @click="showModelDetail=!showModelDetail"
+                  >
+                    <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                    <img alt="头像" :src="model_info.img" class="mr-1 w-4 h-4 rounded-full" />
+                    <div class="text-base leading-none">{{ model_info.name || "获取中" }}</div>
+                    <!-- </div> -->
+                  </touch-ripple>
+                  <touch-ripple
+                    :class="`flex touch-ripple h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-slate-950':'text-slate-950')"
+                    :style="{ clipPath: 'none', backgroundColor: showInfo?'#ffedd5':'#fff' }"
+                    :color="showInfo?'#f7deb7':'#f7deb7'"
+                    :opacity="0.4"
+                    transition="ease-out"
+                    :duration="200"
+                    :keep-last-ripple="true"
+                    @click="showInfo=!showInfo"
+                  >
+                    <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                      <info theme="outline" class="mr-1" size="18" fill="#ff9d00"/>
+                      <div class="text-base leading-none">信息</div>
+                    <!-- </div> -->
+                  </touch-ripple>
+                  <!-- <router-link to="/quant" class="h-full" >
+                    <touch-ripple
+                      :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
+                      :style="{ clipPath: 'none', backgroundColor:'#fff' }"
+                      :color="'#f206'"
+                      :opacity="0.4"
+                      transition="ease-out"
+                      :duration="200"
+                      :keep-last-ripple="true"
+                    >
+                      <fire theme="outline" class="mr-1" size="18" fill="#f20"/>
+                      <div class="text-base leading-none" style="color:#f20">零本量化</div>
+                    </touch-ripple>
+                  </router-link> -->
+                  <router-link :to="`/login?url=/chat/${sessionID}`" class="h-full" v-if="!loginStatus" >
+                    <touch-ripple
+                      :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
+                      :style="{ clipPath: 'none', backgroundColor:'#fff' }"
+                      :color="'#4e81fc'"
+                      :opacity="0.4"
+                      transition="ease-out"
+                      :duration="200"
+                      :keep-last-ripple="true"
+                    >
+                      <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                      <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                      <avatar theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
+                      <div class="text-base leading-none" style="color:rgb(18,30,60);">登录</div>
+                      <!-- </div> -->
+                    </touch-ripple>
+                  </router-link>
+                  
+                  <!-- <div v-show="!welcome_loading" class="text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed" v-html="md.render(welcome)"></div> -->
+                  <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
+                </div>
+                <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
+                  <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
+                </div>
+                <div v-show="showModelDetail">
+                  <div class="min-w-fit w-64 z-10 flex flex-col mt-2 top-10 left-0 bg-white border rounded-xl p-3 duration-100">
+                    <div class="text-sm/relaxed mb-2 flex-1">{{ model_info.desc }}</div>
+                    <div class="flex items-center opacity-80 text-xs">
+                      <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
+                      <div class="username">{{ model_info.createUser.nickname }}</div>
                     </div>
                   </div>
                 </div>
+                <div v-show="showInfo">
+                  <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 mx-auto bg-white border rounded-xl p-3 duration-100">
+                    <p>查看<router-link to="/about/log">更新日志</router-link></p>
+                    <div class="w-full text-sm/relaxed">由于服务器成本原因，对大模型所有用户限制如下：每分钟15次，每天1000次提问。</div>
+                  </div>
+                </div>
+                <!-- 欢迎 -->
+                <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
+                  <div :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
+                    <h2 class="text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold">你好！来聊点什么吧</h2>
+                  </div>
+                </div>
+              </div>
+              <div class="chatList" style="min-height: 200px;" id="ai_chatList">
                 <template v-for="(item,i) in chatList" class="chatList" :key="i">
                   <template  v-if="item.role == 'user'">
                     <div class="user " :data-id="i">
@@ -210,14 +207,14 @@
                     
                   </template>
                   <template v-else-if="item.role == 'assistant'">
-                    <div class="assistant overflow-hidden" :data-id="i">
+                    <div class="assistant" :data-id="i">
                       <div class="chatcontent text-base/relaxed mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
                       </div>
                       <div v-show="chatList[i-1].status != 'analysised' && chatList[i-1].status != 'no_analysis'"
-                        class="text-base md:text-lg lg:text-xl text-green-800 w-full text-left mt-4 mb-4 font-bold">
+                        class="text-base md:text-lg lg:text-xl text-green-800 w-fit px-2 rounded-tr-md text-left font-bold sticky bottom-0 bg-slate-50 pt-2 mt-2 mb-3">
                         <span class="active-text flex items-center">
-                          <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 duration-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg><span class=" text-lg leading-none align-bottom">{{ renderStatus(chatList[i-1].status)}}</span></span>
@@ -254,7 +251,7 @@
                   </template>
                 </template>
                 <div class="my-5">
-                  <div class="bg-white text-blue-950 opacity-85 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 transition px-3 py-2 text-sm/tight md:text-base/tight my-3" v-for="(item) in suggestions" @click="ask(item)">
+                  <div class="bg-white text-blue-950 opacity-85 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 px-3 py-2 text-sm/tight md:text-base/tight my-3" v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
                 </div>

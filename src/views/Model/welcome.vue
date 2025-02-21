@@ -31,10 +31,10 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div :class="` transition-all duration-200 `">
-            <div :class="`ainput__wrapper cursor-pointer px-3`">
+            <div :class="`ainput__wrapper cursor-pointer px-3 _active`">
               <div class="textarea el-input--large _input flex-1">
                 <div
-                  class="textarea__inner opacity-40 text-center font-normal text-base/8"
+                  class="textarea__inner opacity-40 text-center font-normal text-base/8 select-none"
                   placeholder="正在连接"
                   type="textarea"
                   resize="none" 
