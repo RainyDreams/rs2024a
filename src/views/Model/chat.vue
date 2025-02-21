@@ -788,7 +788,7 @@ async function initiateChatWithAI(opt,count) {
     onmessage: (source, model) => {
       if(count) opt.counter=1;
       handleOnMessage(source, model, opt);
-      throttledScrollToBottom();
+      // throttledScrollToBottom();
     },
     onclose: (error,model) => {
       debouncedScrollToBottom();
