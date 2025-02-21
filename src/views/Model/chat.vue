@@ -764,7 +764,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
   }
 }
 
-async function initiateChatWithAI(opt) {
+async function initiateChatWithAI(opt,count) {
   showStop.value = true;
   await Auth.chatWithAI({
     sessionID: sessionID.value,
@@ -785,6 +785,7 @@ async function initiateChatWithAI(opt) {
       renderContent(opt.index);
     },
     onmessage: (source, model) => {
+      if(count) opt.counter=1;
       handleOnMessage(source, model, opt);
       throttledScrollToBottom();
     },
@@ -807,7 +808,11 @@ function handleOnMessage(source, model, opt) {
       if(decode.status == 'error'){
         Auth.chatTaskThread.add(async () => {
           await Auth.getPrtoken('force');
-          return await initiateChatWithAI(opt);
+          if(opt.counter){
+            ElMessage.error('服务器错误，请稍后重试');
+          }else{
+            return await initiateChatWithAI(opt,1);
+          }
         })
         return;
       }
