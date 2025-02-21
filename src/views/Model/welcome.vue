@@ -67,7 +67,7 @@ const tryAgain = async () => {
   const e = await Auth.getAISessionID({model});
   const {status, content} = e
   if(status === "sus"){
-    router.push('/chat/'+content)
+    router.push('/chat/'+content+'?model='+model+'&welcome=true')
   }
 }
 onActivated(async () => {

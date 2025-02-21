@@ -274,7 +274,7 @@
                 :opacity="0.4"
                 transition="ease-out"
                 :duration="200"
-                @start="router.push('/')"
+                @start="router.push('/?model='+model)"
               >
                 <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
               </touch-ripple>
@@ -969,6 +969,7 @@ const send = async (param)=>{
 
 
 const loginStatus = ref(false);
+const model = ref('')
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
 const debouncedScrollToBottom = debounce(scrollToBottom, 700); // 调整 300 为所需的毫秒数
 const throttledScrollToBottom = throttle(scrollToBottom, 1500); // 调整 300 为所需的毫秒数
@@ -980,6 +981,7 @@ onMounted(async ()=>{
     }
   }
   let id = route.params.id;
+  model.value = route.query.model || ''
   // console.log('active'+id)
   // } else {
     sessionID.value = id
