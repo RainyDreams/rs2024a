@@ -428,7 +428,7 @@ function renderStatus(status) {
 }
 function analysisBtn() {
   useAnalysis.value=!useAnalysis.value;
-  if(!useInternet.value && useAnalysis.value){useInternet.value=true}
+  // if(!useInternet.value && useAnalysis.value){useInternet.value=true}
 }
 function copyCode(codeId) {
   const code = window['czig_code_html' + codeId];
