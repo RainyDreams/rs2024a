@@ -212,7 +212,7 @@
                         <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
                       </div>
                       <div v-show="chatList[i-1].status != 'analysised' && chatList[i-1].status != 'no_analysis'"
-                        class="text-base md:text-lg lg:text-xl text-green-800 w-fit px-2 rounded-tr-md text-left font-bold sticky bottom-0 bg-slate-50 pt-2 mt-2 mb-3">
+                        class="text-base md:text-lg lg:text-xl text-green-800 w-fit px-2 rounded-tr-md text-left font-bold sticky bottom-0 bg-slate-50 pt-3 mt-1 pb-1 mb-2">
                         <span class="active-text flex items-center">
                           <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
