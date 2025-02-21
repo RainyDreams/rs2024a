@@ -212,12 +212,13 @@
                         <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
                       </div>
                       <div v-show="chatList[i-1].status != 'analysised' && chatList[i-1].status != 'no_analysis'"
-                        class="text-base md:text-lg lg:text-xl text-green-800 w-fit px-2 rounded-tr-md text-left font-bold sticky bottom-0 bg-slate-50 pt-3 mt-1 pb-1 mb-2">
-                        <span class="active-text flex items-center">
-                          <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg><span class=" text-lg leading-none align-bottom">{{ renderStatus(chatList[i-1].status)}}</span></span>
+                        class="text-base md:text-lg lg:text-xl text-green-800 w-fit  text-left font-bold sticky bottom-0 pb-1 mt-1 mb-2">
+                        <span class=" flex items-center bg-slate-50 z-30 px-3 rounded-3xl py-2 border border-slate-200">
+                            <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg><span class="active-text text-lg leading-none align-bottom">{{ renderStatus(chatList[i-1].status)}}</span>
+                        </span>
                       </div>
                       <div class="flex">
                         <el-tooltip
