@@ -188,7 +188,7 @@
                         >
                           <div>{{item.content}}</div>
                           <template v-if="item.photo">
-                            <div class="py-2"><img class="max-w-full rounded-2xl " :src="item.photo" alt=""></div>
+                            <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="item.photo" alt="[图片]隐私保护已删除"></div>
                           </template>
                         </div>
                         
@@ -279,6 +279,10 @@
           </button>
         </div>
         <div class="p-4 overflow-y-auto flex-1">
+          <!-- 提示区域 -->
+          <div v-if="uploadPhoto.blob" class="py-5 px-4 bg-green-100 text-green-700 rounded-md text-lg mx-4 text-center mb-4">
+            <p>上传成功，可以关闭对话框。</p>
+          </div>
           <!-- 文件上传区域 -->
           <div class="flex flex-col items-center justify-center space-y-4">
             <!-- 自定义文件上传按钮 -->
@@ -1024,6 +1028,8 @@ async function initiateChatWithAI(opt,count) {
       if(opt.photo){
         usePhoto.value = false;
         uploadPhoto.value = {};
+        cameraInput.value.value = '';
+        galleryInput.value.value = '';
       }
     },
   });
@@ -1253,6 +1259,7 @@ onMounted(async ()=>{
   display: flex;
   visibility: visible;
   opacity: 1;
+  /* transition-delay: 1s; */
 }
 .ss-none::-webkit-scrollbar{
   width: 0;
