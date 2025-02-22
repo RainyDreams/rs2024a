@@ -346,7 +346,7 @@
               />
             </div>
             <!-- 提示信息 -->
-            <p v-else class="text-gray-500 text-sm text-center">
+            <p v-if="!uploadPhoto.blob" class="text-gray-500 text-sm text-center">
               请选择一张图片进行上传。
             </p>
           </div>
