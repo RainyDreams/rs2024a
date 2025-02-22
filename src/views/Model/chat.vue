@@ -280,7 +280,7 @@
         </div>
         <div class="p-4 overflow-y-auto flex-1">
           <!-- 提示区域 -->
-          <div v-if="uploadPhoto.blob" class="py-5 px-4 bg-green-100 text-green-700 rounded-md text-lg mx-4 text-center mb-4">
+          <div v-if="uploadPhoto.blob" class="py-4 px-4 bg-green-100 text-green-700 rounded-md text-lg mx-4 text-center mb-4">
             <p>上传成功，可以关闭对话框。</p>
           </div>
           <!-- 文件上传区域 -->
