@@ -585,7 +585,7 @@ const handleFileUpload = async (event) => {
     // const fileUri = `data:${file.type};base64,${base64Data}`;
     const blobUrl = URL.createObjectURL(file);
 
-    if (fileUri) {
+    if (base64Data) {
       uploadPhoto.value = {
         type: file.type,
         blob: blobUrl,
@@ -600,9 +600,7 @@ const handleFileUpload = async (event) => {
       URL.revokeObjectURL(blobUrl);
       console.error(`No URI found in the response for file ${file.name}`);
       uploadPhoto.value = {};
-      ElMessageBox.alert({
-        title: '上传失败',
-        message: `上传失败`,
+      ElMessageBox.alert(`上传失败`,`上传失败,`{
         confirmButtonText: '确定',
         type: 'error',
       });
@@ -614,14 +612,12 @@ const handleFileUpload = async (event) => {
     console.error("Error:", error);
     uploadPhoto.value = {};
     usePhoto.value = false;
-    ElMessageBox.alert({
-      title: '上传失败',
-      message: `上传失败`,
+    ElMessageBox.alert(`上传失败`,`上传失败,`{
       confirmButtonText: '确定',
       type: 'error',
     });
-      galleryInput.value.value = "";
-      cameraInput.value.value = "";
+    galleryInput.value.value = "";
+    cameraInput.value.value = "";
   } finally {
     uploadPhotoDialogLoading.value = false;
   }
