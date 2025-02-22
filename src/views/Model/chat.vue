@@ -187,8 +187,8 @@
                         <div class="chatcontent min-h-8 border border-blue-200 break-words w-fit min-w-6 px-4 py-2 rounded-3xl bg-blue-100 text-blue-900 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
                         >
                           <div>{{item.content}}</div>
-                          <template v-if="item.photo">
-                            <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="item.photo" alt="[图片]隐私保护已删除"></div>
+                          <template v-if="item.photo?.uri">
+                            <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="item.photo.blob" alt="[图片]隐私保护已删除"></div>
                           </template>
                         </div>
                         
@@ -521,22 +521,29 @@ function clearUploadPhoto(){
   uploadPhoto.value = {};
   usePhoto.value = false;
 }
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
+}
 const handleFileUpload = async (event) => {
   try {
     uploadPhoto.value = {};
     usePhoto.value = false;
     uploadPhotoDialogLoading.value = true;
-
-    // 获取用户选择的文件，并调整图片大小
     const file = await resizeImage(event.target.files[0]);
     if (!file) {
       console.error("No file selected.");
       return;
     }
+    const base64Data = await toBase64(file);
 
+    /*
     const fileContent = await readFileAsArrayBuffer(file);
     const numBytes = fileContent.byteLength;
-
     const response = await fetch(
       `/api/ai/uploadPhoto/beta`,
       {
@@ -557,7 +564,10 @@ const handleFileUpload = async (event) => {
     }
 
     const responseData = await response.json();
-    const fileUri = responseData.file?.uri;
+    */
+
+    // const fileUri = responseData.file?.uri;
+    const fileUri = `data:${file.type};base64,${base64Data}`;
     const blobUrl = URL.createObjectURL(file);
 
     if (fileUri) {
@@ -601,7 +611,6 @@ const handleFileUpload = async (event) => {
     uploadPhotoDialogLoading.value = false;
   }
 };
-
 function readFileAsArrayBuffer(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -610,7 +619,6 @@ function readFileAsArrayBuffer(file) {
     reader.readAsArrayBuffer(file);
   });
 }
-
 // 图片调整大小函数
 async function resizeImage(file) {
   return new Promise((resolve, reject) => {
@@ -1152,7 +1160,7 @@ const send = async (param)=>{
     show_thought:true,
     sendTime:targetTime,
     formatSendTime,
-    photo:usePhoto?uploadPhoto.value.blob:null,
+    photo:usePhoto?uploadPhoto.value:null,
   })
   chatList.value.push({
     role: "assistant",
@@ -1219,6 +1227,11 @@ onMounted(async ()=>{
       chatList.value = getList.content.map((e,i)=>{
         e.status = e.analysis?'analysised':'no_analysis';
         e.show_thought = false;
+        if(e.photo){
+          if(e.photo.uri){
+            e.photo.blob=e.photo.uri
+          }
+        }
         return e
       });
       title.value = getList.title || title.value;
@@ -1250,7 +1263,7 @@ onMounted(async ()=>{
 .autohidden{
   display: none;
   visibility: hidden;
-  transition: all .1s ease;
+  transition: all .2s ease;
   opacity: 0;
 }
 .autohidden[data-show="true"]{
