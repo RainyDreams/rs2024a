@@ -810,7 +810,9 @@ function handleOnMessage(source, model, opt) {
         Auth.chatTaskThread.add(async () => {
           await Auth.getPrtoken('force');
           if(opt.counter){
+            chatList.value[opt.index].content += '服务器错误，请稍后重试。\n\n可以尝试新开一个对话';
             ElMessage.error('服务器错误，请稍后重试');
+            return ;
           }else{
             return await initiateChatWithAI(opt,1);
           }
