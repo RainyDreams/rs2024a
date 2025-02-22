@@ -901,7 +901,7 @@ async function deepMind(targetValue, targetTime, index) {
     //并行运行
     await Promise.all([
       Auth.deepMind_Analysis({
-        ...(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_})),
+        ...(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null})),
         onclose: (source) => {
           chatList.value[index - 1].analysis += source;
           renderAnalysis(index - 1);
@@ -918,13 +918,13 @@ async function deepMind(targetValue, targetTime, index) {
       renderAnalysis(index - 1);
       let _analysis = chatList.value[index - 1].analysis;
       chatList.value[index - 1].status = 'try';
-      await Auth.deepMind_Try(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_},[_analysis],(e)=>{
+      await Auth.deepMind_Try(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null},[_analysis],(e)=>{
         _analysis2 += e;
       }));
       chatList.value[index - 1].analysis += '\n\n'; 
       renderAnalysis(index - 1);
       chatList.value[index - 1].status = 'summary';
-      await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_},[_analysis,_analysis2]));
+      await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null},[_analysis,_analysis2]));
       const diffTime = Date.now() - beforeTime;
       chatList.value[index - 1].analysis += '\n\n### 已深度思考 '+parseInt(diffTime/1000)+' 秒'; 
       renderAnalysis(index - 1);
@@ -957,6 +957,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
     useInternet:opt._useInternet_,
     stopStatus,
     line: analysis_line.value,
+    photo:opt.photo,
     onmessage: async (source, model) => {
       showStop.value = true;
       const decode = JSON.parse(source);
