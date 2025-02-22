@@ -282,21 +282,30 @@
           <!-- 文件上传区域 -->
           <div class="flex flex-col items-center justify-center space-y-4">
             <!-- 自定义文件上传按钮 -->
-            <label
-              for="fileInput"
-              class="w-full max-w-md py-3 px-6 bg-blue-500 text-white font-medium rounded-lg cursor-pointer hover:bg-blue-600 transition-colors duration-300 text-center"
-            >
-              选择图片
-            </label>
-            <input
-              id="fileInput"
-              type="file"
-              ref="fileInput"
-              @change="handleFileUpload"
-              accept="image/*"
-              class="hidden"
-              capture="environment" 
-            />
+            <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 w-full max-w-md">
+              <!-- 拍照按钮 -->
+              <label
+                v-show="mobile"
+                for="fileInput"
+                class="w-full py-3 px-6 bg-green-500 text-white font-medium rounded-lg cursor-pointer hover:bg-green-600 transition-colors duration-300 text-center"
+              >
+                拍照
+              </label>
+              <label
+                for="fileInput"
+                class="w-full py-3 px-6 bg-blue-500 text-white font-medium rounded-lg cursor-pointer hover:bg-blue-600 transition-colors duration-300 text-center"
+              >
+                从相册选择
+              </label>
+              <input
+                id="fileInput"
+                type="file"
+                ref="fileInput"
+                @change="handleFileUpload"
+                accept="image/*"
+                class="hidden"
+              />
+            </div>
             <!-- 图片预览 -->
             <div v-if="uploadPhoto.blob" class="relative w-full max-w-md">
               <img
