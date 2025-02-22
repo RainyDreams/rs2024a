@@ -593,7 +593,8 @@ let Auth = {
         useInternet:param.useInternet,
         model:param.line,
         time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
-        sendTime:param.time
+        sendTime:param.time,
+        photo:param.photo
       },
       {
         onmessage:param.onmessage,

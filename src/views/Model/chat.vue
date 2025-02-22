@@ -185,7 +185,13 @@
                           </div>
                         </el-tooltip>
                         <div class="chatcontent min-h-8 border border-blue-200 break-words w-fit min-w-6 px-4 py-2 rounded-3xl bg-blue-100 text-blue-900 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
-                        >{{item.content}}</div>
+                        >
+                          <div>{{item.content}}</div>
+                          <template v-if="item.photo">
+                            <div class="py-2"><img class="max-w-full rounded-2xl " :src="item.photo" alt=""></div>
+                          </template>
+                        </div>
+                        
                       </div>
                       <div class="analysis max-w-full mt-2" v-show="item.status != 'no_analysis' && item.analysis">
                         <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
@@ -204,7 +210,6 @@
                       </div>
                       <!-- </el-watermark> -->
                     </div>
-                    
                   </template>
                   <template v-else-if="item.role == 'assistant'">
                     <div class="assistant" :data-id="i">
@@ -262,13 +267,46 @@
         </div>
       <!-- </div> -->
     </div>
+    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
+      <div class="bg-slate-50 rounded-lg shadow-lg max-w-3xl h-full w-full overflow-hidden pb-4 flex flex-col max-h-96 min-h-64">
+        <div class="p-4 flex justify-between items-center w-full">
+          <h2 class="text-lg font-semibold">上传图片</h2>
+          <button @click="uploadPhotoDialogVisible = false" class="text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="p-4 overflow-y-auto flex-1">
+          <input type="file" ref="fileInput" @change="handleFileUpload" accept="image/*" style="" />
+          <br/>
+          <img :src="uploadPhoto.blob" v-show="uploadPhoto.blob" class="max-w-full" alt="">
+          <br/>
+          <button  v-show="uploadPhoto.blob" @click="clearUploadPhoto" class="text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
+      <div class="p-6 bg-white rounded-3xl">
+        <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>上传中
+      </div>
+    </div>
     <div class="ainput" ref="ainput">
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="relative w-full">
-            <div :class="`flex w-full px-3 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;background-color: #e2e8f080;backdrop-filter: blur(4px);">
+            <div :class="`flex w-full overflow-x-auto px-3 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;background-color: #e2e8f080;backdrop-filter: blur(4px);">
               <touch-ripple
-                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-2 py-2 overflow-hidden select-none border border-blue-500 text-blue-500 `"
+                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-2 py-2 overflow-hidden select-none border border-blue-500 text-blue-500 `"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#4e81fc'"
                 :opacity="0.4"
@@ -279,7 +317,7 @@
                 <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
               </touch-ripple>
               <touch-ripple
-                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-blue-500':'text-blue-500 border-blue-500')"
                 :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
                 :color="useAnalysis?'#fff':'#3b82f6'"
                 :opacity="0.4"
@@ -290,7 +328,7 @@
                 <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">深入思考</span></span>
               </touch-ripple>
               <touch-ripple
-                :class="`touch-ripple w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-white border-blue-500':'text-blue-500 border-blue-500')"
                 :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
                 :color="useInternet?'#fff':'#3b82f6'"
                 :opacity="0.4"
@@ -299,6 +337,17 @@
                 @start="useInternet=!useInternet"
               >
                 <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">联网搜索</span></span>
+              </touch-ripple>
+              <touch-ripple
+                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                :style="{ clipPath: 'none', backgroundColor: usePhoto?'#3b82f6':'#fff' }"
+                :color="usePhoto?'#fff':'#3b82f6'"
+                :opacity="0.4"
+                transition="ease-out"
+                :duration="200"
+                @click="openUploadPhotoDialog"
+              >
+                <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">上传图片</span></span>
               </touch-ripple>
             </div>
           </div>
@@ -325,9 +374,6 @@
               <div class="flex flex-col justify-between items-center">
                 <span class="text-xs text-right opacity-50 text-slate-800 py-2" v-show="(now>=99)">{{ now }}</span>
                 <div class="_number ml-2 flex-1">
-                  <!--  -->
-                  <!-- <add-mode theme="outline" size="24" fill="#555"/> -->
-                  <!-- <application-menu theme="outline" size="24" fill="#333"/> -->
                   <touch-ripple
                     :class="`touch-ripple flex  items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white border-blue-500':'text-blue-500')"
                     :style="{ clipPath: 'none', backgroundColor: (show_menu)?'#3b82f6':'#fff' }"
@@ -381,6 +427,7 @@
 </template>
 <script setup>
 import markdownIt from 'markdown-it';
+import imageCompression from 'browser-image-compression';
 import markdownItHighlightjs from 'markdown-it-highlightjs';
 import math from 'markdown-it-texmath';
 import Katex from 'katex';
@@ -399,10 +446,100 @@ const showModelDetail = ref(false)
 const showInfo = ref(false)
 const contentRendered = ref([])
 const animateMode = ref(false)
-const throttledRender = (e)=>{
-  return md.render(e)
-}
+const fileInput = ref(null);
+const uploadPhotoDialogVisible = ref(false);
+const uploadPhoto = ref({})
+const uploadPhotoDialogLoading = ref(false)
+const usePhoto = ref(false);
+function clearUploadPhoto(){
+  fileInput.value.value = "";
 
+}
+const handleFileUpload = async (event) => {
+  uploadPhoto.value={};
+  usePhoto.value=false;
+  uploadPhotoDialogLoading.value=true;
+  const file = event.target.files[0]; // 获取用户选择的文件
+  if (!file) {
+    console.error("No file selected.");
+    return;
+  }
+  try {
+    const fileContent = await readFileAsArrayBuffer(file);
+    const numBytes = fileContent.byteLength;
+    const response = await fetch(
+      `/api/ai/uploadPhoto/beta`,
+      {
+        method: "POST",
+        headers: {
+          "X-Goog-Upload-Command": "start, upload, finalize",
+          "X-Goog-Upload-Header-Content-Length": numBytes.toString(),
+          "X-Goog-Upload-Header-Content-Type": file.type,
+          "Content-Type": file.type, // 设置文件的 MIME 类型
+        },
+        body: fileContent, // 直接上传文件内容
+      }
+    );
+
+    if (!response.ok) {
+      const errorDetails = await response.text(); // 获取错误详情
+      throw new Error(`Failed to upload file: ${response.statusText} (${errorDetails})`);
+    }
+    const responseData = await response.json();
+    const fileUri = responseData.file?.uri;
+    const blobUrl = URL.createObjectURL(file);
+    if (fileUri) {
+      // console.log(`File uploaded successfully. URI:`, fileUri);
+      uploadPhoto.value={
+        uri:fileUri,
+        type:file.type,
+        blob:blobUrl,
+      };
+      usePhoto.value=true;
+      // uploadPhotoDialogVisible.value=false;
+      ElMessage.success({
+        message: `上传成功`,
+        type: 'success',
+      });
+    } else {
+      URL.revokeObjectURL(blobUrl);
+      console.error(`No URI found in the response for file ${file.name}`);
+      uploadPhoto.value = {}
+      ElMessageBox.alert({
+        title: '上传失败',
+        message: `上传失败`,
+        confirmButtonText: '确定',
+        type: 'error',
+      });
+      usePhoto.value=false;
+      fileInput.value.value = "";
+      // alert(`Upload failed: No URI found in the response.`);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    // alert(`Error: ${error.message}`);
+    //清空
+    uploadPhoto.value = {}
+    usePhoto.value=false;
+    ElMessageBox.alert({
+      title: '上传失败',
+      message: `上传失败`,
+      confirmButtonText: '确定',
+      type: 'error',
+    });
+    fileInput.value.value = "";
+  } finally{
+    uploadPhotoDialogLoading.value=false;
+  }
+};
+function readFileAsArrayBuffer(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+    reader.readAsArrayBuffer(file);
+  });
+}
 function renderStatus(status) {
   switch (status) {
     case 'sending':
@@ -506,8 +643,6 @@ md.use(math,{
   errorClass: 'error',
   katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
 });
-// const contentRendered = ref([]);
-// emitter.emit('toggleSidebar')
 
 /* 主要渲染部分结束 */
 const route = useRoute()
@@ -541,26 +676,11 @@ const model_info = ref({
   },
   createuser:''
 })
-// const options_analysis = [
-//   {value: 'line-1', label: '分析 Gemini-002'},
-//   {value: 'line-2', label: '分析 Doubao-32k'},
-//   {value: 'line-3', label: '分析 Qwen-8b'},
-// ];
-// const options_chat = [
-//   {value: 'line-1', label: '回复 Gemini-1.5-flash-001'},
-//   {value: 'line-2', label: '回复 Doubao-32k'},
-//   {value: 'line-3', label: '回复 X AI'},
-// ];
-// const options_internet = [
-//   {value: 'AUTO', label: '自动联网'},
-//   {value: 'DISABLE', label: '禁止联网'},
-//   {value: 'ENABLE', label: '始终联网'},
-// ];
 const analysis_line = ref('line-1')
 const chat_line = ref('line-1')
 
-const onFocus = () => {
-  // debouncedScrollToBottom();
+const openUploadPhotoDialog =()=>{
+  uploadPhotoDialogVisible.value = true;
 }
 function copyText(text){
   Auth.copyText(text.trim(),()=>{
@@ -623,16 +743,8 @@ nextTick(()=>{
     });
   });
 })
-// textarea.addEventListener('input', function () {
-//   this.style.height = 'auto';
-//   const scrollHeight = this.scrollHeight;
-//   this.style.height = scrollHeight + 'px';
-// });
-// textarea.dispatchEvent(new Event('input'));
 const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
-  // 丝滑滑动到最底部
-  // scrollElement.scrollTop = scrollElement.scrollHeight;
   scrollElement.scrollTo({
     top: scrollElement.scrollHeight,
     behavior: 'smooth'
@@ -654,6 +766,8 @@ function renderContent(index){
 }
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
+  const t_phoho = usePhoto.value;
+  const p_photo = uploadPhoto.value;
   const beforeTime = Date.now();
   const _useAnalysis_ = useAnalysis.value;
   const _useInternet_ = useInternet.value;
@@ -707,7 +821,7 @@ async function deepMind(targetValue, targetTime, index) {
         chatList.value[index - 1].status = 'wait';
       }
     }, 8500);
-    await initiateChatWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_ });
+    await initiateChatWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null});
     clearTimeout(id2);
     chatList.value[index - 1].status = 'analysised';
   })
@@ -757,13 +871,9 @@ function createOptions(opt,analysis,fn=()=>{}) {
         chatList.value[opt.index - 1].status = 'analysised';
         chatList.value[opt.index].content += '[回答已终止]';
       }
-      //  else {
-      //   await initiateChatWithAI(opt);
-      // }
     },
   }
 }
-
 async function initiateChatWithAI(opt,count) {
   showStop.value = true;
   await Auth.chatWithAI({
@@ -776,26 +886,25 @@ async function initiateChatWithAI(opt,count) {
     useInternet: opt._useInternet_,
     line: chat_line.value,
     time: opt.targetTime,
+    photo: opt.photo,
     onerror: (source, model) => {
-      // console.log('错误');
       window.clarity('event', 'CHAT-AI-ERROR');
-      // retryChatWithAI(opt);
-      // 服务器错误
       chatList.value[opt.index].content += '\n\n[服务器繁忙]\n\n'+source;
       renderContent(opt.index);
     },
     onmessage: (source, model) => {
       if(count) opt.counter=1;
       handleOnMessage(source, model, opt);
-      // throttledScrollToBottom();
     },
     onclose: (error,model) => {
-      // debouncedScrollToBottom();
       handleOnClose(error,model, opt);
+      if(opt.photo){
+        usePhoto.value = false;
+        uploadPhoto.value = {};
+      }
     },
   });
 }
-
 function handleOnMessage(source, model, opt) {
   const decode = JSON.parse(source);
   let tmp = '';
@@ -860,15 +969,10 @@ function handleOnMessage(source, model, opt) {
         tmp = decode.response;
         break;
     }
-  }catch(e){
-    // ElMessage.warning('出现错误'+e);
-  }
+  }catch(e){ }
   chatList.value[opt.index].content += tmp;
   renderContent(opt.index);
-  // debouncedScrollToBottom();
 }
-
-
 async function handleOnClose(error,model,opt) {
   stopStatus.value = false;
   showStop.value = false;
@@ -876,9 +980,7 @@ async function handleOnClose(error,model,opt) {
   placeholder.value = '还有什么想聊的';
   document.getElementById('input_chat_ai').focus();
   if (!chatList.value[opt.index].content) {
-    if (!error) {
-      // chatList.value[opt.index].content += '[回答已终止].';
-    }
+    if (!error) {  }
   } else {
     if (!error) {
       if(model == 'line-1'){
@@ -888,8 +990,6 @@ async function handleOnClose(error,model,opt) {
           contentRendered.value=[]
         },10)
       }
-      // Auth.chatTaskThread.add(async () => {
-        // debouncedScrollToBottom();
         const res = await Auth.setAIChatResponse({
           sessionID: sessionID.value,
           content: chatList.value[opt.index].content,
@@ -898,18 +998,11 @@ async function handleOnClose(error,model,opt) {
         });
         suggestions.value = res.suggestions;
         title.value = res.title;
-        // debouncedScrollToBottom();
         emitter.emit('updateTitle', res.title);
-      // });
       
     }
   }
-  // debouncedScrollToBottom();
-  // scrollToBottom()
-  // chatList.value[opt.index - 1].status = 'analysised';
-  
 }
-
 const send = async (param)=>{
   input.value = document.getElementById('input_chat_ai').value
   if(input.value.trim() == '') {
@@ -932,6 +1025,7 @@ const send = async (param)=>{
     show_thought:true,
     sendTime:targetTime,
     formatSendTime,
+    photo:usePhoto?uploadPhoto.value.blob:null,
   })
   chatList.value.push({
     role: "assistant",
@@ -961,14 +1055,8 @@ const send = async (param)=>{
   }
   // onChange();
   const index = chatList.value.length - 1;
-  await deepMind(targetValue, targetTime, index);
-  // await handleChatWithAI_Analysis({ targetValue, targetTime, index });
-  // await handleChatWithAI_Analysis({targetValue,targetTime,index});
+  await deepMind(targetValue, targetTime, index,);
 }
-
-
-
-
 const loginStatus = ref(false);
 const model = ref('')
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
@@ -983,16 +1071,11 @@ onMounted(async ()=>{
   }
   let id = route.params.id;
   model.value = route.query.model || ''
-  // console.log('active'+id)
-  // } else {
     sessionID.value = id
-    // onChange()
-    // await Auth.init()
     fingerprint.value = await Auth.getUserFingerprint();
     await Promise.all([
     async ()=>{
       const welcomeOnline = (await Auth.getAIWelcome({sessionID:id}))
-      // // console.log(welcomeOnline)
       welcome.value = welcomeOnline.content;
       model_info.value = {
         ...model_info.value,
@@ -1000,8 +1083,6 @@ onMounted(async ()=>{
         desc:welcomeOnline.model.desc,
         createuser:welcomeOnline.model.createuser,
       };
-      // // console.log(1)
-      // // console.log(model_info.value)
       model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
       welcome_loading.value = false;
       return 0;
@@ -1034,10 +1115,20 @@ onMounted(async ()=>{
     }))
     loading.value = false;
     document.getElementById('input_chat_ai').focus()
-  // }
 })
 </script>
 
+<style>
 
-
-
+.autohidden{
+  display: none;
+  visibility: hidden;
+  transition: all .1s ease;
+  opacity: 0;
+}
+.autohidden[data-show="true"]{
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+}
+</style>
