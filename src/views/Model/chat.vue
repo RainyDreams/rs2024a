@@ -187,7 +187,7 @@
                         <div class="chatcontent min-h-8 border border-blue-200 break-words w-fit min-w-6 px-4 py-2 rounded-3xl bg-blue-100 text-blue-900 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
                         >
                           <div>{{item.content}}</div>
-                          <template v-if="item.photo?.uri">
+                          <template v-if="item.photo?.meta">
                             <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="item.photo.blob" alt="[图片]隐私保护已删除"></div>
                           </template>
                         </div>
@@ -582,12 +582,11 @@ const handleFileUpload = async (event) => {
     */
 
     // const fileUri = responseData.file?.uri;
-    const fileUri = `data:${file.type};base64,${base64Data}`;
+    // const fileUri = `data:${file.type};base64,${base64Data}`;
     const blobUrl = URL.createObjectURL(file);
 
     if (fileUri) {
       uploadPhoto.value = {
-        uri: fileUri,
         type: file.type,
         blob: blobUrl,
         meta:base64Data
@@ -1244,8 +1243,8 @@ onMounted(async ()=>{
         e.status = e.analysis?'analysised':'no_analysis';
         e.show_thought = false;
         if(e.photo){
-          if(e.photo.uri){
-            e.photo.blob=dataURLtoBlob(e.photo.uri)
+          if(e.photo.meta){
+            e.photo.blob=dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`)
           }
         }
         return e
