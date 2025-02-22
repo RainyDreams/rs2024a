@@ -18,6 +18,12 @@ export default defineConfig((mode) => {
       rollupOptions: {
         output: {
           manualChunks(id) {
+            if (id.includes('.vue')) {
+              const match = id.match(/src\/(.*)\.vue$/);
+              if (match) {
+                return `vue-component-${match[1].replace(/\//g, '-')}`;
+              }
+            }
             if (id.includes('node_modules')) {
               return id.split('node_modules/')[1].split('/')[0];
               return btoa(id.toString().split('node_modules/')[1].split('/')[0].toString()).slice(0,5);

@@ -600,7 +600,7 @@ const handleFileUpload = async (event) => {
       URL.revokeObjectURL(blobUrl);
       console.error(`No URI found in the response for file ${file.name}`);
       uploadPhoto.value = {};
-      ElMessageBox.alert(`上传失败`,`上传失败,`{
+      ElMessageBox.alert(`上传失败`,`上传失败`,{
         confirmButtonText: '确定',
         type: 'error',
       });
@@ -612,7 +612,7 @@ const handleFileUpload = async (event) => {
     console.error("Error:", error);
     uploadPhoto.value = {};
     usePhoto.value = false;
-    ElMessageBox.alert(`上传失败`,`上传失败,`{
+    ElMessageBox.alert(`上传失败`,`上传失败`,{
       confirmButtonText: '确定',
       type: 'error',
     });
