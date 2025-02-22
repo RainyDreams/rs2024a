@@ -280,11 +280,38 @@
         </div>
         <div class="p-4 overflow-y-auto flex-1">
           <!-- 提示区域 -->
-          <div v-if="uploadPhoto.blob" class="py-4 px-4 bg-green-100 text-green-700 rounded-md text-lg mx-4 text-center mb-4">
-            <p>上传成功，可以关闭对话框。</p>
+          <div v-if="uploadPhoto.blob" class="py-4 px-4 bg-green-100 font-bold text-green-700 rounded-md text-lg text-center mb-4">
+            <p>上传成功，可以关闭对话框</p>
           </div>
           <!-- 文件上传区域 -->
           <div class="flex flex-col items-center justify-center space-y-4">
+            <div v-if="uploadPhoto.blob" class="relative w-full max-w-md">
+              <img
+                :src="uploadPhoto.blob"
+                alt="上传的图片"
+                class="w-full h-auto rounded-lg shadow-md object-cover transition-transform hover:scale-105 duration-500 mb-4"
+              />
+              <!-- 清除按钮 -->
+              <button
+                @click="clearUploadPhoto"
+                class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-50 hover:bg-red-600 transition-colors duration-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
             <!-- 自定义文件上传按钮 -->
             <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 w-full max-w-md">
               <!-- 拍照按钮 -->
@@ -318,35 +345,6 @@
                 class="hidden"
               />
             </div>
-            <!-- 图片预览 -->
-            <div v-if="uploadPhoto.blob" class="relative w-full max-w-md">
-              <img
-                :src="uploadPhoto.blob"
-                alt="上传的图片"
-                class="w-full h-auto rounded-lg shadow-md object-cover transition-transform duration-300 hover:scale-105 duration-500"
-              />
-              <!-- 清除按钮 -->
-              <button
-                @click="clearUploadPhoto"
-                class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors duration-300"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-
             <!-- 提示信息 -->
             <p v-else class="text-gray-500 text-sm text-center">
               请选择一张图片进行上传。
