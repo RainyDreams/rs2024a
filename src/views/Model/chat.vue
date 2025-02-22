@@ -529,6 +529,21 @@ function toBase64(file) {
     reader.readAsDataURL(file);
   });
 }
+function dataURLtoBlob(dataURL) {
+  const matches = dataURL.match(/^data:(.+);base64,(.+)$/);
+  if (!matches || matches.length !== 3) {
+    throw new Error("Invalid data URL format");
+  }
+  const mimeType = matches[1]; // 提取 MIME 类型
+  const base64Data = matches[2]; // 提取 Base64 数据
+  const binaryString = atob(base64Data);
+  const arrayBuffer = new ArrayBuffer(binaryString.length);
+  const uint8Array = new Uint8Array(arrayBuffer);
+  for (let i = 0; i < binaryString.length; i++) {
+    uint8Array[i] = binaryString.charCodeAt(i);
+  }
+  return new Blob([uint8Array], { type: mimeType });
+}
 const handleFileUpload = async (event) => {
   try {
     uploadPhoto.value = {};
@@ -575,6 +590,7 @@ const handleFileUpload = async (event) => {
         uri: fileUri,
         type: file.type,
         blob: blobUrl,
+        meta:base64Data
       };
       usePhoto.value = true;
       ElMessage.success({
@@ -1229,7 +1245,7 @@ onMounted(async ()=>{
         e.show_thought = false;
         if(e.photo){
           if(e.photo.uri){
-            e.photo.blob=e.photo.uri
+            e.photo.blob=dataURLtoBlob(e.photo.uri)
           }
         }
         return e
