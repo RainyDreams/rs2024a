@@ -10,9 +10,9 @@ export default defineConfig((mode) => {
     // base:'./',
     plugins: [
       vue(),
-      legacy({
-        targets: ['>0.3%, edge>=79, firefox>=67, chrome>=64, safari>=12, chromeAndroid>=64, iOS>=12'],
-      }),
+      // legacy({
+      //   targets: ['>0.3%, edge>=79, firefox>=67, chrome>=64, safari>=12, chromeAndroid>=64, iOS>=12'],
+      // }),
     ],
     build: {
       rollupOptions: {
@@ -21,12 +21,12 @@ export default defineConfig((mode) => {
             if (id.includes('.vue')) {
               const match = id.match(/src\/(.*)\.vue$/);
               if (match) {
-                return `vue-component-${match[1].replace(/\//g, '-')}`;
+                return `${match[1].replace(/\//g, '-')}`;
               }
             }
             if (id.includes('node_modules')) {
-              return id.split('node_modules/')[1].split('/')[0];
-              return btoa(id.toString().split('node_modules/')[1].split('/')[0].toString()).slice(0,5);
+              // return id.split('node_modules/')[1].split('/')[0];
+              return btoa(id.toString().split('node_modules/')[1].split('/')[0].toString());
             }
           },
         },
