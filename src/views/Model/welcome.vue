@@ -63,7 +63,7 @@ import Auth from '../../utils/auth'
 const route = useRoute()
 const router = useRouter()
 const tryAgain = async () => {
-  let model = route.query.model
+  let model = route.query.model || ''
   const e = await Auth.getAISessionID({model});
   const {status, content} = e
   if(status === "sus"){
