@@ -1240,7 +1240,7 @@ onMounted(async ()=>{
         e.show_thought = false;
         if(e.photo){
           if(e.photo.meta){
-            e.photo.blob=dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`)
+            e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
           }
         }
         return e
