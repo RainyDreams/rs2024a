@@ -19,9 +19,9 @@ export default defineConfig((mode) => {
         output: {
           manualChunks(id) {
             if (id.includes('.vue')) {
-              const match = id.match(/src\/(.*)\.vue$/);
+              const match = id.match(/src\/view\/(.*)\.vue$/);
               if (match) {
-                return `${match[1].replace(/\//g, '-')}`;
+                return `${match[1]}`;
               }
             }
             if (id.includes('node_modules')) {
