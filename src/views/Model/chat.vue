@@ -317,7 +317,6 @@
                   autofocus 
                   :maxlength="40960"
                   autocomplete="off"
-                  @focus="onFocus"
                   :placeholder="placeholder" 
                   @keydown.enter="handleEnter"
                   style="resize:none;min-height: 32px;height:var(--inputContainerHeight);"
@@ -739,7 +738,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
             tmp = decode.response;
             break;
         }
-        debouncedScrollToBottom();
+        // debouncedScrollToBottom();
         chatList.value[opt.index - 1].analysis += tmp;
         renderAnalysis(opt.index - 1);
         fn(tmp);
@@ -791,7 +790,7 @@ async function initiateChatWithAI(opt,count) {
       // throttledScrollToBottom();
     },
     onclose: (error,model) => {
-      debouncedScrollToBottom();
+      // debouncedScrollToBottom();
       handleOnClose(error,model, opt);
     },
   });
