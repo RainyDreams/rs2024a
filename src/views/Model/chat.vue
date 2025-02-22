@@ -296,10 +296,9 @@
                 ref="cameraInput"
                 @change="handleFileUpload"
                 accept="image/*"
-                capture="environment" <!-- 使用后置摄像头 -->
+                capture="environment"
                 class="hidden"
               />
-              <!-- 从相册选择按钮（支持多选） -->
               <label
                 for="galleryInput"
                 class="w-full py-3 px-6 bg-blue-500 text-white font-medium rounded-lg cursor-pointer hover:bg-blue-600 transition-colors duration-300 text-center"
@@ -312,7 +311,6 @@
                 ref="galleryInput"
                 @change="handleFileUpload"
                 accept="image/*"
-                multiple <!-- 支持多选 -->
                 class="hidden"
               />
             </div>
