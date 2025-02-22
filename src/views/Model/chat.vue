@@ -691,7 +691,7 @@ async function deepMind(targetValue, targetTime, index) {
       chatList.value[index - 1].status = 'summary';
       await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_},[_analysis,_analysis2]));
       const diffTime = Date.now(); - beforeTime;
-      chatList.value[index - 1].analysis += '\n\n### 已深度思考 '+dayjs(diffTime).format('ss')+' 秒'; 
+      chatList.value[index - 1].analysis += '\n\n### 已深度思考 '+parseInt(diffTime/1000)+' 秒'; 
       renderAnalysis(index - 1);
     })
   }
