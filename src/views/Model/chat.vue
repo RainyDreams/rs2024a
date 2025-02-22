@@ -285,24 +285,34 @@
             <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 w-full max-w-md">
               <!-- 拍照按钮 -->
               <label
-                v-show="mobile"
-                for="fileInput"
+                for="cameraInput"
                 class="w-full py-3 px-6 bg-green-500 text-white font-medium rounded-lg cursor-pointer hover:bg-green-600 transition-colors duration-300 text-center"
               >
                 拍照
               </label>
+              <input
+                id="cameraInput"
+                type="file"
+                ref="cameraInput"
+                @change="handleFileUpload"
+                accept="image/*"
+                capture="environment" <!-- 使用后置摄像头 -->
+                class="hidden"
+              />
+              <!-- 从相册选择按钮（支持多选） -->
               <label
-                for="fileInput"
+                for="galleryInput"
                 class="w-full py-3 px-6 bg-blue-500 text-white font-medium rounded-lg cursor-pointer hover:bg-blue-600 transition-colors duration-300 text-center"
               >
                 从相册选择
               </label>
               <input
-                id="fileInput"
+                id="galleryInput"
                 type="file"
-                ref="fileInput"
+                ref="galleryInput"
                 @change="handleFileUpload"
                 accept="image/*"
+                multiple <!-- 支持多选 -->
                 class="hidden"
               />
             </div>
@@ -499,13 +509,15 @@ const showModelDetail = ref(false)
 const showInfo = ref(false)
 const contentRendered = ref([])
 const animateMode = ref(false)
-const fileInput = ref(null);
+const cameraInput = ref(null);
+const galleryInput = ref(null)
 const uploadPhotoDialogVisible = ref(false);
 const uploadPhoto = ref({})
 const uploadPhotoDialogLoading = ref(false)
 const usePhoto = ref(false);
 function clearUploadPhoto(){
-  fileInput.value.value = "";
+  cameraInput.value.value = "";
+  galleryInput.value.value = "";
   uploadPhoto.value = {};
   usePhoto.value = false;
 }
@@ -570,7 +582,8 @@ const handleFileUpload = async (event) => {
         type: 'error',
       });
       usePhoto.value = false;
-      fileInput.value.value = "";
+      cameraInput.value.value = "";
+      galleryInput.value.value = "";
     }
   } catch (error) {
     console.error("Error:", error);
@@ -582,7 +595,8 @@ const handleFileUpload = async (event) => {
       confirmButtonText: '确定',
       type: 'error',
     });
-    fileInput.value.value = "";
+      galleryInput.value.value = "";
+      cameraInput.value.value = "";
   } finally {
     uploadPhotoDialogLoading.value = false;
   }
