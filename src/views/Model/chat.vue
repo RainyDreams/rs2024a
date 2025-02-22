@@ -267,8 +267,8 @@
         </div>
       <!-- </div> -->
     </div>
-    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
-      <div class="bg-slate-50 rounded-lg shadow-lg max-w-3xl h-full w-full overflow-hidden pb-4 flex flex-col max-h-96 min-h-64">
+    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-end inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
+      <div class="bg-slate-50 rounded-lg shadow-lg max-w-3xl w-full overflow-hidden pb-4 flex flex-col max-h-[400px] min-h-64">
         <div class="p-4 flex justify-between items-center w-full">
           <h2 class="text-lg font-semibold">上传图片</h2>
           <button @click="uploadPhotoDialogVisible = false" class="text-gray-500 hover:text-gray-700">
@@ -279,16 +279,58 @@
           </button>
         </div>
         <div class="p-4 overflow-y-auto flex-1">
-          <input type="file" ref="fileInput" @change="handleFileUpload" accept="image/*" style="" />
-          <br/>
-          <img :src="uploadPhoto.blob" v-show="uploadPhoto.blob" class="max-w-full" alt="">
-          <br/>
-          <button  v-show="uploadPhoto.blob" @click="clearUploadPhoto" class="text-gray-500 hover:text-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <!-- 文件上传区域 -->
+          <div class="flex flex-col items-center justify-center space-y-4">
+            <!-- 自定义文件上传按钮 -->
+            <label
+              for="fileInput"
+              class="w-full max-w-md py-3 px-6 bg-blue-500 text-white font-medium rounded-lg cursor-pointer hover:bg-blue-600 transition-colors duration-300 text-center"
+            >
+              选择图片
+            </label>
+            <input
+              id="fileInput"
+              type="file"
+              ref="fileInput"
+              @change="handleFileUpload"
+              accept="image/*"
+              class="hidden"
+              capture="environment" 
+            />
+            <!-- 图片预览 -->
+            <div v-if="uploadPhoto.blob" class="relative w-full max-w-md">
+              <img
+                :src="uploadPhoto.blob"
+                alt="上传的图片"
+                class="w-full h-auto rounded-lg shadow-md object-cover transition-transform duration-300 hover:scale-105 duration-500"
+              />
+              <!-- 清除按钮 -->
+              <button
+                @click="clearUploadPhoto"
+                class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors duration-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <!-- 提示信息 -->
+            <p v-else class="text-gray-500 text-sm text-center">
+              请选择一张图片进行上传。
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -304,51 +346,53 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="relative w-full">
-            <div :class="`flex w-full overflow-x-auto px-3 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;background-color: #e2e8f080;backdrop-filter: blur(4px);">
-              <touch-ripple
-                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-2 py-2 overflow-hidden select-none border border-blue-500 text-blue-500 `"
-                :style="{ clipPath: 'none', backgroundColor: '#fff' }"
-                :color="'#4e81fc'"
-                :opacity="0.4"
-                transition="ease-out"
-                :duration="200"
-                @start="router.push('/?model='+model)"
-              >
-                <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
-              </touch-ripple>
-              <touch-ripple
-                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-blue-500':'text-blue-500 border-blue-500')"
-                :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
-                :color="useAnalysis?'#fff':'#3b82f6'"
-                :opacity="0.4"
-                transition="ease-out"
-                :duration="200"
-                @start="analysisBtn"
-              >
-                <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">深入思考</span></span>
-              </touch-ripple>
-              <touch-ripple
-                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-white border-blue-500':'text-blue-500 border-blue-500')"
-                :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
-                :color="useInternet?'#fff':'#3b82f6'"
-                :opacity="0.4"
-                transition="ease-out"
-                :duration="200"
-                @start="useInternet=!useInternet"
-              >
-                <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">联网搜索</span></span>
-              </touch-ripple>
-              <touch-ripple
-                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-white border-blue-500':'text-blue-500 border-blue-500')"
-                :style="{ clipPath: 'none', backgroundColor: usePhoto?'#3b82f6':'#fff' }"
-                :color="usePhoto?'#fff':'#3b82f6'"
-                :opacity="0.4"
-                transition="ease-out"
-                :duration="200"
-                @click="openUploadPhotoDialog"
-              >
-                <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">上传图片</span></span>
-              </touch-ripple>
+            <div :class="`flex w-full px-3 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;background-color: #e2e8f080;backdrop-filter: blur(4px);">
+              <div class="flex overflow-x-auto rounded-t-[16px] ss-none">
+                <touch-ripple
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-2 py-2 overflow-hidden select-none border border-blue-500 text-blue-500 `"
+                  :style="{ clipPath: 'none', backgroundColor: '#fff' }"
+                  :color="'#4e81fc'"
+                  :opacity="0.4"
+                  transition="ease-out"
+                  :duration="200"
+                  @start="router.push('/?model='+model)"
+                >
+                  <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
+                </touch-ripple>
+                <touch-ripple
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                  :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
+                  :color="useAnalysis?'#fff':'#3b82f6'"
+                  :opacity="0.4"
+                  transition="ease-out"
+                  :duration="200"
+                  @start="analysisBtn"
+                >
+                  <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">深入思考</span></span>
+                </touch-ripple>
+                <touch-ripple
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                  :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
+                  :color="useInternet?'#fff':'#3b82f6'"
+                  :opacity="0.4"
+                  transition="ease-out"
+                  :duration="200"
+                  @start="useInternet=!useInternet"
+                >
+                  <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">联网搜索</span></span>
+                </touch-ripple>
+                <touch-ripple
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                  :style="{ clipPath: 'none', backgroundColor: usePhoto?'#3b82f6':'#fff' }"
+                  :color="usePhoto?'#fff':'#3b82f6'"
+                  :opacity="0.4"
+                  transition="ease-out"
+                  :duration="200"
+                  @click="openUploadPhotoDialog"
+                >
+                  <span class="flex items-center align-middle"><pic class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">上传图片</span></span>
+                </touch-ripple>
+              </div>
             </div>
           </div>
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="background-color: #e2e8f080;">
@@ -438,7 +482,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,Fire,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,Fire,Pic,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -453,20 +497,25 @@ const uploadPhotoDialogLoading = ref(false)
 const usePhoto = ref(false);
 function clearUploadPhoto(){
   fileInput.value.value = "";
-
+  uploadPhoto.value = {};
+  usePhoto.value = false;
 }
 const handleFileUpload = async (event) => {
-  uploadPhoto.value={};
-  usePhoto.value=false;
-  uploadPhotoDialogLoading.value=true;
-  const file = event.target.files[0]; // 获取用户选择的文件
-  if (!file) {
-    console.error("No file selected.");
-    return;
-  }
   try {
+    uploadPhoto.value = {};
+    usePhoto.value = false;
+    uploadPhotoDialogLoading.value = true;
+
+    // 获取用户选择的文件，并调整图片大小
+    const file = await resizeImage(event.target.files[0]);
+    if (!file) {
+      console.error("No file selected.");
+      return;
+    }
+
     const fileContent = await readFileAsArrayBuffer(file);
     const numBytes = fileContent.byteLength;
+
     const response = await fetch(
       `/api/ai/uploadPhoto/beta`,
       {
@@ -485,18 +534,18 @@ const handleFileUpload = async (event) => {
       const errorDetails = await response.text(); // 获取错误详情
       throw new Error(`Failed to upload file: ${response.statusText} (${errorDetails})`);
     }
+
     const responseData = await response.json();
     const fileUri = responseData.file?.uri;
     const blobUrl = URL.createObjectURL(file);
+
     if (fileUri) {
-      // console.log(`File uploaded successfully. URI:`, fileUri);
-      uploadPhoto.value={
-        uri:fileUri,
-        type:file.type,
-        blob:blobUrl,
+      uploadPhoto.value = {
+        uri: fileUri,
+        type: file.type,
+        blob: blobUrl,
       };
-      usePhoto.value=true;
-      // uploadPhotoDialogVisible.value=false;
+      usePhoto.value = true;
       ElMessage.success({
         message: `上传成功`,
         type: 'success',
@@ -504,23 +553,20 @@ const handleFileUpload = async (event) => {
     } else {
       URL.revokeObjectURL(blobUrl);
       console.error(`No URI found in the response for file ${file.name}`);
-      uploadPhoto.value = {}
+      uploadPhoto.value = {};
       ElMessageBox.alert({
         title: '上传失败',
         message: `上传失败`,
         confirmButtonText: '确定',
         type: 'error',
       });
-      usePhoto.value=false;
+      usePhoto.value = false;
       fileInput.value.value = "";
-      // alert(`Upload failed: No URI found in the response.`);
     }
   } catch (error) {
     console.error("Error:", error);
-    // alert(`Error: ${error.message}`);
-    //清空
-    uploadPhoto.value = {}
-    usePhoto.value=false;
+    uploadPhoto.value = {};
+    usePhoto.value = false;
     ElMessageBox.alert({
       title: '上传失败',
       message: `上传失败`,
@@ -528,10 +574,11 @@ const handleFileUpload = async (event) => {
       type: 'error',
     });
     fileInput.value.value = "";
-  } finally{
-    uploadPhotoDialogLoading.value=false;
+  } finally {
+    uploadPhotoDialogLoading.value = false;
   }
 };
+
 function readFileAsArrayBuffer(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -540,6 +587,60 @@ function readFileAsArrayBuffer(file) {
     reader.readAsArrayBuffer(file);
   });
 }
+
+// 图片调整大小函数
+async function resizeImage(file) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type.startsWith('image/')) {
+      resolve(null); // 如果不是图片文件，直接返回 null
+      return;
+    }
+
+    const MAX_SIZE = 1000; // 最大宽度或高度
+    const img = new Image();
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    img.onload = () => {
+      let width = img.width;
+      let height = img.height;
+
+      // 计算新的宽度和高度
+      if (width > MAX_SIZE || height > MAX_SIZE) {
+        if (width > height) {
+          height *= MAX_SIZE / width;
+          width = MAX_SIZE;
+        } else {
+          width *= MAX_SIZE / height;
+          height = MAX_SIZE;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      // 绘制调整后的图片
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // 将调整后的图片转换为 Blob 对象
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            resolve(new File([blob], file.name, { type: file.type }));
+          } else {
+            reject(new Error("Failed to resize image."));
+          }
+        },
+        file.type,
+        0.9 // 质量参数（可选）
+      );
+    };
+
+    img.onerror = (error) => reject(error);
+    img.src = URL.createObjectURL(file);
+  });
+}
+
 function renderStatus(status) {
   switch (status) {
     case 'sending':
@@ -1130,5 +1231,9 @@ onMounted(async ()=>{
   display: flex;
   visibility: visible;
   opacity: 1;
+}
+.ss-none::-webkit-scrollbar{
+  width: 0;
+  height:0;
 }
 </style>
