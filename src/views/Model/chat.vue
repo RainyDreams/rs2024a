@@ -153,7 +153,7 @@
                   </div>
                 </div>
                 <div v-show="showInfo">
-                  <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 mx-auto bg-white border rounded-xl p-3 duration-100">
+                  <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 bg-white border rounded-xl p-3 duration-100">
                     <p>查看<router-link to="/about/log">更新日志</router-link></p>
                     <div class="w-full text-sm/relaxed">由于服务器成本原因，对大模型所有用户限制如下：每分钟15次，每天1000次提问。</div>
                   </div>
@@ -281,13 +281,13 @@
             完成
           </button>
         </div>
-        <div class="p-4 overflow-y-auto flex-1">
+        <div class="p-4 overflow-y-auto flex-1 flex flex-col">
           <!-- 提示区域 -->
-          <div v-if="uploadPhoto.blob" class="py-4 px-4 bg-green-100 font-bold text-green-700 rounded-md text-lg text-center mb-4">
+          <div v-if="uploadPhoto.blob" class="py-4 px-4 bg-green-100 max-w-md w-full mx-auto font-bold text-green-700 rounded-md text-lg text-center mb-4">
             <p>上传成功</p>
           </div>
           <!-- 文件上传区域 -->
-          <div class="flex flex-col items-center justify-center space-y-4">
+          <div class="flex flex-col items-center justify-center space-y-4 w-full">
             <div v-if="uploadPhoto.blob" class="relative w-full max-w-md mb-4">
               <img
                 :src="uploadPhoto.blob"
@@ -317,10 +317,11 @@
               </button>
             </div>
             <!-- 自定义文件上传按钮 -->
-            <div :data-show="!uploadPhoto.blob" class="autohidden flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 w-full max-w-md">
+            <div :data-show="!uploadPhoto.blob" class="autohidden lg:mt-6 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 w-full max-w-md">
               <!-- 拍照按钮 -->
               <label
                 for="cameraInput"
+                v-show="mobile"
                 class="w-full py-3 px-6 bg-green-500 text-white font-medium rounded-lg cursor-pointer hover:bg-green-600 transition-colors duration-300 text-center"
               >
                 拍照
