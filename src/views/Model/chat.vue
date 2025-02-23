@@ -571,6 +571,7 @@ const startRecording = async () => {
           meta: base64,
           blob: audioUrl.value
         }
+        mediaRecorder.value.stop();
         useAudio.value = true;
         send();
       };
@@ -591,7 +592,6 @@ const startRecording = async () => {
   }
 };
 
-// 停止录音
 const stopRecording = () => {
   if (mediaRecorder.value && mediaRecorder.value.state !== 'inactive') {
     mediaRecorder.value.stop();
