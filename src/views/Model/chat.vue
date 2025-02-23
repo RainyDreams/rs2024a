@@ -610,6 +610,7 @@ const startRecording = async (event) => {
         audioChunks.value.push(event.data);
       }
     };
+    recordTime.value = 0;
     const timev = setInterval(() => {
       recordTime.value = recordTime.value + 1;
     }, 1000);
