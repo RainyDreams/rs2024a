@@ -378,6 +378,34 @@
         </svg>上传中
       </div>
     </div>
+    <div :data-show="recordMode" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
+      <div class="bg-slate-50 rounded-lg shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
+        <div class="p-4 flex justify-between items-center w-full">
+          <h2 class="text-lg font-semibold">录音</h2>
+          <button @click="recordMode = false" class="text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="p-4 overflow-y-auto flex-1 flex flex-col">
+          <h2 class="mb-6 w-full text-center text-blue-500 text-lg">开始录音</h2>
+          <button
+            @mousedown="startRecording" 
+            @mouseup="stopRecording" 
+            @touchstart="startRecording" 
+            @touchend="stopRecording"
+            :class="[
+              'px-6 py-3 text-lg font-semibold rounded-md shadow-md transition duration-300 shadow-blue-100',
+              isRecording ? 'bg-blue-500 text-white' : 'text-blue-500 border-blue-500 border'
+            ]"
+          >
+            <Acoustic theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/> 
+          </button>
+        </div>
+      </div>
+    </div>
     <div class="ainput" ref="ainput">
       <div class="">
         <div class="max-w-3xl m-auto">
@@ -434,7 +462,7 @@
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="background-color: #e2e8f080;">
             <div :class="`ainput__wrapper items-stretch `">
               <div 
-                class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8 autohidden"
+                class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
                 :data-show="!isRecording" 
                 id="input_chat_ai_div"
                 style="height:var(--inputContainerHeight);--inputContainerHeight:32px;">
@@ -451,9 +479,9 @@
                   @keydown.enter="handleEnter"
                   style="resize:none;min-height: 32px;height:var(--inputContainerHeight);"
                 ></textarea></div>
-              <div :class="`flex flex-col justify-between items-center ${isRecording?'flex-1':''}`">
+              <div :class="`flex flex-col justify-between items-center`">
                 <span class="text-xs text-right opacity-50 text-slate-800 py-2" v-show="(now>=99)">{{ now }}</span>
-                <div :class="`_number flex-1 w-full ${isRecording?' transition':' ml-2'}`">
+                <div :class="`_number flex-1`">
                   <touch-ripple
                     :class="`touch-ripple flex  items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white border-blue-500':'text-blue-500')"
                     :style="{ clipPath: 'none', backgroundColor: (show_menu)?'#3b82f6':'#fff' }"
@@ -466,17 +494,18 @@
                   >
                     <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `" theme="outline" size="18" fill="currentColor"/>
                   </touch-ripple>
-                  <div 
-                    @mousedown="startRecording" 
-                    @mouseup="stopRecording" 
-                    @touchstart="startRecording" 
-                    @touchend="stopRecording"
+                  <touch-ripple
+                    :class="`touch-ripple text-white autohidden items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `"
+                    :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
+                    :color="'#fff'"
+                    :opacity="0.4"
+                    transition="ease"
+                    :duration="200"
                     :data-show="!useAudio"
-                    :class="['flex items-center autohidden justify-center h-8 w-8  mr-1 cursor-pointer transition relative z-50 rounded-full overflow-hidden select-none border border-blue-500 ',
-                     isRecording ? 'bg-blue-500 text-white flex-1' : 'text-blue-500'
-                    ]">
+                    @start="openRecordDialog"
+                  >
                     <Acoustic theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/> 
-                  </div>
+                  </touch-ripple>
                   <touch-ripple
                     :class="`touch-ripple text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(showStop?'hidden':'flex')"
                     :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
@@ -546,6 +575,10 @@ const audioChunks = ref([]);
 const audioUrl = ref('');
 const useAudio = ref(false);
 const uploadAudio = ref({});
+const recordMode = ref(false);
+const openRecordDialog = ()=>{
+  recordMode.value=true;
+}
 const startRecording = async (event) => {
   event.preventDefault();
   useAudio.value = false;
@@ -574,6 +607,7 @@ const startRecording = async (event) => {
         }
         mediaRecorder.value.stop();
         useAudio.value = true;
+        recordMode.value=false;
         send();
       };
       reader.readAsDataURL(audioBlob);
@@ -592,7 +626,6 @@ const startRecording = async (event) => {
     });
   }
 };
-
 const stopRecording = () => {
   if (mediaRecorder.value && mediaRecorder.value.state !== 'inactive') {
     mediaRecorder.value.stop();
@@ -980,6 +1013,7 @@ nextTick(()=>{
   if(isWeChatBrowser()){
     weixinDialogVisible.value = true;
   }
+
 })
 const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
