@@ -5,7 +5,15 @@ import legacy from '@vitejs/plugin-legacy'
 export default defineConfig((mode) => {
   return {
     server: {
-      allowedHosts: ['aaa.chiziingiin.top']
+      allowedHosts: ['aaa.chiziingiin.top'],
+      proxy: {
+        '/api/': {
+          target: 'https://lb.chiziingiin.top',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '/api/'),
+          secure: false,
+        },
+      }
     },
     // base:'./',
     plugins: [
@@ -59,5 +67,5 @@ export default defineConfig((mode) => {
     optimizeDeps: {
       include: ['vue', 'vue-router', 'element-plus'],
     },
-  };
-});
+  }
+})

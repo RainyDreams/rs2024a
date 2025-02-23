@@ -1,8 +1,8 @@
 <template>
   <div class="commonPage bg-slate-50 md:rounded-lg pb-0 h-dvh pt-3" style="display: flex;flex-direction: column;">
     <div id="wechat-tip" v-if="weixinDialogVisible" class="fixed flex top-0 left-0 w-full bg-slate-800 bg-opacity-40 text-white p-4 text-center text-sm  z-40">
-      <span class="flex-1 pr-2">您正在使用微信浏览器访问本站，建议使用浏览器打开</span>
-      <button @click="weixinDialogVisible = false" class="text-white rounded-full h-9 p-2 w-9 flex-shrink-0 bg-slate-900 bg-opacity-20">
+      <span class="flex-1 pr-2">您正在使用微信访问本站，建议使用浏览器打开</span>
+      <button @click="weixinDialogVisible = false" class="text-white rounded-full h-9 p-2 w-9 flex-shrink-0 bg-slate-900 bg-opacity-10">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -378,7 +378,7 @@
         </svg>上传中
       </div>
     </div>
-    <div :data-show="recordMode" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
+    <div :data-show="recordMode" class="fixed flex justify-center items-end inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
       <div class="bg-slate-50 rounded-lg shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
         <div class="p-4 flex justify-between items-center w-full">
           <h2 class="text-lg font-semibold">录音</h2>
@@ -389,21 +389,30 @@
             </svg>
           </button>
         </div>
-        <div class="p-4 overflow-y-auto flex-1 flex flex-col">
-          <h2 class="mb-6 w-full text-center text-blue-500 text-lg">开始录音</h2>
+        <div class="p-4 overflow-y-auto flex-1 flex flex-col items-center justify-center">
+          <!-- 录音时间显示 -->
+          <div
+            v-show="isRecording"
+            class="relative mb-4 text-lg font-semibold text-blue-600 animate-pulse"
+          >
+            <span class="text-transparent bg-clip-text bg-blue-500">
+              {{ recordTime }} s
+            </span>
+          </div>
           <button
-            @mousedown="startRecording" 
-            @mouseup="stopRecording" 
-            @touchstart="startRecording" 
-            @touchend="stopRecording"
+            @click="toggleRecording"
             id="recordAudio"
             :class="[
-              'px-6 py-3 text-lg font-semibold rounded-md shadow-md transition duration-300 shadow-blue-100',
-              isRecording ? 'bg-blue-500 text-white' : 'text-blue-500 border-blue-500 border'
+              'relative px-6 py-3 flex select-none text-lg font-semibold rounded-md shadow-md transition duration-300 transform',
+              isRecording 
+                ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white scale-105' 
+                : 'bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-50'
             ]"
+            aria-label="按住录音"
+            tabindex="0"
           >
-            <Acoustic theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/> 
-            <span class="leading-none ml-2">按住录音</span>
+            <Acoustic theme="outline" size="20" fill="currentColor" :strokeWidth="4" strokeLinejoin="bevel" />
+            <span class="leading-none ml-2">{{isRecording?'正在':'开始'}}录音</span>
           </button>
         </div>
       </div>
@@ -578,12 +587,19 @@ const audioUrl = ref('');
 const useAudio = ref(false);
 const uploadAudio = ref({});
 const recordMode = ref(false);
+const recordTime = ref(0);
+const toggleRecording = async ()=>{
+  if(isRecording.value){
+    stopRecording();
+  } else {
+    await startRecording();
+  }
+}
 const openRecordDialog = ()=>{
   recordMode.value=true;
-  document.querySelector('recordAudio').focus()
+  // document.querySelector('#recordAudio').focus()
 }
 const startRecording = async (event) => {
-  // event.preventDefault();
   useAudio.value = false;
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -594,10 +610,14 @@ const startRecording = async (event) => {
         audioChunks.value.push(event.data);
       }
     };
+    const timev = setInterval(() => {
+      recordTime.value = recordTime.value + 1;
+    }, 1000);
     mediaRecorder.value.onstop = () => {
       const audioBlob = new Blob(audioChunks.value, { type: 'audio/wav' });
       audioUrl.value = URL.createObjectURL(audioBlob);
       const reader = new FileReader();
+      
       reader.onloadend = () => {
         const dataUrl = reader.result;
         const [header, base64] = dataUrl.split(',');
@@ -611,12 +631,14 @@ const startRecording = async (event) => {
         mediaRecorder.value.stop();
         useAudio.value = true;
         recordMode.value=false;
+        clearInterval(timev);
         send();
       };
       reader.readAsDataURL(audioBlob);
       stream.getTracks().forEach(track => track.stop());
     };
     mediaRecorder.value.start();
+    
     isRecording.value = true;
   } catch (error) {
     useAudio.value = false;
@@ -1193,6 +1215,9 @@ async function initiateChatWithAI(opt,count) {
     audio: opt.audio,
     onerror: (source, model) => {
       window.clarity('event', 'CHAT-AI-ERROR');
+      if(source.message.indexOf('UpstashError')>-1){
+        source='文件体积过大'
+      }
       chatList.value[opt.index].content += '\n\n[服务器繁忙]\n\n'+source;
       renderContent(opt.index);
     },

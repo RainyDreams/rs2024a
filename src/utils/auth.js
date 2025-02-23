@@ -687,9 +687,10 @@ let Auth = {
       };
       const response = await fetch(url, postOptions);
       if (response.status != 200) {
-        if(param.onerror) param.onerror(await response.text());
+        if(param.onerror) param.onerror(new Error(await response.text()));
         // defaultFailed(response.statusText,3)
-        throw new Error("Network response was not ok");
+        // return;
+        throw new Error("会话流传输出现错误");
       }
       const model = postData.model;
       // // console.log(model)
