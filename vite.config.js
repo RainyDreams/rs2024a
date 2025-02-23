@@ -17,11 +17,21 @@ export default defineConfig((mode) => {
     build: {
       rollupOptions: {
         output: {
+          entryFileNames: 'assets/[name]-[hash].js',
+          chunkFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: (assetInfo) => {
+            const { name } = assetInfo;
+            if (/\.(css|scss|less|sass)$/.test(name)) {
+              return 'assets/[name]-[hash].[ext]';
+            }
+            return 'assets/[name]-[hash].[ext]';
+          },
           manualChunks(id) {
             if (id.includes('.vue')) {
-              const match = id.match(/src\/view\/(.*)\.vue$/);
+              console.log(id);
+              const match = id.match(/src\/views\/(.*)\/[^/]+\.vue$/);
               if (match) {
-                return `${match[1]}`;
+                return `${match[1].replace(/\//g, '-')}`;
               }
             }
             if (id.includes('node_modules')) {
