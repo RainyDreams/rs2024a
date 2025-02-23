@@ -762,8 +762,8 @@ async function resizeImage(file) {
       return;
     }
 
-    const MAX_SIZE = 64 * 1024; // 最大文件大小：64KB
-    const MAX_DIMENSION = 1000; // 最大宽度或高度
+    const MAX_SIZE = 128 * 1024; // 最大文件大小
+    const MAX_DIMENSION = 1024; // 最大宽度或高度
     const img = new Image();
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -802,14 +802,14 @@ async function resizeImage(file) {
             // 检查文件大小是否满足要求
             if (blob.size <= MAX_SIZE) {
               resolve(new File([blob], file.name, { type: file.type }));
-            } else if (quality > 0.1) {
+            } else if (quality > 0.4) {
               // 如果文件过大且质量未降到最低，继续降低质量
-              quality -= 0.1;
+              quality -= 0.05;
               compress();
             } else {
               // 如果质量降到最低仍不满足要求，尝试进一步缩小尺寸
-              width *= 0.8;
-              height *= 0.8;
+              width *= 0.9;
+              height *= 0.9;
               canvas.width = width;
               canvas.height = height;
               ctx.drawImage(img, 0, 0, width, height);
