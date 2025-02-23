@@ -858,7 +858,7 @@ const handleEnter = (event) => {
   } else if (event.key === 'Enter') {
     event.preventDefault();
     input.value = document.getElementById('input_chat_ai').value
-    if(!loading.value && input.value.trim()){
+    if(!loading.value && (input.value.trim() || usePhoto.value)){
       throttledSend()
     }
   }
@@ -1156,7 +1156,7 @@ async function handleOnClose(error,model,opt) {
 }
 const send = async (param)=>{
   input.value = document.getElementById('input_chat_ai').value
-  if(input.value.trim() == '') {
+  if(input.value.trim() == '' && !usePhoto.value) {
     // ElMessage.warning("Shift + Enter 换行");
     return;
   }
