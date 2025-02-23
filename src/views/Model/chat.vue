@@ -769,14 +769,6 @@ const handleFileUpload = async (event) => {
     uploadPhotoDialogLoading.value = false;
   }
 };
-function readFileAsArrayBuffer(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-    reader.readAsArrayBuffer(file);
-  });
-}
 // 图片调整大小函数
 async function resizeImage(file) {
   return new Promise((resolve, reject) => {
@@ -784,13 +776,11 @@ async function resizeImage(file) {
       resolve(null); // 如果不是图片文件，直接返回 null
       return;
     }
-
     const MAX_SIZE = 256 * 1024; // 最大文件大小
     const MAX_DIMENSION = 1024; // 最大宽度或高度
     const img = new Image();
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-
     img.onload = () => {
       let width = img.width;
       let height = img.height;
@@ -805,11 +795,12 @@ async function resizeImage(file) {
           height = MAX_DIMENSION;
         }
       }
-
       canvas.width = width;
       canvas.height = height;
 
-      // 绘制调整后的图片
+      // 绘制调整后的图片，并设置白色背景（JPEG 不支持透明度）
+      ctx.fillStyle = '#FFFFFF'; // 设置白色背景
+      ctx.fillRect(0, 0, width, height);
       ctx.drawImage(img, 0, 0, width, height);
 
       // 压缩图片并检查大小
@@ -824,7 +815,9 @@ async function resizeImage(file) {
 
             // 检查文件大小是否满足要求
             if (blob.size <= MAX_SIZE) {
-              resolve(new File([blob], file.name, { type: file.type }));
+              // 强制转换为 JPEG 格式，并重命名文件扩展名为 .jpg
+              const fileName = file.name.replace(/\.(png|jpeg|gif|webp)$/i, '.jpg');
+              resolve(new File([blob], fileName, { type: 'image/jpeg' }));
             } else if (quality > 0.4) {
               // 如果文件过大且质量未降到最低，继续降低质量
               quality -= 0.05;
@@ -840,7 +833,7 @@ async function resizeImage(file) {
               compress();
             }
           },
-          file.type,
+          'image/jpeg', // 强制使用 JPEG 格式
           quality
         );
       };
@@ -848,7 +841,6 @@ async function resizeImage(file) {
       // 开始压缩
       compress();
     };
-
     img.onerror = (error) => reject(error);
     img.src = URL.createObjectURL(file);
   });
