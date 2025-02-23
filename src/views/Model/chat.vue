@@ -396,6 +396,7 @@
             @mouseup="stopRecording" 
             @touchstart="startRecording" 
             @touchend="stopRecording"
+            id="recordAudio"
             :class="[
               'px-6 py-3 text-lg font-semibold rounded-md shadow-md transition duration-300 shadow-blue-100',
               isRecording ? 'bg-blue-500 text-white' : 'text-blue-500 border-blue-500 border'
@@ -578,9 +579,10 @@ const uploadAudio = ref({});
 const recordMode = ref(false);
 const openRecordDialog = ()=>{
   recordMode.value=true;
+  document.querySelector('recordAudio').focus()
 }
 const startRecording = async (event) => {
-  event.preventDefault();
+  // event.preventDefault();
   useAudio.value = false;
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
