@@ -403,6 +403,7 @@
             ]"
           >
             <Acoustic theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/> 
+            <span class="leading-none ml-2">按住录音</span>
           </button>
         </div>
       </div>
@@ -761,7 +762,8 @@ async function resizeImage(file) {
       return;
     }
 
-    const MAX_SIZE = 1000; // 最大宽度或高度
+    const MAX_SIZE = 64 * 1024; // 最大文件大小：64KB
+    const MAX_DIMENSION = 1000; // 最大宽度或高度
     const img = new Image();
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -770,14 +772,14 @@ async function resizeImage(file) {
       let width = img.width;
       let height = img.height;
 
-      // 计算新的宽度和高度
-      if (width > MAX_SIZE || height > MAX_SIZE) {
+      // 调整图片尺寸
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
         if (width > height) {
-          height *= MAX_SIZE / width;
-          width = MAX_SIZE;
+          height *= MAX_DIMENSION / width;
+          width = MAX_DIMENSION;
         } else {
-          width *= MAX_SIZE / height;
-          height = MAX_SIZE;
+          width *= MAX_DIMENSION / height;
+          height = MAX_DIMENSION;
         }
       }
 
@@ -787,18 +789,41 @@ async function resizeImage(file) {
       // 绘制调整后的图片
       ctx.drawImage(img, 0, 0, width, height);
 
-      // 将调整后的图片转换为 Blob 对象
-      canvas.toBlob(
-        (blob) => {
-          if (blob) {
-            resolve(new File([blob], file.name, { type: file.type }));
-          } else {
-            reject(new Error("Failed to resize image."));
-          }
-        },
-        file.type,
-        0.9 // 质量参数（可选）
-      );
+      // 压缩图片并检查大小
+      let quality = 0.9; // 初始质量
+      const compress = () => {
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              reject(new Error("Failed to resize image."));
+              return;
+            }
+
+            // 检查文件大小是否满足要求
+            if (blob.size <= MAX_SIZE) {
+              resolve(new File([blob], file.name, { type: file.type }));
+            } else if (quality > 0.1) {
+              // 如果文件过大且质量未降到最低，继续降低质量
+              quality -= 0.1;
+              compress();
+            } else {
+              // 如果质量降到最低仍不满足要求，尝试进一步缩小尺寸
+              width *= 0.8;
+              height *= 0.8;
+              canvas.width = width;
+              canvas.height = height;
+              ctx.drawImage(img, 0, 0, width, height);
+              quality = 0.9; // 重置质量
+              compress();
+            }
+          },
+          file.type,
+          quality
+        );
+      };
+
+      // 开始压缩
+      compress();
     };
 
     img.onerror = (error) => reject(error);
