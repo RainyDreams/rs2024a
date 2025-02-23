@@ -1,6 +1,6 @@
 <template>
   <div class="commonPage bg-slate-50 md:rounded-lg pb-0 h-dvh pt-3" style="display: flex;flex-direction: column;">
-    <div id="wechat-tip" v-if="weixinDialogVisible" class="fixed flex top-0 left-0 w-full bg-slate-800 bg-opacity-40 text-white p-4 text-center text-sm  z-50">
+    <div id="wechat-tip" v-if="weixinDialogVisible" class="fixed flex top-0 left-0 w-full bg-slate-800 bg-opacity-40 text-white p-4 text-center text-sm  z-40">
       <span class="flex-1 pr-2">您正在使用微信浏览器访问本站，建议使用浏览器打开</span>
       <button @click="weixinDialogVisible = false" class="text-white rounded-full h-9 p-2 w-9 flex-shrink-0 bg-slate-900 bg-opacity-20">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -15,7 +15,7 @@
           <div class="aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
-              <div class="title text-center w-full text-lg sticky top-0 z-40 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
+              <div class="title text-center w-full text-lg sticky top-0 z-30 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
               <div class="system mb-3 md:mb-4 lg:mb-5 block">
                   <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
                     <touch-ripple
@@ -198,6 +198,9 @@
                           <div>{{item.content}}</div>
                           <template v-if="item.photo?.meta">
                             <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="item.photo.blob" alt="[图片]隐私保护已删除"></div>
+                          </template>
+                          <template v-if="item.audio?.meta">
+                            <div class="py-2"><audio class="max-w-full" controls :src="item.audio.blob" ></audio></div>
                           </template>
                         </div>
                         
@@ -431,7 +434,8 @@
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="background-color: #e2e8f080;">
             <div :class="`ainput__wrapper items-stretch `">
               <div 
-                class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8" 
+                class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8 autohidden"
+                :data-show="!isRecording" 
                 id="input_chat_ai_div"
                 style="height:var(--inputContainerHeight);--inputContainerHeight:32px;">
                 ><textarea
@@ -447,10 +451,9 @@
                   @keydown.enter="handleEnter"
                   style="resize:none;min-height: 32px;height:var(--inputContainerHeight);"
                 ></textarea></div>
-              <!-- <el-input ></el-input> -->
-              <div class="flex flex-col justify-between items-center">
+              <div :class="`flex flex-col justify-between items-center ${isRecording?'flex-1':''}`">
                 <span class="text-xs text-right opacity-50 text-slate-800 py-2" v-show="(now>=99)">{{ now }}</span>
-                <div class="_number ml-2 flex-1">
+                <div :class="`_number flex-1 w-full ${isRecording?' transition':' ml-2'}`">
                   <touch-ripple
                     :class="`touch-ripple flex  items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white border-blue-500':'text-blue-500')"
                     :style="{ clipPath: 'none', backgroundColor: (show_menu)?'#3b82f6':'#fff' }"
@@ -463,6 +466,17 @@
                   >
                     <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `" theme="outline" size="18" fill="currentColor"/>
                   </touch-ripple>
+                  <div 
+                    @mousedown="startRecording" 
+                    @mouseup="stopRecording" 
+                    @touchstart="startRecording" 
+                    @touchend="stopRecording"
+                    :data-show="!useAudio"
+                    :class="['flex items-center autohidden justify-center h-8 w-8  mr-1 cursor-pointer transition relative z-50 rounded-full overflow-hidden select-none border border-blue-500 ',
+                     isRecording ? 'bg-blue-500 text-white flex-1' : 'text-blue-500'
+                    ]">
+                    <Acoustic theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/> 
+                  </div>
                   <touch-ripple
                     :class="`touch-ripple text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(showStop?'hidden':'flex')"
                     :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
@@ -485,13 +499,6 @@
                   >
                     <PauseOne theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/>
                   </touch-ripple>
-                  <!-- <el-button @click="" :loading="loading" v-show="!showStop" type="primary"
-                    color="#006b2c" class="ml-1 rounded-full w-8 h-8" ></el-button>
-                  <el-button @click="stop()" v-show="loading && !welcome_loading && showStop" type="primary"
-                    color="#006b2c" class="ml-1 rounded-full w-8 h-8" >
-                    <-- 终止 -->
-                    <!-- <forbid theme="outline" size="24" fill="#555" :strokeWidth="3" strokeLinejoin="bevel"/> --
-                  </el-button> -->
                 </div>
               </div>
             </div>
@@ -499,6 +506,7 @@
         </div>
       </div>
     </div>
+    <audio v-if="audioUrl" :src="audioUrl" controls class="mt- hidden"></audio>
     <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 OriginSynq AI 生成，请仔细甄别</p>
   </div>
 </template>
@@ -506,7 +514,7 @@
 import markdownIt from 'markdown-it';
 import imageCompression from 'browser-image-compression';
 import markdownItHighlightjs from 'markdown-it-highlightjs';
-import math from 'markdown-it-texmath';
+import math, { use } from 'markdown-it-texmath';
 import Katex from 'katex';
 import hljs from 'highlight.js';
 // import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
@@ -515,7 +523,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,Fire,Pic,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,DeleteMode,Acoustic,Fire,Pic,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -530,6 +538,70 @@ const uploadPhoto = ref({})
 const uploadPhotoDialogLoading = ref(false)
 const usePhoto = ref(false);
 const weixinDialogVisible = ref(false);
+
+//audio
+const isRecording = ref(false);
+const mediaRecorder = ref(null);
+const audioChunks = ref([]);
+const audioUrl = ref('');
+const useAudio = ref(false);
+const uploadAudio = ref({});
+const startRecording = async () => {
+  useAudio.value = false;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks.value = [];
+    mediaRecorder.value = new MediaRecorder(stream);
+    mediaRecorder.value.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunks.value.push(event.data);
+      }
+    };
+    mediaRecorder.value.onstop = () => {
+      const audioBlob = new Blob(audioChunks.value, { type: 'audio/wav' });
+      audioUrl.value = URL.createObjectURL(audioBlob);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const dataUrl = reader.result;
+        const [header, base64] = dataUrl.split(',');
+        const mimeTypeMatch = header.match(/:(.*?);/);
+        const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : '';
+        uploadAudio.value = {
+          type: mimeType,
+          meta: base64,
+          blob: audioUrl.value
+        }
+        useAudio.value = true;
+        send();
+      };
+      reader.readAsDataURL(audioBlob);
+      stream.getTracks().forEach(track => track.stop());
+    };
+    mediaRecorder.value.start();
+    isRecording.value = true;
+  } catch (error) {
+    useAudio.value = false;
+    console.error('无法访问麦克风:', error);
+    ElMessage.alert('无法访问麦克风', '错误', {
+      confirmButtonText: '确定',
+      type: 'error',
+      callback: action => {
+      }
+    });
+  }
+};
+
+// 停止录音
+const stopRecording = () => {
+  if (mediaRecorder.value && mediaRecorder.value.state !== 'inactive') {
+    mediaRecorder.value.stop();
+    isRecording.value = false;
+  }
+};
+
+
+
+// photo
 function clearUploadPhoto(){
   cameraInput.value.value = "";
   galleryInput.value.value = "";
@@ -933,6 +1005,8 @@ function renderContent(index){
 async function deepMind(targetValue, targetTime, index) {
   const t_phoho = usePhoto.value;
   const p_photo = uploadPhoto.value;
+  const t_audio = useAudio.value;
+  const p_audio = uploadAudio.value;
   const beforeTime = Date.now();
   const _useAnalysis_ = useAnalysis.value;
   const _useInternet_ = useInternet.value;
@@ -944,7 +1018,7 @@ async function deepMind(targetValue, targetTime, index) {
     //并行运行
     await Promise.all([
       Auth.deepMind_Analysis({
-        ...(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null})),
+        ...(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null})),
         onclose: (source) => {
           chatList.value[index - 1].analysis += source;
           renderAnalysis(index - 1);
@@ -961,13 +1035,13 @@ async function deepMind(targetValue, targetTime, index) {
       renderAnalysis(index - 1);
       let _analysis = chatList.value[index - 1].analysis;
       chatList.value[index - 1].status = 'try';
-      await Auth.deepMind_Try(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null},[_analysis],(e)=>{
+      await Auth.deepMind_Try(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null},[_analysis],(e)=>{
         _analysis2 += e;
       }));
       chatList.value[index - 1].analysis += '\n\n'; 
       renderAnalysis(index - 1);
       chatList.value[index - 1].status = 'summary';
-      await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null},[_analysis,_analysis2]));
+      await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null},[_analysis,_analysis2]));
       const diffTime = Date.now() - beforeTime;
       chatList.value[index - 1].analysis += '\n\n### 已深度思考 '+parseInt(diffTime/1000)+' 秒'; 
       renderAnalysis(index - 1);
@@ -986,7 +1060,7 @@ async function deepMind(targetValue, targetTime, index) {
         chatList.value[index - 1].status = 'wait';
       }
     }, 8500);
-    await initiateChatWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null});
+    await initiateChatWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
     clearTimeout(id2);
     chatList.value[index - 1].status = 'analysised';
   })
@@ -1001,6 +1075,7 @@ function createOptions(opt,analysis,fn=()=>{}) {
     stopStatus,
     line: analysis_line.value,
     photo:opt.photo,
+    audio:opt.audio,
     onmessage: async (source, model) => {
       showStop.value = true;
       const decode = JSON.parse(source);
@@ -1053,6 +1128,7 @@ async function initiateChatWithAI(opt,count) {
     line: chat_line.value,
     time: opt.targetTime,
     photo: opt.photo,
+    audio: opt.audio,
     onerror: (source, model) => {
       window.clarity('event', 'CHAT-AI-ERROR');
       chatList.value[opt.index].content += '\n\n[服务器繁忙]\n\n'+source;
@@ -1069,6 +1145,10 @@ async function initiateChatWithAI(opt,count) {
         uploadPhoto.value = {};
         cameraInput.value.value = '';
         galleryInput.value.value = '';
+      }
+      if(opt.audio){
+        useAudio.value = false;
+        uploadAudio.value = {};
       }
     },
   });
@@ -1173,7 +1253,7 @@ async function handleOnClose(error,model,opt) {
 }
 const send = async (param)=>{
   input.value = document.getElementById('input_chat_ai').value
-  if(input.value.trim() == '' && !usePhoto.value) {
+  if(input.value.trim() == '' && !usePhoto.value && !useAudio.value) {
     // ElMessage.warning("Shift + Enter 换行");
     return;
   }
@@ -1193,7 +1273,8 @@ const send = async (param)=>{
     show_thought:true,
     sendTime:targetTime,
     formatSendTime,
-    photo:usePhoto?uploadPhoto.value:null,
+    photo:usePhoto.value?uploadPhoto.value:null,
+    audio:useAudio.value?uploadAudio.value:null,
   })
   chatList.value.push({
     role: "assistant",
@@ -1263,6 +1344,11 @@ onMounted(async ()=>{
         if(e.photo){
           if(e.photo.meta){
             e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
+          }
+        }
+        if(e.audio){
+          if(e.audio.meta){
+            e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
           }
         }
         return e

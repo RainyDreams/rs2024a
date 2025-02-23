@@ -594,7 +594,8 @@ let Auth = {
         model:param.line,
         time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
         sendTime:param.time,
-        photo:param.photo
+        photo:param.photo,
+        audio:param.audio
       },
       {
         onmessage:param.onmessage,
@@ -612,7 +613,8 @@ let Auth = {
     const res = await this.basicAuth('/api/ai/deepMind_Analysis', 
       JSON.stringify({ sessionID: param.sessionID, content: param.content,vf:param.vf,
         model:param.line,time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
-        photo:param.photo
+        photo:param.photo,
+        audio:param.audio
       }));
     param.onclose(res.content)
     return res.content;
@@ -624,7 +626,8 @@ let Auth = {
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
         model:param.line,analysis:param.analysis[0],time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
         useInternet:param.useInternet,
-        photo:param.photo
+        photo:param.photo,
+        audio:param.audio
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
@@ -638,7 +641,8 @@ let Auth = {
     await this.getStreamText('/api/ai/deepMind_Summary', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
         model:param.line,analysis:param.analysis[0],analysis2:param.analysis[1]||'无',time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
-        photo:param.photo
+        photo:param.photo,
+        audio:param.audio
       }, {
       onmessage:param.onmessage,
       onclose:param.onclose,
