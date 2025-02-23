@@ -110,7 +110,7 @@
                 </p>
                 <p>{{ message.content }}</p>
                 <template v-if="message.photo?.blob">
-                  <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="item.photo.blob" alt="[图片]隐私保护已删除"></div>
+                  <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="message.photo.blob" alt="[图片]隐私保护已删除"></div>
                 </template>
                 <p v-if="message.role === 'user' && message.analysis"
                   class="text-sm text-slate-500 mt-2 p-2 bg-slate-50 rounded-lg">
