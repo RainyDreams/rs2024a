@@ -762,7 +762,7 @@ async function resizeImage(file) {
       return;
     }
 
-    const MAX_SIZE = 128 * 1024; // 最大文件大小
+    const MAX_SIZE = 256 * 1024; // 最大文件大小
     const MAX_DIMENSION = 1024; // 最大宽度或高度
     const img = new Image();
     const canvas = document.createElement('canvas');
