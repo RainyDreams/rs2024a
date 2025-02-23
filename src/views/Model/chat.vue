@@ -546,7 +546,8 @@ const audioChunks = ref([]);
 const audioUrl = ref('');
 const useAudio = ref(false);
 const uploadAudio = ref({});
-const startRecording = async () => {
+const startRecording = async (event) => {
+  event.preventDefault();
   useAudio.value = false;
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -970,7 +971,7 @@ nextTick(()=>{
   textarea.addEventListener('input', function () {
     setInputHeight();
   });
-  const touchRipple = document.querySelectorAll('.touch-ripple');
+  const touchRipple = document.querySelectorAll('.touch-ripple,.dde');
   touchRipple.forEach((el) => {
     el.addEventListener('mousedown', function (event) {
       event.preventDefault();
