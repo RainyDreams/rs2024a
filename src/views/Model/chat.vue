@@ -1,12 +1,21 @@
 <template>
   <div class="commonPage bg-slate-50 md:rounded-lg pb-0 h-dvh pt-3" style="display: flex;flex-direction: column;">
+    <div id="wechat-tip" v-if="weixinDialogVisible" class="fixed flex top-0 left-0 w-full bg-slate-800 bg-opacity-30 text-white p-4 text-center text-sm  z-50">
+      <span class="flex-1 pr-2">您正在使用微信浏览器访问本站，建议使用浏览器打开</span>
+      <button @click="weixinDialogVisible = false" class="text-white rounded-full h-9 p-2 w-9 flex-shrink-0 bg-slate-900 bg-opacity-20">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
     <div class="scroll">
       <!-- <div class=""> -->
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
           <div class="aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
-              <div class="title text-center w-full text-lg sticky top-0 z-50 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
+              <div class="title text-center w-full text-lg sticky top-0 z-40 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
               <div class="system mb-3 md:mb-4 lg:mb-5 block">
                   <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
                     <touch-ripple
@@ -520,6 +529,7 @@ const uploadPhotoDialogVisible = ref(false);
 const uploadPhoto = ref({})
 const uploadPhotoDialogLoading = ref(false)
 const usePhoto = ref(false);
+const weixinDialogVisible = ref(false);
 function clearUploadPhoto(){
   cameraInput.value.value = "";
   galleryInput.value.value = "";
@@ -850,6 +860,10 @@ function isMobile() {
   const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
   return mobileRegex.test(userAgent);
 }
+function isWeChatBrowser() {
+  const ua = navigator.userAgent.toLowerCase();
+  return /micromessenger/.test(ua);
+}
 const mobile = isMobile();
 const handleEnter = (event) => {
   if (event.shiftKey || mobile) {
@@ -890,6 +904,9 @@ nextTick(()=>{
       event.preventDefault();
     });
   });
+  if(isWeChatBrowser()){
+    weixinDialogVisible.value = true;
+  }
 })
 const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
