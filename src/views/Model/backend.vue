@@ -113,7 +113,7 @@
                   <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="message.photo.blob" alt="[图片]隐私保护已删除"></div>
                 </template>
                 <template v-if="message.audio?.blob">
-                  <div class="py-2"><audio class="max-w-full" :src="message.audio.blob" ></audio></div>
+                  <div class="py-2"><audio class="max-w-full" controls :src="message.audio.blob" ></audio></div>
                 </template>
                 <p v-if="message.role === 'user' && message.analysis"
                   class="text-sm text-slate-500 mt-2 p-2 bg-slate-50 rounded-lg">
