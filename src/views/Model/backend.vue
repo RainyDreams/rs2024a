@@ -204,6 +204,7 @@ const openChatListDialog = async (session) => {
             e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
           }
         }
+        return e;
       });
 
       // 存储聊天会话的基本信息
