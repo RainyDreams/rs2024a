@@ -109,7 +109,7 @@
                     v-if="message.role === 'user'">{{ dayjs(message.sendTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
                 </p>
                 <p>{{ message.content }}</p>
-                <template v-if="item.photo?.meta">
+                <template v-if="message.photo?.blob">
                   <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="item.photo.blob" alt="[图片]隐私保护已删除"></div>
                 </template>
                 <p v-if="message.role === 'user' && message.analysis"
@@ -175,7 +175,21 @@ const getChatHistory = async (item) => {
     loadingChatSessions.value = false;
   }
 };
-
+function dataURLtoBlob(dataURL) {
+  const matches = dataURL.match(/^data:(.+);base64,(.+)$/);
+  if (!matches || matches.length !== 3) {
+    throw new Error("Invalid data URL format");
+  }
+  const mimeType = matches[1]; // 提取 MIME 类型
+  const base64Data = matches[2]; // 提取 Base64 数据
+  const binaryString = atob(base64Data);
+  const arrayBuffer = new ArrayBuffer(binaryString.length);
+  const uint8Array = new Uint8Array(arrayBuffer);
+  for (let i = 0; i < binaryString.length; i++) {
+    uint8Array[i] = binaryString.charCodeAt(i);
+  }
+  return new Blob([uint8Array], { type: mimeType });
+}
 const openChatListDialog = async (session) => {
   try {
     sessionInfo.value = {}
@@ -184,7 +198,14 @@ const openChatListDialog = async (session) => {
     loadingChatList.value = true;
     const sessionResponse = await Auth.getAIChatList({ sessionID: session.sessionID });
     if (sessionResponse.status ==='sus') {
-      chatList.value = sessionResponse.content;
+      chatList.value = sessionResponse.content.map((e) => {
+        if(e.photo){
+          if(e.photo.meta){
+            e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
+          }
+        }
+      });
+
       // 存储聊天会话的基本信息
       sessionInfo.value = {
         createTime: session.createTime,
