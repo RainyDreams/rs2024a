@@ -268,37 +268,40 @@
       <!-- </div> -->
     </div>
     <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-end inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
-      <div class="bg-slate-50 rounded-lg shadow-lg max-w-3xl w-full overflow-hidden pb-4 flex flex-col max-h-[400px] min-h-64">
+      <div class="bg-slate-50 rounded-lg shadow-lg max-w-3xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
         <div class="p-4 flex justify-between items-center w-full">
           <h2 class="text-lg font-semibold">上传图片</h2>
-          <button @click="uploadPhotoDialogVisible = false" class="text-gray-500 hover:text-gray-700">
+          <button v-show="!uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="text-gray-500 hover:text-gray-700">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+          <button v-show="uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="bg-blue-200 text-blue-500 font-bold rounded-md px-4 py-2">
+            完成
+          </button>
         </div>
         <div class="p-4 overflow-y-auto flex-1">
           <!-- 提示区域 -->
           <div v-if="uploadPhoto.blob" class="py-4 px-4 bg-green-100 font-bold text-green-700 rounded-md text-lg text-center mb-4">
-            <p>上传成功，可以关闭对话框</p>
+            <p>上传成功</p>
           </div>
           <!-- 文件上传区域 -->
           <div class="flex flex-col items-center justify-center space-y-4">
-            <div v-if="uploadPhoto.blob" class="relative w-full max-w-md">
+            <div v-if="uploadPhoto.blob" class="relative w-full max-w-md mb-4">
               <img
                 :src="uploadPhoto.blob"
                 alt="上传的图片"
-                class="w-full h-auto rounded-lg shadow-md object-cover transition-transform hover:scale-105 duration-500 mb-4"
+                class="w-full h-auto rounded-lg shadow-lg shadow-slate-200 object-cover transition-transform hover:scale-105 duration-500"
               />
               <!-- 清除按钮 -->
               <button
                 @click="clearUploadPhoto"
-                class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-50 hover:bg-red-600 transition-colors duration-300"
+                class="absolute bottom-2 right-2 bg-red-500 leading-none items-center px-2 py-1 rounded-full text-white opacity-60 flex hover:bg-red-600 transition-colors duration-300"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
+                  class="h-5 w-5 text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -310,10 +313,11 @@
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
+                清除图片
               </button>
             </div>
             <!-- 自定义文件上传按钮 -->
-            <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 w-full max-w-md">
+            <div :data-show="!uploadPhoto.blob" class="autohidden flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 w-full max-w-md">
               <!-- 拍照按钮 -->
               <label
                 for="cameraInput"
@@ -1269,16 +1273,16 @@ onMounted(async ()=>{
 })
 </script>
 
-<style>
+<style scoped>
 
 .autohidden{
-  display: none;
+  display: none !important;
   visibility: hidden;
   transition: all .2s ease;
   opacity: 0;
 }
 .autohidden[data-show="true"]{
-  display: flex;
+  display: flex !important;
   visibility: visible;
   opacity: 1;
   /* transition-delay: 1s; */
