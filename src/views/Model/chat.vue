@@ -199,8 +199,16 @@
                           <template v-if="item.photo?.meta">
                             <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="item.photo.blob" alt="[图片]隐私保护已删除"></div>
                           </template>
-                          <template v-if="item.audio?.meta">
+                          <template v-if="item.audio?.blob && item.audio?.meta">
                             <div class="py-2"><audio class="max-w-full" controls :src="item.audio.blob" ></audio></div>
+                          </template>
+                          <template v-else-if="item.audio?.url">
+                            <div class="py-2">
+                              <audio v-if="item.audio.blob" class="max-w-full" controls :src="item.audio.blob" ></audio>
+                              <p v-else>
+                                [音频]为保护隐私，已采用匿名发送
+                              </p>
+                            </div>
                           </template>
                         </div>
                         
@@ -342,7 +350,7 @@
                 id="cameraInput"
                 type="file"
                 ref="cameraInput"
-                @change="handleFileUpload"
+                @change="handlePhoto"
                 accept="image/*"
                 capture="environment"
                 class="hidden"
@@ -357,7 +365,7 @@
                 id="galleryInput"
                 type="file"
                 ref="galleryInput"
-                @change="handleFileUpload"
+                @change="handlePhoto"
                 accept="image/*"
                 class="hidden"
               />
@@ -382,7 +390,7 @@
       <div class="bg-slate-50 rounded-lg shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
         <div class="p-4 flex justify-between items-center w-full">
           <h2 class="text-lg font-semibold">录音</h2>
-          <button @click="recordMode = false" class="text-gray-500 hover:text-gray-700">
+          <button @click="closeRecordDialog" class="text-gray-500 hover:text-gray-700">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -430,6 +438,7 @@
                   :opacity="0.4"
                   transition="ease-out"
                   :duration="200"
+                  :keep-last-ripple="false"
                   @start="router.push('/?model='+model)"
                 >
                   <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
@@ -441,6 +450,7 @@
                   :opacity="0.4"
                   transition="ease-out"
                   :duration="200"
+                  :keep-last-ripple="false"
                   @start="analysisBtn"
                 >
                   <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">深入思考</span></span>
@@ -451,6 +461,7 @@
                   :color="useInternet?'#fff':'#3b82f6'"
                   :opacity="0.4"
                   transition="ease-out"
+                  :keep-last-ripple="false"
                   :duration="200"
                   @start="useInternet=!useInternet"
                 >
@@ -462,6 +473,7 @@
                   :color="usePhoto?'#fff':'#3b82f6'"
                   :opacity="0.4"
                   transition="ease-out"
+                  :keep-last-ripple="false"
                   :duration="200"
                   @click="openUploadPhotoDialog"
                 >
@@ -500,7 +512,7 @@
                     :opacity="0.4"
                     transition="ease-out"
                     :duration="200"
-                    :keep-last-ripple="true"
+                    :keep-last-ripple="false"
                     @start="show_menu=!show_menu"
                   >
                     <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `" theme="outline" size="18" fill="currentColor"/>
@@ -513,6 +525,7 @@
                     transition="ease"
                     :duration="200"
                     :data-show="!useAudio"
+                    :keep-last-ripple="false"
                     @start="openRecordDialog"
                   >
                     <Acoustic theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/> 
@@ -524,6 +537,7 @@
                     :opacity="0.4"
                     transition="ease"
                     :duration="200"
+                    :keep-last-ripple="false"
                     @start="send()"
                   >
                     <up theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/>
@@ -535,6 +549,7 @@
                     :opacity="0.4"
                     transition="ease"
                     :duration="200"
+                    :keep-last-ripple="false"
                     @start="stop()"
                   >
                     <PauseOne theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/>
@@ -582,6 +597,7 @@ const weixinDialogVisible = ref(false);
 //audio
 const isRecording = ref(false);
 const mediaRecorder = ref(null);
+const mediaRecoderStream = ref(null);
 const audioChunks = ref([]);
 const audioUrl = ref('');
 const useAudio = ref(false);
@@ -595,71 +611,127 @@ const toggleRecording = async ()=>{
     await startRecording();
   }
 }
-const openRecordDialog = ()=>{
-  recordMode.value=true;
-  // document.querySelector('#recordAudio').focus()
+const closeRecordDialog = ()=>{
+  recordMode.value=false;
+  stopRecording();
 }
-const startRecording = async (event) => {
-  useAudio.value = false;
+const uploadFile = async (file) => {
   try {
+    // 读取文件内容（ArrayBuffer）
+    const fileContent = await file.arrayBuffer(); 
+    const numBytes = fileContent.byteLength;
+    const response = await fetch(`/api/ai/upload/beta`, {
+      method: "POST",
+      headers: {
+        "X-Goog-Upload-Command": "start, upload, finalize",
+        "X-Goog-Upload-Header-Content-Length": numBytes.toString(),
+        "X-Goog-Upload-Header-Content-Type": file.type,
+        "Content-Type": file.type, // 设置文件的 MIME 类型
+      },
+      body: fileContent, // 直接上传文件内容
+    });
+    if (!response.ok) {
+      const errorDetails = await response.text();
+      throw new Error(`Failed to upload file: ${response.statusText} (${errorDetails})`);
+    }
+    const responseData = await response.json();
+    return responseData.file?.uri; // 返回文件 URI
+  } catch (error) {
+    console.error("上传失败:", error);
+    return null;
+  }
+};
+const openRecordDialog = async ()=>{
+  recordMode.value=true;
+  try{
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioChunks.value = [];
     mediaRecorder.value = new MediaRecorder(stream);
+    mediaRecoderStream.value = stream;
+    mediaRecorder.value.on
     mediaRecorder.value.ondataavailable = (event) => {
       if (event.data.size > 0) {
         audioChunks.value.push(event.data);
       }
     };
-    recordTime.value = 0;
-    const timev = setInterval(() => {
-      recordTime.value = recordTime.value + 1;
-    }, 1000);
+    let timev;
+    mediaRecorder.value.onstart=()=>{
+      timev = setInterval(()=>{
+        recordTime.value++;
+      },1000)
+    }
     mediaRecorder.value.onstop = () => {
+      clearInterval(timev);
       const audioBlob = new Blob(audioChunks.value, { type: 'audio/wav' });
       audioUrl.value = URL.createObjectURL(audioBlob);
       const reader = new FileReader();
-      
       reader.onloadend = () => {
-        const dataUrl = reader.result;
-        const [header, base64] = dataUrl.split(',');
-        const mimeTypeMatch = header.match(/:(.*?);/);
-        const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : '';
-        uploadAudio.value = {
-          type: mimeType,
-          meta: base64,
-          blob: audioUrl.value
+        if (true) {
+          Auth.chatTaskThread.add(async ()=>{
+            const url = await uploadFile(audioBlob);
+            uploadAudio.value = {
+              type: 'audio/wav',
+              uri:url,
+              blob: audioUrl.value
+            }
+          })
+        } else {
+          const dataUrl = reader.result;
+          const [header, base64] = dataUrl.split(',');
+          const mimeTypeMatch = header.match(/:(.*?);/);
+          const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : '';
+          uploadAudio.value = {
+            type: mimeType,
+            meta: base64,
+            blob: audioUrl.value
+          }
         }
-        mediaRecorder.value.stop();
         useAudio.value = true;
         recordMode.value=false;
-        clearInterval(timev);
-        send();
+        mediaRecorder.value=null;
+        Auth.chatTaskThread.add(async ()=>{
+          uploadPhotoDialogLoading.value = false;
+          send();
+        })
       };
       reader.readAsDataURL(audioBlob);
-      stream.getTracks().forEach(track => track.stop());
     };
+  } catch (error) {
+    useAudio.value = false;
+    console.error('无法访问麦克风:', error);
+    ElMessageBox.alert('无法访问麦克风', '错误', {
+      confirmButtonText: '确定',
+      type: 'error',
+    });
+  }
+}
+const startRecording = async (event) => {
+  useAudio.value = false;
+  try {
+    // uploadPhotoDialogLoading.value = true;
+    recordTime.value = 0;
     mediaRecorder.value.start();
-    
     isRecording.value = true;
   } catch (error) {
     useAudio.value = false;
     console.error('无法访问麦克风:', error);
-    ElMessage.alert('无法访问麦克风', '错误', {
+    ElMessageBox.alert('无法访问麦克风', '错误', {
       confirmButtonText: '确定',
       type: 'error',
-      callback: action => {
-      }
     });
   }
 };
 const stopRecording = () => {
   if (mediaRecorder.value && mediaRecorder.value.state !== 'inactive') {
     mediaRecorder.value.stop();
+    uploadPhotoDialogLoading.value = true;
+    isRecording.value = false;
+    if (mediaRecoderStream.value) {
+      mediaRecoderStream.value.getTracks().forEach(track => track.stop());
+    }
     isRecording.value = false;
   }
 };
-
-
 
 // photo
 function clearUploadPhoto(){
@@ -691,7 +763,7 @@ function dataURLtoBlob(dataURL) {
   }
   return new Blob([uint8Array], { type: mimeType });
 }
-const handleFileUpload = async (event) => {
+const handlePhoto = async (event) => {
   try {
     uploadPhoto.value = {};
     usePhoto.value = false;
@@ -702,33 +774,6 @@ const handleFileUpload = async (event) => {
       return;
     }
     const base64Data = await toBase64(file);
-
-    /*
-    const fileContent = await readFileAsArrayBuffer(file);
-    const numBytes = fileContent.byteLength;
-    const response = await fetch(
-      `/api/ai/uploadPhoto/beta`,
-      {
-        method: "POST",
-        headers: {
-          "X-Goog-Upload-Command": "start, upload, finalize",
-          "X-Goog-Upload-Header-Content-Length": numBytes.toString(),
-          "X-Goog-Upload-Header-Content-Type": file.type,
-          "Content-Type": file.type, // 设置文件的 MIME 类型
-        },
-        body: fileContent, // 直接上传文件内容
-      }
-    );
-
-    if (!response.ok) {
-      const errorDetails = await response.text(); // 获取错误详情
-      throw new Error(`Failed to upload file: ${response.statusText} (${errorDetails})`);
-    }
-
-    const responseData = await response.json();
-    */
-
-    // const fileUri = responseData.file?.uri;
     // const fileUri = `data:${file.type};base64,${base64Data}`;
     const blobUrl = URL.createObjectURL(file);
 
@@ -1429,6 +1474,8 @@ onMounted(async ()=>{
         if(e.audio){
           if(e.audio.meta){
             e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
+          } else {
+            e.audio.blob=null;
           }
         }
         return e
