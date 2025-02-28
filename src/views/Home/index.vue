@@ -72,7 +72,7 @@
     </div>
     
     <div class="panel bs-container py-10 md:py-16 lg:py-20 xl:py-24 mt-20">
-      <h2 class="mt-18 mb-6 text-4xl/snug md:mt-20 md:mb-10 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">探索智能世界，尝试 OriginSynq</h2>
+      <h2 class="mt-18 mb-6 text-4xl/snug md:mt-20 md:mb-10 md:text-5xl/snug lg:text-6xl/snug font-semibold text-center">探索智能世界，尝试 LinkBrain</h2>
       <h5 class="text-center mb-14 md:mb-28">
         <router-link to="/">
           <el-button size="large" class="text-2xl py-7 px-8 primary-bg" type="primary">立即使用</el-button>

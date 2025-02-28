@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 OriginSynq AI 生成，请仔细甄别</p>
+    <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
   </div>
 </template>
 <script setup>
@@ -64,11 +64,11 @@ const route = useRoute()
 const router = useRouter()
 const tryAgain = async () => {
   let model = route.query.model || ''
-  const e = await Auth.getAISessionID({model});
-  const {status, content} = e
-  if(status === "sus"){
-    router.push('/chat/'+content+'?model='+model+'&welcome=true')
-  }
+  // const e = await Auth.getAISessionID({model});
+  // const {status, content} = e
+  // if(status === "sus"){
+    router.push('/chat/new?model='+model+'&mode=new')
+  // }
 }
 onActivated(async () => {
   // console.log(1)

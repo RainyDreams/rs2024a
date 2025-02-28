@@ -516,7 +516,10 @@ let Auth = {
     window.clarity("event", 'getAIChatList')
     await this.getPrtoken();
     return this.basicAuth('/api/ai/get_chat_history', JSON.stringify({
-      sessionID: param.sessionID
+      sessionID: param.sessionID,
+      mode: param.mode,
+      model: param.model,
+      vf:param.vf
     }));
   },
   setAIChatResponse: async function setAIChatResponse(param){

@@ -169,8 +169,11 @@
                 </div>
                 <!-- 欢迎 -->
                 <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
-                  <div :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
+                  <div v-if="!welcome_loading" :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
                     <h2 class="text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold">你好！来聊点什么吧</h2>
+                  </div>
+                  <div v-else="welcome_loading" :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
+                    <h2 class="text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold">正在建立连接</h2>
                   </div>
                 </div>
               </div>
@@ -439,7 +442,7 @@
                   transition="ease-out"
                   :duration="200"
                   :keep-last-ripple="false"
-                  @start="router.push('/?model='+model)"
+                  @start="applynew"
                 >
                   <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
                 </touch-ripple>
@@ -562,7 +565,7 @@
       </div>
     </div>
     <audio v-if="audioUrl" :src="audioUrl" controls class="mt- hidden"></audio>
-    <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 OriginSynq AI 生成，请仔细甄别</p>
+    <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
   </div>
 </template>
 <script setup>
@@ -1014,7 +1017,7 @@ const tokensCount = ref(0)
 const tokensCount2 = ref(0)
 const title = ref('无标题');
 const suggestions = ref([])
-const model_info = ref({
+const default_model = {
   img:'/logo_sm.webp',
   name:'默认模型',
   desc:'零本智协AI大模型',
@@ -1023,7 +1026,8 @@ const model_info = ref({
     avatar:'/logo_sm.webp'
   },
   createuser:''
-})
+}
+const model_info = ref(default_model)
 const analysis_line = ref('line-1')
 const chat_line = ref('line-1')
 
@@ -1374,6 +1378,9 @@ async function handleOnClose(error,model,opt) {
   }
 }
 const send = async (param)=>{
+  if(loading.value){
+    return;
+  }
   input.value = document.getElementById('input_chat_ai').value
   if(input.value.trim() == '' && !usePhoto.value && !useAudio.value) {
     // ElMessage.warning("Shift + Enter 换行");
@@ -1433,6 +1440,79 @@ const model = ref('')
 const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
 const debouncedScrollToBottom = debounce(scrollToBottom, 700); // 调整 300 为所需的毫秒数
 const throttledScrollToBottom = throttle(scrollToBottom, 1500); // 调整 300 为所需的毫秒数
+let applying = false
+async function applysession({id,mode}){
+  applying = true
+  sessionID.value = id
+  fingerprint.value = await Auth.getUserFingerprint();
+  loading.value = true;
+  //初始化
+  model_info.value = default_model;
+  welcome_loading.value = true;
+  chatList.value = [];
+  title.value = '无标题';
+  emitter.emit('updateTitle', '无标题');
+  welcome.value = '';
+  suggestions.value = [];
+  let tmp = 0;
+  const getList = (await Auth.getAIChatList({sessionID:id,mode,model:model.value,vf:fingerprint.value}))
+  welcome.value = getList.welcome;
+  sessionID.value = getList.sessionID
+  model_info.value = {
+    ...model_info.value,
+    name:getList.model.name,
+    desc:getList.model.desc,
+    createuser:getList.model.createuser,
+  };
+  loading.value = false;
+  welcome_loading.value = false;
+  chatList.value = getList.content.map((e,i)=>{
+    e.status = e.analysis?'analysised':'no_analysis';
+    e.show_thought = false;
+    if(e.photo){
+      if(e.photo.meta){
+        e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
+      }
+    }
+    if(e.audio){
+      if(e.audio.meta){
+        e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
+      } else {
+        e.audio.blob=null;
+      }
+    }
+    return e
+  });
+  title.value = getList.title || title.value;
+  chatList.value.forEach((e,i)=>{
+    if(e.role == 'user'){
+      if(e.analysis){
+        renderAnalysis(i);
+      }
+      if(i == 0){
+        e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
+        tmp=i;
+      }
+    } else {
+      renderContent(i)
+    }
+  })
+  if(mode == 'new'){
+    router.push('/chat/'+getList.sessionID+'?model='+model.value); 
+  } else {
+    router.push('/chat/'+getList.sessionID+'?model='+model.value); 
+  }
+  model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
+  
+  applying = false
+}
+async function applynew(){
+  if(applying) return;
+  const res = await applysession({id:'',mode:'new'})
+}
+
 onMounted(async ()=>{
   const info = sessionStorage.getItem('userInfo');
   if(info){
@@ -1442,62 +1522,11 @@ onMounted(async ()=>{
   }
   let id = route.params.id;
   model.value = route.query.model || ''
-    sessionID.value = id
-    fingerprint.value = await Auth.getUserFingerprint();
-    await Promise.all([
-    async ()=>{
-      const welcomeOnline = (await Auth.getAIWelcome({sessionID:id}))
-      welcome.value = welcomeOnline.content;
-      model_info.value = {
-        ...model_info.value,
-        name:welcomeOnline.model.name,
-        desc:welcomeOnline.model.desc,
-        createuser:welcomeOnline.model.createuser,
-      };
-      model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
-      welcome_loading.value = false;
-      return 0;
-    },async ()=>{
-      let tmp = 0;
-      const getList = (await Auth.getAIChatList({sessionID:id}))
-      chatList.value = getList.content.map((e,i)=>{
-        e.status = e.analysis?'analysised':'no_analysis';
-        e.show_thought = false;
-        if(e.photo){
-          if(e.photo.meta){
-            e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
-          }
-        }
-        if(e.audio){
-          if(e.audio.meta){
-            e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
-          } else {
-            e.audio.blob=null;
-          }
-        }
-        return e
-      });
-      title.value = getList.title || title.value;
-      chatList.value.forEach((e,i)=>{
-        if(e.role == 'user'){
-          if(e.analysis){
-            renderAnalysis(i);
-          }
-          if(i == 0){
-            e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
-          } else {
-            e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
-            tmp=i;
-          }
-        } else {
-          renderContent(i)
-        }
-      })
-    }].map(async(e)=>{
-      return e()
-    }))
-    loading.value = false;
-    document.getElementById('input_chat_ai').focus()
+  let mode = undefined;
+  if(route.query.mode == 'new'){
+    mode = 'new';
+  }
+  await applysession({id,mode})
 })
 </script>
 

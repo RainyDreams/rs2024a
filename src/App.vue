@@ -99,7 +99,7 @@
 
 
 
-console.log('%c零本智协 OriginSynq AI%c\n%c赤峰二中2023级12班2024年研究性学习项目\r%c\n2024-07-25雨窗',
+console.log('%c零本智协 LinkBrain AI%c\n%c赤峰二中2023级12班2024年研究性学习项目\r%c\n2024-07-25雨窗',
 'font-size: 20px; background: #3b82f6; color: #fff; font-family: Arial; padding: 5px 10px; box-shadow: 0 4px 8px rgba(59, 130, 246, 0.5);',
 '',
 'font-size: 16px; background: #dc2626; color: #fff; font-family: Arial; padding: 4px 8px; box-shadow: 0 3px 6px rgba(220, 38, 38, 0.5);',
@@ -289,7 +289,7 @@ Auth.basicInfoTaskThread.add(async ()=>{
   await new Promise(resolve=>{
     setTimeout(()=>{
       resolve()
-    },5000)
+    },10000)
   });
 })
 router.afterEach(async (to, from) => {
