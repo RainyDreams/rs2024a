@@ -202,7 +202,7 @@
                           <template v-if="item.audio?.blob && item.audio?.meta">
                             <div class="py-2"><audio class="max-w-full" controls :src="item.audio.blob" ></audio></div>
                           </template>
-                          <template v-else-if="item.audio?.url">
+                          <template v-if="item.audio?.uri">
                             <div class="py-2">
                               <audio v-if="item.audio.blob" class="max-w-full" controls :src="item.audio.blob" ></audio>
                               <p v-else>
@@ -613,7 +613,13 @@ const toggleRecording = async ()=>{
 }
 const closeRecordDialog = ()=>{
   recordMode.value=false;
-  stopRecording();
+  mediaRecorder.value.stop();
+  uploadPhotoDialogLoading.value = true;
+  isRecording.value = false;
+  if (mediaRecoderStream.value) {
+    mediaRecoderStream.value.getTracks().forEach(track => track.stop());
+  }
+  isRecording.value = false;
 }
 const uploadFile = async (file) => {
   try {
@@ -643,7 +649,10 @@ const uploadFile = async (file) => {
 };
 const openRecordDialog = async ()=>{
   recordMode.value=true;
-  try{
+}
+const startRecording = async (event) => {
+  useAudio.value = false;
+  try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioChunks.value = [];
     mediaRecorder.value = new MediaRecorder(stream);
@@ -696,18 +705,6 @@ const openRecordDialog = async ()=>{
       };
       reader.readAsDataURL(audioBlob);
     };
-  } catch (error) {
-    useAudio.value = false;
-    console.error('无法访问麦克风:', error);
-    ElMessageBox.alert('无法访问麦克风', '错误', {
-      confirmButtonText: '确定',
-      type: 'error',
-    });
-  }
-}
-const startRecording = async (event) => {
-  useAudio.value = false;
-  try {
     // uploadPhotoDialogLoading.value = true;
     recordTime.value = 0;
     mediaRecorder.value.start();
