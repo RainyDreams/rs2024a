@@ -169,12 +169,14 @@
                 </div>
                 <!-- 欢迎 -->
                 <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
-                  <div v-if="!welcome_loading" :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
+                  <div v-if="!welcome_loading" :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full animate__animated `+((chatList.length==0 && !welcome_loading)?'animate__fadeInDown':'animate__fadeOutUp')">
                     <h2 class="text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold">你好！来聊点什么吧</h2>
                   </div>
-                  <div v-else="welcome_loading" :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full animate__animated `+((chatList.length==0)?'animate__fadeInUp':'animate__fadeOutUp')">
+                  <div :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full animate__animated `+((chatList.length==0 && welcome_loading)?'animate__fadeInUp':'animate__fadeOutDown')">
                     <h2 class="text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold">正在建立连接</h2>
                   </div>
+                  
+                  
                 </div>
               </div>
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
