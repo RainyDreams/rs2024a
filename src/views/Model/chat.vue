@@ -25,7 +25,7 @@
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
-                      :keep-last-ripple="true"
+                      :keep-last-ripple="false"
                       @click="router.go(-2)"
                     >
                       <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
@@ -42,7 +42,7 @@
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
-                      :keep-last-ripple="true"
+                      :keep-last-ripple="false"
                     >
                       <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                       <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
@@ -58,7 +58,7 @@
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
-                      :keep-last-ripple="true"
+                      :keep-last-ripple="false"
                     >
                       <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                       <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
@@ -75,7 +75,7 @@
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
-                      :keep-last-ripple="true"
+                      :keep-last-ripple="false"
                     >
                       <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                       <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
@@ -91,7 +91,7 @@
                     :opacity="0.4"
                     transition="ease-out"
                     :duration="200"
-                    :keep-last-ripple="true"
+                    :keep-last-ripple="false"
                     @click="showModelDetail=!showModelDetail"
                   >
                     <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
@@ -106,7 +106,7 @@
                     :opacity="0.4"
                     transition="ease-out"
                     :duration="200"
-                    :keep-last-ripple="true"
+                    :keep-last-ripple="false"
                     @click="showInfo=!showInfo"
                   >
                     <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
@@ -136,7 +136,7 @@
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
-                      :keep-last-ripple="true"
+                      :keep-last-ripple="false"
                     >
                       <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                       <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
@@ -163,8 +163,10 @@
                 </div>
                 <div v-show="showInfo">
                   <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 bg-white border rounded-xl p-3 duration-100">
-                    <p>查看<router-link to="/about/log">更新日志</router-link></p>
-                    <div class="w-full text-sm/relaxed">由于服务器成本原因，对大模型所有用户限制如下：每分钟15次，每天1000次提问。</div>
+                    <p>查看<router-link class="text-blue-500" to="/about/log">更新日志</router-link></p>
+                    <!-- <p class="mb-2">了解<router-link class="text-blue-500" to="/model/story">背后的故事</router-link></p> -->
+                    <p class="mb-2"><a target="_blank" class="text-blue-500" to="/model/story">赤子英金官网</a></p>
+                    <div class="w-full text-sm/relaxed">提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。</div>
                   </div>
                 </div>
                 <!-- 欢迎 -->
@@ -441,7 +443,7 @@
                   transition="ease-out"
                   :duration="200"
                   :keep-last-ripple="false"
-                  @start="applynew"
+                  @click="applynew"
                 >
                   <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
                 </touch-ripple>
@@ -1446,6 +1448,7 @@ async function applysession({id,mode}){
   fingerprint.value = await Auth.getUserFingerprint();
   loading.value = true;
   //初始化
+  placeholder.value = '正在加载中...'
   model_info.value = default_model;
   welcome_loading.value = true;
   chatList.value = [];
@@ -1463,6 +1466,7 @@ async function applysession({id,mode}){
     desc:getList.model.desc,
     createuser:getList.model.createuser,
   };
+  placeholder.value = '你好👋';
   loading.value = false;
   welcome_loading.value = false;
   chatList.value = getList.content.map((e,i)=>{
