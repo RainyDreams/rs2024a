@@ -165,7 +165,7 @@
                   <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 bg-white border rounded-xl p-3 duration-100">
                     <p>查看<router-link class="text-blue-500" to="/about/log">更新日志</router-link></p>
                     <!-- <p class="mb-2">了解<router-link class="text-blue-500" to="/model/story">背后的故事</router-link></p> -->
-                    <p class="mb-2"><a target="_blank" class="text-blue-500" to="/model/story">赤子英金官网</a></p>
+                    <p class="mb-2"><a target="_blank" class="text-blue-500" href="https://www.chiziingiin.top/">赤子英金官网</a></p>
                     <div class="w-full text-sm/relaxed">提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。</div>
                   </div>
                 </div>
