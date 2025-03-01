@@ -169,14 +169,10 @@
                 </div>
                 <!-- 欢迎 -->
                 <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
-                  <div v-if="!welcome_loading" :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full animate__animated `+((chatList.length==0 && !welcome_loading)?'animate__fadeInDown':'animate__fadeOutUp')">
-                    <h2 class="text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold">你好！来聊点什么吧</h2>
-                  </div>
-                  <div :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full animate__animated `+((chatList.length==0 && welcome_loading)?'animate__fadeInUp':'animate__fadeOutDown')">
-                    <h2 class="text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold">正在建立连接</h2>
-                  </div>
-                  
-                  
+                  <div :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full `">
+                    <h2 v-if="!welcome_loading" :class="`text-center w-full text-3xl animate__animated md:text-4xl lg:text-5xl font-bold `+((chatList.length==0 && !welcome_loading)?'animate__fadeInDown':'animate__fadeOutUp')">你好！来聊点什么吧</h2>
+                    <h2 :class="`text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold animate__animated `+((chatList.length==0 && welcome_loading)?'animate__fadeInUp':'animate__fadeOutDown')">正在建立连接</h2>
+                  </div>                
                 </div>
               </div>
               <div class="chatList" style="min-height: 200px;" id="ai_chatList">
@@ -282,7 +278,8 @@
                   </template>
                 </template>
                 <div class="my-5">
-                  <div class="bg-white text-blue-950 opacity-85 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 px-3 py-2 text-sm/tight md:text-base/tight my-3" v-for="(item) in suggestions" @click="ask(item)">
+                  <div class="bg-white text-blue-950 opacity-85 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 px-3 py-2 text-sm/tight lg:text-base/tight my-3" 
+                  v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
                 </div>
@@ -1523,12 +1520,23 @@ onMounted(async ()=>{
     }
   }
   let id = route.params.id;
+  let action = route.query.action;
   model.value = route.query.model || ''
   let mode = undefined;
   if(route.query.mode == 'new'){
     mode = 'new';
   }
-  await applysession({id,mode})
+  if(action){
+    let actionValue = localStorage.getItem(action);
+    input.value = actionValue;
+    document.querySelector('#input_chat_ai').value = actionValue;
+  }
+  await applysession({id,mode});
+  if(action){
+    send();
+    localStorage.removeItem(action);
+  }
+
 })
 </script>
 

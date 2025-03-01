@@ -60,14 +60,24 @@ import { TouchRipple } from 'vue-touch-ripple'
 import { Refresh } from '@icon-park/vue-next'
 import 'vue-touch-ripple/style.css'
 import Auth from '../../utils/auth'
+import { getRadomString } from '../../utils/helpers'
 const route = useRoute()
 const router = useRouter()
 const tryAgain = async () => {
   let model = route.query.model || ''
+  let q = route.query.q || ''
+  if(q){
+    const qid = getRadomString(8);
+    localStorage.setItem(qid, decodeURIComponent(q));
+    router.push('/chat/new?model='+model+'&mode=new&action='+qid)
+
+  } else {
+    router.push('/chat/new?model='+model+'&mode=new')
+
+  }
   // const e = await Auth.getAISessionID({model});
   // const {status, content} = e
   // if(status === "sus"){
-    router.push('/chat/new?model='+model+'&mode=new')
   // }
 }
 onActivated(async () => {
