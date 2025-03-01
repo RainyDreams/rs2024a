@@ -510,9 +510,9 @@
                 <span class="text-xs text-right opacity-50 text-slate-800 py-2" v-show="(now>=99)">{{ now }}</span>
                 <div :class="`_number flex-1`">
                   <touch-ripple
-                    :class="`touch-ripple flex  items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-white border-blue-500':'text-blue-500')"
-                    :style="{ clipPath: 'none', backgroundColor: (show_menu)?'#3b82f6':'#fff' }"
-                    :color="(show_menu)?'#fff':'#3b82f6'"
+                    :class="`touch-ripple flex  items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-blue-500 border-blue-500':'text-slate-500')"
+                    :style="{ clipPath: 'none', backgroundColor: '#fff' }"
+                    :color="'#bfdbfe'"
                     :opacity="0.4"
                     transition="ease-out"
                     :duration="200"
@@ -522,9 +522,9 @@
                     <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `" theme="outline" size="18" fill="currentColor"/>
                   </touch-ripple>
                   <touch-ripple
-                    :class="`touch-ripple text-white autohidden items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `"
-                    :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
-                    :color="'#fff'"
+                    :class="`touch-ripple autohidden items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border text-blue-500 border-blue-500 `"
+                    :style="{ clipPath: 'none', backgroundColor: '#fff' }"
+                    :color="'#bfdbfe'"
                     :opacity="0.4"
                     transition="ease"
                     :duration="200"
