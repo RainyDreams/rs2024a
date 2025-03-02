@@ -678,7 +678,7 @@ let Auth = {
   },
   decodeStream:function(meta,opt){
     const decode = JSON.parse(meta);
-    console.log(decode)
+    // console.log(decode,opt)
     if(decode.mode == 'stream-text'){
       opt.chatMessage(decode.text)
       return decode.text;

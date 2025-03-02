@@ -1262,7 +1262,7 @@ function handleOnMessage(source, model, opt) {
   try{
     Auth.decodeStream(source, {
       chatMessage: (source) => {
-        tmp += source;
+        chatList.value[opt.index].content += source;
         renderContent(opt.index);
       },
       analysisMessage: (source) => {
