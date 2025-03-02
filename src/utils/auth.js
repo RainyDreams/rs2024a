@@ -590,7 +590,7 @@ let Auth = {
     window.clarity("event", 'chatWithAI')
     await this.getPrtoken();
     let _this = this;
-    await this.getStreamText('/api/ai/stream', 
+    await this.getStreamText('/api/ai/deepMind', 
       { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf,
         useAnalysis:param.useAnalysis,
         useInternet:param.useInternet,
@@ -675,6 +675,43 @@ let Auth = {
       onclose:param.onclose,
       stopStatus:param.stopStatus
     });
+  },
+  decodeStream:function(meta,opt){
+    const decode = JSON.parse(meta);
+    console.log(decode)
+    if(decode.mode == 'stream-text'){
+      opt.chatMessage(decode.text)
+      return decode.text;
+    } else if (decode.mode == 'stream-text-analysis') {
+      opt.analysisMessage(decode.text)
+      return decode.text;
+    } else if(decode.mode == 'meta') {
+      if (decode.candidates) { model = 'line-1'}
+      else if(decode.choices) { model = 'line-2'}
+      else if(decode.response || decode.usage) {model = 'line-4'}
+      else if(decode.status){
+        if(decode.status == 'error'){
+          tmp = '[服务器错误]'
+          return tmp;
+        }
+      }
+      switch (model) {
+        case 'line-1':
+          tmp = decode.candidates[0].content.parts[0].text;
+          break;
+        case 'line-2':
+          tmp = decode.choices[0].delta?.content;
+          break;
+        case 'line-3':
+          tmp = decode.choices[0].delta?.content;
+          break;
+        case 'line-4':
+          tmp = decode.response;
+          break;
+      }
+      return tmp;
+    }
+    return '???'
   },
   getStreamText:async function getStreamText(url,postData,param) {
     window.clarity("event", 'getStreamText')

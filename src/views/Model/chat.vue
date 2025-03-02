@@ -1126,6 +1126,69 @@ function renderContent(index){
   = md.render(chatList.value[index].content)
 }
 /* chat */
+// async function deepMind(targetValue, targetTime, index) {
+//   const t_phoho = usePhoto.value;
+//   const p_photo = uploadPhoto.value;
+//   const t_audio = useAudio.value;
+//   const p_audio = uploadAudio.value;
+//   const beforeTime = Date.now();
+//   const _useAnalysis_ = useAnalysis.value;
+//   const _useInternet_ = useInternet.value;
+//   debouncedScrollToBottom();
+//   showStop.value = true;
+//   if(useInternet.value) {
+//     analysis_line.value = 'line-1';
+//     chatList.value[index - 1].status = 'searching';
+//     //并行运行
+//     await Promise.all([
+//       Auth.deepMind_Analysis({
+//         ...(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null})),
+//         onclose: (source) => {
+//           chatList.value[index - 1].analysis += source;
+//           renderAnalysis(index - 1);
+//           debouncedScrollToBottom();
+//         }
+//       }),
+//     ]);
+//     debouncedScrollToBottom();
+//   }
+//   if (useAnalysis.value){
+//     let _analysis2;
+//     Auth.chatTaskThread.add(async () => {
+//       chatList.value[index - 1].analysis += '\n\n'; 
+//       renderAnalysis(index - 1);
+//       let _analysis = chatList.value[index - 1].analysis;
+//       chatList.value[index - 1].status = 'try';
+//       await Auth.deepMind_Try(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null},[_analysis],(e)=>{
+//         _analysis2 += e;
+//       }));
+//       chatList.value[index - 1].analysis += '\n\n'; 
+//       renderAnalysis(index - 1);
+//       chatList.value[index - 1].status = 'summary';
+//       await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null},[_analysis,_analysis2]));
+//       const diffTime = Date.now() - beforeTime;
+//       chatList.value[index - 1].analysis += '\n\n### 已深度思考 '+parseInt(diffTime/1000)+' 秒'; 
+//       renderAnalysis(index - 1);
+//     })
+//   }
+//   Auth.chatTaskThread.add(async () => {
+//     chatList.value[index - 1].status = 'analysising';
+//     const id1 = setTimeout(() => {
+//       if(chatList.value[index - 1].status != 'analysised'){
+//         chatList.value[index - 1].status = 'reply';
+//       }
+//     }, 4000);
+//     const id2 = setTimeout(() => {
+//       clearTimeout(id1);
+//       if(chatList.value[index - 1].status != 'analysised'){
+//         chatList.value[index - 1].status = 'wait';
+//       }
+//     }, 8500);
+//     await initiateChatWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
+//     clearTimeout(id2);
+//     chatList.value[index - 1].status = 'analysised';
+//   })
+// }
 async function deepMind(targetValue, targetTime, index) {
   const t_phoho = usePhoto.value;
   const p_photo = uploadPhoto.value;
@@ -1136,41 +1199,6 @@ async function deepMind(targetValue, targetTime, index) {
   const _useInternet_ = useInternet.value;
   debouncedScrollToBottom();
   showStop.value = true;
-  if(useInternet.value) {
-    analysis_line.value = 'line-1';
-    chatList.value[index - 1].status = 'searching';
-    //并行运行
-    await Promise.all([
-      Auth.deepMind_Analysis({
-        ...(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null})),
-        onclose: (source) => {
-          chatList.value[index - 1].analysis += source;
-          renderAnalysis(index - 1);
-          debouncedScrollToBottom();
-        }
-      }),
-    ]);
-    debouncedScrollToBottom();
-  }
-  if (useAnalysis.value){
-    let _analysis2;
-    Auth.chatTaskThread.add(async () => {
-      chatList.value[index - 1].analysis += '\n\n'; 
-      renderAnalysis(index - 1);
-      let _analysis = chatList.value[index - 1].analysis;
-      chatList.value[index - 1].status = 'try';
-      await Auth.deepMind_Try(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null},[_analysis],(e)=>{
-        _analysis2 += e;
-      }));
-      chatList.value[index - 1].analysis += '\n\n'; 
-      renderAnalysis(index - 1);
-      chatList.value[index - 1].status = 'summary';
-      await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null},[_analysis,_analysis2]));
-      const diffTime = Date.now() - beforeTime;
-      chatList.value[index - 1].analysis += '\n\n### 已深度思考 '+parseInt(diffTime/1000)+' 秒'; 
-      renderAnalysis(index - 1);
-    })
-  }
   Auth.chatTaskThread.add(async () => {
     chatList.value[index - 1].status = 'analysising';
     const id1 = setTimeout(() => {
@@ -1184,62 +1212,12 @@ async function deepMind(targetValue, targetTime, index) {
         chatList.value[index - 1].status = 'wait';
       }
     }, 8500);
-    await initiateChatWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
+    await DeepMindWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
     clearTimeout(id2);
     chatList.value[index - 1].status = 'analysised';
   })
 }
-function createOptions(opt,analysis,fn=()=>{}) {
-  return {
-    sessionID: sessionID.value,
-    content: opt.targetValue,
-    vf: fingerprint.value,
-    analysis: analysis,
-    useInternet:opt._useInternet_,
-    stopStatus,
-    line: analysis_line.value,
-    photo:opt.photo,
-    audio:opt.audio,
-    onmessage: async (source, model) => {
-      showStop.value = true;
-      const decode = JSON.parse(source);
-      let tmp = '';
-      try{
-        switch (model) {
-          case 'line-1':
-            tmp = decode.candidates[0].content.parts[0].text;
-            tokensCount.value = decode.usageMetadata.totalTokenCount;
-            break;
-          case 'line-2':
-            tmp = decode.choices[0].delta?.content;
-            break;
-          case 'line-3':
-            tmp = decode.response;
-            break;
-        }
-        // debouncedScrollToBottom();
-        chatList.value[opt.index - 1].analysis += tmp;
-        renderAnalysis(opt.index - 1);
-        fn(tmp);
-      }catch(e){
-        await Auth.getPrtoken();
-      }
-      
-    },
-    onerror:async ()=>{
-      await Auth.getPrtoken();
-    },
-    onclose: async (source) => {
-      if (stopStatus.value == true) {
-        stopStatus.value = false;
-        placeholder.value = "还有什么想聊的";
-        chatList.value[opt.index - 1].status = 'analysised';
-        chatList.value[opt.index].content += '[回答已终止]';
-      }
-    },
-  }
-}
-async function initiateChatWithAI(opt,count) {
+async function DeepMindWithAI(opt,count) {
   showStop.value = true;
   await Auth.chatWithAI({
     sessionID: sessionID.value,
@@ -1281,72 +1259,20 @@ async function initiateChatWithAI(opt,count) {
   });
 }
 function handleOnMessage(source, model, opt) {
-  const decode = JSON.parse(source);
-  let tmp = '';
   try{
-    // console.log(decode);
-    if (decode.candidates) { model = 'line-1'}
-    else if(decode.choices) { model = 'line-2'}
-    else if(decode.response || decode.usage) {model = 'line-4'}
-    else if(decode.status){
-      if(decode.status == 'error'){
-        Auth.chatTaskThread.add(async () => {
-          await Auth.getPrtoken('force');
-          if(opt.counter){
-            chatList.value[opt.index].content += '服务器错误，请稍后重试。\n\n可以尝试新开一个对话';
-            ElMessage.error('服务器错误，请稍后重试');
-            return ;
-          }else{
-            return await initiateChatWithAI(opt,1);
-          }
-        })
-        return;
-      }
-    }
-    // console.log(model);
-    switch (model) {
-      case 'line-1':
-        if(decode.candidates[0].finishReason == 'STOP'){
-          stopStatus.value = true;
-        }
-        tmp = decode.candidates[0].content.parts[0].text;
-        if (tmp) {
-          tmp = tmp.replace(/\`\`\`lingben_bash[\s\S]*?\`\`\`/, '');
-          tokensCount2.value = decode.usageMetadata.totalTokenCount;
-        } else if (decode.candidates[0].content.parts[0].functionCall) {
-          Auth.chatTaskThread.add(async () => {
-            await Auth.functionCall(decode.candidates[0].content.parts[0].functionCall, {
-              alert: (obj) => {
-                ElMessageBox.alert(md.render(obj.content), obj.title || '任务执行结果', {
-                  confirmButtonText: '确定',
-                  showCancelButton: false,
-                  dangerouslyUseHTMLString: true,
-                  showClose: false,
-                });
-              },
-              renderHtml: (html) => {
-                chatList.value[opt.index].content += html;
-              },
-            });
-          });
-          tmp = '\n\n';
-        }
-        if(!animateMode.value) animateMode.value = true;
-        contentRendered.value.push({content:tmp,fresh:true});
-        break;
-      case 'line-2':
-        tmp = decode.choices[0].delta?.content;
-        break;
-      case 'line-3':
-        tmp = decode.choices[0].delta?.content;
-        break;
-      case 'line-4':
-        tmp = decode.response;
-        break;
-    }
-  }catch(e){ }
-  chatList.value[opt.index].content += tmp;
-  renderContent(opt.index);
+    Auth.decodeStream(source, {
+      chatMessage: (source) => {
+        tmp += source;
+        renderContent(opt.index);
+      },
+      analysisMessage: (source) => {
+        chatList.value[opt.index - 1].analysis += source;
+        renderAnalysis(opt.index - 1);
+      },
+    });
+  }catch(e){
+    
+  }
 }
 async function handleOnClose(error,model,opt) {
   stopStatus.value = false;
