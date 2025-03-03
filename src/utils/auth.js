@@ -754,14 +754,14 @@ let Auth = {
             param.onclose(false,postData.model); 
             break; 
           }
-          let textArray = (tmp+decoder.decode(value, { stream: true })).split('\ndata: ');
+          let textArray = (tmp+decoder.decode(value, { stream: true })).split('\n');
           // tmp = textArray.pop();
           // // console.log(textArray);
           for (const text of textArray) {
             if(text == '[DONE]') continue;
             // // console.log(text)
             if(text){
-              param.onmessage(text,model);
+              param.onmessage(text.replace('data: ',''),model);
             }
           }
         } catch(e) {
