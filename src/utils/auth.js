@@ -678,7 +678,7 @@ let Auth = {
   },
   decodeStream:function(meta,opt){
     const decode = JSON.parse(meta);
-    // console.log(decode,opt)
+    console.log(decode,opt)
     if(decode.mode == 'text'){
       opt.chatMessage(decode.text)
       return decode.text;
@@ -754,19 +754,19 @@ let Auth = {
             param.onclose(false,postData.model); 
             break; 
           }
-          let textArray = (tmp+decoder.decode(value, { stream: true })).split('\n');
+          const decode = decoder.decode(value, { stream: true })
+          let textArray = (tmp+decode).split('\n');
+          console.log(decode);
           // tmp = textArray.pop();
           // // console.log(textArray);
           for (const text of textArray) {
-            if(text == '[DONE]') continue;
-            // // console.log(text)
             if(text){
               param.onmessage(text.replace('data: ',''),model);
             }
           }
         } catch(e) {
           errorCount++;
-          if(errorCount > 100){
+          if(errorCount > 10){
             param.onclose();
             defaultFailed(e,3)
             break;
