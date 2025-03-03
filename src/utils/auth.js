@@ -755,7 +755,7 @@ let Auth = {
             break; 
           }
           let textArray = (tmp+decoder.decode(value, { stream: true })).split('\ndata: ');
-          tmp = textArray.pop();
+          // tmp = textArray.pop();
           // // console.log(textArray);
           for (const text of textArray) {
             if(text == '[DONE]') continue;
