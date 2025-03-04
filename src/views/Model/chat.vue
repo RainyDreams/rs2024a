@@ -1269,6 +1269,13 @@ function handleOnMessage(source, model, opt) {
         chatList.value[opt.index - 1].analysis += source;
         renderAnalysis(opt.index - 1);
       },
+      title:(source)=>{
+        title.value = source;
+        emitter.emit('updateTitle', source);
+      },
+      suggestions:(source)=>{
+        suggestions.value = source;
+      }
     });
   }catch(e){
     
@@ -1291,15 +1298,15 @@ async function handleOnClose(error,model,opt) {
           contentRendered.value=[]
         },10)
       }
-        const res = await Auth.setAIChatResponse({
-          sessionID: sessionID.value,
-          content: chatList.value[opt.index].content,
-          tokens: tokensCount.value + tokensCount2.value,
-          title: title.value,
-        });
-        suggestions.value = res.suggestions;
-        title.value = res.title;
-        emitter.emit('updateTitle', res.title);
+        // const res = await Auth.setAIChatResponse({
+        //   sessionID: sessionID.value,
+        //   content: chatList.value[opt.index].content,
+        //   tokens: tokensCount.value + tokensCount2.value,
+        //   title: title.value,
+        // });
+        // suggestions.value = res.suggestions;
+        // title.value = res.title;
+        // emitter.emit('updateTitle', res.title);
       
     }
   }

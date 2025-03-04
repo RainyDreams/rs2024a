@@ -678,7 +678,7 @@ let Auth = {
   },
   decodeStream:function(meta,opt){
     const decode = JSON.parse(meta);
-    console.log(decode,opt)
+    // console.log(decode,opt)
     if(decode.mode == 'text'){
       opt.chatMessage(decode.text)
       return decode.text;
@@ -712,6 +712,12 @@ let Auth = {
       return tmp;
     } else if (decode.mode == 'message') {
       console.log('[MESSAGE]',decode.message);
+    } else if (decode.mode == 'error') {
+      console.log('[ERROR]',decode.error);
+    } else if (decode.mode == 'title'){
+      opt.title(decode.title)
+    } else if (decode.mode == 'suggestions'){
+      opt.suggestions(decode.suggestions)
     }
     return '???'
   },
@@ -756,7 +762,7 @@ let Auth = {
           }
           const decode = decoder.decode(value, { stream: true })
           let textArray = (tmp+decode).split('\n');
-          console.log(decode);
+          // console.log(decode);
           // tmp = textArray.pop();
           // // console.log(textArray);
           for (const text of textArray) {
