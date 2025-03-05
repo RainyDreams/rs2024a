@@ -269,11 +269,11 @@
                         >
                           <div 
                             @click="copyHtml(i)"
-                            class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer">
+                            class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer mr-1">
                             <DocDetail theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                           </div>
-                        </el-tooltip>
-                        
+                        </el-tooltip> 
+                        <div v-if="item.model" class="flex leading-none items-center text-slate-500 text-sm">{{ item.model }}模型回复</div>
                       </div>
                       <!-- </el-watermark> -->
                     </div>
@@ -1275,6 +1275,11 @@ function handleOnMessage(source, model, opt) {
       },
       suggestions:(source)=>{
         suggestions.value = source;
+      },
+      info:(config)=>{
+        if(config.mode == 'text'){
+          chatList.value[opt.index].model = config.version;
+        }
       }
     });
   }catch(e){

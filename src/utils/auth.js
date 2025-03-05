@@ -718,6 +718,8 @@ let Auth = {
       opt.title(decode.title)
     } else if (decode.mode == 'suggestions'){
       opt.suggestions(decode.suggestions)
+    } else if (decode.mode == 'info'){
+      opt.info(decode.config)
     }
     return '???'
   },
@@ -744,31 +746,31 @@ let Auth = {
       // // console.log(model)
       const reader = response.body.getReader();
       let decoder = new TextDecoder();
-      let tmp=''
+      let buffer = '';
       let errorCount = 0;
       while (true) {
-        if(param.stopStatus){
-          if(param.stopStatus.value) { param.onclose(false,postData.model); break; }
-        }
+        if (param.stopStatus && param.stopStatus.value) {
+          param.onclose(false, postData.model);
+          break;
+      }
         try{
           const { done, value } = await reader.read();
-          // // console.log('1',value)
           if (done) { 
-            if(tmp != '[DONE]'){
-              param.onmessage(tmp,model);
+            if (buffer) {
+              param.onmessage(buffer.replace('data: ', ''), postData.model);
             }
             param.onclose(false,postData.model); 
             break; 
           }
-          const decode = decoder.decode(value, { stream: true })
-          let textArray = (tmp+decode).split('\n');
-          // console.log(decode);
-          // tmp = textArray.pop();
-          // // console.log(textArray);
-          for (const text of textArray) {
-            if(text){
-              param.onmessage(text.replace('data: ',''),model);
+          const decodedText = decoder.decode(value, { stream: true });
+          buffer += decodedText;
+          let newlineIndex;
+          while ((newlineIndex = buffer.indexOf('\n')) !== -1) {
+            const line = buffer.substring(0, newlineIndex);
+            if (line) {
+                param.onmessage(line.replace('data: ', ''), postData.model);
             }
+            buffer = buffer.substring(newlineIndex + 1);
           }
         } catch(e) {
           errorCount++;
@@ -777,7 +779,6 @@ let Auth = {
             defaultFailed(e,3)
             break;
           }
-          // // console.warn('getStreamText - ',e)
         }
       }
     } catch (error) {
