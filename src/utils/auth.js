@@ -591,12 +591,13 @@ let Auth = {
     await this.getPrtoken();
     let _this = this;
     await this.getStreamText('/api/ai/deepMind', 
-      { sessionID: param.sessionID, content: param.content,analysis:param.analysis,vf:param.vf,
+      { sessionID: param.sessionID,
+        content: param.content,
+        vf:param.vf,
         useAnalysis:param.useAnalysis,
         useInternet:param.useInternet,
-        model:param.line,
+        useTask:param.useTask,
         time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
-        sendTime:param.time,
         photo:param.photo,
         audio:param.audio
       },
