@@ -43,8 +43,9 @@ export default defineConfig((mode) => {
               }
             }
             if (id.includes('node_modules')) {
+              return 'vendor';
               // return id.split('node_modules/')[1].split('/')[0];
-              return btoa(id.toString().split('node_modules/')[1].split('/')[0].toString());
+              // return btoa(id.toString().split('node_modules/')[1].split('/')[0].toString());
             }
           },
         },
