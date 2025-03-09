@@ -9,7 +9,7 @@
         </svg>
       </button>
     </div>
-    <div class="scroll">
+    <div :class="`scroll ${chatList.length>0?'active':''}`">
       <!-- <div class=""> -->
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
           <div class="aichat">
@@ -177,7 +177,7 @@
                   </div>                
                 </div>
               </div>
-              <div class="chatList" style="min-height: 200px;" id="ai_chatList">
+              <div class="chatList" style="min-height: 0px;" id="ai_chatList">
                 <template v-for="(item,i) in chatList" class="chatList" :key="i">
                   <template  v-if="item.role == 'user'">
                     <div class="user " :data-id="i">
@@ -1001,7 +1001,7 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
   window['czig_code_html'+codeid] = token.content;
   //on绑定事件
   return `<div class="czig-code-block sticky text-base rounded-lg overflow-auto my-2">
-    <div class="language-label sticky bg-slate-200 px-3 py-2 flex align-middle justify-between items-center"> 
+    <div class="language-label sticky bg-slate-200 truncate px-3 py-2 flex align-middle justify-between items-center"> 
       <span class="truncate">${langName}</span>
       <svg id="code_${codeid}" onclick="copyCode('${codeid}')" class="hover:opacity-80 cursor-pointer trasition opacity-100" width="16" height="16" viewBox="0 0 48 48" fill="none"><path d="M13 12.4316V7.8125C13 6.2592 14.2592 5 15.8125 5H40.1875C41.7408 5 43 6.2592 43 7.8125V32.1875C43 33.7408 41.7408 35 40.1875 35H35.5163" stroke="#0007" stroke-width="4" stroke-linecap="round" stroke-linejoin="bevel"></path><path d="M32.1875 13H7.8125C6.2592 13 5 14.2592 5 15.8125V40.1875C5 41.7408 6.2592 43 7.8125 43H32.1875C33.7408 43 35 41.7408 35 40.1875V15.8125C35 14.2592 33.7408 13 32.1875 13Z" fill="none" stroke="#0007" stroke-width="4" stroke-linejoin="bevel"></path></svg>
     </div>
@@ -1018,28 +1018,28 @@ md.use(math,{
 });
 
 /* 主要渲染部分结束 */
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 const chatList = ref([]);
 const input = ref("");
 const placeholder = ref("你好👋");
 const loading = ref(true);
-const ainput = ref()
-const now = ref(0)
-const fingerprint = ref("")
-const welcome = ref('')
-const welcome_loading = ref(true)
-const sessionID = ref()
-const stopStatus = ref(false)
+const ainput = ref();
+const now = ref(0);
+const fingerprint = ref("");
+const welcome = ref('');
+const welcome_loading = ref(true);
+const sessionID = ref();
+const stopStatus = ref(false);
 const useAnalysis = ref(false);
 const useInternet = ref(false);
 const useTask = ref(false);
 const show_menu = ref(true)
 const showStop = ref(false);
-const tokensCount = ref(0)
-const tokensCount2 = ref(0)
 const title = ref('无标题');
-const suggestions = ref([])
+const suggestions = ref([]);
+const loginStatus = ref(false);
+const model = ref('');
 const default_model = {
   img:'/logo_sm.webp',
   name:'默认模型',
@@ -1245,6 +1245,7 @@ async function DeepMindWithAI(opt,count) {
   await Auth.chatWithAI({
     sessionID: sessionID.value,
     content: opt.targetValue,
+    model:model.value,
     vf: fingerprint.value,
     analysis: chatList.value[opt.index - 1].analysis || '',
     stopStatus,
@@ -1282,7 +1283,7 @@ async function DeepMindWithAI(opt,count) {
     },
   });
 }
-function handleOnMessage(source, model, opt) {
+function handleOnMessage(source, m , opt) {
   try{
     Auth.decodeStream(source, {
       chatMessage: (source) => {
@@ -1300,9 +1301,15 @@ function handleOnMessage(source, model, opt) {
       suggestions:(source)=>{
         suggestions.value = source;
       },
-      info:(config)=>{
-        if(config.mode == 'text'){
-          chatList.value[opt.index].model = config.version;
+      info:(source)=>{
+        if(source.mode == 'text'){
+          chatList.value[opt.index].model = source.version;
+        }
+      },
+      config:(source)=>{
+        if(source.type == 'session'){
+          sessionID.value = source.content;
+          router.push('/chat/?s='+source.content+'&model='+model.value); 
         }
       }
     });
@@ -1320,23 +1327,15 @@ async function handleOnClose(error,model,opt) {
     if (!error) {  }
   } else {
     if (!error) {
-      if(model == 'line-1'){
-        // animateMode.value = false;
-        setTimeout(()=>{
-          animateMode.value = false;
-          contentRendered.value=[]
-        },10)
-      }
-        // const res = await Auth.setAIChatResponse({
-        //   sessionID: sessionID.value,
-        //   content: chatList.value[opt.index].content,
-        //   tokens: tokensCount.value + tokensCount2.value,
-        //   title: title.value,
-        // });
-        // suggestions.value = res.suggestions;
-        // title.value = res.title;
-        // emitter.emit('updateTitle', res.title);
-      
+      // if(model == 'line-1'){
+      //   // animateMode.value = false;
+      //   setTimeout(()=>{
+      //     animateMode.value = false;
+      //     contentRendered.value=[]
+      //   },10)
+      // }
+      await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index-1])
+      await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index])
     }
   }
 }
@@ -1398,79 +1397,118 @@ const send = async (param)=>{
   const index = chatList.value.length - 1;
   await deepMind(targetValue, targetTime, index,);
 }
-const loginStatus = ref(false);
-const model = ref('')
-const throttledSend = throttle(send, 100); // 调整 3000 为所需的毫秒数
-const debouncedScrollToBottom = debounce(scrollToBottom, 700); // 调整 300 为所需的毫秒数
-const throttledScrollToBottom = throttle(scrollToBottom, 1500); // 调整 300 为所需的毫秒数
+
+const throttledSend = throttle(send, 100);
+const debouncedScrollToBottom = debounce(scrollToBottom, 700); 
+const throttledScrollToBottom = throttle(scrollToBottom, 1500); 
 let applying = false
 async function applysession({id,mode}){
-  applying = true
-  sessionID.value = id
-  fingerprint.value = await Auth.getUserFingerprint();
-  loading.value = true;
-  //初始化
-  placeholder.value = '正在加载中...'
-  model_info.value = default_model;
-  welcome_loading.value = true;
-  chatList.value = [];
-  title.value = '无标题';
-  emitter.emit('updateTitle', '无标题');
-  welcome.value = '';
-  suggestions.value = [];
-  let tmp = 0;
-  const getList = (await Auth.getAIChatList({sessionID:id,mode,model:model.value,vf:fingerprint.value}))
-  welcome.value = getList.welcome;
-  sessionID.value = getList.sessionID
-  model_info.value = {
-    ...model_info.value,
-    name:getList.model.name,
-    desc:getList.model.desc,
-    createuser:getList.model.createuser,
-  };
   placeholder.value = '你好👋';
-  loading.value = false;
-  welcome_loading.value = false;
-  chatList.value = getList.content.map((e,i)=>{
-    e.status = e.analysis?'analysised':'no_analysis';
-    e.show_thought = false;
-    if(e.photo){
-      if(e.photo.meta){
-        e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
-      }
-    }
-    if(e.audio){
-      if(e.audio.meta){
-        e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
-      } else {
-        e.audio.blob=null;
-      }
-    }
-    return e
-  });
-  title.value = getList.title || title.value;
-  chatList.value.forEach((e,i)=>{
-    if(e.role == 'user'){
-      if(e.analysis){
-        renderAnalysis(i);
-      }
-      if(i == 0){
-        e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
-      } else {
-        e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
-        tmp=i;
-      }
-    } else {
-      renderContent(i)
-    }
-  })
   if(mode == 'new'){
-    router.push('/chat/'+getList.sessionID+'?model='+model.value); 
-  } else {
-    router.push('/chat/'+getList.sessionID+'?model='+model.value); 
+    applying = true;
+    fingerprint.value = await Auth.getUserFingerprint();
+    loading.value = false;
+    placeholder.value = '你好👋';
+    model_info.value = default_model;
+    welcome_loading.value = false;
+    chatList.value = [];
+    title.value = '无标题';
+    emitter.emit('updateTitle', '无标题');
+    welcome.value = '';
+    suggestions.value = [];
+    sessionID.value = '';
+    router.push('/chat/?model='+model.value);
+    applying = false;
+    return ;
   }
-  model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
-  
+  // Auth.chatTaskThread.add(async()=>{
+    if(sessionID.value){
+      let tmp = 0;
+      chatList.value = JSON.parse(localStorage.getItem('chat_'+sessionID.value) || '[]');
+      chatList.value.forEach((e,i)=>{
+        if(e.role == 'user'){
+          e.status = e.analysis?'analysised':'no_analysis';
+          e.show_thought = false;
+          if(e.photo){
+            if(e.photo.meta){
+              e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
+            }
+          }
+          if(e.audio){
+            if(e.audio.meta){
+              e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
+            } else {
+              e.audio.blob=null;
+            }
+          }
+          if(e.analysis){
+            renderAnalysis(i);
+          }
+          if(i == 0){
+            e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
+          } else {
+            e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
+            tmp=i;
+          }
+        } else {
+          renderContent(i)
+        }
+      })
+      debouncedScrollToBottom()
+      loading.value = false;
+      welcome_loading.value = false;
+      Auth.chatTaskThread.add(async ()=>{
+        const getList = (await Auth.getAIChatList({sessionID:sessionID.value,mode,model:model.value,vf:fingerprint.value}))
+        welcome.value = getList.welcome;
+        model_info.value = {
+          ...model_info.value,
+          name:getList.model.name,
+          desc:getList.model.desc,
+          createuser:getList.model.createuser,
+        };
+        chatList.value = (await Auth.replaceAndUpdateUserRecords(sessionID.value,getList.content,chatList.value)).map((e,i)=>{
+          e.status = e.analysis?'analysised':'no_analysis';
+          e.show_thought = false;
+          if(e.photo){
+            if(e.photo.meta){
+              e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
+            }
+          }
+          if(e.audio){
+            if(e.audio.meta){
+              e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
+            } else {
+              e.audio.blob=null;
+            }
+          }
+          return e
+        });
+        title.value = getList.title || title.value;
+        chatList.value.forEach((e,i)=>{
+          if(e.role == 'user'){
+            if(e.analysis){
+              renderAnalysis(i);
+            }
+            if(i == 0){
+              e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
+            } else {
+              e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
+              tmp=i;
+            }
+          } else {
+            renderContent(i)
+          }
+        })
+        setTimeout(()=>{
+          scrollToBottom()
+        },50)
+        model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
+      })
+    } else {
+      loading.value = false;
+      placeholder.value = '你好👋';
+      welcome_loading.value = false;
+    }
   applying = false
 }
 async function applynew(){
@@ -1485,19 +1523,22 @@ onMounted(async ()=>{
       loginStatus.value = true;
     }
   }
-  let id = route.params.id;
+  await Auth.db_init()
+  sessionID.value = route.query.s;
+  model.value = route.query.model || '';
   let action = route.query.action;
-  model.value = route.query.model || ''
   let mode = undefined;
   if(route.query.mode == 'new'){
     mode = 'new';
   }
+  loading.value = false;
   if(action){
     let actionValue = localStorage.getItem(action);
     input.value = actionValue;
     document.querySelector('#input_chat_ai').value = actionValue;
+    setInputHeight()
   }
-  await applysession({id,mode});
+  await applysession({id:sessionID,mode:mode})
   if(action){
     send();
     localStorage.removeItem(action);

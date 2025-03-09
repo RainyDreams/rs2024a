@@ -404,7 +404,6 @@ a[href]{
   margin-bottom: 4px;
 }
 
-
 .aichat{
   background-color: transparent !important;
   padding: 0px !important;
@@ -526,7 +525,7 @@ a[href]{
   .chatList{
     .czig-code-block{
       .language-label{
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-family: "JetBrains Mono",ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
       }
       // .hljs{
       //   font-size: 0.875rem !important;
@@ -540,6 +539,9 @@ a[href]{
     }
     pre code.hljs{
       background-color: transparent !important;;
+    }
+    code, kbd, samp, pre{
+      font-family: "JetBrains Mono",ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
     }
     *:not(.czig-code-block *,.katex *){
       font-size: inherit;
@@ -650,8 +652,13 @@ a[href]{
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  height: fit-content;
   max-height: 100%;
-  flex: 1 1 0;
+  flex-shrink: 1;
+  &.active{
+    flex:1 1 0;
+  }
+  transition: all .3s;
   &::-webkit-scrollbar {
     width:0;
     height:0;

@@ -592,8 +592,9 @@ let Auth = {
     let _this = this;
     await this.getStreamText('/api/ai/deepMind', 
       { sessionID: param.sessionID,
+        model:param.model,
         content: param.content,
-        vf:param.vf,
+        vf:param.vf, 
         useAnalysis:param.useAnalysis,
         useInternet:param.useInternet,
         useTask:param.useTask,
@@ -677,9 +678,73 @@ let Auth = {
       stopStatus:param.stopStatus
     });
   },
+  saveChatRecords: async function (sessionID, chatRecords) {
+    try {
+      // console.log(sessionID,chatRecords)
+      // 从 localStorage 中获取当前会话的聊天记录
+      const storedRecords = localStorage.getItem(`chat_${sessionID}`);
+      let userRecordsInDB = storedRecords ? JSON.parse(storedRecords) : [];
+  
+      // 将新聊天记录追加到现有记录中
+      userRecordsInDB.push(chatRecords);
+  
+      // 将更新后的聊天记录存回 localStorage
+      localStorage.setItem(`chat_${sessionID}`, JSON.stringify(userRecordsInDB));
+      console.log('聊天记录存储成功');
+    } catch (error) {
+      console.error('存储聊天记录时出错:', error);
+    }
+  },
+  
+  replaceAndUpdateUserRecords: async function (sessionID, newChatRecords, chatList) {
+    try {
+      // 开启事务（这里不需要事务，因为 localStorage 是同步操作）
+      // console.log(sessionID,newChatRecords,chatList)
+      const storedRecords = localStorage.getItem(`chat_${sessionID}`);
+      let userRecordsInDB = storedRecords ? JSON.parse(storedRecords) : [];
+  
+      // 如果没有找到对应的会话记录，则初始化为空数组
+      if (!Array.isArray(userRecordsInDB)) {
+        userRecordsInDB = [];
+      }
+  
+      // 找到最后一条用户记录
+      const lastUserRecordInArray = newChatRecords
+        .filter(record => record.role === 'user')
+        .pop();
+  
+      if (!lastUserRecordInArray) {
+        throw new Error('传入的数组中未找到任何用户记录');
+      }
+  
+      const timeS = lastUserRecordInArray.sendTime;
+  
+      // 更新用户记录：保留时间大于 timeS 的记录
+      const updatedUserRecords = newChatRecords.concat(
+        userRecordsInDB.filter(record => record.sendTime > timeS)
+      );
+  
+      // 将更新后的聊天记录存回 localStorage
+      localStorage.setItem(`chat_${sessionID}`, JSON.stringify(updatedUserRecords));
+      // 找到 chatList 中时间大于 timeS 的记录
+      let lastMatchIndex = -1;
+      chatList.forEach((record, index) => {
+        if (record.sendTime && record.sendTime > timeS) {
+          lastMatchIndex = index;
+        }
+      });
+      console.log(chatList,chatList.slice(lastMatchIndex).filter(e=>e.role === 'user'))
+  
+      // 返回合并后的聊天记录
+      return newChatRecords;
+    } catch (error) {
+      console.error('替换和存储用户记录时出错:', error);
+      return [];
+    }
+  },
   decodeStream:function(meta,opt){
     const decode = JSON.parse(meta);
-    console.log(decode,opt)
+    // console.log(decode,opt)
     if(decode.mode == 'text'){
       opt.chatMessage(decode.text)
       return decode.text;
@@ -719,6 +784,8 @@ let Auth = {
       opt.title(decode.title)
     } else if (decode.mode == 'suggestions'){
       opt.suggestions(decode.suggestions)
+    } else if (decode.mode == 'config'){
+      opt.config(decode.config)
     } else if (decode.mode == 'info'){
       opt.info(decode.config)
     }
@@ -809,8 +876,9 @@ let Auth = {
   db_init:async function db_init(){
     if (!this.db.version) {
       this.db = new Dexie('lingben_zhixie');
-      this.db.version(2).stores({
-        user_profile_cache: 'id, avatar, username, nickname, expirationTime'
+      this.db.version(3).stores({
+        user_profile_cache: 'id, avatar, username, nickname, expirationTime',
+        chatMessages: '++id, session, content',
       });
       return await this.db.open();
     }

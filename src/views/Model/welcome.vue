@@ -69,11 +69,9 @@ const tryAgain = async () => {
   if(q){
     const qid = getRadomString(8);
     localStorage.setItem(qid, decodeURIComponent(q));
-    router.push('/chat/new?model='+model+'&mode=new&action='+qid)
-
+    router.push('/chat/?'+(model?('model='+model+'&'):'')+'mode=new&action='+qid)
   } else {
-    router.push('/chat/new?model='+model+'&mode=new')
-
+    router.push('/chat/?'+(model?('model='+model+'&'):'')+'mode=new')
   }
   // const e = await Auth.getAISessionID({model});
   // const {status, content} = e

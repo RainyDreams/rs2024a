@@ -52,7 +52,7 @@ const router = createRouter({
     { path: "/", name: "ModelWelcome", component: ModelWelcome,meta:{title:'LinkBrain AI',hide:['sidebar','tabbar']} },
     { path: "/quant", name: "ModelQuant", component: ModelQuant,meta:{title:'LinkBrain AI 自然语言量化交易策略',hide:['sidebar','tabbar']} },
     { path: "/backend", name: "ModelBackEnd", component: backend,meta:{title:'LinkBrain AI 后台',hide:['sidebar','tabbar']} },
-    { path: "/chat/:id", name: "ModelChat", component: ModelChat,meta:{title:'LinkBrain AI',hide:['tabbar','sidebar']}},
+    { path: "/chat/", name: "ModelChat", component: ModelChat,meta:{title:'LinkBrain AI',hide:['tabbar','sidebar']}},
     { path: "/model/", name: "Model", children:[
       { path: "square", name: "ModelSquare", component: ModelSquare,meta:{title:'LinkBrain AI 智能体广场'} },
       // { path: "m/:id", name: "ModelType", component: Model,meta:{title:'LinkBrain AI'}},
