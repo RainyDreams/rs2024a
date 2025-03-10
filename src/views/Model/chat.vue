@@ -128,7 +128,7 @@
                       <div class="text-base leading-none" style="color:#f20">零本量化</div>
                     </touch-ripple>
                   </router-link> -->
-                  <router-link :to="`/login?url=/chat/${sessionID}`" class="h-full" v-if="!loginStatus" >
+                  <router-link :to="`/login?url=%2Fchat%2F%3Fs%3D${sessionID}`" class="h-full" v-if="!loginStatus" >
                     <touch-ripple
                       :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
@@ -579,7 +579,7 @@
       </div>
     </div>
     <audio v-if="audioUrl" :src="audioUrl" controls class="mt- hidden"></audio>
-    <div :class="'transition-all h-0 duration-500 ease-linear '+(chatList.length == 0?`max-h-2/5 h-0 md:h-20 lg:h-40 xl:h-48 `:'')"></div>
+    <div :class="'transition-all h-0 duration-300 ease-linear '+(chatList.length == 0?`max-h-2/5 h-0 md:h-20 lg:h-40 xl:h-48 `:'')"></div>
     <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
   </div>
 </template>
@@ -1271,6 +1271,7 @@ async function DeepMindWithAI(opt,count) {
       renderContent(opt.index);
     },
     onmessage: (source, model) => {
+      console.log(source,model);
       if(count) opt.counter=1;
       handleOnMessage(source, model, opt);
     },
@@ -1291,6 +1292,7 @@ async function DeepMindWithAI(opt,count) {
 }
 function handleOnMessage(source, m , opt) {
   try{
+    console.log(source,opt);
     Auth.decodeStream(source, {
       chatMessage: (source) => {
         chatList.value[opt.index].content += source;
@@ -1320,7 +1322,7 @@ function handleOnMessage(source, m , opt) {
       }
     });
   }catch(e){
-    
+    console.log(e)
   }
 }
 async function handleOnClose(error,model,opt) {
@@ -1519,8 +1521,12 @@ async function applysession({id,mode}){
 }
 async function applynew(){
   if(applying) return;
-  await stop();
+  // await stop();
+  
   Auth.chatTaskThread.clear();
+  stopStatus.value=false;
+  showStop.value=false;
+  loading.value=false;
   const res = await applysession({id:'',mode:'new'})
 }
 

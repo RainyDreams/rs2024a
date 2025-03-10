@@ -620,7 +620,7 @@ let Auth = {
         useAnalysis:param.useAnalysis,
         useInternet:param.useInternet,
         useTask:param.useTask,
-        time:(dayjs().format('YYYY年MM月DD日 ') )+new Date().toTimeString(),
+        time:(dayjs().format('YYYY年MM月DD日') )+new Date().toTimeString(),
         photo:param.photo,
         audio:param.audio
       },
@@ -842,7 +842,7 @@ let Auth = {
         if (param.stopStatus && param.stopStatus.value) {
           param.onclose(false, postData.model);
           break;
-      }
+        }
         try{
           const { done, value } = await reader.read();
           if (done) { 

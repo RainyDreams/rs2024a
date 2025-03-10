@@ -525,7 +525,7 @@ a[href]{
   .chatList{
     .czig-code-block{
       .language-label{
-        font-family: "JetBrains Mono",ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+        font-family: "JetBrains Mono","Misans",ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
       }
       // .hljs{
       //   font-size: 0.875rem !important;
@@ -541,7 +541,7 @@ a[href]{
       background-color: transparent !important;;
     }
     code, kbd, samp, pre{
-      font-family: "JetBrains Mono",ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+      font-family: "JetBrains Mono","Misans",ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
     }
     *:not(.czig-code-block *,.katex *){
       font-size: inherit;
