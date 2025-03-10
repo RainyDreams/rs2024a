@@ -674,14 +674,14 @@ a[href]{
     width:100%;
     background-color: #fff;
     border-radius: 8px;
-    padding:8px;
-    padding-left: 20px;
+    padding:10px;
+    padding-left: 18px;
     display: flex;
     // flex-direction: column;
     align-items: flex-end;
     transition: all 0.25s ease;
     position: relative;
-    border:1px solid transparent;
+    // border:1px solid transparent;
     border-radius: 25px;
     font-size: 0;
     box-shadow: 0px 2px 5px 1px #94a3b811;
@@ -697,16 +697,16 @@ a[href]{
     &._active,&:hover{
       // cursor: pointer;
       // border-color:rgba(144, 77, 245,0.2);
-      border-color:#94a3b833;
-      box-shadow: 0px 1px 4px 0px #94a3b822;
+      // border-color:#94a3b833;
+      // box-shadow: 0px 1px 4px 0px #94a3b822;
     }
     &:focus-within{
       // background-color: #fffffffc;
-      cursor: inherit;
-      border-radius: 25px;
-      box-shadow: 0px 1px 4px 0px #94a3b822;
-      // border-color:rgba(144, 77, 245,0.8);
-      border-color:#cbd5e1;
+      // cursor: inherit;
+      // border-radius: 25px;
+      // box-shadow: 0px 1px 4px 0px #94a3b822;
+      // // border-color:rgba(144, 77, 245,0.8);
+      // border-color:#cbd5e1;
     }
     // &::before {
     //   content: "";

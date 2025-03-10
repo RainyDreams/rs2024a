@@ -9,13 +9,13 @@
         </svg>
       </button>
     </div>
-    <div :class="`scroll ${chatList.length>0?'active':''}`">
+    <div :class="`scroll active`">
       <!-- <div class=""> -->
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
           <div class="aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
-              <div class="title text-center w-full text-lg sticky top-0 z-30 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
+              <div class="title text-center w-full text-xs sticky top-0 z-30 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
               <div class="system mb-3 md:mb-4 lg:mb-5 block">
                   <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
                     <touch-ripple
@@ -173,7 +173,7 @@
                 <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
                   <div :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full `">
                     <h2 v-if="!welcome_loading" :class="`text-center w-full text-3xl animate__animated md:text-4xl lg:text-5xl font-bold `+((chatList.length==0 && !welcome_loading)?'animate__fadeInDown':'animate__fadeOutUp')">你好！来聊点什么吧</h2>
-                    <h2 :class="`text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold animate__animated `+((chatList.length==0 && welcome_loading)?'animate__fadeInUp':'animate__fadeOutDown')">正在建立连接</h2>
+                    <!-- <h2 :class="`text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold animate__animated `+((chatList.length==0 && welcome_loading)?'animate__fadeInUp':'animate__fadeOutDown')">正在建立连接</h2> -->
                   </div>                
                 </div>
               </div>
@@ -236,7 +236,7 @@
                   </template>
                   <template v-else-if="item.role == 'assistant'">
                     <div class="assistant" :data-id="i">
-                      <div class="chatcontent text-base/relaxed mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                      <div class="chatcontent text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
                       </div>
                       <div v-show="chatList[i-1].status != 'analysised' && chatList[i-1].status != 'no_analysis'"
@@ -273,14 +273,14 @@
                             <DocDetail theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                           </div>
                         </el-tooltip> 
-                        <div v-if="item.model" class="flex leading-none items-center text-slate-500 text-sm">{{ item.model }}模型回复</div>
+                        <div v-if="item.model" class="flex leading-none items-center text-slate-400 text-xs">{{ item.model }}模型回复</div>
                       </div>
                       <!-- </el-watermark> -->
                     </div>
                   </template>
                 </template>
                 <div class="my-5">
-                  <div class="bg-white text-blue-950 opacity-85 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 px-3 py-2 text-sm/tight lg:text-base/tight my-3" 
+                  <div class="bg-white text-slate-700 opacity-85 border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 px-2 py-1 text-sm/relaxed lg:text-base/tight my-2" 
                   v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
@@ -433,12 +433,12 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="relative w-full">
-            <div :class="`flex w-full px-3 rounded-t-[25px] pt-2 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;background-color: #e2e8f080;backdrop-filter: blur(4px);">
-              <div class="flex overflow-x-auto rounded-t-[16px] ss-none">
+            <div :class="`flex w-full px-3 pt-1 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
+              <div class="flex overflow-x-auto ss-none">
                 <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-2 py-2 overflow-hidden select-none border border-blue-500 text-blue-500 `"
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-700 bg-slate-50`"
                   :style="{ clipPath: 'none', backgroundColor: '#fff' }"
-                  :color="'#4e81fc'"
+                  :color="'#dbeafe'"
                   :opacity="0.4"
                   transition="ease-out"
                   :duration="200"
@@ -448,9 +448,9 @@
                   <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
-                  :color="useAnalysis?'#fff':'#3b82f6'"
+                  :color="useAnalysis?'#f1f5f9':'#dbeafe'"
                   :opacity="0.4"
                   transition="ease-out"
                   :duration="200"
@@ -460,9 +460,9 @@
                   <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">思考</span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useTask?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
-                  :color="useTask?'#fff':'#3b82f6'"
+                  :color="useTask?'#f1f5f9':'#dbeafe'"
                   :opacity="0.4"
                   transition="ease-out"
                   :keep-last-ripple="false"
@@ -472,9 +472,9 @@
                   <span class="flex items-center align-middle"><list-two class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">多任务</span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
-                  :color="useInternet?'#fff':'#3b82f6'"
+                  :color="useInternet?'#f1f5f9':'#dbeafe'"
                   :opacity="0.4"
                   transition="ease-out"
                   :keep-last-ripple="false"
@@ -484,9 +484,9 @@
                   <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">搜索</span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-full px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-white border-blue-500':'text-blue-500 border-blue-500')"
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: usePhoto?'#3b82f6':'#fff' }"
-                  :color="usePhoto?'#fff':'#3b82f6'"
+                  :color="usePhoto?'#f1f5f9':'#dbeafe'"
                   :opacity="0.4"
                   transition="ease-out"
                   :keep-last-ripple="false"
@@ -495,46 +495,8 @@
                 >
                   <span class="flex items-center align-middle"><pic class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">图片</span></span>
                 </touch-ripple>
-              </div>
-            </div>
-          </div>
-          <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="background-color: #e2e8f080;">
-            <div :class="`ainput__wrapper items-stretch `">
-              <div 
-                class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
-                :data-show="!isRecording" 
-                id="input_chat_ai_div"
-                style="height:var(--inputContainerHeight);--inputContainerHeight:32px;">
-                ><textarea
-                  id="input_chat_ai"
-                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-72 md:max-h-80 min-h-8"
-                  type="textarea"
-                  resize="none" 
-                  size="large" 
-                  autofocus 
-                  :maxlength="40960"
-                  autocomplete="off"
-                  :placeholder="placeholder" 
-                  @keydown.enter="handleEnter"
-                  style="resize:none;min-height: 32px;height:var(--inputContainerHeight);"
-                ></textarea></div>
-              <div :class="`flex flex-col justify-between items-center`">
-                <span class="text-xs text-right opacity-50 text-slate-800 py-2" v-show="(now>=99)">{{ now }}</span>
-                <div :class="`_number flex-1`">
-                  <touch-ripple
-                    :class="`touch-ripple flex  items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border `+((show_menu)?'text-blue-500 border-blue-500':'text-slate-500')"
-                    :style="{ clipPath: 'none', backgroundColor: '#fff' }"
-                    :color="'#bfdbfe'"
-                    :opacity="0.4"
-                    transition="ease-out"
-                    :duration="200"
-                    :keep-last-ripple="false"
-                    @start="show_menu=!show_menu"
-                  >
-                    <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `" theme="outline" size="18" fill="currentColor"/>
-                  </touch-ripple>
-                  <touch-ripple
-                    :class="`touch-ripple autohidden items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border text-blue-500 border-blue-500 `"
+                <touch-ripple
+                    :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAudio?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                     :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                     :color="'#bfdbfe'"
                     :opacity="0.4"
@@ -544,10 +506,48 @@
                     :keep-last-ripple="false"
                     @start="openRecordDialog"
                   >
-                    <Acoustic theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/> 
+                    <span class="flex items-center align-middle"><Acoustic theme="outline" size="16" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/><span class="h-fit leading-none ml-1">音频</span></span>
                   </touch-ripple>
+              </div>
+            </div>
+          </div>
+          <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="">
+            <div :class="`ainput__wrapper items-stretch border border-slate-200 shadow-lg focus-within:shadow-lg focus-within:shadow-slate-200 transition-all duration-500 focus-within:border-slate-300 shadow-slate-100`">
+              <div 
+                class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
+                :data-show="!isRecording" 
+                id="input_chat_ai_div"
+                style="height:var(--inputContainerHeight);--inputContainerHeight:64px;">
+                ><textarea
+                  id="input_chat_ai"
+                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-72 md:max-h-80 min-h-16"
+                  type="textarea"
+                  resize="none" 
+                  size="large" 
+                  autofocus 
+                  :maxlength="40960"
+                  autocomplete="off"
+                  :placeholder="placeholder" 
+                  @keydown="handleEnter"
+                  style="resize:none;min-height: 32px;height:var(--inputContainerHeight);"
+              ></textarea></div>
+              <div :class="`flex flex-col justify-between items-center`">
+                <span class="text-xs text-right opacity-50 text-slate-800 py-2" v-show="(now>=99)">{{ now }}</span>
+                <div :class="`_number flex-1`">
+                  <!-- <touch-ripple
+                    :class="`touch-ripple items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden transition select-none flex `+((show_menu)?'bg-blue-100 text-blue-500':'bg-slate-100 text-slate-500')"
+                    :style="{ clipPath: 'none', backgroundColor: '#fff' }"
+                    :color="'#f1f5f9'"
+                    :opacity="0.4"
+                    transition="ease-out"
+                    :duration="200"
+                    :keep-last-ripple="false"
+                    @start="show_menu=!show_menu"
+                  >
+                    <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `" theme="outline" size="18" fill="currentColor"/>
+                  </touch-ripple> -->
                   <touch-ripple
-                    :class="`touch-ripple text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(showStop?'hidden':'flex')"
+                    :class="`touch-ripple items-center justify-center h-8 w-8  mr-1 cursor-pointer transition rounded-full overflow-hidden select-none `+(showStop?'hidden ':'flex ')+(sendActive?'text-white bg-blue-500':' bg-slate-100 text-slate-500')"
                     :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
                     :color="'#fff'"
                     :opacity="0.4"
@@ -578,6 +578,7 @@
       </div>
     </div>
     <audio v-if="audioUrl" :src="audioUrl" controls class="mt- hidden"></audio>
+    <div :class="'transition-all h-0 duration-500 '+(chatList.length == 0?`h-2/5 max-h-0 md:max-h-20 lg:max-h-40 xl:max-h-48 `:'')"></div>
     <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
   </div>
 </template>
@@ -1053,6 +1054,7 @@ const default_model = {
 const model_info = ref(default_model)
 const analysis_line = ref('line-1')
 const chat_line = ref('line-1')
+const sendActive = ref(false);
 
 const openUploadPhotoDialog =()=>{
   uploadPhotoDialogVisible.value = true;
@@ -1093,6 +1095,8 @@ const handleEnter = (event) => {
       throttledSend()
     }
   }
+  console.log(document.getElementById('input_chat_ai').value?.trim(),event)
+  sendActive.value = !(document.getElementById('input_chat_ai').value?.trim() == '' && !usePhoto.value && !useAudio.value)
 }
 function ask(q){
   document.getElementById('input_chat_ai').value=q;
@@ -1102,7 +1106,7 @@ function ask(q){
 function setInputHeight(){
   const textarea = document.getElementById('input_chat_ai')
   const textareaCssContainer = document.getElementById('input_chat_ai_div')
-  textareaCssContainer.style.setProperty('--inputContainerHeight', '32px');
+  textareaCssContainer.style.setProperty('--inputContainerHeight', '64px');
   const scrollHeight = textarea.scrollHeight;
   // console.log(scrollHeight);
   textareaCssContainer.style.setProperty('--inputContainerHeight', scrollHeight+'px');
@@ -1344,7 +1348,7 @@ const send = async (param)=>{
     return;
   }
   input.value = document.getElementById('input_chat_ai').value
-  if(input.value.trim() == '' && !usePhoto.value && !useAudio.value) {
+  if(!sendActive.value) {
     // ElMessage.warning("Shift + Enter 换行");
     return;
   }
@@ -1378,7 +1382,7 @@ const send = async (param)=>{
   now.value = 0;
   suggestions.value = [];
   const textareaCssContainer = document.getElementById('input_chat_ai_div')
-  textareaCssContainer.style.setProperty('--inputContainerHeight', '32px');
+  textareaCssContainer.style.setProperty('--inputContainerHeight', '64px');
   // document.getElementById('input_chat_ai').style.height = document.getElementById('input_chat_ai').scrollHeight+'px'
   loading.value = true;
   document.getElementById('input_chat_ai').focus();
