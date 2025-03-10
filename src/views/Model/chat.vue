@@ -1348,7 +1348,7 @@ const send = async (param)=>{
     return;
   }
   input.value = document.getElementById('input_chat_ai').value
-  if(!sendActive.value) {
+  if(input.value?.trim() == '' && !usePhoto.value && !useAudio.value) {
     // ElMessage.warning("Shift + Enter 换行");
     return;
   }
