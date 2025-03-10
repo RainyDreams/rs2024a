@@ -33,14 +33,36 @@ const defaultFailed = async function (response,code) {
   return { status: 'error', content: response };
 }
 export class Scheduler {
-  constructor(max){
-    this.max = max;this.count = 0 ;this.queue = new Array();
+  constructor(max) {
+    this.max = max;
+    this.count = 0;
+    this.queue = [];
   }
-  async add(promiseCreator){
-    if(this.count>=this.max) await new Promise((resolve,reject)=>this.queue.push(resolve));   
-    this.count ++;let res = await promiseCreator();this.count--;
-    if(this.queue.length){this.queue.shift()();}
-    return res;
+
+  async add(promiseCreator) {
+    if (this.count >= this.max) {
+      await new Promise((resolve, reject) => {
+        this.queue.push({ resolve, reject });
+      });
+    }
+    this.count++;
+    try {
+      const res = await promiseCreator();
+      return res;
+    } finally {
+      this.count--;
+      if (this.queue.length > 0) {
+        const { resolve } = this.queue.shift();
+        resolve();
+      }
+    }
+  }
+
+  clear() {
+    while (this.queue.length > 0) {
+      const { reject } = this.queue.shift();
+      reject(new Error('Task cancelled'));
+    }
   }
 }
 let Auth = {

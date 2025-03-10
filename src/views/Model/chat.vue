@@ -280,7 +280,7 @@
                   </template>
                 </template>
                 <div class="my-5">
-                  <div class="bg-white text-slate-700 opacity-85 border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 px-2 py-1 text-sm/relaxed lg:text-base/tight my-2" 
+                  <div class="text-slate-700 opacity-85 border-slate-200  border rounded-md cursor-pointer hover:bg-slate-100 px-3 py-1 text-sm/loose lg:text-base/tight my-2" 
                   v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
@@ -450,7 +450,7 @@
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
-                  :color="useAnalysis?'#f1f5f9':'#dbeafe'"
+                  :color="useAnalysis?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
                   transition="ease-out"
                   :duration="200"
@@ -462,7 +462,7 @@
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
-                  :color="useTask?'#f1f5f9':'#dbeafe'"
+                  :color="useTask?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
                   transition="ease-out"
                   :keep-last-ripple="false"
@@ -474,7 +474,7 @@
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
-                  :color="useInternet?'#f1f5f9':'#dbeafe'"
+                  :color="useInternet?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
                   transition="ease-out"
                   :keep-last-ripple="false"
@@ -486,7 +486,7 @@
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: usePhoto?'#3b82f6':'#fff' }"
-                  :color="usePhoto?'#f1f5f9':'#dbeafe'"
+                  :color="usePhoto?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
                   transition="ease-out"
                   :keep-last-ripple="false"
@@ -512,7 +512,7 @@
             </div>
           </div>
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="">
-            <div :class="`ainput__wrapper items-stretch border border-slate-200 shadow-lg focus-within:shadow-lg focus-within:shadow-slate-200 transition-all duration-500 focus-within:border-slate-300 shadow-slate-100`">
+            <div :class="`ainput__wrapper items-stretch border border-slate-200 shadow-lg focus-within:shadow-xl focus-within:shadow-slate-200 transition-all duration-500 focus-within:border-slate-300 shadow-slate-100`">
               <div 
                 class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
                 :data-show="!isRecording" 
@@ -528,7 +528,8 @@
                   :maxlength="40960"
                   autocomplete="off"
                   :placeholder="placeholder" 
-                  @keydown="handleEnter"
+                  @keydown.enter="handleEnter"
+                  @input="handleInput"
                   style="resize:none;min-height: 32px;height:var(--inputContainerHeight);"
               ></textarea></div>
               <div :class="`flex flex-col justify-between items-center`">
@@ -578,7 +579,7 @@
       </div>
     </div>
     <audio v-if="audioUrl" :src="audioUrl" controls class="mt- hidden"></audio>
-    <div :class="'transition-all h-0 duration-500 '+(chatList.length == 0?`h-2/5 max-h-0 md:max-h-20 lg:max-h-40 xl:max-h-48 `:'')"></div>
+    <div :class="'transition-all h-0 duration-500 ease-linear '+(chatList.length == 0?`max-h-2/5 h-0 md:h-20 lg:h-40 xl:h-48 `:'')"></div>
     <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
   </div>
 </template>
@@ -595,7 +596,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,Fire,Pic,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,RightSmallUp,Pic,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -1084,7 +1085,7 @@ function isWeChatBrowser() {
   return /micromessenger/.test(ua);
 }
 const mobile = isMobile();
-const handleEnter = (event) => {
+const handleEnter = async (event) => {
   if (event.shiftKey || mobile) {
     input.value = document.getElementById('input_chat_ai').value
     return;
@@ -1095,15 +1096,16 @@ const handleEnter = (event) => {
       throttledSend()
     }
   }
-  console.log(document.getElementById('input_chat_ai').value?.trim(),event)
-  sendActive.value = !(document.getElementById('input_chat_ai').value?.trim() == '' && !usePhoto.value && !useAudio.value)
 }
+const handleInput = async (event) => {
+  sendActive.value = !(document.getElementById('input_chat_ai').value?.trim() == '' && !usePhoto.value && !useAudio.value)
+} 
 function ask(q){
   document.getElementById('input_chat_ai').value=q;
   suggestions.value=[];
   send();
 }
-function setInputHeight(){
+async function setInputHeight(){
   const textarea = document.getElementById('input_chat_ai')
   const textareaCssContainer = document.getElementById('input_chat_ai_div')
   textareaCssContainer.style.setProperty('--inputContainerHeight', '64px');
@@ -1517,6 +1519,8 @@ async function applysession({id,mode}){
 }
 async function applynew(){
   if(applying) return;
+  await stop();
+  Auth.chatTaskThread.clear();
   const res = await applysession({id:'',mode:'new'})
 }
 
