@@ -944,6 +944,7 @@ function analysisBtn() {
   useAnalysis.value=!useAnalysis.value;
   if(useAnalysis.value){
     useTask.value=false;
+    useDraw.value=false;
   }
   // if(!useInternet.value && useAnalysis.value){useInternet.value=true}
 }
@@ -951,6 +952,7 @@ function taskBtn(){
   useTask.value=!useTask.value;
   if(useTask.value){
     useAnalysis.value=false;
+    useDraw.value=false;
   }
 }
 function drawBtn(){
