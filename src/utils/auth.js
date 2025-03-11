@@ -620,6 +620,7 @@ let Auth = {
         useAnalysis:param.useAnalysis,
         useInternet:param.useInternet,
         useTask:param.useTask,
+        useDraw:param.useDraw,
         time:(dayjs().format('YYYY年MM月DD日') )+new Date().toTimeString(),
         photo:param.photo,
         audio:param.audio
@@ -811,8 +812,7 @@ let Auth = {
     } else if (decode.mode == 'info'){
       opt.info(decode.config)
     } else if (decode.mode == 'draw'){
-      opt.draw(decode.code)
-
+      opt.draw(JSON.parse(decode.text))
     }
     return '???'
   },

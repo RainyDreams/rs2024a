@@ -472,6 +472,18 @@
                   <span class="flex items-center align-middle"><list-two class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">多任务</span></span>
                 </touch-ripple>
                 <touch-ripple
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
+                  :color="useDraw?'#dbeafe':'#f1f5f9'"
+                  :opacity="0.4"
+                  transition="ease-out"
+                  :keep-last-ripple="false"
+                  :duration="200"
+                  @start="drawBtn"
+                >
+                  <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图</span></span>
+                </touch-ripple>
+                <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
                   :color="useInternet?'#dbeafe':'#f1f5f9'"
@@ -596,7 +608,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,RightSmallUp,Pic,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,Platte,RightSmallUp,Pic,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home, FolderBlock } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -941,6 +953,13 @@ function taskBtn(){
     useAnalysis.value=false;
   }
 }
+function drawBtn(){
+  useDraw.value=!useDraw.value;
+  if(useDraw.value){
+    useAnalysis.value=false;
+    useTask.value=false;
+  }
+}
 function copyCode(codeId) {
   const code = window['czig_code_html' + codeId];
   // // console.log(code)
@@ -1036,6 +1055,7 @@ const stopStatus = ref(false);
 const useAnalysis = ref(false);
 const useInternet = ref(false);
 const useTask = ref(false);
+const useDraw = ref(false);
 const show_menu = ref(true)
 const showStop = ref(false);
 const title = ref('无标题');
@@ -1226,6 +1246,7 @@ async function deepMind(targetValue, targetTime, index) {
   const _useAnalysis_ = useAnalysis.value;
   const _useInternet_ = useInternet.value;
   const _useTask_ = useTask.value;
+  const _useDraw_ = useDraw.value;
   debouncedScrollToBottom();
   showStop.value = true;
   Auth.chatTaskThread.add(async () => {
@@ -1241,7 +1262,7 @@ async function deepMind(targetValue, targetTime, index) {
         chatList.value[index - 1].status = 'wait';
       }
     }, 8500);
-    await DeepMindWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,_useTask_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
+    await DeepMindWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,_useTask_,_useDraw_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
     clearTimeout(id2);
     chatList.value[index - 1].status = 'analysised';
   })
@@ -1258,6 +1279,7 @@ async function DeepMindWithAI(opt,count) {
     useAnalysis: opt._useAnalysis_,
     useInternet: opt._useInternet_,
     useTask:opt._useTask_,
+    useDraw:opt._useDraw_,
     line: chat_line.value,
     time: opt.targetTime,
     photo: opt.photo,
@@ -1290,10 +1312,10 @@ async function DeepMindWithAI(opt,count) {
     },
   });
 }
-function handleOnMessage(source, m , opt) {
+function handleOnMessage(res, m , opt) {
   try{
-    console.log(source,opt);
-    Auth.decodeStream(source, {
+    console.log(res,opt);
+    Auth.decodeStream(res, {
       chatMessage: (source) => {
         chatList.value[opt.index].content += source;
         renderContent(opt.index);
@@ -1321,19 +1343,22 @@ function handleOnMessage(source, m , opt) {
         }
       },
       draw:(source)=>{
+        console.log(source);
         const code  = source.code;
-        let canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const resizeCanvas = () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        const safeEval = (code) => {
+          return new Function(`"use strict";\n\n${code}`)();
         };
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-        let fn = ()=>{
-          return (new Function(code))()
+        let fn = async ()=>{
+          const canvas = safeEval(code);
+          console.log(canvas);
+          const dataurl = canvas.toDataURL('image/png',1);
+          let blob=URL.createObjectURL(dataURLtoBlob(`data:image/png;base64,${dataurl}`));
+          chatList.value[opt.index].content += `\n\n生成的图片如下\n\n![AI生成的图片](${blob})\n\n`;
+          renderContent(opt.index);
+          // document.body.appendChild(canvas);
+          // document.body.appendChild(canvas);
         };
-
+        fn();
       }
     });
   }catch(e){
