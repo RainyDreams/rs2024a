@@ -810,6 +810,9 @@ let Auth = {
       opt.config(decode.config)
     } else if (decode.mode == 'info'){
       opt.info(decode.config)
+    } else if (decode.mode == 'draw'){
+      opt.draw(decode.code)
+
     }
     return '???'
   },

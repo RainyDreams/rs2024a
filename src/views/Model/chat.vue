@@ -1319,6 +1319,21 @@ function handleOnMessage(source, m , opt) {
           sessionID.value = source.content;
           router.push('/chat/?s='+source.content+'&model='+model.value); 
         }
+      },
+      draw:(source)=>{
+        const code  = source.code;
+        let canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        let fn = ()=>{
+          return (new Function(code))()
+        };
+
       }
     });
   }catch(e){
@@ -1522,7 +1537,6 @@ async function applysession({id,mode}){
 async function applynew(){
   if(applying) return;
   // await stop();
-  
   Auth.chatTaskThread.clear();
   stopStatus.value=false;
   showStop.value=false;
