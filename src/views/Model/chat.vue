@@ -607,7 +607,7 @@
       </div>
     </div>
     <audio v-if="audioUrl" :src="audioUrl" controls class="mt- hidden"></audio>
-    <div :class="'transition-all h-0 duration-300 ease-linear '+(chatList.length == 0?`max-h-2/5 h-0 md:h-20 lg:h-40 xl:h-48 `:'')"></div>
+    <div :class="'transition-all h-0 duration-300 ease-linear '+(chatList.length == 0?`max-limit md:h-20 lg:h-32 `:'')"></div>
     <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
   </div>
 </template>
@@ -1664,5 +1664,8 @@ onMounted(async ()=>{
   z-index: 2;
   background: linear-gradient(to right, rgba(248, 250, 252,0) 0%, rgba(248, 250, 252,1) 100%);
   pointer-events: none;
+}
+.max-limit{
+  max-height:15%;
 }
 </style>
