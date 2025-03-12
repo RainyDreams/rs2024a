@@ -9,7 +9,10 @@
         </svg>
       </button>
     </div>
-    <div :class="`scroll active`">
+    <div 
+      :class="`scroll active`"
+      @scroll.passive="checkScollStatus"
+    >
       <!-- <div class=""> -->
         <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
           <div class="aichat">
@@ -433,20 +436,32 @@
       <div class="">
         <div class="max-w-3xl m-auto">
           <div class="relative w-full">
-            <div :class="`flex w-full px-3 pt-1 pb-1 ease `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
-              <div class="flex overflow-x-auto ss-none">
-                <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-700 bg-slate-50`"
-                  :style="{ clipPath: 'none', backgroundColor: '#fff' }"
-                  :color="'#dbeafe'"
-                  :opacity="0.4"
-                  transition="ease-out"
-                  :duration="200"
-                  :keep-last-ripple="false"
-                  @click="applynew"
-                >
-                  <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
-                </touch-ripple>
+            <div :class="`relative flex w-full ml-3 pt-1 pb-1 ease  `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
+              <touch-ripple
+                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-700 bg-slate-50`"
+                :style="{ clipPath: 'none', backgroundColor: '#fff' }"
+                :color="'#f1f5f9'"
+                :opacity="0.4"
+                transition="ease-out"
+                :duration="200"
+                :keep-last-ripple="false"
+                @click="applynew"
+              >
+                <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
+              </touch-ripple>
+              <touch-ripple
+                :class="`touch-ripple transition-all ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-md z-10 shadow-slate-200 border-blue-500 absolute bottom-12 right-1 w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none border text-slate-50 bg-blue-500`"
+                :style="{ clipPath: 'none', backgroundColor: '#fff' }"
+                :color="'#f1f5f9'"
+                :opacity="0.4"
+                transition="ease-out"
+                :duration="200"
+                :keep-last-ripple="false"
+                @click="scrollToBottom"
+              >
+                <span class="flex items-center align-middle"><arrow-down class="h-fit w-fit" theme="outline" size="16"  fill="currentColor"/></span>
+              </touch-ripple>
+              <div class="flex pl-1 ss-none overflow-x-auto scroll-container">
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
@@ -519,7 +534,8 @@
                     @start="openRecordDialog"
                   >
                     <span class="flex items-center align-middle"><Acoustic theme="outline" size="16" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/><span class="h-fit leading-none ml-1">音频</span></span>
-                  </touch-ripple>
+                </touch-ripple>
+                <div class="h-full w-5 flex-shrink-0"></div>
               </div>
             </div>
           </div>
@@ -608,10 +624,11 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,Platte,RightSmallUp,Pic,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home, FolderBlock } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,Platte,ArrowDown,Pic,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home, FolderBlock } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
+import { set } from 'nprogress';
 const showModelDetail = ref(false)
 const showInfo = ref(false)
 const contentRendered = ref([])
@@ -1003,12 +1020,22 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
   var info = token.info.trim().split(/\s+/);
   var langName = info[0];
   var highlightedCode;
-  if (langName.toLowerCase().indexOf('lingben_bash')>-1) {
-    highlightedCode = md.render(token.content);
-    return `<div class="czig-news-block">
-      <div class="language-label sticky bg-slate-200 px-3 py-2">零本智协智能查询</div>
-      <div class="bg-slate-100 px-3 py-2">${highlightedCode}</div>
-    </div>`
+  if (langName.toLowerCase().indexOf('draw')>-1) {
+    // console.log(token.content)
+    const code = token.content;
+    // console.log(code)
+    // highlightedCode = md.render(token.content);
+    return `
+<div lingben-draw>
+    <pre class="hidden">${code}</pre>
+    <span class="flex w-fit items-center bg-slate-50 z-30 mb-2 px-3 rounded-3xl py-2 border border-slate-200">
+        <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg><span class="active-text text-lg leading-none align-bottom">等待中...</span>
+    </span>
+    <img src=""/>
+</div>`
   } else if (hljs.getLanguage(langName)) {
     try {
       highlightedCode = hljs.highlight(token.content, { language: langName }).value;
@@ -1078,6 +1105,8 @@ const model_info = ref(default_model)
 const analysis_line = ref('line-1')
 const chat_line = ref('line-1')
 const sendActive = ref(false);
+const scrollStatus = ref(false);
+
 
 const openUploadPhotoDialog =()=>{
   uploadPhotoDialogVisible.value = true;
@@ -1156,11 +1185,24 @@ nextTick(()=>{
 })
 const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
+  // if(scrollStatus){
   scrollElement.scrollTo({
     top: scrollElement.scrollHeight,
-    behavior: 'smooth'
+    behavior: 'smooth',
+    duration: 500,
   });
+  scrollStatus.value = false;
+  // }
 };
+const checkScollStatus = debounce(()=>{
+  const scrollElement = document.getElementsByClassName('scroll')[0];
+  if(scrollElement.scrollHeight - (Math.floor(scrollElement.scrollTop) + scrollElement.clientHeight) >= 150){
+    scrollStatus.value=true;
+  } else {
+    scrollStatus.value=false;
+  }
+},1000)
+checkScollStatus()
 
 const stop = async (param)=>{
   stopStatus.value=true;
@@ -1173,72 +1215,46 @@ function renderAnalysis(index){
 }
 function renderContent(index){
   chatList.value[index].renderedContent
-  = md.render(chatList.value[index].content)
+  = md.render(chatList.value[index].content);
+  const task_ = async()=>{
+    // console.log(index);
+    document.querySelectorAll('div[lingben-draw]').forEach(e=>{
+      const code = e.children[0].innerText;
+      // console.dir(e.children);
+      const safeEval = (code) => {
+        
+        return new Function(`"use strict";\n\n${code}`)();
+      };
+      let fn = async ()=>{
+        try{
+          const canvas = safeEval(code);
+          // console.log(canvas);
+          let before = e.children[2].src;
+          if(before){
+            URL.revokeObjectURL(before);
+          }
+          const dataurl = canvas.toDataURL('image/png',1);
+          let blob=URL.createObjectURL(dataURLtoBlob(`data:image/png;base64,${dataurl}`));
+          e.children[2].src = blob;
+          e.children[2].className='czig-draw rounded-md shadow-md shadow-slate-100 max-h-[400px]';
+          e.children[1].classList.remove('flex');
+          e.children[1].classList.add('hidden');
+        }catch(e){}
+
+        // renderAnalysis(opt.index - 1);
+        // renderContent(opt.index);
+        // document.body.appendChild(canvas);
+        // document.body.appendChild(canvas);
+      };
+      fn();
+    })
+  }
+  // task_();
+  setTimeout(()=>{
+    task_();
+  },1000)
 }
 /* chat */
-// async function deepMind(targetValue, targetTime, index) {
-//   const t_phoho = usePhoto.value;
-//   const p_photo = uploadPhoto.value;
-//   const t_audio = useAudio.value;
-//   const p_audio = uploadAudio.value;
-//   const beforeTime = Date.now();
-//   const _useAnalysis_ = useAnalysis.value;
-//   const _useInternet_ = useInternet.value;
-//   debouncedScrollToBottom();
-//   showStop.value = true;
-//   if(useInternet.value) {
-//     analysis_line.value = 'line-1';
-//     chatList.value[index - 1].status = 'searching';
-//     //并行运行
-//     await Promise.all([
-//       Auth.deepMind_Analysis({
-//         ...(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null})),
-//         onclose: (source) => {
-//           chatList.value[index - 1].analysis += source;
-//           renderAnalysis(index - 1);
-//           debouncedScrollToBottom();
-//         }
-//       }),
-//     ]);
-//     debouncedScrollToBottom();
-//   }
-//   if (useAnalysis.value){
-//     let _analysis2;
-//     Auth.chatTaskThread.add(async () => {
-//       chatList.value[index - 1].analysis += '\n\n'; 
-//       renderAnalysis(index - 1);
-//       let _analysis = chatList.value[index - 1].analysis;
-//       chatList.value[index - 1].status = 'try';
-//       await Auth.deepMind_Try(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null},[_analysis],(e)=>{
-//         _analysis2 += e;
-//       }));
-//       chatList.value[index - 1].analysis += '\n\n'; 
-//       renderAnalysis(index - 1);
-//       chatList.value[index - 1].status = 'summary';
-//       await Auth.deepMind_Summary(createOptions({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null},[_analysis,_analysis2]));
-//       const diffTime = Date.now() - beforeTime;
-//       chatList.value[index - 1].analysis += '\n\n### 已深度思考 '+parseInt(diffTime/1000)+' 秒'; 
-//       renderAnalysis(index - 1);
-//     })
-//   }
-//   Auth.chatTaskThread.add(async () => {
-//     chatList.value[index - 1].status = 'analysising';
-//     const id1 = setTimeout(() => {
-//       if(chatList.value[index - 1].status != 'analysised'){
-//         chatList.value[index - 1].status = 'reply';
-//       }
-//     }, 4000);
-//     const id2 = setTimeout(() => {
-//       clearTimeout(id1);
-//       if(chatList.value[index - 1].status != 'analysised'){
-//         chatList.value[index - 1].status = 'wait';
-//       }
-//     }, 8500);
-//     await initiateChatWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
-//     clearTimeout(id2);
-//     chatList.value[index - 1].status = 'analysised';
-//   })
-// }
 async function deepMind(targetValue, targetTime, index) {
   const t_phoho = usePhoto.value;
   const p_photo = uploadPhoto.value;
@@ -1295,7 +1311,7 @@ async function DeepMindWithAI(opt,count) {
       renderContent(opt.index);
     },
     onmessage: (source, model) => {
-      console.log(source,model);
+      // console.log(source,model);
       if(count) opt.counter=1;
       handleOnMessage(source, model, opt);
     },
@@ -1316,15 +1332,17 @@ async function DeepMindWithAI(opt,count) {
 }
 function handleOnMessage(res, m , opt) {
   try{
-    console.log(res,opt);
+    // console.log(res,opt);
     Auth.decodeStream(res, {
       chatMessage: (source) => {
         chatList.value[opt.index].content += source;
         renderContent(opt.index);
+        debouncedScrollToBottom();
       },
       analysisMessage: (source) => {
         chatList.value[opt.index - 1].analysis += source;
         renderAnalysis(opt.index - 1);
+        debouncedScrollToBottom();
       },
       title:(source)=>{
         title.value = source;
@@ -1345,7 +1363,7 @@ function handleOnMessage(res, m , opt) {
         }
       },
       draw:(source)=>{
-        console.log(source);
+        // console.log(source);
         const code  = source.code;
         const safeEval = (code) => {
           return new Function(`"use strict";\n\n${code}`)();
@@ -1377,6 +1395,7 @@ async function handleOnClose(error,model,opt) {
     if (!error) {  }
   } else {
     if (!error) {
+      
       // if(model == 'line-1'){
       //   // animateMode.value = false;
       //   setTimeout(()=>{
@@ -1563,7 +1582,7 @@ async function applysession({id,mode}){
 }
 async function applynew(){
   if(applying) return;
-  // await stop();
+  await stop();
   Auth.chatTaskThread.clear();
   stopStatus.value=false;
   showStop.value=false;
@@ -1619,5 +1638,31 @@ onMounted(async ()=>{
 .ss-none::-webkit-scrollbar{
   width: 0;
   height:0;
+}
+.scroll-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 37px;
+  width: 6px;
+  height: 100%;
+  display: block;
+  flex-shrink: 0;
+  z-index: 2;
+  background: linear-gradient(to left, rgba(248, 250, 252,0) 0%, rgba(248, 250, 252,1) 100%);
+  pointer-events: none;
+}
+.scroll-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 100%;
+  display: block;
+  flex-shrink: 0;
+  z-index: 2;
+  background: linear-gradient(to right, rgba(248, 250, 252,0) 0%, rgba(248, 250, 252,1) 100%);
+  pointer-events: none;
 }
 </style>
