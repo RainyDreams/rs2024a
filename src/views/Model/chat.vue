@@ -280,7 +280,7 @@
                   </template>
                 </template>
                 <div class="my-5">
-                  <div class="text-slate-700 opacity-85 border-slate-200  border rounded-md cursor-pointer hover:bg-slate-100 px-3 py-1 text-sm/loose lg:text-base/tight my-2" 
+                  <div class="text-slate-700 opacity-85 border-slate-200  border rounded-md cursor-pointer hover:bg-slate-100 px-3 py-1 text-sm/loose lg:text-base/loose my-2" 
                   v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
