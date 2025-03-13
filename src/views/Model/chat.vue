@@ -248,7 +248,7 @@
                             <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg><span class="active-text text-lg leading-none align-bottom">{{ renderStatus(chatList[i-1].status)}}</span>
+                          </svg><span class="active-text text-lg leading-none align-bottom">{{ chatList[i-1].statusText }}</span>
                         </span>
                       </div>
                       <div class="flex">
@@ -450,7 +450,7 @@
                 <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
               </touch-ripple>
               <touch-ripple
-                :class="`touch-ripple transition-all ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-md z-10 shadow-slate-200 border-blue-500 absolute bottom-12 right-1 w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none border text-slate-50 bg-blue-500`"
+                :class="`delay-100 touch-ripple transition-all duration-200 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-md z-10 shadow-slate-200  absolute bottom-12 right-4 w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none bg-white border border-slate-200 text-slate-500`"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#f1f5f9'"
                 :opacity="0.4"
@@ -1201,7 +1201,7 @@ const checkScollStatus = debounce(()=>{
   } else {
     scrollStatus.value=false;
   }
-},1000)
+},300)
 checkScollStatus()
 
 const stop = async (param)=>{
@@ -1252,7 +1252,7 @@ function renderContent(index){
   // task_();
   setTimeout(()=>{
     task_();
-  },1000)
+  },500)
 }
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
@@ -1268,20 +1268,21 @@ async function deepMind(targetValue, targetTime, index) {
   debouncedScrollToBottom();
   showStop.value = true;
   Auth.chatTaskThread.add(async () => {
-    chatList.value[index - 1].status = 'analysising';
-    const id1 = setTimeout(() => {
-      if(chatList.value[index - 1].status != 'analysised'){
-        chatList.value[index - 1].status = 'reply';
-      }
-    }, 4000);
-    const id2 = setTimeout(() => {
-      clearTimeout(id1);
-      if(chatList.value[index - 1].status != 'analysised'){
-        chatList.value[index - 1].status = 'wait';
-      }
-    }, 8500);
+  //   chatList.value[index - 1].status = 'analysising';
+  //   const id1 = setTimeout(() => {
+  //     if(chatList.value[index - 1].status != 'analysised'){
+  chatList.value[index - 1].status = 'reply';
+  //     }
+  //   }, 4000);
+  //   const id2 = setTimeout(() => {
+  //     clearTimeout(id1);
+  //     if(chatList.value[index - 1].status != 'analysised'){
+  //       chatList.value[index - 1].status = 'wait';
+  //     }
+  //   }, 8500);
+    chatList.value[index - 1].statusText = '正在传输';
     await DeepMindWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,_useTask_,_useDraw_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
-    clearTimeout(id2);
+    // clearTimeout(id2);
     chatList.value[index - 1].status = 'analysised';
   })
 }
@@ -1332,7 +1333,6 @@ async function DeepMindWithAI(opt,count) {
 }
 function handleOnMessage(res, m , opt) {
   try{
-    // console.log(res,opt);
     Auth.decodeStream(res, {
       chatMessage: (source) => {
         chatList.value[opt.index].content += source;
@@ -1352,8 +1352,12 @@ function handleOnMessage(res, m , opt) {
         suggestions.value = source;
       },
       info:(source)=>{
-        if(source.mode == 'text'){
-          chatList.value[opt.index].model = source.version;
+        console.log(source,opt);
+        if(source.status){
+          chatList.value[opt.index-1].statusText = source.status;
+        }
+        if(source.info.mode == 'text'){
+          chatList.value[opt.index].model = source.info.version;
         }
       },
       config:(source)=>{

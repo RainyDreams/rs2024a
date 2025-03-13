@@ -810,7 +810,7 @@ let Auth = {
     } else if (decode.mode == 'config'){
       opt.config(decode.config)
     } else if (decode.mode == 'info'){
-      opt.info(decode.config)
+      opt.info(decode)
     } else if (decode.mode == 'draw'){
       opt.draw(JSON.parse(decode.text))
     }
