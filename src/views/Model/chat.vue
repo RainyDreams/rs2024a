@@ -487,18 +487,6 @@
                   <span class="flex items-center align-middle"><PreviewOpen class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">预览<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
-                  :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
-                  :color="useDraw?'#dbeafe':'#f1f5f9'"
-                  :opacity="0.4"
-                  transition="ease-out"
-                  :keep-last-ripple="false"
-                  :duration="200"
-                  @start="drawBtn"
-                >
-                  <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图<span class="text-[10px] ml-[2px]">测试</span></span></span>
-                </touch-ripple>
-                <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
                   :color="useInternet?'#dbeafe':'#f1f5f9'"
@@ -509,6 +497,18 @@
                   @start="internetBtn"
                 >
                   <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">搜索</span></span>
+                </touch-ripple>
+                <touch-ripple
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
+                  :color="useDraw?'#dbeafe':'#f1f5f9'"
+                  :opacity="0.4"
+                  transition="ease-out"
+                  :keep-last-ripple="false"
+                  :duration="200"
+                  @start="drawBtn"
+                >
+                  <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
