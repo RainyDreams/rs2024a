@@ -475,16 +475,16 @@
                   <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">思考</span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
-                  :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
-                  :color="useTask?'#dbeafe':'#f1f5f9'"
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :style="{ clipPath: 'none', backgroundColor: usePreview?'#3b82f6':'#fff' }"
+                  :color="usePreview?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
                   transition="ease-out"
                   :keep-last-ripple="false"
                   :duration="200"
-                  @start="taskBtn"
+                  @start="previewBtn"
                 >
-                  <span class="flex items-center align-middle"><list-two class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">多任务</span></span>
+                  <span class="flex items-center align-middle"><PreviewOpen class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">预览<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
@@ -496,7 +496,7 @@
                   :duration="200"
                   @start="drawBtn"
                 >
-                  <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图</span></span>
+                  <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
@@ -506,9 +506,21 @@
                   transition="ease-out"
                   :keep-last-ripple="false"
                   :duration="200"
-                  @start="useInternet=!useInternet"
+                  @start="internetBtn"
                 >
                   <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">搜索</span></span>
+                </touch-ripple>
+                <touch-ripple
+                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
+                  :color="useTask?'#dbeafe':'#f1f5f9'"
+                  :opacity="0.4"
+                  transition="ease-out"
+                  :keep-last-ripple="false"
+                  :duration="200"
+                  @start="taskBtn"
+                >
+                  <span class="flex items-center align-middle"><list-two class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">多任务<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
@@ -624,7 +636,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,Platte,ArrowDown,Pic,Plus,Avatar,ApplicationMenu,History,Earth,Thermometer,Info,SmartOptimization,Left,Home, FolderBlock } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,Platte,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Thermometer,Info,SmartOptimization,Left,Home, FolderBlock } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -970,6 +982,14 @@ function taskBtn(){
   if(useTask.value){
     useAnalysis.value=false;
     useDraw.value=false;
+    usePreview.value=false;
+  }
+}
+function previewBtn(){
+  usePreview.value=!usePreview.value;
+  if(usePreview.value){
+    useDraw.value=false;
+    useTask.value=false;
   }
 }
 function drawBtn(){
@@ -977,6 +997,14 @@ function drawBtn(){
   if(useDraw.value){
     useAnalysis.value=false;
     useTask.value=false;
+    usePreview.value=false;
+    useInternet.value=false;
+  }
+}
+function internetBtn(){
+  useInternet.value=!useInternet.value;
+  if(useInternet.value){
+    useDraw.value=false;
   }
 }
 function copyCode(codeId) {
@@ -1085,6 +1113,7 @@ const useAnalysis = ref(false);
 const useInternet = ref(false);
 const useTask = ref(false);
 const useDraw = ref(false);
+const usePreview = ref(false);
 const show_menu = ref(true)
 const showStop = ref(false);
 const title = ref('无标题');
@@ -1202,7 +1231,6 @@ const checkScollStatus = debounce(()=>{
     scrollStatus.value=false;
   }
 },300)
-checkScollStatus()
 
 const stop = async (param)=>{
   stopStatus.value=true;
@@ -1265,24 +1293,13 @@ async function deepMind(targetValue, targetTime, index) {
   const _useInternet_ = useInternet.value;
   const _useTask_ = useTask.value;
   const _useDraw_ = useDraw.value;
+  const _usePreview_ = usePreview.value;
   debouncedScrollToBottom();
   showStop.value = true;
   Auth.chatTaskThread.add(async () => {
-  //   chatList.value[index - 1].status = 'analysising';
-  //   const id1 = setTimeout(() => {
-  //     if(chatList.value[index - 1].status != 'analysised'){
-  chatList.value[index - 1].status = 'reply';
-  //     }
-  //   }, 4000);
-  //   const id2 = setTimeout(() => {
-  //     clearTimeout(id1);
-  //     if(chatList.value[index - 1].status != 'analysised'){
-  //       chatList.value[index - 1].status = 'wait';
-  //     }
-  //   }, 8500);
+    chatList.value[index - 1].status = 'reply';
     chatList.value[index - 1].statusText = '正在传输';
-    await DeepMindWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,_useTask_,_useDraw_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
-    // clearTimeout(id2);
+    await DeepMindWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,_useTask_,_useDraw_,_usePreview_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
     chatList.value[index - 1].status = 'analysised';
   })
 }
@@ -1299,6 +1316,7 @@ async function DeepMindWithAI(opt,count) {
     useInternet: opt._useInternet_,
     useTask:opt._useTask_,
     useDraw:opt._useDraw_,
+    usePreview:opt._usePreview_,
     line: chat_line.value,
     time: opt.targetTime,
     photo: opt.photo,
@@ -1333,6 +1351,7 @@ async function DeepMindWithAI(opt,count) {
 }
 function handleOnMessage(res, m , opt) {
   try{
+    checkScollStatus();
     Auth.decodeStream(res, {
       chatMessage: (source) => {
         chatList.value[opt.index].content += source;
@@ -1383,6 +1402,19 @@ function handleOnMessage(res, m , opt) {
           // document.body.appendChild(canvas);
         };
         fn();
+      },
+      preview:(preview)=>{
+        try{
+          ElMessageBox.alert('即将打开新的网页以预览生成的内容', '提示', {
+            confirmButtonText: '确定',
+            showClose:true,
+            callback: action => {
+              if(action === 'confirm'){
+                window.open(preview.url);
+              }
+            }
+          })
+        }catch(e){}
       }
     });
   }catch(e){
