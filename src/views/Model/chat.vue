@@ -272,6 +272,13 @@
                       <!-- </el-watermark> -->
                     </div>
                   </template>
+                  <template v-else-if="item.role == 'assistant'">
+                    <div class="assistant" :data-id="i">
+                      <div class="chatcontent text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                        <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
+                      </div>
+                    </div>
+                  </template>
                 </template>
                 <div class="my-5">
                   <div class="text-slate-700 opacity-85 border-slate-200  border rounded-md cursor-pointer hover:bg-slate-100 px-3 py-1 text-sm/loose lg:text-base/loose my-2" 
@@ -450,7 +457,7 @@
                 </span>
               </div>
               <touch-ripple
-                :class="`delay-100 touch-ripple transition-all duration-200 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-md z-10 shadow-slate-200  absolute bottom-12 right-4 w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none bg-white border border-slate-200 text-slate-500`"
+                :class="`touch-ripple transition-all duration-100 delay-75 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-lg z-10 shadow-slate-300  absolute bottom-12 left-0 mx-auto right-0 w-fit flex-shrink-0 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none bg-white border border-slate-300 text-slate-500`"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#f1f5f9'"
                 :opacity="0.4"
@@ -475,7 +482,7 @@
                   <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">思考</span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :class="`relative touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: usePreview?'#3b82f6':'#fff' }"
                   :color="usePreview?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -484,6 +491,13 @@
                   :duration="200"
                   @start="previewBtn"
                 >
+                <!-- <div
+                  v-if="isFirstVisit"
+                  class="absolute z-20 bottom-full left-1/2 text-slate-800 bg-white border text-sm px-3 py-2 rounded-md opacity-100 visible transition-opacity duration-300"
+                  @click="qx"
+                >
+                  推荐你打开这个新增的功能哦！
+                </div> -->
                   <span class="flex items-center align-middle"><PreviewOpen class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">预览<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
@@ -990,7 +1004,7 @@ function previewBtn(){
   if(usePreview.value){
     useDraw.value=false;
     useTask.value=false;
-    useAnalysis.value=true;
+    // useAnalysis.value=true;
   }
 }
 function drawBtn(){
@@ -1137,6 +1151,7 @@ const analysis_line = ref('line-1')
 const chat_line = ref('line-1')
 const sendActive = ref(false);
 const scrollStatus = ref(false);
+const isFirstVisit = ref(false);
 
 
 const openUploadPhotoDialog =()=>{
@@ -1214,6 +1229,16 @@ nextTick(()=>{
   }
 
 })
+  
+const hasVisited = localStorage.getItem('hasVisited');
+if (!hasVisited) {
+  isFirstVisit.value = true;
+}
+
+function qx(){
+  localStorage.setItem('hasVisited', 'true');
+  isFirstVisit.value = false
+}
 const scrollToBottom = () => {
   const scrollElement = document.getElementsByClassName('scroll')[0];
   // if(scrollStatus){
@@ -1232,18 +1257,18 @@ const checkScollStatus = debounce(()=>{
   } else {
     scrollStatus.value=false;
   }
-},300)
+},200)
 
 const stop = async (param)=>{
   stopStatus.value=true;
   showStop.value=false;
   loading.value=false;
 }
-function renderAnalysis(index){
+const renderAnalysis = debounce((index)=>{
   chatList.value[index].renderedAnalysis
   = md.render(chatList.value[index].analysis)
-}
-const renderContentTask = async(index)=>{
+},200)
+const renderContentTask = (index)=>{
   chatList.value[index].renderedContent
   = md.render(chatList.value[index].content);
   const task_ = async()=>{
@@ -1283,9 +1308,7 @@ const renderContentTask = async(index)=>{
     task_();
   },500)
 }
-function renderContent(index){
-  renderContentTask(index)
-}
+const renderContent = debounce(renderContentTask,300)
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
   const t_phoho = usePhoto.value;
@@ -1361,12 +1384,12 @@ function handleOnMessage(res, m , opt) {
       chatMessage: (source) => {
         chatList.value[opt.index].content += source;
         renderContent(opt.index);
-        debouncedScrollToBottom();
+        // debouncedScrollToBottom();
       },
       analysisMessage: (source) => {
         chatList.value[opt.index - 1].analysis += source;
         renderAnalysis(opt.index - 1);
-        debouncedScrollToBottom();
+        // debouncedScrollToBottom();
       },
       title:(source)=>{
         title.value = source;
@@ -1628,7 +1651,8 @@ async function applynew(){
   stopStatus.value=false;
   showStop.value=false;
   loading.value=false;
-  const res = await applysession({id:'',mode:'new'})
+  const res = await applysession({id:'',mode:'new'});
+  debouncedScrollToBottom();
 }
 
 onMounted(async ()=>{
