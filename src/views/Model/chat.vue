@@ -242,15 +242,6 @@
                       <div class="chatcontent text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
                       </div>
-                      <div v-show="chatList[i-1].status != 'analysised' && chatList[i-1].status != 'no_analysis'"
-                        class="text-base md:text-lg lg:text-xl text-green-800 w-fit  text-left font-bold sticky bottom-0 pb-1 mt-1 mb-2">
-                        <span class=" flex items-center bg-slate-50 z-30 px-3 rounded-3xl py-2 border border-slate-200">
-                            <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg><span class="active-text text-lg leading-none align-bottom">{{ chatList[i-1].statusText }}</span>
-                        </span>
-                      </div>
                       <div class="flex">
                         <el-tooltip
                           class="box-item"
@@ -449,6 +440,15 @@
               >
                 <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
               </touch-ripple>
+              <div v-show="statusText"
+                class="text-base md:text-lg lg:text-xl text-green-800 w-fit  text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
+                <span class=" flex items-center bg-slate-50 z-30 px-3 rounded-3xl py-2 border border-slate-200">
+                    <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg><span class="active-text text-lg leading-none align-bottom text-blue-500">{{ statusText }}</span>
+                </span>
+              </div>
               <touch-ripple
                 :class="`delay-100 touch-ripple transition-all duration-200 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-md z-10 shadow-slate-200  absolute bottom-12 right-4 w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none bg-white border border-slate-200 text-slate-500`"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
@@ -498,7 +498,7 @@
                 >
                   <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">搜索</span></span>
                 </touch-ripple>
-                <touch-ripple
+                <!-- <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
                   :color="useDraw?'#dbeafe':'#f1f5f9'"
@@ -509,7 +509,7 @@
                   @start="drawBtn"
                 >
                   <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图<span class="text-[10px] ml-[2px]">测试</span></span></span>
-                </touch-ripple>
+                </touch-ripple> -->
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
@@ -990,6 +990,7 @@ function previewBtn(){
   if(usePreview.value){
     useDraw.value=false;
     useTask.value=false;
+    useAnalysis.value=true;
   }
 }
 function drawBtn(){
@@ -1117,6 +1118,7 @@ const usePreview = ref(false);
 const show_menu = ref(true)
 const showStop = ref(false);
 const title = ref('无标题');
+const statusText = ref('');
 const suggestions = ref([]);
 const loginStatus = ref(false);
 const model = ref('');
@@ -1241,7 +1243,7 @@ function renderAnalysis(index){
   chatList.value[index].renderedAnalysis
   = md.render(chatList.value[index].analysis)
 }
-function renderContent(index){
+const renderContentTask = async(index)=>{
   chatList.value[index].renderedContent
   = md.render(chatList.value[index].content);
   const task_ = async()=>{
@@ -1250,7 +1252,6 @@ function renderContent(index){
       const code = e.children[0].innerText;
       // console.dir(e.children);
       const safeEval = (code) => {
-        
         return new Function(`"use strict";\n\n${code}`)();
       };
       let fn = async ()=>{
@@ -1275,12 +1276,15 @@ function renderContent(index){
         // document.body.appendChild(canvas);
       };
       fn();
-    })
+    });
   }
   // task_();
   setTimeout(()=>{
     task_();
   },500)
+}
+function renderContent(index){
+  renderContentTask(index)
 }
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
@@ -1298,9 +1302,10 @@ async function deepMind(targetValue, targetTime, index) {
   showStop.value = true;
   Auth.chatTaskThread.add(async () => {
     chatList.value[index - 1].status = 'reply';
-    chatList.value[index - 1].statusText = '正在传输';
+    statusText.value = '正在传输';
     await DeepMindWithAI({targetValue,targetTime,index,_useAnalysis_,_useInternet_,_useTask_,_useDraw_,_usePreview_,photo:t_phoho?p_photo:null,audio:t_audio?p_audio:null});
     chatList.value[index - 1].status = 'analysised';
+    statusText.value = '';
   })
 }
 async function DeepMindWithAI(opt,count) {
@@ -1373,7 +1378,7 @@ function handleOnMessage(res, m , opt) {
       info:(source)=>{
         console.log(source,opt);
         if(source.status){
-          chatList.value[opt.index-1].statusText = source.status;
+          statusText.value = source.status;
         }
         if(source.info.mode == 'text'){
           chatList.value[opt.index].model = source.info.version;
