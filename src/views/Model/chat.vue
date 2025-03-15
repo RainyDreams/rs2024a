@@ -240,7 +240,9 @@
                   <template v-else-if="item.role == 'assistant'">
                     <div class="assistant" :data-id="i">
                       <div class="chatcontent text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
-                        <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
+                        <!-- <template > -->
+                        <div v-for="(item,i2) in item.renderedContent" :key="i2" v-html="item" class="chat_animate_in"></div>
+                        <!-- </template> -->
                       </div>
                       <div class="flex">
                         <el-tooltip
@@ -272,10 +274,12 @@
                       <!-- </el-watermark> -->
                     </div>
                   </template>
-                  <template v-else-if="item.role == 'assistant'">
+                  <template v-else-if="item.role == 'lingben'">
                     <div class="assistant" :data-id="i">
-                      <div class="chatcontent text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
-                        <div class="animate__animated animate__fadeIn" style="--animate-duration:2.5s" v-html="item.renderedContent"></div>
+                      <div class="chatcontent animate_chat text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                        <template v-for="(item,i2) in item.renderedContent">
+                          <div v-html="item"></div>
+                        </template>
                       </div>
                     </div>
                   </template>
@@ -457,7 +461,7 @@
                 </span>
               </div>
               <touch-ripple
-                :class="`touch-ripple transition-all duration-100 delay-75 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-lg z-10 shadow-slate-300  absolute bottom-12 left-0 mx-auto right-0 w-fit flex-shrink-0 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none bg-white border border-slate-300 text-slate-500`"
+                :class="`touch-ripple transition-all duration-100 delay-75 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-xl z-10 shadow-slate-400  absolute bottom-20 left-0 mx-auto right-0 w-fit flex-shrink-0 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none bg-white border border-slate-300 text-slate-500`"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#f1f5f9'"
                 :opacity="0.4"
@@ -1296,30 +1300,32 @@ const task_ = async()=>{
   });
 }
 const renderContentTask = async (index,isStream)=>{
-  const previous = chatList.value[index].content;
-  if(previous){
-    const doc = htmlParser.parseFromString(html, 'text/html');
-    
-  }
-  chatList.value[index].renderedContent
-  = md.render(chatList.value[index].content);
+  const previous = chatList.value[index].renderedContent;
+  const now = md.render(chatList.value[index].content);
+  // if(previous){
+  // const doc = htmlParser.parseFromString(html, 'text/html');
+  chatList.value[index].renderedContent = splitHtmlFirstLevelRegex(now)
+  // }
+  // chatList.value[index].renderedContent
+  // = 
   
   // task_();
   setTimeout(()=>{
     task_();
   },500)
 }
-function splitHtmlFirstLevelRegex(htmlStr) {
-  // 匹配顶级标签（非嵌套）
-  const regex = /<([a-z]+)[^>]*>([\s\S]*?)<\/\1>/gi;
-  let matches;
-  const result = [];
+function splitHtmlFirstLevelRegex(htmlStr) { const doc = htmlParser.parseFromString(htmlStr, 'text/html');
+  const fragment = doc.createDocumentFragment();
+  
+  // 将 HTML 内容移入 DocumentFragment（避免污染真实 DOM）
+  Array.from(doc.body.childNodes).forEach(node => {
+    fragment.appendChild(node);
+  });
 
-  while ((matches = regex.exec(htmlStr)) !== null) {
-    result.push(matches[0]); // 完整标签
-  }
-
-  return result;
+  // 过滤出顶级元素节点
+  return Array.from(fragment.childNodes).filter(node => 
+    node.nodeType === Node.ELEMENT_NODE
+  ).map(e=>e.outerHTML);
 }
 const renderContent = renderContentTask
 

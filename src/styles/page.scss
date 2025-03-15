@@ -648,6 +648,22 @@ a[href]{
     word-break: break-all;
   }
 }
+.chat_animate_in{
+  // will-change: opacity, transform;
+  opacity: 0;
+  animation: ChatFadeIn 0.8s ease-out forwards;
+  animation-delay: 70ms;
+}
+@keyframes ChatFadeIn {
+  from {
+    opacity: 0;
+    // transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    // transform: translateY(0);
+  }
+}
 .scroll{
   overflow-y: auto;
   overflow-x: hidden;
