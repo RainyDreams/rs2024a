@@ -453,7 +453,7 @@
                 <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
               </touch-ripple>
               <div v-show="statusText"
-                class="text-base md:text-lg lg:text-xl text-green-800 w-fit  text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
+                class="text-base md:text-lg pointer-events-none lg:text-xl text-green-800 w-fit  text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
                 <span class=" flex items-center bg-slate-50 z-30 px-3 rounded-3xl py-2 border border-slate-200">
                     <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -462,7 +462,7 @@
                 </span>
               </div>
               <touch-ripple
-                :class="`touch-ripple transition-all duration-100 delay-75 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-xl z-10 shadow-slate-400  absolute bottom-20 left-0 mx-auto right-0 w-fit flex-shrink-0 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none bg-white border border-slate-300 text-slate-500`"
+                :class="`touch-ripple transition-all pointer-events-none duration-100 delay-75 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-xl z-10 shadow-slate-400  absolute bottom-20 left-0 mx-auto right-0 w-fit flex-shrink-0 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none bg-white border border-slate-300 text-slate-500`"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#f1f5f9'"
                 :opacity="0.4"
