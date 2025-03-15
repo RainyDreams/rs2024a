@@ -655,6 +655,9 @@ a[href]{
   height: fit-content;
   max-height: 100%;
   flex-shrink: 1;
+  &.running{
+    will-change: scroll-position;
+  }
   &.active{
     flex:1 1 0;
   }

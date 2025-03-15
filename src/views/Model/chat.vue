@@ -1264,51 +1264,65 @@ const stop = async (param)=>{
   showStop.value=false;
   loading.value=false;
 }
-const renderAnalysis = debounce((index)=>{
+const htmlParser = new DOMParser();
+const renderAnalysis = (index)=>{
   chatList.value[index].renderedAnalysis
   = md.render(chatList.value[index].analysis)
-},200)
-const renderContentTask = (index)=>{
+}
+const task_ = async()=>{
+  document.querySelectorAll('div[lingben-draw]').forEach(e=>{
+    const code = e.children[0].innerText;
+    // console.dir(e.children);
+    const safeEval = (code) => {
+      return new Function(`"use strict";\n\n${code}`)();
+    };
+    let fn = async ()=>{
+      try{
+        const canvas = safeEval(code);
+        // console.log(canvas);
+        let before = e.children[2].src;
+        if(before){
+          URL.revokeObjectURL(before);
+        }
+        const dataurl = canvas.toDataURL('image/png',1);
+        let blob=URL.createObjectURL(dataURLtoBlob(`data:image/png;base64,${dataurl}`));
+        e.children[2].src = blob;
+        e.children[2].className='czig-draw rounded-md shadow-md shadow-slate-100 max-h-[400px]';
+        e.children[1].classList.remove('flex');
+        e.children[1].classList.add('hidden');
+      }catch(e){}
+    };
+    fn();
+  });
+}
+const renderContentTask = async (index,isStream)=>{
+  const previous = chatList.value[index].content;
+  if(previous){
+    const doc = htmlParser.parseFromString(html, 'text/html');
+    
+  }
   chatList.value[index].renderedContent
   = md.render(chatList.value[index].content);
-  const task_ = async()=>{
-    // console.log(index);
-    document.querySelectorAll('div[lingben-draw]').forEach(e=>{
-      const code = e.children[0].innerText;
-      // console.dir(e.children);
-      const safeEval = (code) => {
-        return new Function(`"use strict";\n\n${code}`)();
-      };
-      let fn = async ()=>{
-        try{
-          const canvas = safeEval(code);
-          // console.log(canvas);
-          let before = e.children[2].src;
-          if(before){
-            URL.revokeObjectURL(before);
-          }
-          const dataurl = canvas.toDataURL('image/png',1);
-          let blob=URL.createObjectURL(dataURLtoBlob(`data:image/png;base64,${dataurl}`));
-          e.children[2].src = blob;
-          e.children[2].className='czig-draw rounded-md shadow-md shadow-slate-100 max-h-[400px]';
-          e.children[1].classList.remove('flex');
-          e.children[1].classList.add('hidden');
-        }catch(e){}
-
-        // renderAnalysis(opt.index - 1);
-        // renderContent(opt.index);
-        // document.body.appendChild(canvas);
-        // document.body.appendChild(canvas);
-      };
-      fn();
-    });
-  }
+  
   // task_();
   setTimeout(()=>{
     task_();
   },500)
 }
-const renderContent = debounce(renderContentTask,300)
+function splitHtmlFirstLevelRegex(htmlStr) {
+  // 匹配顶级标签（非嵌套）
+  const regex = /<([a-z]+)[^>]*>([\s\S]*?)<\/\1>/gi;
+  let matches;
+  const result = [];
+
+  while ((matches = regex.exec(htmlStr)) !== null) {
+    result.push(matches[0]); // 完整标签
+  }
+
+  return result;
+}
+const renderContent = renderContentTask
+
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
   const t_phoho = usePhoto.value;
