@@ -1039,7 +1039,7 @@ window.copyCode = copyCode;
 
 const md = new markdownIt({
   typographer: true, // 使用高级的打字排版
-  html: true,
+  html: false,
   linkify: true,
   highlight: function (str, lang) {
     if (lang && markdownIt.utils.isStringEmpty(lang)) { return `<pre class="language-${lang}"><code>${md.utils.escapeHtml(str)}</code></pre>`; } 
@@ -1062,6 +1062,25 @@ md.use(markdownItHighlightjs,{
   inline: true,
   hljs,
 });
+md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+  const token = tokens[idx];
+  
+  // 检查是否已经有 target 属性
+  let hasTarget = token.attrIndex('target') !== -1;
+  if (!hasTarget) {
+    // 添加 target="_blank"
+    token.attrPush(['target', '_blank']);
+  }
+
+  // 添加 rel="noopener noreferrer" 以提高安全性
+  let hasRel = token.attrIndex('rel') !== -1;
+  if (!hasRel) {
+    token.attrPush(['rel', 'noopener noreferrer']);
+  }
+
+  // 使用默认的渲染逻辑
+  return self.renderToken(tokens, idx, options);
+};
 md.renderer.rules.fence = function(tokens, idx, options, env, self) {
   var token = tokens[idx];
   var info = token.info.trim().split(/\s+/);
