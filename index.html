@@ -30,14 +30,28 @@
 <body>
   <div id="loading-container" style="--animate-delay:0.6s;animation-duration:1s;position:fixed;top:0;left:0;height:100vh;height:100svh;width:100vw;z-index:99999;background-color:#f8fafc;color:#3b82f6;display:flex;flex-direction:column">
     <div style="animation-duration:1s;flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column">
-      <div style="animation:spin 0.55s linear infinite;margin:auto;height:2rem;width:2rem;display:flex;align-items:center;justify-content:center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style="height:100%;width:100%">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity=".25"></circle>
-          <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" opacity=".75"></path>
-        </svg>
-      </div>
+      <svg id="loading-logo" width="129" height="129" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130">
+        <defs><style>
+          .d{fill:none;stroke:#575d6b;stroke-miterlimit:10;stroke-width:1px;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 990;
+            animation: drawErase 5s ease infinite;
+          }
+          @keyframes drawErase {
+            0% { stroke-dashoffset: 990; }
+            90% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 0; }
+          }
+        </style></defs>
+        <g id="c">
+          <path class="d" pathLength="1000"  d="m128.37,64.37c.02,20.11-4.64,37.94-15.43,48.57-10.63,10.79-28.46,15.45-48.57,15.43-20.11.02-37.94-4.64-48.57-15.43C5.01,102.31.36,84.49.38,64.38c-.02-20.11,4.64-37.94,15.43-48.57C26.44,5.01,44.26.36,64.37.38c20.11-.02,37.94,4.64,48.57,15.43,10.79,10.63,15.45,28.46,15.43,48.57Z"/>
+          <path class="d" pathLength="1000"  d="m64.38,47.64c9.23,0,16.74,7.51,16.74,16.74s-7.51,16.74-16.74,16.74-16.74-7.51-16.74-16.74,7.51-16.74,16.74-16.74"/>
+          <path class="d" pathLength="1000"  d="m64.38,39.76h0c-13.59,0-24.62,11.02-24.62,24.62h0c0,13.59,11.02,24.62,24.62,24.62h0c13.59,0,24.62-11.02,24.62-24.62h0c0-13.59-11.02-24.62-24.62-24.62h0Z"/>
+        </g>
+      </svg>
     </div>
-    <p style="font-size:12px;line-height:1;margin:0;text-align:center;margin-bottom:10px">零本智协</p>
+    <p style="font-size:12px;line-height:1;margin:0;text-align:center;margin-bottom:8px">零本智协</p>
+    <p style="font-size:10px;line-height:1;margin:0;text-align:center;margin-bottom:10px;color:#999">赤峰二中2023级12班研学项目</p>
     <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
   </div>
   <div id="app"></div>
