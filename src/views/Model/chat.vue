@@ -222,10 +222,11 @@
                       <div class="analysis max-w-full mt-2" v-show="item.status != 'no_analysis' && item.analysis">
                         <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
                         <div 
-                          :class="`_text text-gray-500 text-xs lg:text-sm  px-4 py-5  border border-slate-200 bg-white rounded-xl `+(item.status=='analysis'?'active':'')"
+                          :class="`_text text-gray-500 text-xs lg:text-sm px-4 py-5  border border-slate-200 bg-white rounded-xl `+(item.status=='analysis'?'active':'')"
                           v-show="item.show_thought" 
-                          v-html="item.renderedAnalysis"
-                        ></div>
+                        >
+                          <div v-for="(item,i2) in item.renderedAnalysis" :key="i2" v-html="item" class="chat_animate_in"></div>
+                        </div>
                         <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
                           <span class="py-2 px-3 border border-slate-200 bg-white mt-2 items-center leading-none hover:bg-slate-100  transition-all rounded-lg cursor-pointer flex">
                             <SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>{{item.show_thought?'收起':'展开'}}思考过程
@@ -1288,10 +1289,7 @@ const stop = async (param)=>{
   loading.value=false;
 }
 const htmlParser = new DOMParser();
-const renderAnalysis = (index)=>{
-  chatList.value[index].renderedAnalysis
-  = md.render(chatList.value[index].analysis)
-}
+
 const task_ = async()=>{
   document.querySelectorAll('div[lingben-draw]').forEach(e=>{
     const code = e.children[0].innerText;
@@ -1318,17 +1316,20 @@ const task_ = async()=>{
     fn();
   });
 }
+const renderAnalysis = (index)=>{
+  // chatList.value[index].renderedAnalysis
+  // = md.render(chatList.value[index].analysis);
+  const now = md.render(chatList.value[index].analysis);
+  // if(previous){
+  // const doc = htmlParser.parseFromString(html, 'text/html');
+  chatList.value[index].renderedAnalysis = splitHtmlFirstLevelRegex(now)
+}
 const renderContentTask = async (index,isStream)=>{
-  const previous = chatList.value[index].renderedContent;
+  // const previous = chatList.value[index].renderedContent;
   const now = md.render(chatList.value[index].content);
   // if(previous){
   // const doc = htmlParser.parseFromString(html, 'text/html');
   chatList.value[index].renderedContent = splitHtmlFirstLevelRegex(now)
-  // }
-  // chatList.value[index].renderedContent
-  // = 
-  
-  // task_();
   setTimeout(()=>{
     task_();
   },500)
