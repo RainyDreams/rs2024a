@@ -88,7 +88,7 @@
                     </touch-ripple>
                   </router-link>
                   <touch-ripple
-                    :class="`flex touch-ripple touch-none h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-slate-950':'text-slate-950')"
+                    :class="`flex touch-ripple nofocus h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-slate-950':'text-slate-950')"
                     :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#4e81fc44':'#fff' }"
                     :color="showModelDetail?'#fff':'#4e81fc'"
                     :opacity="0.4"
@@ -103,7 +103,7 @@
                     <!-- </div> -->
                   </touch-ripple>
                   <touch-ripple
-                    :class="`flex touch-ripple touch-none h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-slate-950':'text-slate-950')"
+                    :class="`flex touch-ripple nofocus h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-slate-950':'text-slate-950')"
                     :style="{ clipPath: 'none', backgroundColor: showInfo?'#ffedd5':'#fff' }"
                     :color="showInfo?'#f7deb7':'#f7deb7'"
                     :opacity="0.4"
@@ -475,7 +475,7 @@
               </touch-ripple>
               <div class="flex pl-1 ss-none overflow-x-auto scroll-container">
                 <touch-ripple
-                  :class="`touch-ripple touch-none w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
                   :color="useAnalysis?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -487,7 +487,7 @@
                   <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">思考</span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`relative touch-ripple touch-none w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :class="`relative touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: usePreview?'#3b82f6':'#fff' }"
                   :color="usePreview?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -506,7 +506,7 @@
                   <span class="flex items-center align-middle"><PreviewOpen class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">预览<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple touch-none w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
                   :color="useInternet?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -518,7 +518,7 @@
                   <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">搜索</span></span>
                 </touch-ripple>
                 <!-- <touch-ripple
-                  :class="`touch-ripple touch-none w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
                   :color="useDraw?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -530,7 +530,7 @@
                   <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple> -->
                 <touch-ripple
-                  :class="`touch-ripple touch-none w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
                   :color="useTask?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -542,7 +542,7 @@
                   <span class="flex items-center align-middle"><list-two class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">多任务<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple touch-none w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: usePhoto?'#3b82f6':'#fff' }"
                   :color="usePhoto?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -554,7 +554,7 @@
                   <span class="flex items-center align-middle"><pic class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">图片</span></span>
                 </touch-ripple>
                 <touch-ripple
-                    :class="`touch-ripple touch-none w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAudio?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                    :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAudio?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                     :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                     :color="'#bfdbfe'"
                     :opacity="0.4"
@@ -619,7 +619,7 @@
                     <up theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/>
                   </touch-ripple>
                   <touch-ripple
-                    :class="`touch-ripple touch-none text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(showStop?'flex':'hidden')"
+                    :class="`touch-ripple nofocus text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(showStop?'flex':'hidden')"
                     :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
                     :color="'#fff'"
                     :opacity="0.4"
@@ -1242,7 +1242,7 @@ nextTick(()=>{
   textarea.addEventListener('input', function () {
     setInputHeight();
   });
-  const touchRipple = document.querySelectorAll('.touch-none,.dde');
+  const touchRipple = document.querySelectorAll('.nofocus,.dde');
   touchRipple.forEach((el) => {
     el.addEventListener('mousedown', function (event) {
       event.preventDefault();

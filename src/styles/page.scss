@@ -676,6 +676,7 @@ a[href]{
   }
   &.active{
     flex:1 1 0;
+    height: 100vh;
   }
   transition: all .3s;
   &::-webkit-scrollbar {
