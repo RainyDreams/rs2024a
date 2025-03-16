@@ -1,27 +1,27 @@
 {
-  "name": "零本AI",
+  "name": "零本 LinkBrain AI",
   "short_name": "零本AI",
   "display": "standalone",
   "description": "依托尖端的 AI 技术驱动力量，构建全面创新的市场项目解决方案体系，致力于让「零成本构建创新高效应用程序」成为现实。",
   "icons": [
     {
-      "src": "/images/logo_256.webp",
+      "src": "/images/logo_256.png",
       "sizes": "256x256",
-      "type": "image/webp"
+      "type": "image/png"
     },
     {
-      "src": "/images/logo_384.webp",
+      "src": "/images/logo_384.png",
       "sizes": "384x384",
-      "type": "image/webp"
+      "type": "image/png"
     },
     {
-      "src": "/images/logo_512.webp",
+      "src": "/images/logo_512.png",
       "sizes": "512x512",
-      "type": "image/webp"
+      "type": "image/png"
     }
   ],
   "start_url": "/",
   "id":"/",
-  "background_color": "#e2f0fe",
-  "theme_color": "#e2f0fe"
+  "background_color": "#f8f5f0",
+  "theme_color": "#f8f5f0"
 }
