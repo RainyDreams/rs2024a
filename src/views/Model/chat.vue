@@ -183,7 +183,7 @@
               <div class="chatList" style="min-height: 0px;" id="ai_chatList">
                 <template v-for="(item,i) in chatList" class="chatList" :key="i">
                   <template  v-if="item.role == 'user'">
-                    <div class="user " :data-id="i">
+                    <div class="user flex-shrink-0" :data-id="i">
                       <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                       <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
                       <div class="flex items-end group">
@@ -239,7 +239,7 @@
                     </div>
                   </template>
                   <template v-else-if="item.role == 'assistant'">
-                    <div class="assistant" :data-id="i">
+                    <div class="assistant flex-shrink-0" :data-id="i">
                       <div class="chatcontent text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <!-- <template > -->
                         <div v-for="(item,i2) in item.renderedContent" :key="i2" v-html="item" class="chat_animate_in"></div>
@@ -474,49 +474,99 @@
                 <span class="flex items-center align-middle"><arrow-down class="h-fit w-fit" theme="outline" size="16"  fill="currentColor"/></span>
               </touch-ripple>
               <div class="flex pl-1 ss-none overflow-x-auto scroll-container">
-                <touch-ripple
-                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
-                  :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
-                  :color="useAnalysis?'#dbeafe':'#f1f5f9'"
-                  :opacity="0.4"
-                  transition="ease-out"
-                  :duration="200"
-                  :keep-last-ripple="false"
-                  @start="analysisBtn"
+                <el-popover
+                  placement="top-start"
+                  :width="200"
+                  :show-after="300"
+                  trigger="hover"
+                  popper-class="rounded-xl shadow-lg shadow-slate-200"
                 >
-                  <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">思考</span></span>
-                </touch-ripple>
-                <touch-ripple
-                  :class="`relative touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
-                  :style="{ clipPath: 'none', backgroundColor: usePreview?'#3b82f6':'#fff' }"
-                  :color="usePreview?'#dbeafe':'#f1f5f9'"
-                  :opacity="0.4"
-                  transition="ease-out"
-                  :keep-last-ripple="false"
-                  :duration="200"
-                  @start="previewBtn"
+                  <template #default>
+                    <div class="flex flex-col items-start justify-start">
+                      <div class="text-base text-slate-700 mb-1 align-bottom font-semibold">思考分析</div>
+                      <div class="text-xs text-slate-600 leading-relaxed">
+                        该功能可以通过重构需求、优化方案、批判总结等方式帮助您深入分析问题，提升决策效率。
+                      </div>
+                    </div>
+                  </template>
+                  <template #reference>
+                    <touch-ripple
+                      :class="`touch-ripple nofocus relative overflow-hidden w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                      :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
+                      :color="useAnalysis?'#dbeafe':'#f1f5f9'"
+                      :opacity="0.4"
+                      transition="ease-out"
+                      :duration="200"
+                      :keep-last-ripple="false"
+                      @start="analysisBtn"
+                    >
+                      <span class="flex items-center align-middle"><SmartOptimization class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">思考</span></span>
+                    </touch-ripple>
+                  </template>
+                </el-popover>
+                <el-popover
+                  placement="top-start"
+                  :width="200"
+                  :show-after="300"
+                  trigger="hover"
+                  popper-class="rounded-xl shadow-lg shadow-slate-200"
                 >
-                <!-- <div
-                  v-if="isFirstVisit"
-                  class="absolute z-20 bottom-full left-1/2 text-slate-800 bg-white border text-sm px-3 py-2 rounded-md opacity-100 visible transition-opacity duration-300"
-                  @click="qx"
+                  <template #default>
+                    <div class="flex flex-col items-start justify-start">
+                      <div class="text-base text-slate-700 mb-1 align-bottom font-semibold flex items-center">
+                        <span>预览模式</span>
+                        <experiment-one theme="outline" class="text-blue-500 inline-block ml-1" size="16" fill="currentColor" :strokeWidth="4"/>
+                      </div>
+                      <div class="text-xs text-slate-600 leading-relaxed">
+                        该功能可以根据你的需求通过分析、设计、编程等构建一个可以预览使用的网页应用程序
+                      </div>
+                    </div>
+                  </template>
+                  <template #reference>
+                    <touch-ripple
+                      :class="`relative touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                      :style="{ clipPath: 'none', backgroundColor: usePreview?'#3b82f6':'#fff' }"
+                      :color="usePreview?'#dbeafe':'#f1f5f9'"
+                      :opacity="0.4"
+                      transition="ease-out"
+                      :keep-last-ripple="false"
+                      :duration="200"
+                      @start="previewBtn"
+                    >
+                      <span class="flex items-center align-middle"><PreviewOpen class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">预览<span class="text-[10px] ml-[2px]">测试</span></span></span>
+                    </touch-ripple>
+                  </template>
+                </el-popover>
+                <el-popover
+                  placement="top-start"
+                  :width="200"
+                  :show-after="300"
+                  trigger="hover"
+                  popper-class="rounded-xl shadow-lg shadow-slate-200"
                 >
-                  推荐你打开这个新增的功能哦！
-                </div> -->
-                  <span class="flex items-center align-middle"><PreviewOpen class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">预览<span class="text-[10px] ml-[2px]">测试</span></span></span>
-                </touch-ripple>
-                <touch-ripple
-                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
-                  :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
-                  :color="useInternet?'#dbeafe':'#f1f5f9'"
-                  :opacity="0.4"
-                  transition="ease-out"
-                  :keep-last-ripple="false"
-                  :duration="200"
-                  @start="internetBtn"
-                >
-                  <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">搜索</span></span>
-                </touch-ripple>
+                  <template #default>
+                    <div class="flex flex-col items-start justify-start">
+                      <div class="text-base text-slate-700 mb-1 align-bottom font-semibold">搜索查询</div>
+                      <div class="text-xs text-slate-600 leading-relaxed">
+                        该功能可以根据系统重构后的需求，通过搜索查询互联网信息、权威词条等并展示给用户。
+                      </div>
+                    </div>
+                  </template>
+                  <template #reference>
+                    <touch-ripple
+                      :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                      :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
+                      :color="useInternet?'#dbeafe':'#f1f5f9'"
+                      :opacity="0.4"
+                      transition="ease-out"
+                      :keep-last-ripple="false"
+                      :duration="200"
+                      @start="internetBtn"
+                    >
+                      <span class="flex items-center align-middle"><earth class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">搜索</span></span>
+                    </touch-ripple>
+                  </template>
+                </el-popover>
                 <!-- <touch-ripple
                   :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
                   :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
@@ -653,9 +703,9 @@ import hljs from 'highlight.js';
 import { onActivated, onMounted, ref,reactive, watch, nextTick } from "vue"
 import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
-import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElSkeleton,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
+import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElPopover,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,Platte,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Thermometer,Info,SmartOptimization,Left,Home, FolderBlock } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,Platte,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Thermometer,Info,SmartOptimization,Left,Home,ExperimentOne } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
