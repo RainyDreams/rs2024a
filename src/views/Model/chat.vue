@@ -453,26 +453,42 @@
                 <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
               </touch-ripple>
               <div v-show="statusText"
-                class="text-base md:text-lg pointer-events-none lg:text-xl text-green-800 w-fit  text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
-                <span class=" flex items-center bg-slate-50 z-30 px-3 rounded-3xl py-2 border border-slate-200">
+                class="text-base md:text-lg pointer-events-none lg:text-xl text-green-800 w-fit text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
+                <span class=" flex items-center bg-white z-30 px-3 rounded-3xl py-2 border border-slate-200">
                     <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg><span class="active-text text-lg leading-none align-bottom text-blue-500">{{ statusText }}</span>
                 </span>
               </div>
-              <touch-ripple
-                :class="`touch-ripple transition-all duration-100 delay-75 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'} shadow-xl z-10 shadow-slate-400  absolute bottom-20 left-0 mx-auto right-0 w-fit flex-shrink-0 cursor-pointer text-sm rounded-full items-center px-2 py-2 overflow-hidden select-none bg-white border border-slate-300 text-slate-500`"
-                :style="{ clipPath: 'none', backgroundColor: '#fff' }"
-                :color="'#f1f5f9'"
-                :opacity="0.4"
-                transition="ease-out"
-                :duration="200"
-                :keep-last-ripple="false"
-                @click="scrollToBottom"
-              >
-                <span class="flex items-center align-middle"><arrow-down class="h-fit w-fit" theme="outline" size="16"  fill="currentColor"/></span>
-              </touch-ripple>
+              <div :class="`absolute border transition-all duration-100 delay-75  bg-white border-slate-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-sm rounded-full z-10 shadow-slate-100 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'}`">
+                <touch-ripple
+                  class="touch-ripple w-fit flex-shrink-0 text-sm rounded-l-full items-center px-2 py-2 overflow-hidden select-none bg-white text-slate-500"
+                  :style="{ clipPath: 'none', backgroundColor: '#fff' }"
+                  :color="'#f1f5f9'"
+                  :opacity="0.4"
+                  transition="ease-out"
+                  :duration="200"
+                  :keep-last-ripple="false"
+                  @click="scrollToBottom"
+                >
+                  <span class="flex pl-1 items-center align-middle"><arrow-down class="h-fit w-fit" theme="outline" size="16"  fill="currentColor"/></span>
+                </touch-ripple>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="自动下滑"
+                  placement="top-end"
+                >
+                  <div 
+                    class="leading-none flex items-center cursor-pointer bg-white border-l border-slate-300 text-slate-500 rounded-r-full pl-2 pr-3"
+                    @click="autoScroll=!autoScroll"  
+                  >
+                    <!-- <div class="mx-auto border-slate-300 rounded-full w-4 h-4 border"></div> -->
+                    <check-one theme="filled" size="20" fill="currentColor" :class="`transition delay-75  ${autoScroll?'text-blue-500':'text-slate-300'}`"/>
+                  </div>
+                </el-tooltip>
+              </div>
               <div class="flex pl-1 ss-none overflow-x-auto scroll-container">
                 <el-popover
                   placement="top-start"
@@ -705,7 +721,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElPopover,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,Platte,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Thermometer,Info,SmartOptimization,Left,Home,ExperimentOne } from '@icon-park/vue-next';
+import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Thermometer,Info,SmartOptimization,Left,Home,ExperimentOne } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -1226,7 +1242,7 @@ const chat_line = ref('line-1')
 const sendActive = ref(false);
 const scrollStatus = ref(false);
 const isFirstVisit = ref(false);
-
+const autoScroll = ref(false);
 
 const openUploadPhotoDialog =()=>{
   uploadPhotoDialogVisible.value = true;
@@ -1308,7 +1324,6 @@ const hasVisited = localStorage.getItem('hasVisited');
 if (!hasVisited) {
   isFirstVisit.value = true;
 }
-
 function qx(){
   localStorage.setItem('hasVisited', 'true');
   isFirstVisit.value = false
@@ -1330,6 +1345,7 @@ const checkScollStatus = debounce(()=>{
     scrollStatus.value=true;
   } else {
     scrollStatus.value=false;
+    autoScroll.value=false;
   }
 },200)
 
@@ -1772,7 +1788,23 @@ onMounted(async ()=>{
     send();
     localStorage.removeItem(action);
   }
-
+  watch(autoScroll, (newValue) => {
+    let scrollContainer = document.querySelector('.scroll');
+    if (newValue) {
+      const intervalId = setInterval(() => {
+        const container = scrollContainer;
+        if (container) {
+          container.scrollTop = container.scrollHeight;
+        }
+      }, 100);
+      scrollContainer._scrollIntervalId = intervalId;
+    } else {
+      const intervalId = scrollContainer._scrollIntervalId;
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    }
+  });
 })
 </script>
 
