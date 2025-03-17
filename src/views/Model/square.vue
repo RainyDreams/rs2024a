@@ -317,7 +317,6 @@ onActivated(async ()=>{
     }
   }
   loading.value = false;
-  newsList.value = await Auth.loadRss();
 
 })
 
