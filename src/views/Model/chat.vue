@@ -461,9 +461,9 @@
                   </svg><span class="active-text text-lg leading-none align-bottom text-blue-500">{{ statusText }}</span>
                 </span>
               </div>
-              <div :class="`absolute border transition-all duration-100 delay-75  bg-white border-slate-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-sm rounded-full z-10 shadow-slate-100 ${scrollStatus?'opacity-100 visible':'opacity-0 invisible'}`">
+              <div :class="`absolute border transition-all duration-100 delay-100 bg-white border-slate-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-sm rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
                 <touch-ripple
-                  class="touch-ripple w-fit flex-shrink-0 text-sm rounded-l-full items-center px-2 py-2 overflow-hidden select-none bg-white text-slate-500"
+                  :class="`touch-ripple w-fit flex-shrink-0 text-sm rounded-l-full items-center px-2 py-2 overflow-hidden select-none bg-white ${(autoScroll)?'text-blue-500':'text-slate-500'}`"
                   :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                   :color="'#f1f5f9'"
                   :opacity="0.4"
@@ -485,7 +485,7 @@
                     @click="autoScroll=!autoScroll"  
                   >
                     <!-- <div class="mx-auto border-slate-300 rounded-full w-4 h-4 border"></div> -->
-                    <check-one theme="filled" size="20" fill="currentColor" :class="`transition delay-75  ${autoScroll?'text-blue-500':'text-slate-300'}`"/>
+                    <check-one theme="filled" size="20" fill="currentColor" :class="`transition  ${autoScroll?'text-blue-500 delay-75':'text-slate-300'}`"/>
                   </div>
                 </el-tooltip>
               </div>
