@@ -1345,7 +1345,6 @@ const checkScollStatus = debounce(()=>{
     scrollStatus.value=true;
   } else {
     scrollStatus.value=false;
-    autoScroll.value=false;
   }
 },200)
 
@@ -1559,6 +1558,7 @@ async function handleOnClose(error,model,opt) {
   stopStatus.value = false;
   showStop.value = false;
   loading.value = false;
+  autoScroll.value=false;
   placeholder.value = '还有什么想聊的';
   document.getElementById('input_chat_ai').focus();
   if (!chatList.value[opt.index].content) {
@@ -1796,7 +1796,7 @@ onMounted(async ()=>{
         if (container) {
           container.scrollTop = container.scrollHeight;
         }
-      }, 100);
+      }, 600);
       scrollContainer._scrollIntervalId = intervalId;
     } else {
       const intervalId = scrollContainer._scrollIntervalId;
