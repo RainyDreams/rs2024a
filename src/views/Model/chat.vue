@@ -24,7 +24,7 @@
                     <touch-ripple
                       :class="`flex touch-ripple  h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full pr-2 pl-3 py-1 overflow-hidden select-none border `"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#4e81fc'"
+                      :color="'#bfdbfe'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
@@ -41,7 +41,7 @@
                     <touch-ripple
                       :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full pl-2 pr-3 py-1 overflow-hidden select-none border text-slate-950`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#4e81fc'"
+                      :color="'#bfdbfe'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
@@ -53,11 +53,11 @@
                       <!-- </div> -->
                     </touch-ripple>
                   </router-link>
-                  <router-link to="/model/square" class="h-full">
+                  <router-link to="/model/square" class="h-full" v-if="loginStatus">
                     <touch-ripple
                       :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#4e81fc'"
+                      :color="'#bfdbfe'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
@@ -74,7 +74,7 @@
                     <touch-ripple
                       :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#4e81fc'"
+                      :color="'#bfdbfe'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
@@ -90,7 +90,7 @@
                   <touch-ripple
                     :class="`flex touch-ripple nofocus h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-slate-950':'text-slate-950')"
                     :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#4e81fc44':'#fff' }"
-                    :color="showModelDetail?'#fff':'#4e81fc'"
+                    :color="showModelDetail?'#fff':'#bfdbfe'"
                     :opacity="0.4"
                     transition="ease-out"
                     :duration="200"
@@ -135,7 +135,7 @@
                     <touch-ripple
                       :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#4e81fc'"
+                      :color="'#bfdbfe'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
@@ -166,10 +166,10 @@
                 </div>
                 <div v-show="showInfo">
                   <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 bg-white border rounded-xl p-3 duration-100">
-                    <p>查看<router-link class="text-blue-500" to="/about/log">更新日志</router-link></p>
-                    <!-- <p class="mb-2">了解<router-link class="text-blue-500" to="/model/story">背后的故事</router-link></p> -->
-                    <p class="mb-2"><a target="_blank" class="text-blue-500" href="https://www.chiziingiin.top/">赤子英金官网</a></p>
-                    <div class="w-full text-sm/relaxed">提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。</div>
+                    <p>查看<router-link class="text-blue-500 font-medium" to="/about/log">更新日志</router-link></p>
+                    <p class="">了解<a class="text-blue-500 font-medium" href="https://mp.weixin.qq.com/s/WUJ4EzVP7gBVunauJgQ7PQ">《零本AI：深入思考赋能实际教学》</a></p>
+                    <p class=""><a target="_blank" class="text-blue-500 font-medium" href="https://www.chiziingiin.top/">赤子英金官网</a></p>
+                    <div class="w-full text-xs text-slate-700 mt-2">提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。</div>
                   </div>
                 </div>
                 <!-- 欢迎 -->
@@ -621,7 +621,7 @@
             </div>
           </div>
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="">
-            <div :class="`ainput__wrapper items-stretch border border-slate-200 shadow-lg focus-within:shadow-xl focus-within:shadow-slate-200 transition-all duration-500 focus-within:border-slate-300 shadow-slate-100`">
+            <div :class="`ainput__wrapper items-stretch border border-slate-200 shadow-none focus-within:shadow-xl focus-within:shadow-slate-200 transition-all duration-500 focus-within:border-slate-300 shadow-slate-100`">
               <div 
                 class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
                 :data-show="!isRecording" 
