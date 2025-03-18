@@ -228,7 +228,10 @@ emitter.on('applyForLogin',(fn=async()=>{})=>{
   })
 });
 async function login(){
-  emitter.emit('applyForLogin',async()=>{})
+  emitter.emit('applyForLogin',async()=>{
+    emitter.emit('updateLoginInfo')
+  })
+  
   // let prStatus = await Auth.getPrtoken();
   // if(prStatus.status == 'exist' || prStatus.status == 'sus'){
 
@@ -268,6 +271,7 @@ async function submitForm(){
       await Auth.getPrtoken('force')
       sessionStorage.removeItem('userInfo')
       ElMessage.success('登录成功');
+      emitter.emit('updateLoginInfo');
       if(tmpFn){
         await tmpFn();
       }

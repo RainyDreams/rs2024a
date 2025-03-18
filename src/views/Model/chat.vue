@@ -1765,6 +1765,14 @@ async function applynew(){
 }
 
 onMounted(async ()=>{
+  emitter.on('updateLoginInfo',()=>{
+    const info = sessionStorage.getItem('userInfo');
+    if(info){
+      if(JSON.parse(info).avatar){
+        loginStatus.value = true;
+      }
+    }
+  })
   const info = sessionStorage.getItem('userInfo');
   if(info){
     if(JSON.parse(info).avatar){
