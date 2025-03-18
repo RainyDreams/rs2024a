@@ -133,6 +133,7 @@
                   </router-link> -->
                   <!-- <router-link :to="`/login?url=%2Fchat%2F%3Fs%3D${sessionID}`" class="h-full" v-if="!loginStatus" > -->
                   <touch-ripple
+                    v-if="!loginStatus"
                     :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
                     :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                     :color="'#bfdbfe'"

@@ -111,8 +111,8 @@
         <label for="password" class="block text-gray-600 text-sm mb-1">密码</label>
         <input type="password" id="password" v-model="form.password" placeholder="请输入密码" class="outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full mb-6 bg-slate-100">
         <div id="turnstile-box"></div>
-        <button type="submit" class="bg-blue-200 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full hover:bg-blue-200">登 录</button>
-        <router-link  class="block border border-slate-200 transition text-slate-600 py-2 text-center text-base/relaxed px-4 rounded-lg w-full hover:bg-slate-50" to="/reg">注 册</router-link>
+        <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full">登 录</button>
+        <button type="button" @click="reg" class="block border border-slate-200 transition text-slate-600 py-2 text-center text-base/relaxed px-4 rounded-lg w-full hover:bg-slate-50" to="/reg">注 册</button>
         <p class="text-gray-400 text-xs mb-1 mt-4">登录即代表同意《零本智协统一身份验证用户协议》</p>
       </form>
       <p class="text-gray-400 text-xs mt-1">© 2025 零本智协 保留所有权利.</p>
@@ -228,12 +228,17 @@ emitter.on('applyForLogin',(fn=async()=>{})=>{
   })
 });
 async function login(){
-  let prStatus = await Auth.getPrtoken();
-  if(prStatus.status == 'exist' || prStatus.status == 'sus'){
+  emitter.emit('applyForLogin',async()=>{})
+  // let prStatus = await Auth.getPrtoken();
+  // if(prStatus.status == 'exist' || prStatus.status == 'sus'){
 
-  } else {
-    emitter.emit('applyForLogin',async()=>{})
-  }
+  // } else {
+  // }
+}
+function reg(){
+  LoginThread.solve();
+  showLoginModel.value = false;
+  router.push('/reg');
 }
 async function submitForm(){
   if(!form.username || !form.password){
