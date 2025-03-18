@@ -15,6 +15,7 @@ import { useRoute, useRouter } from "vue-router";
 import { asyncThrottle } from "./helpers";
 import dayjs, { Dayjs } from "dayjs";
 import { status } from "nprogress";
+import { emitter } from "./emitter";
 // import { use } from "echarts/types/src/extension.js";
 const router = useRouter()
 const route = useRoute()
@@ -120,16 +121,26 @@ let Auth = {
           window.clarity("event", 'auth_success')
           return { ...data,status: "sus", content: await success(data), };
         } else if (data.status === "error" && data.code === 4) {
-          let a = await this.getPrtoken();
-          if(a.status == 'notExist'){
-            if(Auth.router){
-              Auth.router.push('/login-needed?url='+encodeURIComponent(window.location.pathname))
-            } else {
-              window.location.href = ('/login-needed?url='+encodeURIComponent(window.location.pathname))
-            }
-          } else{
-            return await this.basicAuth(url, body);
-          }
+          // let a = await this.getPrtoken();
+          const that = this
+          return await new Promise(async (resolve, reject) => {
+            emitter.emit('applyForLogin',async ()=>{
+              const a = await that.basicAuth(url, body);
+              resolve(a);
+              return a;
+            })
+          })
+          
+
+          // if(a.status == 'notExist'){
+          //   // if(Auth.router){
+          //   //   Auth.router.push('/login-needed?url='+encodeURIComponent(window.location.pathname))
+          //   // } else {
+          //   //   window.location.href = ('/login-needed?url='+encodeURIComponent(window.location.pathname))
+          //   // }
+          // } else{
+          //   return 
+          // }
         } else {
           console.error(url,fdata);
           return await failed(data.status+'\n'+fdata, url);
@@ -279,8 +290,7 @@ let Auth = {
     const userAuthStatus = userAuth && userAuth?.isLogined;
     if(mode == 'force'){
 
-    }
-    else if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
+    } else if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
       return { status: "exist", content: Cookies.get("czigauth") };
     } else if (!Cookies.get("czigauth") && !userAuthStatus && !userAuth?.AlreadyAuthenticated){
       return { status: "notExist", content: Cookies.get("czigauth") };
@@ -297,7 +307,7 @@ let Auth = {
         await this.getUserFingerprint();
         window.clarity("set", 'userID', data.content.customID);
         window.clarity("identify", data.content.customID, data.content.sessionID,'getPrtoken',data.content.customID)
-        return data.content;
+        return { status: "sus", content: data.content };
       },
       failed: async (response, type) => {
         Cookies.set("czigauth", "ERROR", {

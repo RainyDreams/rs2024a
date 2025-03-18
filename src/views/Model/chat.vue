@@ -131,23 +131,24 @@
                       <div class="text-base leading-none" style="color:#f20">零本量化</div>
                     </touch-ripple>
                   </router-link> -->
-                  <router-link :to="`/login?url=%2Fchat%2F%3Fs%3D${sessionID}`" class="h-full" v-if="!loginStatus" >
-                    <touch-ripple
-                      :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
-                      :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#bfdbfe'"
-                      :opacity="0.4"
-                      transition="ease-out"
-                      :duration="200"
-                      :keep-last-ripple="false"
-                    >
-                      <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                      <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                      <avatar theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
-                      <div class="text-base leading-none" style="color:rgb(18,30,60);">登录</div>
-                      <!-- </div> -->
-                    </touch-ripple>
-                  </router-link>
+                  <!-- <router-link :to="`/login?url=%2Fchat%2F%3Fs%3D${sessionID}`" class="h-full" v-if="!loginStatus" > -->
+                  <touch-ripple
+                    :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
+                    :style="{ clipPath: 'none', backgroundColor:'#fff' }"
+                    :color="'#bfdbfe'"
+                    :opacity="0.4"
+                    transition="ease-out"
+                    :duration="200"
+                    :keep-last-ripple="false"
+                    @click="login()"
+                  >
+                    <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                    <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                    <avatar theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
+                    <div class="text-base leading-none" style="color:rgb(18,30,60);">登录</div>
+                    <!-- </div> -->
+                  </touch-ripple>
+                  <!-- </router-link> -->
                   
                   <!-- <div v-show="!welcome_loading" class="text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed" v-html="md.render(welcome)"></div> -->
                   <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
@@ -725,7 +726,6 @@ import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
-import { set } from 'nprogress';
 const showModelDetail = ref(false)
 const showInfo = ref(false)
 const contentRendered = ref([])
@@ -1031,7 +1031,9 @@ async function resizeImage(file) {
     img.src = URL.createObjectURL(file);
   });
 }
-
+function login(){
+  emitter.emit('login',{re:true})
+}
 function renderStatus(status) {
   switch (status) {
     case 'sending':

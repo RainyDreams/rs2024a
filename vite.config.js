@@ -8,7 +8,7 @@ export default defineConfig((mode) => {
       allowedHosts: ['aaa.chiziingiin.top'],
       proxy: {
         '/api/': {
-          target: 'https://lb.chiziingiin.top',
+          target: 'https://lingben.top',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '/api/'),
           secure: false,

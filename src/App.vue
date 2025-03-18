@@ -92,6 +92,32 @@
       </div>
     </div>
   </div>
+
+  <div :class="['fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-500 ease-out',showLoginModel?'opacity-100 visible':'opacity-0 invisible']">
+    <div class="bg-white p-8 rounded-3xl relative shadow-md w-96">
+      <button 
+        @click="close"
+        class="absolute text-gray-400 transition right-2 top-2 hover:bg-slate-200 bg-slate-50 hover:bg-opacity-50 rounded-full flex items-center justify-center w-10 h-10 hover:text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <h1 class="text-3xl font-bold text-blue-600 mb-6">欢迎！</h1>
+      <el-skeleton  v-show="loginLoading" animated :rows="5" />
+      <form @submit.prevent="submitForm" v-show="!loginLoading">
+        <label for="username" class="block text-gray-600 text-sm mb-1">邮箱</label>
+        <input type="text" id="username" v-model="form.username" placeholder="请输入邮箱" class="border-2 outline-none transition focus:border-blue-500 border-slate-100 rounded-lg px-3 py-2 w-full mb-4 bg-slate-100">
+        <label for="password" class="block text-gray-600 text-sm mb-1">密码</label>
+        <input type="password" id="password" v-model="form.password" placeholder="请输入密码" class="outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full mb-6 bg-slate-100">
+        <div id="turnstile-box"></div>
+        <button type="submit" class="bg-blue-200 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full hover:bg-blue-200">登 录</button>
+        <router-link  class="block border border-slate-200 transition text-slate-600 py-2 text-center text-base/relaxed px-4 rounded-lg w-full hover:bg-slate-50" to="/reg">注 册</router-link>
+        <p class="text-gray-400 text-xs mb-1 mt-4">登录即代表同意《零本智协统一身份验证用户协议》</p>
+      </form>
+      <p class="text-gray-400 text-xs mt-1">© 2025 零本智协 保留所有权利.</p>
+    </div>
+  </div>
 </template>
 
 
@@ -104,12 +130,6 @@ console.log('%c零本智协 LinkBrain AI%c\n%c赤峰二中2023级12班2024年研
 '',
 'font-size: 16px; background: #dc2626; color: #fff; font-family: Arial; padding: 4px 8px; box-shadow: 0 3px 6px rgba(220, 38, 38, 0.5);',
 'font-size: 18px; font-family: Arial;');
-console.log('%cNOTICE%c\n%c你好，当你看到这段文本代表你可能已经掌握一定的技术能力，我很高兴我的软件能被你们所了解。\n但有以下几点需要注意：%c\n%c1. 我们是学生初创项目，请不要尝试攻击、毁坏或者以任何方式使它停止工作，我们感谢你的善举\n2. 如果你想要研究它的源码和创作历程，请关注“赤子英金”',
-'font-size: 22px; padding: 6px; color: #020617; background: #fde047; font-family: Arial; box-shadow: 0 5px 10px rgba(253, 224, 71, 0.5);',
-'',
-'font-size: 14px; line-height: 20px; padding: 4px; font-family: Arial;',
-'',
-'padding: 4px; line-height: 20px; font-size: 14px; font-family: Arial;');
 console.log('%cDANGER%c请不要粘贴任何未知代码！！！\n防止XSS攻击',
 'font-size: 22px; padding: 6px; color: #fff; background: #dc2626; font-family: Arial; box-shadow: 0 5px 10px rgba(220, 38, 38, 0.5);',
 'font-size: 22px; padding: 6px; color: #020617; background: #fde047; font-family: Arial; box-shadow: 0 5px 10px rgba(253, 224, 71, 0.5);');
@@ -117,15 +137,14 @@ import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRoute,useRouter } from 'vue-router'
 import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji, Log, CooperativeHandshake,History, Server, NewspaperFolding } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
-import { ElConfigProvider,ElAvatar,ElProgress,ElBadge, ElMessage, ElMessageBox } from 'element-plus'
+import { ElConfigProvider,ElAvatar,ElProgress,ElBadge, ElMessage, ElSkeleton } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Auth from './utils/auth';
 import { emitter } from './utils/emitter';
 import NProgress from 'nprogress';
 import Cookies from 'js-cookie';
-import 'nprogress/nprogress.css';
 import { configList,rightList } from './utils/config';
-import Status from './views/Model/status.vue';
+import CryptoJS from 'crypto-js';
 const router = useRouter();
 Auth.router = useRouter();
 const route = useRoute();
@@ -135,23 +154,141 @@ const isDarkMode = ref(0);
 const activeName = ref(0);
 const showMenu = ref(false);
 const sideCollapsed = ref(false);
-//检测暗色模式
+const showLoginModel = ref(false);
+const loginLoading = ref(false);
+const verifyToken = ref();
+const form = reactive({
+  username:'',
+  password:'',
+});
 if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
   if(!sessionStorage.getItem('darkMode') || sessionStorage.getItem('darkMode')=='dark'){
     // isDarkMode.value=1;
   }
 }
-//缩小侧边栏
+let tmpFn ;
+class LoginScheduler {
+  constructor(max) {
+    this.max = max;
+    this.count = 0;
+    this.queue = [];
+  }
+  async add(promiseCreator) {
+    if (this.count >= this.max) {
+      await new Promise((resolve, reject) => {
+        this.queue.push({ resolve, reject });
+      });
+    }
+    this.count++;
+    try {
+      const res = await promiseCreator();
+      return res;
+    } finally {
+      
+    }
+  }
+  async solve(){
+    this.count--;
+    if (this.queue.length > 0) {
+      const { resolve } = this.queue.shift();
+      resolve();
+    }
+  }
+  clear() {
+    while (this.queue.length > 0) {
+      const { reject } = this.queue.shift();
+      reject(new Error('Task cancelled'));
+    }
+    this.count = 0;
+  }
+}
+const LoginThread = new LoginScheduler(1);
 emitter.on('toggleSidebar',()=>{
   sideCollapsed.value = true;
 })
+emitter.on('applyForLogin',(fn=async()=>{})=>{
+  LoginThread.add(async ()=>{
+    let prStatus = await Auth.getPrtoken();
+    if(prStatus.status == 'exist' || prStatus.status == 'sus'){
+      await fn();
+      LoginThread.solve();
+    } else if (prStatus.status == 'notExist'){
+      showLoginModel.value = true;
+      tmpFn = fn;
+    } else {
+      prStatus = await Auth.getPrtoken('force');
+      if(prStatus.status == 'exist' || prStatus.status == 'sus'){
+        await fn();
+        LoginThread.solve();
+      } else {
+        showLoginModel.value = true;
+        tmpFn = fn;
+      }
+    }
+  })
+});
+async function login(){
+  let prStatus = await Auth.getPrtoken();
+  if(prStatus.status == 'exist' || prStatus.status == 'sus'){
+
+  } else {
+    emitter.emit('applyForLogin',async()=>{})
+  }
+}
+async function submitForm(){
+  if(!form.username || !form.password){
+    ElMessage.error('请输入账号和密码');
+    return ;
+  }
+  ElMessage.info('正在登录')
+  const encode = CryptoJS.MD5(form.username+form.password).toString().toUpperCase();
+  loginLoading.value=true;
+  const createTeam = await Auth.userLogin({
+    username:form.username,
+    password:encode,
+    token:verifyToken.value,
+    force:'ewbiuweuicvewiuc'
+  })
+  try{
+    if(createTeam.status == 'sus'){
+      window.clarity("identify", createTeam.content.id, createTeam.content.sessionID,'login',createTeam.content.id)
+      form.username = '';
+      form.password = '';
+      Cookies.set("czigauth", "NeedPrtoken", {
+        expires: new Date(createTeam.content.expires),
+        path: "/",
+        secure: true,
+        domain:'.chiziingiin.top'
+      });
+      await Auth.getPrtoken('force')
+      sessionStorage.removeItem('userInfo')
+      ElMessage.success('登录成功');
+      if(tmpFn){
+        await tmpFn();
+      }
+      update();
+      tmpFn = null;
+      showLoginModel.value = false;
+      LoginThread.solve();
+    } else {
+      Cookies.set("czigauth", "NeedPrtoken", {
+        path: "/",
+        secure: true,
+        domain:'.chiziingiin.top'
+      });
+    }
+  } finally {
+    loginLoading.value=false;
+  }
+  
+}
+function close(){
+  LoginThread.clear();
+  showLoginModel.value = false;
+}
+emitter.on('login',login)
 const toggleSidebar = () => {
   sideCollapsed.value = !sideCollapsed.value;
-  // if(sideCollapsed.value){
-  //   SideBarHide.value = true;
-  // } else {
-  //   SideBarHide.value = false;
-  // }
 }
 const basicInfo = ref({
   isLogined:false,
@@ -160,17 +297,17 @@ const basicInfo = ref({
   NotificationList:[]
 })
 onMounted(async ()=>{
-  // // console.log(1)
   setTimeout(()=>{
     if(document.querySelector('#loading-container')){
       document.querySelector('#loading-container').classList.add('animate__fadeOut');
-      document.querySelector('#loading-container div').classList.add('animate__fadeOut');
+      // document.querySelector('#loading-container div').classList.add('animate__fadeOut');
       setTimeout(()=>{
         document.querySelector('#loading-container').remove()
-      },1000)
+      },2000)
     }
-  },10)
-})
+  },10);
+  verifyToken.value = await Auth.getRecaptchaToken({action:'login',id:'#turnstile-box'})
+});
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
@@ -178,96 +315,8 @@ const update = () => {
   (Auth.getBasicInfo({task:async function(re){
     basicInfo.value = re;
     emitter.emit('basicInfo',re)
-    const ps = new Promise((resolve,reject)=>{
-      if ('Notification' in window) {
-        if (Cookies.get('permission') == 'accept' || Notification.permission === 'granted'){
-          resolve();
-        } else if(!Cookies.get('permission')){
-          Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-              resolve();
-              Auth.acceptPermission()
-            } else {
-              Auth.rejectPermission()
-              reject()
-            }
-          });
-        } else if (Notification.permission === 'default') {
-          Cookies.set('permission',false,{expires:7})
-          Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-              resolve();
-              Auth.acceptPermission()
-            } else {
-              Auth.rejectPermission()
-              reject()
-            }
-          });
-        } else {
-          reject()
-        }
-      } else {
-        reject()
-      }
-    })
-    ps.then(()=>{
-      re.NotificationList.forEach(e=>{
-        let nl = localStorage.getItem('notificationList')
-        if(!nl) {
-          localStorage.setItem('notificationList',JSON.stringify([]))
-        }
-        nl = localStorage.getItem('notificationList')
-        let decode = JSON.parse(nl)
-        if(!decode.includes(e.id)){
-          const notification = new Notification(
-            e.title, {
-            body: e.body,
-          });
-          notification.addEventListener('click', function() {
-            router.push('/notification')
-          });
-          decode.push(e.id)
-          localStorage.setItem('notificationList',JSON.stringify(decode))
-        } 
-      })
-      if(document.visibilityState === 'visible'){
-        Auth.basicInfoTaskThread.add(async ()=>{
-          update()
-          await new Promise(resolve=>{
-            setTimeout(()=>{
-              resolve()
-            },120000)
-          });
-        })
-      }
-    }).catch(()=>{
-      re.NotificationList.forEach(e=>{
-        ElMessage.info('收到一条消息')
-      })
-      if(document.visibilityState === 'visible'){
-        Auth.basicInfoTaskThread.add(async ()=>{
-          update()
-          await new Promise(resolve=>{
-            setTimeout(()=>{
-              resolve()
-            },120000)
-          });
-        })
-      }
-      // setTimeout(()=>{
-      //   update()
-      // },200000)
-    })
   }}));
 }
-// Auth.basicInfoTaskThread.add(async ()=>{
-//   await new Promise(resolve=>{
-//     setTimeout(()=>{
-//       resolve()
-//     },5000)
-//   });
-//   update()
-// })
 emitter.on('updateBasicAuth',update)
 NProgress.configure({
   showSpinner: false,
