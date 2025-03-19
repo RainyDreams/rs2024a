@@ -93,8 +93,8 @@
     </div>
   </div>
 
-  <div :class="['fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-100 ease-out',showLoginModel?'opacity-100 visible ':' opacity-0 invisible pointer-events-none']">
-    <div :class="['bg-white p-8 rounded-3xl relative shadow-md w-96 transition duration-300 ease-out',showLoginModel?'scale-100':'scale-95']">
+  <div :class="['fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-200 ease-out',showLoginModel?'opacity-100 visible ':' opacity-0 invisible pointer-events-none']">
+    <div :class="['bg-white p-8 rounded-3xl relative shadow-md w-96 transition duration-300 ease-out timefn',showLoginModel?'scale-100':'scale-95']">
       <button 
         @click="close"
         class="absolute text-gray-400 transition right-2 top-2 hover:bg-slate-200 bg-slate-50 hover:bg-opacity-50 rounded-full flex items-center justify-center w-10 h-10 hover:text-gray-700">
@@ -325,6 +325,7 @@ onMounted(async ()=>{
   setTimeout(()=>{
     if(document.querySelector('#loading-container')){
       document.querySelector('#loading-container').classList.add('animate__fadeOut');
+      document.querySelector('#loading-container').classList.add('pointer-events-none');
       // document.querySelector('#loading-container div').classList.add('animate__fadeOut');
       setTimeout(()=>{
         document.querySelector('#loading-container').remove()
@@ -482,5 +483,8 @@ const tabbarList = ref(configList[0].tabs);
     display:none;
   }
   width:auto !important;
+}
+.timefn{
+  transition-timing-function: cubic-bezier(0.33, 0.85, 0.41, 1.4) !important;
 }
 </style>

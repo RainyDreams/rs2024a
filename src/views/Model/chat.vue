@@ -1645,62 +1645,44 @@ const debouncedScrollToBottom = debounce(scrollToBottom, 700);
 const throttledScrollToBottom = throttle(scrollToBottom, 1500); 
 let applying = false
 async function applysession({id,mode}){
-  placeholder.value = '你好👋';
-  if(mode == 'new'){
-    applying = true;
-    fingerprint.value = await Auth.getUserFingerprint();
-    loading.value = false;
-    placeholder.value = '你好👋';
-    model_info.value = default_model;
-    welcome_loading.value = false;
-    chatList.value = [];
-    title.value = '无标题';
-    emitter.emit('updateTitle', '无标题');
-    welcome.value = '';
-    suggestions.value = [];
-    sessionID.value = '';
-    router.push('/chat/?model='+model.value);
-    applying = false;
-    return ;
-  }
-  // Auth.chatTaskThread.add(async()=>{
-    if(sessionID.value){
-      let tmp = 0;
-      chatList.value = JSON.parse(localStorage.getItem('chat_'+sessionID.value) || '[]');
-      chatList.value.forEach((e,i)=>{
-        if(e.role == 'user'){
-          e.status = e.analysis?'analysised':'no_analysis';
-          e.show_thought = false;
-          if(e.photo){
-            if(e.photo.meta){
-              e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
-            }
+  if(sessionID.value){
+    let tmp = 0;
+    chatList.value = JSON.parse(localStorage.getItem('chat_'+sessionID.value) || '[]');
+    chatList.value.forEach((e,i)=>{
+      if(e.role == 'user'){
+        e.status = e.analysis?'analysised':'no_analysis';
+        e.show_thought = false;
+        if(e.photo){
+          if(e.photo.meta){
+            e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
           }
-          if(e.audio){
-            if(e.audio.meta){
-              e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
-            } else {
-              e.audio.blob=null;
-            }
-          }
-          if(e.analysis){
-            renderAnalysis(i);
-          }
-          if(i == 0){
-            e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
-          } else {
-            e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
-            tmp=i;
-          }
-        } else {
-          renderContent(i)
         }
-      })
-      debouncedScrollToBottom()
-      loading.value = false;
-      welcome_loading.value = false;
+        if(e.audio){
+          if(e.audio.meta){
+            e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
+          } else {
+            e.audio.blob=null;
+          }
+        }
+        if(e.analysis){
+          renderAnalysis(i);
+        }
+        if(i == 0){
+          e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
+        } else {
+          e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
+          tmp=i;
+        }
+      } else {
+        renderContent(i)
+      }
+    })
+    debouncedScrollToBottom()
+    loading.value = false;
+    welcome_loading.value = false;
+    Auth.chatTaskThread.add(async ()=>{
+      const getList = (await Auth.getAIChatList({sessionID:sessionID.value,mode,model:model.value,vf:fingerprint.value}))
       Auth.chatTaskThread.add(async ()=>{
-        const getList = (await Auth.getAIChatList({sessionID:sessionID.value,mode,model:model.value,vf:fingerprint.value}))
         welcome.value = getList.welcome;
         model_info.value = {
           ...model_info.value,
@@ -1708,24 +1690,8 @@ async function applysession({id,mode}){
           desc:getList.model.desc,
           createuser:getList.model.createuser,
         };
-        chatList.value = (await Auth.replaceAndUpdateUserRecords(sessionID.value,getList.content,chatList.value)).map((e,i)=>{
-          e.status = e.analysis?'analysised':'no_analysis';
-          e.show_thought = false;
-          if(e.photo){
-            if(e.photo.meta){
-              e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
-            }
-          }
-          if(e.audio){
-            if(e.audio.meta){
-              e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
-            } else {
-              e.audio.blob=null;
-            }
-          }
-          return e
-        });
         title.value = getList.title || title.value;
+        localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
         chatList.value.forEach((e,i)=>{
           if(e.role == 'user'){
             if(e.analysis){
@@ -1746,12 +1712,13 @@ async function applysession({id,mode}){
         },50)
         model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
       })
-    } else {
-      loading.value = false;
-      placeholder.value = '你好👋';
-      welcome_loading.value = false;
-    }
-  applying = false
+    })
+  } else {
+    loading.value = false;
+    placeholder.value = '你好👋';
+    welcome_loading.value = false;
+  }
+  applying = false;
 }
 async function applynew(){
   if(applying) return;
@@ -1785,7 +1752,7 @@ onMounted(async ()=>{
   model.value = route.query.model || '';
   let action = route.query.action;
   let mode = undefined;
-  if(route.query.mode == 'new'){
+  if(route.query.mode == 'new' && !sessionID.value){
     mode = 'new';
   }
   loading.value = false;
@@ -1795,11 +1762,27 @@ onMounted(async ()=>{
     document.querySelector('#input_chat_ai').value = actionValue;
     setInputHeight()
   }
-  await applysession({id:sessionID,mode:mode})
+  if(mode == 'new'){
+    applying = true;
+    fingerprint.value = await Auth.getUserFingerprint();
+    loading.value = false;
+    placeholder.value = '你好👋';
+    model_info.value = default_model;
+    welcome_loading.value = false;
+    chatList.value = [];
+    title.value = '无标题';
+    emitter.emit('updateTitle', '无标题');
+    welcome.value = '';
+    suggestions.value = [];
+    sessionID.value = '';
+    router.push('/chat/?model='+model.value);
+    applying = false;
+  }
   if(action){
     send();
     localStorage.removeItem(action);
   }
+  await applysession({id:sessionID,mode:mode})
   watch(autoScroll, (newValue) => {
     let scrollContainer = document.querySelector('.scroll');
     if (newValue) {
@@ -1816,7 +1799,7 @@ onMounted(async ()=>{
         clearInterval(intervalId);
       }
     }
-  });
+  })
 })
 </script>
 
