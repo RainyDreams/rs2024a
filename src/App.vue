@@ -294,7 +294,7 @@ async function submitForm(){
   
 }
 function close(){
-  if(LoginThread.count == 1){
+  if(LoginThread.count <= 1){
     LoginThread.clear();
     showLoginModel.value = false;
     return;
