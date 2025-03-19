@@ -77,7 +77,7 @@ if(Cookies.get('czigauth') == 'AlreadyAuthenticated'){
 onActivated(async ()=>{
   // // console.log(123)
   // debugger;
-  verifyToken.value = await Auth.getRecaptchaToken({action:'signup',id:'#turnstile-box'})
+  verifyToken.value = Auth.getRecaptchaToken({action:'signup',id:'#turnstile-box'})
 })
 const submitForm = (formEl) => {
   if (!formEl) return;

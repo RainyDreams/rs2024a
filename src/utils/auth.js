@@ -156,7 +156,12 @@ let Auth = {
       return await failed(error, url);
     }
   },
-  getRecaptchaToken:async function getRecaptchaToken({action="default",id='#turnstile-box'}){
+  getRecaptchaToken:function getRecaptchaToken({
+    action="default",
+    id='#turnstile-box',
+    success,
+    failed
+  }){
     window.clarity("event", 'getRecaptchaToken')
     return new Promise((resolve,reject)=>{
       // window.turnstile.ready(function () {
@@ -164,12 +169,11 @@ let Auth = {
           sitekey: '0x4AAAAAAAgyM4dGoERAGuG2',
           action: action,
           callback: function(token) {
-            // // console.log(token);
+            success(token);
             resolve(token)
           },
           'error-callback': function(err) {
-            // // console.log(err);
-            reject(err)
+            failed(err)
           },
           'refresh-expired':'auto'
         });

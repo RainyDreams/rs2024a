@@ -36,7 +36,7 @@
               <remind theme="outline" size="20" fill="#5F6388" :strokewidth="5"  strokeLinejoin="bevel"/>
             </el-badge>
           </router-link>
-          <router-link v-if="!basicInfo.isLogined" class="login_tab" to="/login">登录</router-link>
+          <a v-if="!basicInfo.isLogined" class="login_tab " @click="login">登录</a>
           <a v-if="basicInfo.isLogined" :class="`btn _user ${activeName=='User'?'router-link-active':''}`" @click="clickUser()">
             <el-avatar
               alt="头像"
@@ -137,7 +137,7 @@ import { ref,markRaw, reactive, onMounted, onActivated } from 'vue';
 import { RouterLink, RouterView,useRoute,useRouter } from 'vue-router'
 import { MenuFoldOne,MenuUnfoldOne,AllApplication,DashboardOne,FormOne,AlignTextLeftOne,AddressBook,EditName,Communication, EveryUser,Plus,Info, DocDetail, SettingConfig, Tool, SmartOptimization, ApplicationOne, MessageEmoji, Log, CooperativeHandshake,History, Server, NewspaperFolding } from '@icon-park/vue-next';
 import { Remind } from "@icon-park/vue-next";
-import { ElConfigProvider,ElAvatar,ElProgress,ElBadge, ElMessage, ElSkeleton } from 'element-plus'
+import { ElConfigProvider,ElAvatar,ElProgress,ElBadge, ElMessage, ElSkeleton, ElMessageBox } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import Auth from './utils/auth';
 import { emitter } from './utils/emitter';
@@ -209,7 +209,7 @@ emitter.on('toggleSidebar',()=>{
 emitter.on('applyForLogin',(fn=async()=>{})=>{
   LoginThread.add(async ()=>{
     let prStatus = await Auth.getPrtoken();
-    if(prStatus.status == 'exist' || prStatus.status == 'sus'){
+    if(prStatus.status == 'sus'){
       await fn();
       LoginThread.solve();
     } else if (prStatus.status == 'notExist'){
@@ -245,6 +245,10 @@ function reg(){
   router.push('/reg');
 }
 async function submitForm(){
+  if(!verifyToken.value){
+    ElMessage.error('请完成验证');
+    return ;
+  }
   if(!form.username || !form.password){
     ElMessage.error('请输入账号和密码');
     return ;
@@ -281,11 +285,8 @@ async function submitForm(){
       showLoginModel.value = false;
       LoginThread.solve();
     } else {
-      Cookies.set("czigauth", "NeedPrtoken", {
-        path: "/",
-        secure: true,
-        domain:'.chiziingiin.top'
-      });
+      Cookies.remove("czigauth");
+      ElMessage.error('登录失败');
     }
   } finally {
     loginLoading.value=false;
@@ -293,8 +294,22 @@ async function submitForm(){
   
 }
 function close(){
-  LoginThread.clear();
-  showLoginModel.value = false;
+  if(LoginThread.count == 1){
+    LoginThread.clear();
+    showLoginModel.value = false;
+    return;
+  }
+  ElMessageBox.alert(`当前有 ${LoginThread.count} 个任务需3+1+N鉴权，放弃登录会取消任务，是否确认放弃？`, '提示', {
+    confirmButtonText: '确定',
+    showClose:true,
+    showCancelButton:true,
+    callback: action => {
+      if(action === 'confirm'){
+        LoginThread.clear();
+        showLoginModel.value = false;
+      }
+    },
+  });
 }
 emitter.on('login',login)
 const toggleSidebar = () => {
@@ -316,7 +331,16 @@ onMounted(async ()=>{
       },2000)
     }
   },10);
-  verifyToken.value = await Auth.getRecaptchaToken({action:'login',id:'#turnstile-box'})
+  Auth.getRecaptchaToken({
+    action:'login',
+    id:'#turnstile-box',
+    success:(token)=>{
+      verifyToken.value = token;
+    },
+    failed:()=>{
+      verifyToken.value = false;
+    }
+  })
 });
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
