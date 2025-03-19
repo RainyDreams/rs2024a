@@ -109,7 +109,7 @@
     </div> -->
     <div class="copyright py-5 px-2 mt-16 md:mt-20">
       <p class="text-center mb-2"><span class="">赤子英金</span> · <span class="primary-text">零本智协</span></p>
-      <p class="text-center mb-2 text-xs md:text-sm">Copyright © 2024 赤峰二中2023级12班研究性学习零本智协项目组 All rights reserved.</p>
+      <p class="text-center mb-2 text-xs md:text-sm">Copyright © 2025 赤峰二中2023级12班研究性学习零本智协项目组 All rights reserved.</p>
       <p class="text-center mb-2 text-xs md:text-sm">自2024年8月18日开始统计，已累计稳定提供服务
         <span class="primary-text">{{ count }}</span></p>
       <p class="text-center text-sm">

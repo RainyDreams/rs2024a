@@ -36,7 +36,7 @@
         </el-form-item>
       </el-form>
       <div class="mt-3">
-        <p class="text-slate-400 text-xs/tight mt-2">© 2024 赤子英金 保留所有权利.</p>
+        <p class="text-slate-400 text-xs/tight mt-2">© 2025 赤子英金 保留所有权利.</p>
         <p class="text-slate-400 text-xs/tight mt-2">赤峰二中2023级12班研究性学习项目（零本智协） 拥有完全著作权.</p>
         <p class="text-slate-400 text-xs/tight mt-2">了解我们的<a href="https://www.chiziingiin.top/project/RS2024/A">创作历程</a></p>
       </div>
