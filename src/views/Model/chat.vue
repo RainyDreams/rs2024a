@@ -1760,6 +1760,7 @@ async function applynew(){
   stopStatus.value=false;
   showStop.value=false;
   loading.value=false;
+  statusText.value='';
   const res = await applysession({id:'',mode:'new'});
   debouncedScrollToBottom();
 }
