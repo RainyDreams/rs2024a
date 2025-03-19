@@ -93,8 +93,8 @@
     </div>
   </div>
 
-  <div :class="['fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-500 ease-out',showLoginModel?'opacity-100 visible':'opacity-0 invisible']">
-    <div class="bg-white p-8 rounded-3xl relative shadow-md w-96">
+  <div :class="['fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-100 ease-out',showLoginModel?'opacity-100 visible ':' opacity-0 invisible pointer-events-none']">
+    <div :class="['bg-white p-8 rounded-3xl relative shadow-md w-96 transition duration-300 ease-out',showLoginModel?'scale-100':'scale-95']">
       <button 
         @click="close"
         class="absolute text-gray-400 transition right-2 top-2 hover:bg-slate-200 bg-slate-50 hover:bg-opacity-50 rounded-full flex items-center justify-center w-10 h-10 hover:text-gray-700">
@@ -113,7 +113,7 @@
         <div id="turnstile-box"></div>
         <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full">登 录</button>
         <button type="button" @click="reg" class="block border border-slate-200 transition text-slate-600 py-2 text-center text-base/relaxed px-4 rounded-lg w-full hover:bg-slate-50" to="/reg">注 册</button>
-        <p class="text-gray-400 text-xs mb-1 mt-4">登录即代表同意《零本智协统一身份验证用户协议》</p>
+        <p class="text-gray-400 text-xs mb-1 mt-4">登录即代表同意<a href="https://oh.chiziingiin.top/license/auth" target="_blank">《零本智协统一身份验证用户协议》</a></p>
       </form>
       <p class="text-gray-400 text-xs mt-1">© 2025 零本智协 保留所有权利.</p>
     </div>
@@ -229,7 +229,8 @@ emitter.on('applyForLogin',(fn=async()=>{})=>{
 });
 async function login(){
   emitter.emit('applyForLogin',async()=>{
-    emitter.emit('updateLoginInfo')
+    LoginThread.solve();
+    update()
   })
   
   // let prStatus = await Auth.getPrtoken();
@@ -255,7 +256,7 @@ async function submitForm(){
     username:form.username,
     password:encode,
     token:verifyToken.value,
-    force:'ewbiuweuicvewiuc'
+    force:'ewbiuwudsaef66f'
   })
   try{
     if(createTeam.status == 'sus'){
@@ -323,7 +324,8 @@ function bindShowMenu(){
 const update = () => {
   (Auth.getBasicInfo({task:async function(re){
     basicInfo.value = re;
-    emitter.emit('basicInfo',re)
+    emitter.emit('basicInfo',re);
+    emitter.emit('updateLoginInfo')
   }}));
 }
 emitter.on('updateBasicAuth',update)

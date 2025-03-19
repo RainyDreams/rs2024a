@@ -64,6 +64,7 @@ export class Scheduler {
       const { reject } = this.queue.shift();
       reject(new Error('Task cancelled'));
     }
+    this.count = 0
   }
 }
 let Auth = {
