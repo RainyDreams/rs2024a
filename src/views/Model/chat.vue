@@ -177,7 +177,7 @@
                 <!-- 欢迎 -->
                 <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
                   <div :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full `">
-                    <h2 v-if="!welcome_loading" :class="`text-center w-full text-3xl animate__animated md:text-4xl lg:text-5xl font-bold `+((chatList.length==0 && !welcome_loading)?'animate__fadeInDown':'animate__fadeOutUp')">你好！来聊点什么吧</h2>
+                    <h2 v-if="!welcome_loading" :class="`serif-text text-center w-full text-3xl animate__animated md:text-4xl lg:text-5xl font-bold `+((chatList.length==0 && !welcome_loading)?'animate__fadeInDown':'animate__fadeOutUp')">你好！来聊点什么吧</h2>
                     <!-- <h2 :class="`text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold animate__animated `+((chatList.length==0 && welcome_loading)?'animate__fadeInUp':'animate__fadeOutDown')">正在建立连接</h2> -->
                   </div>                
                 </div>
@@ -501,8 +501,8 @@
                 >
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
-                      <div class="text-base text-slate-700 mb-1 align-bottom font-semibold">思考分析</div>
-                      <div class="text-xs text-slate-600 leading-relaxed">
+                      <div class="text-base text-slate-700 mb-1 align-bottom font-semibold serif-text">思考分析</div>
+                      <div class="text-xs text-slate-600 leading-relaxed serif-text">
                         该功能可以通过重构需求、优化方案、批判总结等方式帮助您深入分析问题，提升决策效率。
                       </div>
                     </div>
@@ -532,10 +532,10 @@
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
                       <div class="text-base text-slate-700 mb-1 align-bottom font-semibold flex items-center">
-                        <span>预览模式</span>
+                        <span class="serif-text">预览模式</span>
                         <experiment-one theme="outline" class="text-blue-500 inline-block ml-1" size="16" fill="currentColor" :strokeWidth="4"/>
                       </div>
-                      <div class="text-xs text-slate-600 leading-relaxed">
+                      <div class="text-xs text-slate-600 leading-relaxed serif-text">
                         该功能可以根据你的需求通过分析、设计、编程等构建一个可以预览使用的网页应用程序
                       </div>
                     </div>
@@ -564,8 +564,8 @@
                 >
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
-                      <div class="text-base text-slate-700 mb-1 align-bottom font-semibold">搜索查询</div>
-                      <div class="text-xs text-slate-600 leading-relaxed">
+                      <div class="text-base text-slate-700 mb-1 align-bottom font-semibold serif-text">搜索查询</div>
+                      <div class="text-xs text-slate-600 leading-relaxed serif-text">
                         该功能可以根据系统重构后的需求，通过搜索查询互联网信息、权威词条等并展示给用户。
                       </div>
                     </div>

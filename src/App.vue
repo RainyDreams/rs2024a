@@ -1,21 +1,30 @@
 <template >
-  <div :class="'page '+(isDarkMode?'dark':'light')" :data-theme="isDarkMode?'dark':'light'" >
+  <div :class="'page '+(isDarkMode?'dark':'light')" :data-theme="isDarkMode?'dark':'light'">
     <div class="mainpage">
       <div class="header" v-if="!TabBarHide">
         <div :class="{navlist:1,show:showMenu}" :style="showMenu?'':'transition-delay: 0.20s;'">
-          <router-link class="logo pc" to="/home" v-if="SideBarHide" style="margin-left:24px;height:28px;padding:0 8px;">
+          <router-link class="logo pc" to="/home" v-if="SideBarHide"
+            style="margin-left:24px;height:28px;padding:0 8px;">
             <img src="/logo.webp" style="color:#3c3e55" alt="零本智协">
           </router-link>
-          <a v-for="(item,i) in configList" :class="`nav ${activeName==item.name?'router-link-active':''} animate__animated ${M(showMenu?'animate__fadeInTopLeft':'animate__fadeOutTopLeft')}`" :style="(showMenu?`animation-duration:0.5s;`:'')+`animation-delay:${0.08*(i)}s`" :key="item.name" @click="isM(item.to,item.name)">
-            <div class="icon" ><component :is="getIcon(item.icon)" theme="outline" size="22"/></div>
+          <a v-for="(item,i) in configList"
+            :class="`nav ${activeName==item.name?'router-link-active':''} animate__animated ${M(showMenu?'animate__fadeInTopLeft':'animate__fadeOutTopLeft')}`"
+            :style="(showMenu?`animation-duration:0.5s;`:'')+`animation-delay:${0.08*(i)}s`" :key="item.name"
+            @click="isM(item.to,item.name)">
+            <div class="icon">
+              <component :is="getIcon(item.icon)" theme="outline" size="22" />
+            </div>
             <p>{{ item.title }}</p>
           </a>
-          <div v-if="!TabBarHide" class="m tabbar" >
+          <div v-if="!TabBarHide" class="m tabbar">
             <ul class="tablist">
-              <li :class="`tab ${(item.type=='primary')?'primary':''} animate__animated ${showMenu?'animate__fadeInLeft':'animate__fadeOutLeft'}`" :style="(showMenu?`animation-duration:0.6s;`:'')+`animation-delay:${0+0.12*(i)}s`" v-for="(item,i) in tabbarList" :key="i">
-                <router-link class="" @click="toM(item.to)" :to="item.to" >
+              <li
+                :class="`tab ${(item.type=='primary')?'primary':''} animate__animated ${showMenu?'animate__fadeInLeft':'animate__fadeOutLeft'}`"
+                :style="(showMenu?`animation-duration:0.6s;`:'')+`animation-delay:${0+0.12*(i)}s`"
+                v-for="(item,i) in tabbarList" :key="i">
+                <router-link class="" @click="toM(item.to)" :to="item.to">
                   <div class="icon">
-                    <component :is="getIcon(item.icon)" theme="outline" size="22"/>
+                    <component :is="getIcon(item.icon)" theme="outline" size="22" />
                   </div>
                   <p>{{ item.title }}</p>
                 </router-link>
@@ -27,48 +36,39 @@
           <router-link to="/home">
             <img src="/logo.webp" style="color:#3c3e55" alt="零本智协">
           </router-link>
-          <MenuFoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="!showMenu"/>
-          <MenuUnfoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="showMenu"/>
+          <MenuFoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="!showMenu" />
+          <MenuUnfoldOne @click="bindShowMenu()" theme="outline" size="22" fill="#5F6388" v-if="showMenu" />
         </div>
         <div class="btns" v-show="basicInfo.visitInfo">
           <router-link v-if="basicInfo.isLogined" class="btn" to="/notification">
             <el-badge :value="basicInfo.Notification?basicInfo.Notification:undefined" :max="99" class="item">
-              <remind theme="outline" size="20" fill="#5F6388" :strokewidth="5"  strokeLinejoin="bevel"/>
+              <remind theme="outline" size="20" fill="#5F6388" :strokewidth="5" strokeLinejoin="bevel" />
             </el-badge>
           </router-link>
           <a v-if="!basicInfo.isLogined" class="login_tab " @click="login">登录</a>
-          <a v-if="basicInfo.isLogined" :class="`btn _user ${activeName=='User'?'router-link-active':''}`" @click="clickUser()">
-            <el-avatar
-              alt="头像"
-              :size="35"
-              :src="basicInfo.avatar"
-            />
+          <a v-if="basicInfo.isLogined" :class="`btn _user ${activeName=='User'?'router-link-active':''}`"
+            @click="clickUser()">
+            <el-avatar alt="头像" :size="35" :src="basicInfo.avatar" />
           </a>
         </div>
         <div class="btns" v-show="!basicInfo.visitInfo" style="width:60px;">
-          <el-progress
-            style="width:100%"
-            :percentage="100"
-            :show-text="false"
-            :indeterminate="true"
-            :duration="1"
-            :color="[{ color: '#904df5', percentage: 100 }]"
-          ></el-progress>
+          <el-progress style="width:100%" :percentage="100" :show-text="false" :indeterminate="true" :duration="1"
+            :color="[{ color: '#904df5', percentage: 100 }]"></el-progress>
         </div>
       </div>
       <div class="routerpage">
         <el-config-provider :locale="zhCn">
           <router-view v-slot="{ Component }">
             <!-- <transition :duration="{ enter: 400000, leave:0 }" enter-active-class="animate__animated animate__fadeInRight"> -->
-              <keep-alive :max="1">
-                <component :is="Component" />
-              </keep-alive>
+            <keep-alive :max="1">
+              <component :is="Component" />
+            </keep-alive>
             <!-- </transition> -->
           </router-view>
         </el-config-provider>
       </div>
     </div>
-    <div v-if="!SideBarHide" :class="`tabbar pc flex-col `+(sideCollapsed?'sideCollapsed':'')" >
+    <div v-if="!SideBarHide" :class="`tabbar pc flex-col `+(sideCollapsed?'sideCollapsed':'')">
       <router-link class="logo" to="/home">
         <img src="/logo.webp" class="mb-3 bg" style="color:#3c3e55" alt="零本智协">
         <img src="/logo_sm.webp" class="mb-3 sm" style="color:#3c3e55" alt="零本智协">
@@ -76,9 +76,9 @@
       <div class="flex-1">
         <ul class="tablist">
           <li :class="{primary:item.type=='primary',tab:1}" v-for="(item,i) in tabbarList" :key="i">
-            <router-link class="" :to="item.to" >
+            <router-link class="" :to="item.to">
               <div class="icon">
-                <component :is="getIcon(item.icon)" theme="outline" size="22"/>
+                <component :is="getIcon(item.icon)" theme="outline" size="22" />
               </div>
               <p>{{ item.title }}</p>
             </router-link>
@@ -87,35 +87,55 @@
       </div>
       <div style="padding: 16px 28px;">
         <button class="collapse-btn" @click="toggleSidebar">
-          <component :is="sideCollapsed ?MenuFoldOne: MenuUnfoldOne " theme="outline" size="22" fill="#5F6388"/>
+          <component :is="sideCollapsed ?MenuFoldOne: MenuUnfoldOne " theme="outline" size="22" fill="#5F6388" />
         </button>
       </div>
     </div>
   </div>
 
-  <div :class="['fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-200 ease-out',showLoginModel?'opacity-100 visible ':' opacity-0 invisible pointer-events-none']">
-    <div :class="['bg-white mx-auto mt-8 md:mt-14 p-8 rounded-3xl relative shadow-md w-96 transition duration-300 ease-out timefn',showLoginModel?'scale-100':'scale-95']">
-      <button 
-        @click="close"
+  <div
+    :class="['fixed inset-0 z-50 flex items-center overflow-y-auto overflow-x-hidden bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-200 ease-out',showLoginModel?'opacity-100 visible ':' opacity-0 invisible pointer-events-none']">
+    <div
+      :class="['bg-white mx-auto p-8 rounded-3xl h-fit relative shadow-md min-w-48 w-full max-w-96 transition-all duration-300 ease-out timefn',showLoginModel?'scale-100':'scale-95']">
+      <button @click="close"
         class="absolute text-gray-400 transition right-2 top-2 hover:bg-slate-200 bg-slate-50 hover:bg-opacity-50 rounded-full flex items-center justify-center w-10 h-10 hover:text-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
-      <h1 class="text-3xl font-bold text-blue-600 mb-6">欢迎！</h1>
-      <el-skeleton  v-show="loginLoading" animated :rows="5" />
-      <form @submit.prevent="submitForm" v-show="!loginLoading">
-        <label for="username" class="block text-gray-600 text-sm mb-1">邮箱</label>
-        <input type="text" id="username" v-model="form.username" placeholder="请输入邮箱" class="border-2 outline-none transition focus:border-blue-500 border-slate-100 rounded-lg px-3 py-2 w-full mb-4 bg-slate-100">
-        <label for="password" class="block text-gray-600 text-sm mb-1">密码</label>
-        <input type="password" id="password" v-model="form.password" placeholder="请输入密码" class="outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full mb-6 bg-slate-100">
-        <div id="turnstile-box"></div>
-        <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full">登 录</button>
-        <button type="button" @click="reg" class="block border border-slate-200 transition text-slate-600 py-2 text-center text-base/relaxed px-4 rounded-lg w-full hover:bg-slate-50" to="/reg">注 册</button>
-        <p class="text-gray-400 text-xs mb-1 mt-4">登录即代表同意<a href="https://oh.chiziingiin.top/license/auth" target="_blank">《零本智协统一身份验证用户协议》</a></p>
+      <h1 :class="['text-3xl font-bold text-blue-600 mb-6 serif-text']">你好</h1>
+      <el-skeleton v-show="loginLoading" animated :rows="5" />
+      <form @submit.prevent="submitForm" ref="loginForm"class="overflow-hidden ease relative transition-all " v-show="!loginLoading">
+        <div class="swiper" ref="swiperRef">
+          <div class="swiper-wrapper transition-all">
+            <div class="swiper-slide px-1">
+              <label for="login_username" class="block text-gray-600 text-sm mb-1">邮箱</label>
+              <input type="text" v-model="form.username" id="login_username" placeholder="请输入邮箱" class="border-2 outline-none transition focus:border-blue-500 border-slate-100 rounded-lg px-3 py-2 w-full mb-4 bg-slate-100">
+              <button type="button" @click="nextStep" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full">下一步</button>
+            </div>
+            <div class="swiper-slide px-1">
+              <label for="login_password" class="block text-gray-600 text-sm mb-1">{{!loginMode?'密码':'验证码'}}</label>
+              <input type="password" v-model="form.password" id="login_password" placeholder="请输入密码" class="outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full mb-2 bg-slate-100">
+              <p class="w-full text-right mb-3"><a @click="switchLoginMode" class="text-blue-600 text-sm cursor-pointer">使用{{loginMode?'密码':'验证码'}}登录</a></p>
+              <p class="text-sm text-slate-600 mb-3 w-full text-center">{{ loginMode?'如果没有账号将自动注册':'' }}</p>
+              <div id="turnstile-box" class="mx-auto"></div>
+              <button type="button" @click="previousStep" class="block border mb-2 border-slate-200 transition text-slate-600 py-2 text-center text-base/relaxed px-4 rounded-lg w-full hover:bg-slate-50">上一步</button>
+              <button type="button" @click="submitForm" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full" >登录</button>
+            </div>
+          </div>
+        </div>
+        <!-- 
+        <div v-if="showPasswordInput">
+          <div class="flex justify-between items-center mb-2">
+            
+          </div>
+        </div> -->
+        <!-- <div v-if="showVerificationCodeHint" class="text-red-500 text-xs mb-2">将自动注册账号</div>
+        <button v-if="showPasswordInput" type="submit" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full">登 录</button>
+        <button v-if="showPasswordInput" type="button" @click="reg" class="block border border-slate-200 transition text-slate-600 py-2 text-center text-base/relaxed px-4 rounded-lg w-full hover:bg-slate-50" to="/reg">注 册</button>
+        <p v-if="showPasswordInput" class="text-gray-400 text-xs mb-1 mt-4">登录即代表同意<a href="https://oh.chiziingiin.top/license/auth" target="_blank">《零本智协统一身份验证用户协议》</a></p> -->
       </form>
-      <p class="text-gray-400 text-xs mt-1">© 2025 零本智协 保留所有权利.</p>
+      <p v-if="showPasswordInput" class="text-gray-400 text-xs mt-1">© 2025 零本智协 保留所有权利.</p>
     </div>
   </div>
 </template>
@@ -145,6 +165,7 @@ import NProgress from 'nprogress';
 import Cookies from 'js-cookie';
 import { configList,rightList } from './utils/config';
 import CryptoJS from 'crypto-js';
+import Swiper from 'swiper';
 const router = useRouter();
 Auth.router = useRouter();
 const route = useRoute();
@@ -161,11 +182,63 @@ const form = reactive({
   username:'',
   password:'',
 });
-if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  if(!sessionStorage.getItem('darkMode') || sessionStorage.getItem('darkMode')=='dark'){
-    // isDarkMode.value=1;
+const loginForm = ref()
+const loginPage = ref(0);
+const loginMode = ref(0);
+const swiperRef = ref(null);
+let nextStep,previousStep,switchLoginMode;
+onMounted(async ()=>{
+  setTimeout(()=>{
+    if(document.querySelector('#loading-container')){
+      document.querySelector('#loading-container').classList.add('animate__fadeOut');
+      document.querySelector('#loading-container').classList.add('pointer-events-none');
+      // document.querySelector('#loading-container div').classList.add('animate__fadeOut');
+      setTimeout(()=>{
+        document.querySelector('#loading-container').remove()
+      },2000)
+    }
+  },10);
+  const swiper = new Swiper(swiperRef.value, {
+    autoHeight:true,
+    allowTouchMove: false, 
+    on: {
+      slideChange: function () {
+        // const activeSlide = this.slides[this.activeIndex];
+        loginPage.value = this.activeIndex;
+        // const container = this.el;
+        // container.style.height = activeSlide.offsetHeight + 'px';
+      }
+    }
+  });
+  switchLoginMode=()=>{
+    loginMode.value = loginMode.value == 0 ? 1 : 0;
+    setTimeout(()=>{
+      swiper.updateAutoHeight();
+    },50)
   }
-}
+  nextStep = () => {
+    swiper.slideNext();
+  };
+  previousStep = () => {
+    swiper.slidePrev();
+  };
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    if(!sessionStorage.getItem('darkMode') || sessionStorage.getItem('darkMode')=='dark'){
+      // isDarkMode.value=1;
+    }
+  }
+  Auth.getRecaptchaToken({
+    action:'login',
+    id:'#turnstile-box',
+    success:(token)=>{
+      verifyToken.value = token;
+    },
+    failed:()=>{
+      verifyToken.value = false;
+    }
+  })
+});
+
 let tmpFn ;
 class LoginScheduler {
   constructor(max) {
@@ -321,28 +394,7 @@ const basicInfo = ref({
   Notification:0,
   NotificationList:[]
 })
-onMounted(async ()=>{
-  setTimeout(()=>{
-    if(document.querySelector('#loading-container')){
-      document.querySelector('#loading-container').classList.add('animate__fadeOut');
-      document.querySelector('#loading-container').classList.add('pointer-events-none');
-      // document.querySelector('#loading-container div').classList.add('animate__fadeOut');
-      setTimeout(()=>{
-        document.querySelector('#loading-container').remove()
-      },2000)
-    }
-  },10);
-  Auth.getRecaptchaToken({
-    action:'login',
-    id:'#turnstile-box',
-    success:(token)=>{
-      verifyToken.value = token;
-    },
-    failed:()=>{
-      verifyToken.value = false;
-    }
-  })
-});
+
 function bindShowMenu(){
   showMenu.value=!showMenu.value;
 }
@@ -488,3 +540,17 @@ const tabbarList = ref(configList[0].tabs);
   transition-timing-function: cubic-bezier(0.33, 0.85, 0.41, 1.4) !important;
 }
 </style>
+
+<style scoped>
+.swiper {
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+
+.swiper-slide {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+}
+</style>    

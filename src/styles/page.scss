@@ -4,6 +4,9 @@
 ._show{
   visibility: visible !important;
 }
+.serif-text{
+  font-family: 'Noto Serif SC',"Crimson Pro", 'ui-serif',Georgia, Cambria, "Times New Roman", Times, serif;
+}
 .czig-text{
   background-image: linear-gradient(180deg, rgb(222, 41, 16) 25%, rgb(255, 157, 0) 100%);
   background-clip: text;
