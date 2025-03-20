@@ -1691,7 +1691,11 @@ async function applysession({id,mode}){
           createuser:getList.model.createuser,
         };
         title.value = getList.title || title.value;
-        localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
+        try{
+          localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
+        }finally{
+
+        }
         chatList.value.forEach((e,i)=>{
           if(e.role == 'user'){
             if(e.analysis){

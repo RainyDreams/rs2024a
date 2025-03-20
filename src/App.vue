@@ -93,8 +93,8 @@
     </div>
   </div>
 
-  <div :class="['fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-200 ease-out',showLoginModel?'opacity-100 visible ':' opacity-0 invisible pointer-events-none']">
-    <div :class="['bg-white p-8 rounded-3xl relative shadow-md w-96 transition duration-300 ease-out timefn',showLoginModel?'scale-100':'scale-95']">
+  <div :class="['fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-200 ease-out',showLoginModel?'opacity-100 visible ':' opacity-0 invisible pointer-events-none']">
+    <div :class="['bg-white mx-auto mt-8 md:mt-14 p-8 rounded-3xl relative shadow-md w-96 transition duration-300 ease-out timefn',showLoginModel?'scale-100':'scale-95']">
       <button 
         @click="close"
         class="absolute text-gray-400 transition right-2 top-2 hover:bg-slate-200 bg-slate-50 hover:bg-opacity-50 rounded-full flex items-center justify-center w-10 h-10 hover:text-gray-700">
