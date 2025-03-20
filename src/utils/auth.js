@@ -233,7 +233,7 @@ let Auth = {
     }))
     if(!res.isLogined){
       if(res.AlreadyAuthenticated == true){
-        await this.getPrtoken('force')
+        await this.getPrtoken('force');
       } else {
         // next('/login-needed?url='+encodeURIComponent(Auth.route.fullPath))
       }
