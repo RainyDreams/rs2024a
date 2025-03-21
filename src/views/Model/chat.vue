@@ -1512,6 +1512,9 @@ function handleOnMessage(res, m , opt) {
       title:(source)=>{
         title.value = source;
         emitter.emit('updateTitle', source);
+        gtag('config', 'TAG_ID', {
+          'page_title' : source
+        });
       },
       suggestions:(source)=>{
         suggestions.value = source;
@@ -1701,6 +1704,9 @@ async function applysession({id,mode}){
           createuser:getList.model.createuser,
         };
         title.value = getList.title || title.value;
+        gtag('config', 'TAG_ID', {
+          'page_title' : title.value
+        });
         try{
           localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
         }finally{
