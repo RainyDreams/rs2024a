@@ -200,6 +200,7 @@ let Auth = {
       return { status: "error", content: res.content };
     }
   },
+
   userRegister:async function userRegister(param){
     await this.getUserFingerprint();
     Auth.analysis("event", 'userRegister')
@@ -209,6 +210,10 @@ let Auth = {
     await this.getUserFingerprint();
     Auth.analysis("event", 'userLogin')
     return this.basicAuth("/api/login", JSON.stringify(param))
+  },
+  userVerify:async function userVerify(param) {
+    Auth.analysis("event", 'userVerify')
+    return this.basicAuth("/api/verify", JSON.stringify(param))
   },
   getBasicInfoStatus:false,
   getBasicInfo:/*asyncThrottle(*/async function getBasicInfo({task}){

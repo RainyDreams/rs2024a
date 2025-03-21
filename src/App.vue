@@ -109,16 +109,18 @@
         <div class="swiper" ref="swiperRef">
           <div class="swiper-wrapper transition-all">
             <div class="swiper-slide px-1">
-              <label for="login_username" class="block text-gray-600 text-sm mb-1">邮箱</label>
-              <input type="text" v-model="form.username" id="login_username" placeholder="请输入邮箱" class="border-2 outline-none transition focus:border-blue-500 border-slate-100 rounded-lg px-3 py-2 w-full mb-4 bg-slate-100">
+              <label for="login_mail" class="block text-gray-600 text-sm mb-1">邮箱</label>
+              <input type="email" value="" v-model="form.username" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"  aria-label="邮箱地址输入框" id="login_mail" placeholder="请输入邮箱" autocomplete="email" class="border-2 outline-none transition focus:border-blue-500 border-slate-100 rounded-lg px-3 py-2 w-full mb-4 bg-slate-100">
               <button type="button" @click="nextStep" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full">下一步</button>
             </div>
             <div class="swiper-slide px-1">
               <div v-if="loginMode">
                 <label for="login_password" class="block text-gray-600 text-sm mb-1">验证码</label>
                 <div class="flex mb-2">
-                  <input type="text" v-model="form.password" id="login_password" placeholder="请输入验证码" maxlength="6" class="serif-text outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full bg-slate-100">
-                  <a @click="sendVerifyCode" class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg flex-shrink-0 bg-slate-100 border-slate-200">发送验证码</a>
+                  <input type="text" v-model="form.password" id="login_password" autocomplete="off" placeholder="请输入验证码" maxlength="6" value="" class="console-text outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full bg-slate-100">
+                  <input type="text" v-model="form.verify" id="login_verify"  class="hidden">
+                  <a @click="sendVerifyCode" v-if="!verifyLoading" class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg flex-shrink-0 bg-slate-100 border-slate-200">发送验证码</a>
+                  <a v-if="verifyLoading" class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg flex-shrink-0 bg-slate-100 border-slate-200">{{ verifyWait }}秒后重试</a>
                   <!-- <a class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg flex-shrink-0 bg-slate-100 border-slate-200">{{ vf_time }}秒后重试</a> -->
                 </div>
                 <p class="w-full text-right mb-3"><a @click="switchLoginMode" class="text-blue-600 text-sm cursor-pointer">使用密码登录</a></p>
@@ -188,16 +190,20 @@ const showMenu = ref(false);
 const sideCollapsed = ref(false);
 const showLoginModel = ref(false);
 const loginLoading = ref(false);
+const verifyLoading = ref(false);
+const verifyWait = ref(180);
 const verifyToken = ref();
 const form = reactive({
   username:'',
   password:'',
+  verify:'',
 });
 const loginForm = ref()
 const loginPage = ref(0);
 const loginMode = ref(0);
 const swiperRef = ref(null);
 let nextStep,previousStep,switchLoginMode;
+let swiper;
 onMounted(async ()=>{
   setTimeout(()=>{
     if(document.querySelector('#loading-container')){
@@ -209,7 +215,7 @@ onMounted(async ()=>{
       },2000)
     }
   },10);
-  const swiper = new Swiper(swiperRef.value, {
+  swiper = new Swiper(swiperRef.value, {
     autoHeight:true,
     allowTouchMove: false, 
     on: {
@@ -227,11 +233,33 @@ onMounted(async ()=>{
       swiper.updateAutoHeight();
     },50)
   }
+  await new Promise((resolve,reject)=>{
+    document.querySelector('#turnstile-box').innerHTML = '';
+    setTimeout(()=>{
+      swiper.updateAutoHeight();
+    },500)
+    Auth.getRecaptchaToken({
+      action:'login',
+      id:'#turnstile-box',
+      success:(token)=>{
+        verifyToken.value = token;
+        resolve();
+      },
+      failed:()=>{
+        verifyToken.value = false;
+      }
+    })
+  })
   nextStep = () => {
     if(swiper.activeIndex==0){
       if(form.username){
+        if(!form.username.match(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/)){
+          ElMessage.error('请输入正确的邮箱');
+          return ;
+        }
         swiper.slideNext();
       } else {
+        
         ElMessage.warning('请输入邮箱');
       }
     }
@@ -245,16 +273,16 @@ onMounted(async ()=>{
       // isDarkMode.value=1;
     }
   }
-  Auth.getRecaptchaToken({
-    action:'login',
-    id:'#turnstile-box',
-    success:(token)=>{
-      verifyToken.value = token;
-    },
-    failed:()=>{
-      verifyToken.value = false;
-    }
-  })
+  // Auth.getRecaptchaToken({
+  //   action:'login',
+  //   id:'#turnstile-box',
+  //   success:(token)=>{
+  //     verifyToken.value = token;
+  //   },
+  //   failed:()=>{
+  //     verifyToken.value = false;
+  //   }
+  // })
 });
 
 let tmpFn ;
@@ -329,7 +357,9 @@ function reg(){
   showLoginModel.value = false;
   router.push('/reg');
 }
-function sendVerifyCode(){
+let verifyCodeTimer;
+async function sendVerifyCode(){
+  // ElMessage.info('正在进行人机验证');
   if(!verifyToken.value){
     ElMessage.error('请完成验证');
     return ;
@@ -338,7 +368,71 @@ function sendVerifyCode(){
     if(!form.username){
       ElMessage.error('请输入账号');
     } else {
+      //检查是否邮箱
       
+      ElMessage.info('正在发送验证码');
+      verifyLoading.value = true;
+      try{
+        verifyWait.value = 180;
+        const createTeam = await Auth.userVerify({
+          username:form.username,
+          token:verifyToken.value,
+        });
+        if(createTeam.status == 'sus'){
+          ElMessage.success('验证码发送成功');
+          form.verify = createTeam.content.verify;
+          if(verifyCodeTimer) clearInterval(verifyCodeTimer);
+          verifyCodeTimer = setInterval(()=>{
+            verifyWait.value--;
+            if(verifyWait.value <= 0){
+              clearInterval(verifyCodeTimer);
+              verifyCodeTimer = null;
+              verifyLoading.value = false;
+            }
+          },1000);
+        } else if (createTeam.status == 'wait') {
+          form.verify = createTeam.content.verify;
+          verifyWait.value = (createTeam.content.time - new Date().getTime()) / 1000;
+          ElMessage.warning(createTeam.message);
+          if(verifyCodeTimer) clearInterval(verifyCodeTimer);
+          verifyCodeTimer = setInterval(()=>{
+            verifyWait.value--;
+            if(verifyWait.value <= 0){
+              clearInterval(verifyCodeTimer);
+              verifyCodeTimer = null;
+              verifyLoading.value = false;
+            }
+          },1000);
+        } else {
+          verifyLoading.value = false;
+          ElMessage.error(createTeam.message || '验证码发送失败');
+        }
+      } catch(e) {
+        verifyLoading.value = false;
+        ElMessage.error('验证码发送失败');
+      } finally {
+        await new Promise((resolve,reject)=>{
+          verifyToken.value = false;
+          document.querySelector('#turnstile-box').innerHTML = ''
+          setTimeout(()=>{
+            swiper.updateAutoHeight();
+          },500)
+          Auth.getRecaptchaToken({
+            action:'login',
+            id:'#turnstile-box',
+            success:(token)=>{
+              verifyToken.value = token;
+              setTimeout(()=>{
+          swiper.updateAutoHeight();
+        },500)
+              resolve();
+            },
+            failed:()=>{
+              verifyToken.value = false;
+            }
+          })
+        })
+      }
     }
   }
 }
@@ -347,10 +441,70 @@ async function submitForm(){
     ElMessage.error('请完成验证');
     return ;
   }
-  
   if(loginMode.value == 1){
     if(!form.username || !form.password){
       ElMessage.error('请输入账号和密码');
+      return;
+    }
+    ElMessage.info('正在登录');
+    loginLoading.value=true;
+    try{
+      const encode = CryptoJS.MD5(form.username+form.password).toString().toUpperCase();
+      const createTeam = await Auth.userLogin({
+        username:form.username,
+        token:verifyToken.value,
+        verify:form.verify,
+        code:encode
+      });
+      if(createTeam.status == 'sus'){
+        form.username = '';
+        form.password = '';
+        Cookies.set("czigauth", "NeedPrtoken", {
+          expires: new Date(createTeam.content.expires),
+          path: "/",
+          secure: true,
+          domain:'.lingben.top'
+        });
+        await Auth.getPrtoken('force')
+        sessionStorage.removeItem('userInfo')
+        ElMessage.success('登录成功');
+        emitter.emit('updateLoginInfo');
+        if(verifyCodeTimer) clearInterval(verifyCodeTimer);
+        verifyWait.value = 180;
+        if(tmpFn){
+          await tmpFn();
+        }
+        update();
+        tmpFn = null;
+        showLoginModel.value = false;
+        LoginThread.solve();
+      } else {
+        Cookies.remove("czigauth");
+        ElMessage.error(createTeam.message || '登录失败');
+      }
+    } finally {
+      loginLoading.value=false;
+      await new Promise((resolve,reject)=>{
+        verifyToken.value = false;
+        document.querySelector('#turnstile-box').innerHTML = ''
+        setTimeout(()=>{
+          swiper.updateAutoHeight();
+        },500)
+        Auth.getRecaptchaToken({
+          action:'login',
+          id:'#turnstile-box',
+          success:(token)=>{
+            verifyToken.value = token;
+            setTimeout(()=>{
+              swiper.updateAutoHeight();
+            },500)
+            resolve();
+          },
+          failed:()=>{
+            verifyToken.value = false;
+          }
+        })
+      })
     }
   } else {
     if(!form.username || !form.password){
@@ -375,7 +529,7 @@ async function submitForm(){
           expires: new Date(createTeam.content.expires),
           path: "/",
           secure: true,
-          domain:'.chiziingiin.top'
+          domain:'.lingben.top'
         });
         await Auth.getPrtoken('force')
         sessionStorage.removeItem('userInfo')
@@ -394,10 +548,31 @@ async function submitForm(){
       }
     } finally {
       loginLoading.value=false;
+      await new Promise((resolve,reject)=>{
+        verifyToken.value = false;
+        document.querySelector('#turnstile-box').innerHTML = ''
+        setTimeout(()=>{
+          swiper.updateAutoHeight();
+        },500)
+        Auth.getRecaptchaToken({
+          action:'login',
+          id:'#turnstile-box',
+          success:(token)=>{
+            verifyToken.value = token;
+            setTimeout(()=>{
+          swiper.updateAutoHeight();
+        },500)
+            resolve();
+          },
+          failed:()=>{
+            verifyToken.value = false;
+          }
+        })
+      })
     }
   }  
 }
-function close(){
+async function close(){
   if(LoginThread.count <= 1){
     LoginThread.clear();
     showLoginModel.value = false;
@@ -414,6 +589,24 @@ function close(){
       }
     },
   });
+  await new Promise((resolve,reject)=>{
+    verifyToken.value = false;
+    document.querySelector('#turnstile-box').innerHTML = ''
+    Auth.getRecaptchaToken({
+      action:'login',
+      id:'#turnstile-box',
+      success:(token)=>{
+        verifyToken.value = token;
+        setTimeout(()=>{
+          swiper.updateAutoHeight();
+        },500)
+        resolve();
+      },
+      failed:()=>{
+        verifyToken.value = false;
+      }
+    })
+  })
 }
 emitter.on('login',login)
 const toggleSidebar = () => {
@@ -573,6 +766,9 @@ const tabbarList = ref(configList[0].tabs);
 }
 .timefn{
   transition-timing-function: cubic-bezier(0.33, 0.85, 0.41, 1.4) !important;
+}
+.swiper-wrapper{
+  transition: height 0.4s cubic-bezier(0.3, 0.57, 0.44, 1.18), transform 0.3s ease !important
 }
 </style>
 
