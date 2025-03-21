@@ -471,7 +471,7 @@ async function submitForm(){
         await Auth.getPrtoken('force')
         sessionStorage.removeItem('userInfo')
         ElMessage.success('登录成功');
-        emitter.emit('updateLoginInfo');
+        // emitter.emit('updateLoginInfo');
         if(verifyCodeTimer) clearInterval(verifyCodeTimer);
         verifyWait.value = 180;
         if(tmpFn){
@@ -537,7 +537,6 @@ async function submitForm(){
         await Auth.getPrtoken('force')
         sessionStorage.removeItem('userInfo')
         ElMessage.success('登录成功');
-        emitter.emit('updateLoginInfo');
         if(tmpFn){
           await tmpFn();
         }

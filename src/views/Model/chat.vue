@@ -1754,19 +1754,14 @@ async function applynew(){
 
 onMounted(async ()=>{
   emitter.on('updateLoginInfo',()=>{
-    const info = sessionStorage.getItem('userInfo');
-    if(info){
-      if(JSON.parse(info).avatar){
-        loginStatus.value = true;
-      }
+    let prStatus = await Auth.getPrtoken();
+    if(prStatus.status == 'sus' || prStatus.status == 'exist'){
+      loginStatus.value = true;
+    } else {
+      loginStatus.value = false;
     }
   })
-  const info = sessionStorage.getItem('userInfo');
-  if(info){
-    if(JSON.parse(info).avatar){
-      loginStatus.value = true;
-    }
-  }
+  emitter.emit('updateLoginInfo')
   await Auth.db_init()
   sessionID.value = route.query.s;
   model.value = route.query.model || '';

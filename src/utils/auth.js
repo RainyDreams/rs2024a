@@ -225,7 +225,7 @@ let Auth = {
         expires: 7,
         path: "/",
         secure: true,
-        domain:'.chiziingiin.top'
+        domain:'.lingben.top'
       })
     }
     const info = sessionStorage.getItem('userInfo');
@@ -322,7 +322,7 @@ let Auth = {
           expires: new Date(data.content.expires),
           path: "/",
           secure: true,
-          domain:'.chiziingiin.top'
+          domain:'.lingben.top'
         });
         await this.getUserFingerprint();
         Auth.analysis("set", 'userID', data.content.customID);
@@ -334,7 +334,7 @@ let Auth = {
           expires: new Date(),
           path: "/",
           secure: true,
-          domain:'.chiziingiin.top'
+          domain:'.lingben.top'
         });
         await this.getUserFingerprint();
         if (response.status === 401) {
