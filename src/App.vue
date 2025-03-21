@@ -382,6 +382,9 @@ async function sendVerifyCode(){
           ElMessage.success('验证码发送成功');
           form.verify = createTeam.content.verify;
           if(verifyCodeTimer) clearInterval(verifyCodeTimer);
+          if(createTeam.content.time){
+            verifyWait.value = (createTeam.content.time - new Date().getTime()) / 1000;
+          }
           verifyCodeTimer = setInterval(()=>{
             verifyWait.value--;
             if(verifyWait.value <= 0){
