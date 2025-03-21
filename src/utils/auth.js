@@ -123,7 +123,7 @@ let Auth = {
         }catch(err){}
         if (data.status === "sus") {
           gtag('config', 'G-CWX5XWKR74', {
-            'user_id': data.content?.id || '__guest__';
+            'user_id': data.content?.id || '__guest__'
           });
           Auth.analysis("event", 'auth_success')
           return { ...data,status: "sus", content: await success(data), };

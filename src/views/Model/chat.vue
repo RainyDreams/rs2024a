@@ -1063,6 +1063,7 @@ function analysisBtn() {
     useTask.value=false;
     useDraw.value=false;
   }
+  // gtag('event', 'screen_view', { screen_name: 'chat' });
   // if(!useInternet.value && useAnalysis.value){useInternet.value=true}
 }
 function taskBtn(){
