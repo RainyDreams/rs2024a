@@ -286,7 +286,7 @@ let Auth = {
     Auth.analysis("event", 'reportErrlog');
     gtag('event', 'exception', {
       'description': content,
-      'fatal': false;
+      'fatal': false
     });
     let t = {}
     try{
