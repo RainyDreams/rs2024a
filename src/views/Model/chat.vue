@@ -1063,7 +1063,7 @@ function analysisBtn() {
     useTask.value=false;
     useDraw.value=false;
   }
-  // gtag('event', 'screen_view', { screen_name: 'chat' });
+  // gtag('event', 'chat', { screen_name: 'chat' });
   // if(!useInternet.value && useAnalysis.value){useInternet.value=true}
 }
 function taskBtn(){
@@ -1431,7 +1431,7 @@ async function deepMind(targetValue, targetTime, index) {
   const _useDraw_ = useDraw.value;
   const _usePreview_ = usePreview.value;
   try{
-    gtag('event', 'screen_view', {
+    gtag('event', 'chat', {
       chat_useAnalysis: _useAnalysis_,
       chat_useInternet: _useInternet_,
       chat_useTask: _useTask_,
@@ -1512,7 +1512,7 @@ function handleOnMessage(res, m , opt) {
       title:(source)=>{
         title.value = source;
         emitter.emit('updateTitle', source);
-        gtag('config', 'TAG_ID', {
+        gtag('config', 'G-CWX5XWKR74', {
           'page_title' : source
         });
       },
@@ -1704,7 +1704,7 @@ async function applysession({id,mode}){
           createuser:getList.model.createuser,
         };
         title.value = getList.title || title.value;
-        gtag('config', 'TAG_ID', {
+        gtag('config', 'G-CWX5XWKR74', {
           'page_title' : title.value
         });
         try{
