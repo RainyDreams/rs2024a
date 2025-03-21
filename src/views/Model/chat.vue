@@ -1429,6 +1429,15 @@ async function deepMind(targetValue, targetTime, index) {
   const _useTask_ = useTask.value;
   const _useDraw_ = useDraw.value;
   const _usePreview_ = usePreview.value;
+  try{
+    gtag('event', 'screen_view', {
+      chat_useAnalysis: _useAnalysis_,
+      chat_useInternet: _useInternet_,
+      chat_useTask: _useTask_,
+      chat_useDraw: _useDraw_,
+      chat_usePreview: _usePreview_
+    });
+  }catch(e){}
   debouncedScrollToBottom();
   showStop.value = true;
   Auth.chatTaskThread.add(async () => {
@@ -1458,7 +1467,7 @@ async function DeepMindWithAI(opt,count) {
     photo: opt.photo,
     audio: opt.audio,
     onerror: (source, model) => {
-      window.clarity('event', 'CHAT-AI-ERROR');
+      Auth.analysis('event', 'CHAT-AI-ERROR');
       if(source.message.indexOf('UpstashError')>-1){
         source='文件体积过大'
       }
@@ -1625,7 +1634,7 @@ const send = async (param)=>{
   loading.value = true;
   document.getElementById('input_chat_ai').focus();
   placeholder.value = "正在回复中...";
-  window.clarity("identify", fingerprint.value, null, "CHAT-AI", null)
+  Auth.analysis("identify", fingerprint.value, null, "CHAT-AI", null)
   if (
     useInternet.value=='AUTO'
     && (targetValue.indexOf('新闻')>-1 || targetValue.indexOf('news')>-1 || targetValue.indexOf('weather')>-1)

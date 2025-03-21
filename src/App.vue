@@ -114,13 +114,24 @@
               <button type="button" @click="nextStep" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full">下一步</button>
             </div>
             <div class="swiper-slide px-1">
-              <label for="login_password" class="block text-gray-600 text-sm mb-1">{{!loginMode?'密码':'验证码'}}</label>
-              <input type="password" v-model="form.password" id="login_password" placeholder="请输入密码" class="outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full mb-2 bg-slate-100">
-              <p class="w-full text-right mb-3"><a @click="switchLoginMode" class="text-blue-600 text-sm cursor-pointer">使用{{loginMode?'密码':'验证码'}}登录</a></p>
-              <p class="text-sm text-slate-600 mb-3 w-full text-center">{{ loginMode?'如果没有账号将自动注册':'' }}</p>
+              <div v-if="loginMode">
+                <label for="login_password" class="block text-gray-600 text-sm mb-1">验证码</label>
+                <div class="flex mb-2">
+                  <input type="text" v-model="form.password" id="login_password" placeholder="请输入验证码" maxlength="6" class="serif-text outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full bg-slate-100">
+                  <a @click="sendVerifyCode" class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg flex-shrink-0 bg-slate-100 border-slate-200">发送验证码</a>
+                  <!-- <a class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg flex-shrink-0 bg-slate-100 border-slate-200">{{ vf_time }}秒后重试</a> -->
+                </div>
+                <p class="w-full text-right mb-3"><a @click="switchLoginMode" class="text-blue-600 text-sm cursor-pointer">使用密码登录</a></p>
+                <p class="text-sm text-slate-600 mb-3 w-full text-center">如果没有账号将自动注册</p>
+              </div>
+              <div v-else>
+                <label for="login_password" class="block text-gray-600 text-sm mb-1">密码</label>
+                <input type="password" v-model="form.password" id="login_password" placeholder="请输入密码" class="outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full mb-2 bg-slate-100">
+                <p class="w-full text-right mb-3"><a @click="switchLoginMode" class="text-blue-600 text-sm cursor-pointer">使用验证码登录</a></p>
+              </div>
               <div id="turnstile-box" class="mx-auto"></div>
-              <button type="button" @click="previousStep" class="block border mb-2 border-slate-200 transition text-slate-600 py-2 text-center text-base/relaxed px-4 rounded-lg w-full hover:bg-slate-50">上一步</button>
               <button type="button" @click="submitForm" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full" >登录</button>
+              <button type="button" @click="previousStep" class="block border mb-2 border-slate-200 transition text-slate-600 py-2 text-center text-base/relaxed px-4 rounded-lg w-full hover:bg-slate-50">上一步</button>
             </div>
           </div>
         </div>
@@ -217,7 +228,14 @@ onMounted(async ()=>{
     },50)
   }
   nextStep = () => {
-    swiper.slideNext();
+    if(swiper.activeIndex==0){
+      if(form.username){
+        swiper.slideNext();
+      } else {
+        ElMessage.warning('请输入邮箱');
+      }
+    }
+    
   };
   previousStep = () => {
     swiper.slidePrev();
@@ -305,66 +323,79 @@ async function login(){
     LoginThread.solve();
     update()
   })
-  
-  // let prStatus = await Auth.getPrtoken();
-  // if(prStatus.status == 'exist' || prStatus.status == 'sus'){
-
-  // } else {
-  // }
 }
 function reg(){
   LoginThread.solve();
   showLoginModel.value = false;
   router.push('/reg');
 }
+function sendVerifyCode(){
+  if(!verifyToken.value){
+    ElMessage.error('请完成验证');
+    return ;
+  }
+  if(loginMode.value == 1){
+    if(!form.username){
+      ElMessage.error('请输入账号');
+    } else {
+      
+    }
+  }
+}
 async function submitForm(){
   if(!verifyToken.value){
     ElMessage.error('请完成验证');
     return ;
   }
-  if(!form.username || !form.password){
-    ElMessage.error('请输入账号和密码');
-    return ;
-  }
-  ElMessage.info('正在登录')
-  const encode = CryptoJS.MD5(form.username+form.password).toString().toUpperCase();
-  loginLoading.value=true;
-  const createTeam = await Auth.userLogin({
-    username:form.username,
-    password:encode,
-    token:verifyToken.value,
-    force:'ewbiuwudsaef66f'
-  })
-  try{
-    if(createTeam.status == 'sus'){
-      window.clarity("identify", createTeam.content.id, createTeam.content.sessionID,'login',createTeam.content.id)
-      form.username = '';
-      form.password = '';
-      Cookies.set("czigauth", "NeedPrtoken", {
-        expires: new Date(createTeam.content.expires),
-        path: "/",
-        secure: true,
-        domain:'.chiziingiin.top'
-      });
-      await Auth.getPrtoken('force')
-      sessionStorage.removeItem('userInfo')
-      ElMessage.success('登录成功');
-      emitter.emit('updateLoginInfo');
-      if(tmpFn){
-        await tmpFn();
-      }
-      update();
-      tmpFn = null;
-      showLoginModel.value = false;
-      LoginThread.solve();
-    } else {
-      Cookies.remove("czigauth");
-      ElMessage.error('登录失败');
-    }
-  } finally {
-    loginLoading.value=false;
-  }
   
+  if(loginMode.value == 1){
+    if(!form.username || !form.password){
+      ElMessage.error('请输入账号和密码');
+    }
+  } else {
+    if(!form.username || !form.password){
+      ElMessage.error('请输入账号和密码');
+      return ;
+    }
+    ElMessage.info('正在登录')
+    const encode = CryptoJS.MD5(form.username+form.password).toString().toUpperCase();
+    loginLoading.value=true;
+    const createTeam = await Auth.userLogin({
+      username:form.username,
+      password:encode,
+      token:verifyToken.value,
+      force:'ewbiuwudsaef66f'
+    })
+    try{
+      if(createTeam.status == 'sus'){
+        Auth.analysis("identify", createTeam.content.id, createTeam.content.sessionID,'login',createTeam.content.id)
+        form.username = '';
+        form.password = '';
+        Cookies.set("czigauth", "NeedPrtoken", {
+          expires: new Date(createTeam.content.expires),
+          path: "/",
+          secure: true,
+          domain:'.chiziingiin.top'
+        });
+        await Auth.getPrtoken('force')
+        sessionStorage.removeItem('userInfo')
+        ElMessage.success('登录成功');
+        emitter.emit('updateLoginInfo');
+        if(tmpFn){
+          await tmpFn();
+        }
+        update();
+        tmpFn = null;
+        showLoginModel.value = false;
+        LoginThread.solve();
+      } else {
+        Cookies.remove("czigauth");
+        ElMessage.error('登录失败');
+      }
+    } finally {
+      loginLoading.value=false;
+    }
+  }  
 }
 function close(){
   if(LoginThread.count <= 1){
@@ -430,8 +461,12 @@ Auth.basicInfoTaskThread.add(async ()=>{
   });
 })
 router.afterEach(async (to, from) => {
+  try{
+    gtag('event', 'page_view');
+  }catch(e){}
   const item = configList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1) || 
   rightList.find(i=>to.path.indexOf(i.to.split('/')[1])>-1);
+  
   if(item){
     activeName.value = item.name;
     if(window.innerWidth <= 992){

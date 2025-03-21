@@ -94,7 +94,7 @@ const submitForm = (formEl) => {
         force:'ewbiuweuicvewiuc'
       })
       if(createTeam.status == 'sus'){
-        window.clarity("identify", createTeam.content.id, createTeam.content.sessionID,'login',createTeam.content.id)
+        Auth.analysis("identify", createTeam.content.id, createTeam.content.sessionID,'login',createTeam.content.id)
         form.username = '';
         form.password = '';
         Cookies.set("czigauth", "NeedPrtoken", {

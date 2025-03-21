@@ -132,7 +132,7 @@ const send = async (param)=>{
   onChange();
   const index = chatList.value.length - 1;
   fingerprint.value = await Auth.getUserFingerprint();
-  window.clarity("identify", fingerprint.value, null, "TEST-AI", null)
+  Auth.analysis("identify", fingerprint.value, null, "TEST-AI", null)
   await Auth.chatWithAIAnlysis(chatList.value,{
     fingerprint:fingerprint.value,
     onclose:(source) => {

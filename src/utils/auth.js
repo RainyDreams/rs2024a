@@ -22,7 +22,7 @@ const route = useRoute()
 const BASICURL = ''
 const defaultSuccess = async (data) => data.content?data.content:data;
 const defaultFailed = async function (response,code) {
-  window.clarity("event", 'auth_error')
+  Auth.analysis("event", 'auth_error')
   if(!navigator.onLine){
     return { status: 'offline' }
   }
@@ -30,7 +30,7 @@ const defaultFailed = async function (response,code) {
   const err = new Error(
     `Content:${code}\n${response}<br/> UA:${ua}<br/> Link:${window.location.href}<br/> time:${new Date().getTime()}`)
   const r = await Auth.reportErrlog(`${err.message}<br/>${err.stack}`)
-  window.clarity("set", 'reportID', r.id);
+  Auth.analysis("set", 'reportID', r.id);
   return { status: 'error', content: response };
 }
 export class Scheduler {
@@ -69,13 +69,13 @@ export class Scheduler {
 }
 let Auth = {
   acceptPermission:()=>{
-    window.clarity("set", 'permission', 'accept');
-    window.clarity('event', 'permission_accept')
+    Auth.analysis("set", 'permission', 'accept');
+    Auth.analysis('event', 'permission_accept')
     Cookies.set('permission',true,{expires:7})
   },
   rejectPermission:()=>{
-    window.clarity("set", 'permission', 'reject');
-    window.clarity('event', 'permission_reject')
+    Auth.analysis("set", 'permission', 'reject');
+    Auth.analysis('event', 'permission_reject')
     Cookies.set('permission',false,{expires:7})
   },
   mainTaskThread: new Scheduler(5),
@@ -92,6 +92,9 @@ let Auth = {
         ElMessage.success("以访客身份登录成功");
       }
     }
+  },
+  analysis:function(type,){
+
   },
   basicAuth:async function basicAuth(
     url = BASICURL,
@@ -119,7 +122,10 @@ let Auth = {
            data = JSON.parse(fdata);
         }catch(err){}
         if (data.status === "sus") {
-          window.clarity("event", 'auth_success')
+          gtag('config', 'G-CWX5XWKR74', {
+            'user_id': data.content?.id || '__guest__';
+          });
+          Auth.analysis("event", 'auth_success')
           return { ...data,status: "sus", content: await success(data), };
         } else if (data.status === "error" && data.code === 4) {
           // let a = await this.getPrtoken();
@@ -162,7 +168,7 @@ let Auth = {
     success,
     failed
   }){
-    window.clarity("event", 'getRecaptchaToken')
+    Auth.analysis("event", 'getRecaptchaToken')
     return new Promise((resolve,reject)=>{
       // window.turnstile.ready(function () {
         window.turnstile.render(id, {
@@ -181,7 +187,7 @@ let Auth = {
     })
   },
   guestLogin:async function guestLogin(param) {
-    window.clarity("event", 'guestLogin')
+    Auth.analysis("event", 'guestLogin')
     const res = await this.basicAuth(
       "/api/guestlogin",
       JSON.stringify({ username: "guest" })
@@ -196,17 +202,17 @@ let Auth = {
   },
   userRegister:async function userRegister(param){
     await this.getUserFingerprint();
-    window.clarity("event", 'userRegister')
+    Auth.analysis("event", 'userRegister')
     return this.basicAuth("/api/reg", JSON.stringify(param))
   },
   userLogin:async function userLogin(param) {
     await this.getUserFingerprint();
-    window.clarity("event", 'userLogin')
+    Auth.analysis("event", 'userLogin')
     return this.basicAuth("/api/login", JSON.stringify(param))
   },
   getBasicInfoStatus:false,
   getBasicInfo:/*asyncThrottle(*/async function getBasicInfo({task}){
-    window.clarity("event", 'getBasicInfo')
+    Auth.analysis("event", 'getBasicInfo')
     // const getPr = await Auth.getPrtoken();
     // debugger;
     if((!Cookies.get('czigauth'))){
@@ -240,7 +246,7 @@ let Auth = {
     } else {
     }
     // debugger;
-    window.clarity("set", 'userTag', res.identityType || 'normal');
+    Auth.analysis("set", 'userTag', res.identityType || 'normal');
     this.getBasicInfoStatus = false;
     return task({
       ...JSON.parse(info),
@@ -252,7 +258,7 @@ let Auth = {
     return task(info)
   })*/
   getUser:async function getUser(){
-    window.clarity("event", 'getUser')
+    Auth.analysis("event", 'getUser')
     const stmtGet = sessionStorage.getItem('userInfo')
     if(stmtGet){
       return JSON.parse(stmtGet)
@@ -261,23 +267,27 @@ let Auth = {
     }
   },
   logout: async function logout(){
-    window.clarity("event", 'logout')
+    Auth.analysis("event", 'logout')
     await this.getPrtoken()
     return this.basicAuth("/api/logout")
   },
   checkUsername:async function checkUsername(value){
     await this.getUserFingerprint();
-    window.clarity("event", 'checkUsername')
+    Auth.analysis("event", 'checkUsername')
     return this.basicAuth("/api/checkUsername", JSON.stringify({username:value}))
   },
   test:async function test() {
     await this.getUserFingerprint();
-    window.clarity("event", 'test')
+    Auth.analysis("event", 'test')
     return this.basicAuth("/api/test");
   },
   reportErrlog:async function reportErrlog(content) {
     await this.getUserFingerprint();
-    window.clarity("event", 'reportErrlog')
+    Auth.analysis("event", 'reportErrlog');
+    gtag('event', 'exception', {
+      'description': content,
+      'fatal': false;
+    });
     let t = {}
     try{
       t = this.basicAuth("/api/reportErrlog", content,{failed:async ()=>{}});
@@ -300,7 +310,7 @@ let Auth = {
     } else if (!Cookies.get("czigauth") && !userAuthStatus && !userAuth?.AlreadyAuthenticated){
       return { status: "notExist", content: Cookies.get("czigauth") };
     }
-    window.clarity("event", 'getPrtoken')
+    Auth.analysis("event", 'getPrtoken')
     return this.basicAuth("/api/prtoken", "", {
       success: async (data) => {
         Cookies.set("czigauth", "AlreadyAuthenticated", {
@@ -310,8 +320,8 @@ let Auth = {
           domain:'.chiziingiin.top'
         });
         await this.getUserFingerprint();
-        window.clarity("set", 'userID', data.content.customID);
-        window.clarity("identify", data.content.customID, data.content.sessionID,'getPrtoken',data.content.customID)
+        Auth.analysis("set", 'userID', data.content.customID);
+        Auth.analysis("identify", data.content.customID, data.content.sessionID,'getPrtoken',data.content.customID)
         return { status: "sus", content: data.content };
       },
       failed: async (response, type) => {
@@ -323,17 +333,17 @@ let Auth = {
         });
         await this.getUserFingerprint();
         if (response.status === 401) {
-          window.clarity("event", 'getPrtoken_401')
+          Auth.analysis("event", 'getPrtoken_401')
           return { status: 'invalid', content: response };
         } else {
-          window.clarity("event", 'getPrtoken_Error')
+          Auth.analysis("event", 'getPrtoken_Error')
           return { status: 'error', content: response };
         }
       }
     });
   },
   createTeam:async function createTeam(param) {
-    window.clarity("event", 'createTeam')
+    Auth.analysis("event", 'createTeam')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/createTeam",
@@ -341,7 +351,7 @@ let Auth = {
     );
   },
   joinTeam:async function joinTeam(param) {
-    window.clarity("event","joinTeam")
+    Auth.analysis("event","joinTeam")
     await this.getPrtoken();
     return this.basicAuth(
       "/api/joinTeam",
@@ -349,7 +359,7 @@ let Auth = {
     );
   },
   getTeamInfo:async function getTeamInfo(param = {}) {
-    window.clarity("event", 'getTeamInfo')
+    Auth.analysis("event", 'getTeamInfo')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/teamInfo",
@@ -357,7 +367,7 @@ let Auth = {
     );
   },
   getTeamList:async function getTeamList(param = {}) {
-    window.clarity("event", 'getTeamList')
+    Auth.analysis("event", 'getTeamList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/teamList",
@@ -365,7 +375,7 @@ let Auth = {
     );
   },
   getJoinedTeamList: async function getJoinedTeamList(param = {}) {
-    window.clarity("event", 'getJoinedTeamList')
+    Auth.analysis("event", 'getJoinedTeamList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/joinedTeamList",
@@ -373,7 +383,7 @@ let Auth = {
     );
   },
   removeTeamUser:async function removeTeamUser(param={}){
-    window.clarity("event", 'removeTeamUser')
+    Auth.analysis("event", 'removeTeamUser')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/teamRemoveMember",
@@ -381,7 +391,7 @@ let Auth = {
     );
   },
   teamChangeRole:async function teamChangeRole(param){
-    window.clarity("event", 'changeRole')
+    Auth.analysis("event", 'changeRole')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/teamChangeRole",
@@ -389,12 +399,12 @@ let Auth = {
     );
   },
   getDashboard:async function getDashboard() {
-    window.clarity("event", 'getDashboard')
+    Auth.analysis("event", 'getDashboard')
     await this.getPrtoken();
     return this.basicAuth("/api/dashboard", JSON.stringify({}));
   },
   getDashboardAnlysis:async function getDashboardAnlysis(param){
-    window.clarity("event", 'getDashboardAnlysis')
+    Auth.analysis("event", 'getDashboardAnlysis')
     await this.getPrtoken();
     return await this.getStreamText('/api/dashboardAnlysis', { content: JSON.stringify(),}, {
       onmessage:param.onmessage,
@@ -402,12 +412,12 @@ let Auth = {
     });
   },
   createProject: async function createProject(param) {
-    window.clarity("event", 'createProject')
+    Auth.analysis("event", 'createProject')
     await this.getPrtoken();
     return this.basicAuth("/api/createProject", JSON.stringify({ ...param }));
   },
   getProjectDetail:async function getProjectDetail(param = {}) {
-    window.clarity("event", 'getProjectDetail')
+    Auth.analysis("event", 'getProjectDetail')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/projectDetail",
@@ -415,7 +425,7 @@ let Auth = {
     );
   },
   getProjectList:async function getProjectList(param = {}) {
-    window.clarity("event", 'getProjectList')
+    Auth.analysis("event", 'getProjectList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/projectList",
@@ -423,7 +433,7 @@ let Auth = {
     );
   },
   getJoinedProjectList:async function getJoinedProjectList(param = {}) {
-    window.clarity("event", 'getJoinedProjectList')
+    Auth.analysis("event", 'getJoinedProjectList')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/joinedProjectList",
@@ -431,7 +441,7 @@ let Auth = {
     );
   },
   createProjectItem:async function createProjectItem(param = {}){
-    window.clarity("event", 'createProjectItem')
+    Auth.analysis("event", 'createProjectItem')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/project/create-item",
@@ -439,7 +449,7 @@ let Auth = {
     );
   },
   getProjectItem:async function getProjectItem(param={}){
-    window.clarity("event", 'getProjectItem')
+    Auth.analysis("event", 'getProjectItem')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/project/get-item",
@@ -447,7 +457,7 @@ let Auth = {
     );
   },
   getProjectItemByID:async function getProjectItemByID(param={}){
-    window.clarity("event", 'getProjectItemByID')
+    Auth.analysis("event", 'getProjectItemByID')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/project/get-item-by-id",
@@ -455,7 +465,7 @@ let Auth = {
     );
   },
   addDiscussion:async function addDiscussion(param={}){
-    window.clarity("event", 'addDiscussion')
+    Auth.analysis("event", 'addDiscussion')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/project/add-discussion",
@@ -463,7 +473,7 @@ let Auth = {
     );
   },
   getDiscussionAnlysis:async function getDiscussionAnlysis(param,fns){
-    window.clarity("event", 'getDiscussionAnlysis')
+    Auth.analysis("event", 'getDiscussionAnlysis')
     await this.getPrtoken();
     return await this.getStreamText('/api/project/DiscussionAnlysis', { ...param}, {
       onmessage:fns.onmessage,
@@ -471,7 +481,7 @@ let Auth = {
     });
   },
   removeProjectItem:async function removeProjectItem(param={}){
-    window.clarity("event", 'removeProjectItem')
+    Auth.analysis("event", 'removeProjectItem')
     await this.getPrtoken();
     return this.basicAuth(
       "/api/project/remove-item",
@@ -479,26 +489,26 @@ let Auth = {
     );
   },
   getUserInfo:async function getUserInfo(param = {}) {
-    window.clarity("event", 'getUserInfo')
+    Auth.analysis("event", 'getUserInfo')
     await this.getPrtoken();
     return this.basicAuth('/api/userinfo', JSON.stringify({ uid: param.uid||'' }), );
   },
   getUpdateList:async function getUpdateList(param = {}){
-    window.clarity("event", 'getUpdateList')
+    Auth.analysis("event", 'getUpdateList')
     return this.basicAuth('/api/getUpdateList', JSON.stringify({ page:param.page }), );
   },
   getNotification:async function getNotification(param={}){
-    window.clarity("event", 'getNotification')
+    Auth.analysis("event", 'getNotification')
     await this.getPrtoken();
     return this.basicAuth('/api/getNotification', JSON.stringify({ page:param.page }), );
   },
   readNotification: async function readNotification(param={}){
-    window.clarity("event", 'readNotification')
+    Auth.analysis("event", 'readNotification')
     await this.getPrtoken();
     return this.basicAuth('/api/readNotification', JSON.stringify({ list:param.list }), );
   },
   openWindow:async function openWindow(url,callback){
-    window.clarity("event", 'openWindow')
+    Auth.analysis("event", 'openWindow')
     let width = 500;
     let height = 500;
     let left = (screen.width - width) / 2;
@@ -514,23 +524,23 @@ let Auth = {
   },
   /* 实验性功能 */
   getModelList: async function getModelList(){
-    window.clarity("event", 'getModelList');
+    Auth.analysis("event", 'getModelList');
     return this.basicAuth('/api/ai/modelList', '', );
   },
   createModel: async function createModel(param){
-    window.clarity("event", 'createModel')
+    Auth.analysis("event", 'createModel')
     return this.basicAuth('/api/ai/createModel', JSON.stringify(param), );
   },
   getAIWelcome: async function getAIWelcome(param){
-    window.clarity("event", 'getAIWelcome')
+    Auth.analysis("event", 'getAIWelcome')
     return this.basicAuth('/api/ai/welcome', JSON.stringify(param || {}), );
   },
   getAIAnlysisWelcome: async function getAIAnlysisWelcome(param){
-    window.clarity("event", 'getAIAnlysisWelcome')
+    Auth.analysis("event", 'getAIAnlysisWelcome')
     return this.basicAuth('/api/ai/anlysisWelcome', JSON.stringify(param || {}), );
   },
   getAISessionID: async function getAISessionID(param){
-    window.clarity("event", 'ApplyForAISessionID')
+    Auth.analysis("event", 'ApplyForAISessionID')
     await this.getPrtoken();
     let _this = this;
     return this.basicAuth('/api/ai/apply_for_sessionID', JSON.stringify({
@@ -539,18 +549,18 @@ let Auth = {
     }));
   },
   getServerStatus:async function getServerStatus(){
-    window.clarity("event", 'getServerStatus')
+    Auth.analysis("event", 'getServerStatus')
     return this.basicAuth('/api/getServerStatus', JSON.stringify({
       time:(new Date()).getTime()
     }), );
   },
   getAiChatHistory: async function getAiChatHistory(param){
-    window.clarity("event", 'getAiChatHistory')
+    Auth.analysis("event", 'getAiChatHistory')
     await this.getPrtoken();
     return this.basicAuth('/api/ai/get_history',param);
   },
   getAIChatList: async function getAIChatList(param){
-    window.clarity("event", 'getAIChatList')
+    Auth.analysis("event", 'getAIChatList')
     await this.getPrtoken();
     return this.basicAuth('/api/ai/get_chat_history', JSON.stringify({
       sessionID: param.sessionID,
@@ -560,7 +570,7 @@ let Auth = {
     }));
   },
   setAIChatResponse: async function setAIChatResponse(param){
-    window.clarity("event", 'setAIChatResponse')
+    Auth.analysis("event", 'setAIChatResponse')
     await this.getPrtoken();
     return this.basicAuth('/api/ai/set_chat_response', JSON.stringify({
       sessionID: param.sessionID,
@@ -570,7 +580,7 @@ let Auth = {
     }));
   },
   setAIChatResponse_test: async function setAIChatResponse(param){
-    window.clarity("event", 'setAIChatResponse')
+    Auth.analysis("event", 'setAIChatResponse')
     await this.getPrtoken();
     return this.basicAuth('/api/ai/set_chat_response_test', JSON.stringify({
       sessionID: param.sessionID,
@@ -578,7 +588,7 @@ let Auth = {
     }));
   },
   AI_createWorkflow:async function AI_createWorkflow(param){
-    window.clarity("event", 'AI_createWorkflow')
+    Auth.analysis("event", 'AI_createWorkflow')
     await this.getPrtoken();
     // return this.basicAuth('/api/ai/createWorkflow', JSON.stringify(param), );
     // debugger;
@@ -594,7 +604,7 @@ let Auth = {
     );
   },
   chatWithAIAnlysis:async function chatWithAIAnlysis(list, param){
-    window.clarity("event", 'chatWithAIAnlysis')
+    Auth.analysis("event", 'chatWithAIAnlysis')
     await this.getPrtoken();
     const res = await this.basicAuth(
       "/api/ai/send",
@@ -608,7 +618,7 @@ let Auth = {
     }
   },
   chatWithAI_Analysis:async function chatWithAI_Analysis(param) {
-    window.clarity("event", 'chatWithAI')
+    Auth.analysis("event", 'chatWithAI')
     await this.getPrtoken();
     let _this = this;
     if(!param.useAnalysis){
@@ -624,7 +634,7 @@ let Auth = {
     });
   },
   chatWithAI:async function chatWithAI(param) {
-    window.clarity("event", 'chatWithAI')
+    Auth.analysis("event", 'chatWithAI')
     await this.getPrtoken();
     let _this = this;
     await this.getStreamText('/api/ai/deepMind', 
@@ -652,7 +662,7 @@ let Auth = {
 
 
   deepMind_Analysis:async function chatWithAI_Analysis(param) {
-    window.clarity("event", 'chatWithAI')
+    Auth.analysis("event", 'chatWithAI')
     await this.getPrtoken();
     const res = await this.basicAuth('/api/ai/deepMind_Analysis', 
       JSON.stringify({ sessionID: param.sessionID, content: param.content,vf:param.vf,
@@ -664,7 +674,7 @@ let Auth = {
     return res.content;
   },
   deepMind_Try:async function chatWithAI_Analysis(param) {
-    window.clarity("event", 'chatWithAI')
+    Auth.analysis("event", 'chatWithAI')
     await this.getPrtoken();
     await this.getStreamText('/api/ai/deepMind_Try', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
@@ -680,7 +690,7 @@ let Auth = {
     });
   },
   deepMind_Summary:async function chatWithAI_Analysis(param) {
-    window.clarity("event", 'chatWithAI')
+    Auth.analysis("event", 'chatWithAI')
     await this.getPrtoken();
     await this.getStreamText('/api/ai/deepMind_Summary', 
       { sessionID: param.sessionID, content: param.content,vf:param.vf,
@@ -699,7 +709,7 @@ let Auth = {
 
 
   dangerViewGuest:async function dangerViewGuest(param) {
-    window.clarity("event", 'dangerViewGuest')
+    Auth.analysis("event", 'dangerViewGuest')
     await this.getPrtoken();
     return this.basicAuth('/api/danger/viewGuest', JSON.stringify({}));
   },
@@ -708,7 +718,7 @@ let Auth = {
 
 
   chatWithAI_test:async function chatWithAI(param) {
-    window.clarity("event", 'chatWithAI')
+    Auth.analysis("event", 'chatWithAI')
     await this.getPrtoken();
     let _this = this;
     await this.getStreamText('/api/ai/stream_test', { sessionID: param.sessionID, content: param.content,vf:param.vf}, {
@@ -835,7 +845,7 @@ let Auth = {
     return '???'
   },
   getStreamText:async function getStreamText(url,postData,param) {
-    window.clarity("event", 'getStreamText')
+    Auth.analysis("event", 'getStreamText')
     try{
       await this.getPrtoken();
       const postOptions = {
@@ -901,16 +911,16 @@ let Auth = {
     }
   },
   getAIGuestList:async function getAIGuestList() {
-    window.clarity("event", 'getAIGuestList')
+    Auth.analysis("event", 'getAIGuestList')
     await this.getPrtoken();
     return this.basicAuth("/api/danger/viewAIGuest");
   },
   getUserFingerprint:async function getUserFingerprint() {
-    window.clarity("event", 'getUserFingerprint')
+    Auth.analysis("event", 'getUserFingerprint')
     const fp = await FingerprintJS.load();
     const result = await fp.get();
     const visitorId = result.visitorId;
-    window.clarity("set", 'Fingerprint',result.visitorId);
+    Auth.analysis("set", 'Fingerprint',result.visitorId);
     return visitorId;
   },
   db:{
@@ -929,7 +939,7 @@ let Auth = {
   getUserInfoByID:async function getUserInfoByID(user){
     await this.db_init()
     let this_ = this;
-    window.clarity("event", 'getUserInfoByID')
+    Auth.analysis("event", 'getUserInfoByID')
     this.db.transaction('rw', this.db.user_profile_cache, async () => {
       const now = Date.now();
       const expiredItems = await this_.db.user_profile_cache.where('expirationTime').below(now).toArray();
@@ -1010,7 +1020,7 @@ let Auth = {
   },
 }
 Auth.copyText = navigator.clipboard?(text,fn,er) => {
-  window.clarity("event",'copy')
+  Auth.analysis("event",'copy')
   navigator.clipboard.writeText(text).then(() => {
     fn()
   }).catch((error) => {
@@ -1018,7 +1028,7 @@ Auth.copyText = navigator.clipboard?(text,fn,er) => {
     // // console.error('Error copying text to clipboard:', error);
   });
 }:(text,fn,er)=>{
-  window.clarity("event",'copy')
+  Auth.analysis("event",'copy')
   const textarea = document.createElement('textarea');
   textarea.value = text;
   document.body.appendChild(textarea);
@@ -1033,7 +1043,7 @@ Auth.copyText = navigator.clipboard?(text,fn,er) => {
   document.body.removeChild(textarea);
 }
 Auth.copyHtml = false? (html, fn, er) => {
-  window.clarity("event", 'copy');
+  Auth.analysis("event", 'copy');
   // 对于现代浏览器，尝试使用Clipboard API复制HTML（如果支持）
   navigator.clipboard.write([
     new ClipboardItem({
@@ -1046,7 +1056,7 @@ Auth.copyHtml = false? (html, fn, er) => {
     // // console.error('Error copying HTML to clipboard:', error);
   });
 } : (html,fn,er) => {
-  window.clarity("event", 'copy');
+  Auth.analysis("event", 'copy');
   // 对于旧浏览器，使用document.execCommand方式
   const div = document.createElement('div');
   div.innerHTML = html;

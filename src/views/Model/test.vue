@@ -140,7 +140,7 @@ const send = async (param)=>{
   askRef.value.focus();
   placeholder.value = "正在回复中...";
   fingerprint.value = await Auth.getUserFingerprint();
-  window.clarity("identify", fingerprint.value, null, "TEST-AI", null)
+  Auth.analysis("identify", fingerprint.value, null, "TEST-AI", null)
   setTimeout(()=>{
     throttledScrollToBottom();
   },100)

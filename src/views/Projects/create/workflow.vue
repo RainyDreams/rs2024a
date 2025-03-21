@@ -301,7 +301,7 @@ const send = async (param)=>{
   loading.value = true;
   askRef.value.focus();
   placeholder.value = "正在回复中...";
-  window.clarity("identify", fingerprint.value, null, "TEST-AI", null)
+  Auth.analysis("identify", fingerprint.value, null, "TEST-AI", null)
   setTimeout(()=>{
     throttledScrollToBottom();
   },100)
