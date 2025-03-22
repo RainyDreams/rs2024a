@@ -1658,6 +1658,7 @@ const debouncedScrollToBottom = debounce(scrollToBottom, 700);
 const throttledScrollToBottom = throttle(scrollToBottom, 1500); 
 let applying = false
 async function applysession({id,mode}){
+  
   if(sessionID.value){
     let tmp = 0;
     chatList.value = JSON.parse(localStorage.getItem('chat_'+sessionID.value) || '[]');
@@ -1705,7 +1706,7 @@ async function applysession({id,mode}){
         };
         title.value = getList.title || title.value;
         gtag('event', 'page_view', {
-          'page_title': source,
+          'page_title': title.value,
         });
         try{
           localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
@@ -1748,7 +1749,8 @@ async function applynew(){
   showStop.value=false;
   loading.value=false;
   statusText.value='';
-  const res = await applysession({id:'',mode:'new'});
+  router.push('/?model='+model.value);
+  // const res = await applysession({id:'',mode:'new'});
   debouncedScrollToBottom();
 }
 

@@ -256,7 +256,15 @@ onMounted(async ()=>{
       // isDarkMode.value=1;
     }
   }
-  new Promise((resolve,reject)=>{
+  Auth.basicInfoTaskThread.add(async ()=>{
+    update();
+    // await new Promise(resolve=>{
+    //   setTimeout(()=>{
+    //     resolve()
+    //   },10000)
+    // });
+  })
+  let a = new Promise((resolve,reject)=>{
     document.querySelector('#turnstile-box').innerHTML = '';
     setTimeout(()=>{
       swiper.updateAutoHeight();
@@ -272,7 +280,11 @@ onMounted(async ()=>{
         verifyToken.value = false;
       }
     })
-  })();
+  });
+  a.then(()=>{
+    console.log('更新成功')
+  })
+  
   // Auth.getRecaptchaToken({
   //   action:'login',
   //   id:'#turnstile-box',
@@ -647,14 +659,7 @@ router.beforeEach((to, from, next) => {
   }
   next()
 });
-Auth.basicInfoTaskThread.add(async ()=>{
-  update();
-  await new Promise(resolve=>{
-    setTimeout(()=>{
-      resolve()
-    },10000)
-  });
-})
+
 router.afterEach(async (to, from) => {
   try{
     gtag('event', 'page_view');

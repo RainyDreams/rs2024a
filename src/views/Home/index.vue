@@ -93,9 +93,9 @@
       <p class="text-center text-sm w-full">
         <!-- <a title="本站支持IPv6访问" target='_blank'><img style='display:inline-block;vertical-align:middle' alt="本站支持IPv6访问" src="https://static.ipw.cn/icon/ipv6-certified-s4.svg"></a>
         <a title="本站支持SSL安全访问" target='_blank'><img style='display:inline-block;vertical-align:middle' alt="本站支持SSL安全访问" src="https://static.ipw.cn/icon/ssl-s4.svg"></a> -->
-        <a href="https://www.chiziingiin.top/license/user" class="mx-2">用户协议</a>
-        <a href="https://www.chiziingiin.top/license/private" class="mx-2">隐私政策</a>
-        <a href="https://www.chiziingiin.top/project/RS2024/explain" class="mx-2">名词介绍</a>
+        <a href="https://oh.chiziingiin.top/license/user" class="mx-2">用户协议</a>
+        <a href="https://oh.chiziingiin.top/license/private" class="mx-2">隐私政策</a>
+        <a href="https://oh.chiziingiin.top/project/RS2024/explain" class="mx-2">名词介绍</a>
       </p>
     </div>
   </div>
