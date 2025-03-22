@@ -1512,8 +1512,8 @@ function handleOnMessage(res, m , opt) {
       title:(source)=>{
         title.value = source;
         emitter.emit('updateTitle', source);
-        gtag('config', 'G-CWX5XWKR74', {
-          'page_title' : source
+        gtag('event', 'page_view', {
+          'page_title': source,
         });
       },
       suggestions:(source)=>{
@@ -1704,8 +1704,8 @@ async function applysession({id,mode}){
           createuser:getList.model.createuser,
         };
         title.value = getList.title || title.value;
-        gtag('config', 'G-CWX5XWKR74', {
-          'page_title' : title.value
+        gtag('event', 'page_view', {
+          'page_title': source,
         });
         try{
           localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
@@ -1753,7 +1753,7 @@ async function applynew(){
 }
 
 onMounted(async ()=>{
-  emitter.on('updateLoginInfo',()=>{
+  emitter.on('updateLoginInfo',async ()=>{
     let prStatus = await Auth.getPrtoken();
     if(prStatus.status == 'sus' || prStatus.status == 'exist'){
       loginStatus.value = true;

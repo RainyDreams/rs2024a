@@ -131,7 +131,7 @@
                 <input type="password" v-model="form.password" id="login_password" placeholder="请输入密码" class="outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full mb-2 bg-slate-100">
                 <p class="w-full text-right mb-3"><a @click="switchLoginMode" class="text-blue-600 text-sm cursor-pointer">使用验证码登录</a></p>
               </div>
-              <div id="turnstile-box" class="mx-auto"></div>
+              <div id="turnstile-box" class="mx-auto min-h-[70px]"></div>
               <button type="button" @click="submitForm" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full" >登录</button>
               <button type="button" @click="previousStep" class="block border mb-2 border-slate-200 transition text-slate-600 py-2 text-center text-base/relaxed px-4 rounded-lg w-full hover:bg-slate-50">上一步</button>
             </div>
@@ -233,23 +233,6 @@ onMounted(async ()=>{
       swiper.updateAutoHeight();
     },50)
   }
-  await new Promise((resolve,reject)=>{
-    document.querySelector('#turnstile-box').innerHTML = '';
-    setTimeout(()=>{
-      swiper.updateAutoHeight();
-    },500)
-    Auth.getRecaptchaToken({
-      action:'login',
-      id:'#turnstile-box',
-      success:(token)=>{
-        verifyToken.value = token;
-        resolve();
-      },
-      failed:()=>{
-        verifyToken.value = false;
-      }
-    })
-  })
   nextStep = () => {
     if(swiper.activeIndex==0){
       if(form.username){
@@ -273,6 +256,23 @@ onMounted(async ()=>{
       // isDarkMode.value=1;
     }
   }
+  new Promise((resolve,reject)=>{
+    document.querySelector('#turnstile-box').innerHTML = '';
+    setTimeout(()=>{
+      swiper.updateAutoHeight();
+    },500)
+    Auth.getRecaptchaToken({
+      action:'login',
+      id:'#turnstile-box',
+      success:(token)=>{
+        verifyToken.value = token;
+        resolve();
+      },
+      failed:()=>{
+        verifyToken.value = false;
+      }
+    })
+  })();
   // Auth.getRecaptchaToken({
   //   action:'login',
   //   id:'#turnstile-box',
@@ -349,7 +349,7 @@ emitter.on('applyForLogin',(fn=async()=>{})=>{
 async function login(){
   emitter.emit('applyForLogin',async()=>{
     LoginThread.solve();
-    update()
+    emitter.emit('updateLoginInfo');
   })
 }
 function reg(){

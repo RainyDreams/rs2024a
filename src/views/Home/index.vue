@@ -1,5 +1,6 @@
 <template>
-  <div class="site-content Crimson">
+  <div class="site-content">
+    
     <div class="panel bs-container py-6 md:py-12 lg:py-16 xl:py-22 mb-6">
       <div class="row">
         <div class="col-12 col-lg-6">
@@ -15,6 +16,8 @@
               @click="show_video=true">
               <play-one theme="filled" size="50" fill="#fff" />
               <span class="text-white text-lg mt-2">观看宣传短片</span>
+        <span class="primary-text">{{ count || '[登录访问限制]3+1+N ' }}</span>
+
             </div>
             <iframe v-else class="aspect-video" style="width:100%;" src="https://player.bilibili.com/player.html?bvid=BV1b1pQeCEcm&as_wide=0&danmaku=false&autoplay=1&muted=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
           </div>  
@@ -111,8 +114,7 @@
       <p class="text-center mb-2"><span class="">赤子英金</span> · <span class="primary-text">零本智协</span></p>
       <p class="text-center mb-2 text-xs md:text-sm">Copyright © 2025 赤峰二中2023级12班研究性学习零本智协项目组 All rights reserved.</p>
       <p class="text-center mb-2 text-xs md:text-sm">自2024年8月18日开始统计，已累计稳定提供服务
-        <span class="primary-text">{{ count }}</span></p>
-      <p class="text-center text-sm">
+      <p class="text-center text-sm"></p>
         <!-- <a title="本站支持IPv6访问" target='_blank'><img style='display:inline-block;vertical-align:middle' alt="本站支持IPv6访问" src="https://static.ipw.cn/icon/ipv6-certified-s4.svg"></a>
         <a title="本站支持SSL安全访问" target='_blank'><img style='display:inline-block;vertical-align:middle' alt="本站支持SSL安全访问" src="https://static.ipw.cn/icon/ssl-s4.svg"></a> -->
         <a href="https://www.chiziingiin.top/license/user" class="mx-2">用户协议</a>
