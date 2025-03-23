@@ -1572,7 +1572,7 @@ function handleOnMessage(res, m , opt) {
             showClose:source.showClose===false?false:true,
           })
         }catch(e){
-
+          console.log(e);
         }
       }
     });
