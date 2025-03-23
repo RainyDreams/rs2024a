@@ -1737,6 +1737,35 @@ async function applysession({id,mode}){
             renderContent(i)
           }
         })
+        chatList.value.forEach((e,i)=>{
+        if(e.role == 'user'){
+          e.status = e.analysis?'analysised':'no_analysis';
+          e.show_thought = false;
+          if(e.photo){
+            if(e.photo.meta){
+              e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
+            }
+          }
+          if(e.audio){
+            if(e.audio.meta){
+              e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
+            } else {
+              e.audio.blob=null;
+            }
+          }
+          if(e.analysis){
+            renderAnalysis(i);
+          }
+          if(i == 0){
+            e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
+          } else {
+            e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
+            tmp=i;
+          }
+        } else {
+          renderContent(i)
+        }
+      })
         setTimeout(()=>{
           scrollToBottom()
         },50)
