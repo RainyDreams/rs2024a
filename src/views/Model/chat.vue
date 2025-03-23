@@ -229,8 +229,8 @@
                         >
                           <div v-for="(item,i2) in item.renderedAnalysis" :key="i2" v-html="item" class="chat_animate_in"></div>
                         </div>
-                        <p v-if="item.analysis" @click="item.show_thought = !item.show_thought" class="flex items-center cursor-pointer justify-end">
-                          <span class="py-2 px-3 border border-slate-200 bg-white mt-2 items-center leading-none hover:bg-slate-100  transition-all rounded-lg cursor-pointer flex">
+                        <p v-if="item.analysis" class="flex items-center cursor-pointer justify-end">
+                          <span @click="item.show_thought = !item.show_thought" class="py-2 px-3 border sticky bottom-20 border-slate-200 bg-white mt-2 items-center leading-none hover:bg-slate-100  transition-all rounded-lg cursor-pointer flex">
                             <SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>{{item.show_thought?'收起':'展开'}}思考过程
                           </span>
                           <!-- <Down v-show="!item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
@@ -1721,7 +1721,9 @@ async function applysession({id,mode}){
         });
         try{
           localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
-        }catch(e){}
+        }catch(e){
+          localStorage.clear()
+        }
         chatList.value.forEach((e,i)=>{
           if(e.role == 'user'){
             if(e.analysis){
