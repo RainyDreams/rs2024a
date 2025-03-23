@@ -847,6 +847,8 @@ let Auth = {
       opt.draw(JSON.parse(decode.text))
     } else if (decode.mode == 'preview'){
       opt.preview(decode.config)
+    } else if (decode.mode == 'alert'){
+      opt.alert(decode.content)
     }
     return '???'
   },

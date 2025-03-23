@@ -1564,6 +1564,16 @@ function handleOnMessage(res, m , opt) {
             }
           })
         }catch(e){}
+      },
+      alert:(source)=>{
+        try{
+          ElMessageBox.alert(source.content, source.title||'提示', {
+            confirmButtonText: source.confirmButtonText||'确定',
+            showClose:source.showClose===false?false:true,
+          })
+        }catch(e){
+
+        }
       }
     });
   }catch(e){
