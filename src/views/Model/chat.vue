@@ -1721,9 +1721,6 @@ async function applysession({id,mode}){
         try{
           localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
         }catch(e){}
-        finally{
-          
-        }
         chatList.value.forEach((e,i)=>{
           if(e.role == 'user'){
             if(e.analysis){
