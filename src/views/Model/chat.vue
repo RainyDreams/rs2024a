@@ -1706,7 +1706,8 @@ async function applysession({id,mode}){
     welcome_loading.value = false;
     Auth.chatTaskThread.add(async ()=>{
       const getList = (await Auth.getAIChatList({sessionID:sessionID.value,mode,model:model.value,vf:fingerprint.value}))
-      Auth.chatTaskThread.add(async ()=>{
+      // Auth.chatTaskThread.add(async ()=>{
+        chatList.value = getList.content;
         welcome.value = getList.welcome;
         model_info.value = {
           ...model_info.value,
@@ -1740,7 +1741,7 @@ async function applysession({id,mode}){
           scrollToBottom()
         },50)
         model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
-      })
+      // })
     })
   } else {
     loading.value = false;
