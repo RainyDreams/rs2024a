@@ -3,7 +3,7 @@ import router from './routers/index';
 import App from './App.vue';
 import longPress from './utils/v-long-press';
 import './styles/index.scss';
-import 'animate.css';
+import './styles/animate.css';
 import './styles/tw.css'
 import 'nprogress/nprogress.css';
 import 'swiper/css';
