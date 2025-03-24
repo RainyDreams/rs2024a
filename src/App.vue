@@ -96,7 +96,7 @@
   <div
     :class="['fixed inset-0 z-50 flex items-center overflow-y-auto overflow-x-hidden bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-200 ease-out',showLoginModel?'opacity-100 visible ':' opacity-0 invisible pointer-events-none']">
     <div
-      :class="['bg-white mx-auto p-8 rounded-3xl h-fit relative shadow-md min-w-48 w-full max-w-96 transition-all duration-300 ease-out timefn',showLoginModel?'scale-100':'scale-95']">
+      :class="['bg-white mx-auto p-8 rounded-3xl h-fit relative shadow-lg shadow-gray-500 shadow- min-w-48 w-full max-w-96 transition-all duration-300 ease-out timefn',showLoginModel?'scale-100':'scale-95']">
       <button @click="close"
         class="absolute text-gray-400 transition right-2 top-2 hover:bg-slate-200 bg-slate-50 hover:bg-opacity-50 rounded-full flex items-center justify-center w-10 h-10 hover:text-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -228,7 +228,11 @@ onMounted(async ()=>{
     }
   });
   switchLoginMode=()=>{
+    form.password = '';
     loginMode.value = loginMode.value == 0 ? 1 : 0;
+    if(verifyCodeTimer) clearInterval(verifyCodeTimer);
+    verifyWait.value = 180;
+    verifyLoading.value=false;
     setTimeout(()=>{
       swiper.updateAutoHeight();
     },50)
@@ -240,9 +244,9 @@ onMounted(async ()=>{
           ElMessage.error('请输入正确的邮箱');
           return ;
         }
+        form.password = '';
         swiper.slideNext();
       } else {
-        
         ElMessage.warning('请输入邮箱');
       }
     }
@@ -250,6 +254,9 @@ onMounted(async ()=>{
   };
   previousStep = () => {
     swiper.slidePrev();
+    if(verifyCodeTimer) clearInterval(verifyCodeTimer);
+    verifyWait.value = 180;
+    verifyLoading.value=false;
   };
   if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
     if(!sessionStorage.getItem('darkMode') || sessionStorage.getItem('darkMode')=='dark'){
@@ -486,6 +493,7 @@ async function submitForm(){
         // emitter.emit('updateLoginInfo');
         if(verifyCodeTimer) clearInterval(verifyCodeTimer);
         verifyWait.value = 180;
+        verifyLoading.value=false;
         if(tmpFn){
           await tmpFn();
         }
@@ -590,6 +598,11 @@ async function close(){
   if(LoginThread.count <= 1){
     LoginThread.clear();
     showLoginModel.value = false;
+    verifyLoading.value=false;
+    if(verifyCodeTimer) clearInterval(verifyCodeTimer);
+    form.password = '';
+    loginPage.value = 0;
+    swiper.slideTo(0);
     return;
   }
   ElMessageBox.alert(`当前有 ${LoginThread.count} 个任务需3+1+N鉴权，放弃登录会取消任务，是否确认放弃？`, '提示', {
@@ -600,6 +613,11 @@ async function close(){
       if(action === 'confirm'){
         LoginThread.clear();
         showLoginModel.value = false;
+        verifyLoading.value=false;
+        if(verifyCodeTimer) clearInterval(verifyCodeTimer);
+        form.password = '';
+        loginPage.value = 0
+        swiper.slideTo(0);
       }
     },
   });
