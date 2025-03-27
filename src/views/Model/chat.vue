@@ -718,7 +718,7 @@ import math, { use } from 'markdown-it-texmath';
 import Katex from 'katex';
 import hljs from 'highlight.js';
 // import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
-import { onActivated, onMounted, ref,reactive, watch, nextTick } from "vue"
+import { onActivated, onMounted, ref,reactive, watch, nextTick,getCurrentInstance } from "vue"
 import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElPopover,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
@@ -874,7 +874,6 @@ const stopRecording = () => {
     isRecording.value = false;
   }
 };
-
 // photo
 function clearUploadPhoto(){
   cameraInput.value.value = "";
@@ -1358,6 +1357,56 @@ const stop = async (param)=>{
   loading.value=false;
 }
 const htmlParser = new DOMParser();
+class RenderTaskQueueManager {
+  constructor(vm) {
+    this.vm = vm;
+    this.taskQueue = [];
+  }
+  addTask(task) {
+    return (...args) => {
+          const taskWrapper = () => task(...args);
+          this.taskQueue.push(taskWrapper);
+          this.runNextTask();
+      };
+  }
+  runNextTask() {
+        if (this.taskQueue.length > 0) {
+            const task = this.taskQueue.shift();
+            task();
+            this.vm.$nextTick(() => {
+                if (this.taskQueue.length > 0) {
+                    this.runNextTask();
+                }
+            });
+        }
+    }
+}
+const instance = getCurrentInstance();
+const renderTaskManager = new RenderTaskQueueManager(instance.proxy);
+
+const renderAnalysisTask = (index)=>{
+  // chatList.value[index].renderedAnalysis
+  // = md.render(chatList.value[index].analysis);
+  const now = md.render(chatList.value[index].analysis);
+  // if(previous){
+  // const doc = htmlParser.parseFromString(html, 'text/html');
+  chatList.value[index].renderedAnalysis = splitHtmlFirstLevelRegex(now)
+}
+const renderContentTask = (index,isStream)=>{
+  console.log(index)
+  // const previous = chatList.value[index].renderedContent;
+  const now = md.render(chatList.value[index].content);
+  // if(previous){
+  // const doc = htmlParser.parseFromString(html, 'text/html');
+  chatList.value[index].renderedContent = splitHtmlFirstLevelRegex(now)
+  setTimeout(()=>{
+    task_();
+  },500)
+}
+
+const renderContent = renderTaskManager.addTask(renderContentTask);
+const renderAnalysis = renderTaskManager.addTask(renderAnalysisTask);
+
 
 const task_ = async()=>{
   document.querySelectorAll('div[lingben-draw]').forEach(e=>{
@@ -1385,24 +1434,6 @@ const task_ = async()=>{
     fn();
   });
 }
-const renderAnalysis = (index)=>{
-  // chatList.value[index].renderedAnalysis
-  // = md.render(chatList.value[index].analysis);
-  const now = md.render(chatList.value[index].analysis);
-  // if(previous){
-  // const doc = htmlParser.parseFromString(html, 'text/html');
-  chatList.value[index].renderedAnalysis = splitHtmlFirstLevelRegex(now)
-}
-const renderContentTask = async (index,isStream)=>{
-  // const previous = chatList.value[index].renderedContent;
-  const now = md.render(chatList.value[index].content);
-  // if(previous){
-  // const doc = htmlParser.parseFromString(html, 'text/html');
-  chatList.value[index].renderedContent = splitHtmlFirstLevelRegex(now)
-  setTimeout(()=>{
-    task_();
-  },500)
-}
 function splitHtmlFirstLevelRegex(htmlStr) { const doc = htmlParser.parseFromString(htmlStr, 'text/html');
   const fragment = doc.createDocumentFragment();
   
@@ -1416,8 +1447,6 @@ function splitHtmlFirstLevelRegex(htmlStr) { const doc = htmlParser.parseFromStr
     node.nodeType === Node.ELEMENT_NODE
   ).map(e=>e.outerHTML);
 }
-const renderContent = renderContentTask
-
 /* chat */
 async function deepMind(targetValue, targetTime, index) {
   const t_phoho = usePhoto.value;
