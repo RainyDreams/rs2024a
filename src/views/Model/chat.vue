@@ -1331,17 +1331,6 @@ function qx(){
   localStorage.setItem('hasVisited', 'true');
   isFirstVisit.value = false
 }
-const scrollToBottom = () => {
-  const scrollElement = document.getElementsByClassName('scroll')[0];
-  // if(scrollStatus){
-  scrollElement.scrollTo({
-    top: scrollElement.scrollHeight,
-    behavior: 'smooth',
-    duration: 500,
-  });
-  scrollStatus.value = false;
-  // }
-};
 const checkScollStatus = debounce(()=>{
   const scrollElement = document.getElementsByClassName('scroll')[0];
   if(scrollElement.scrollHeight - (Math.floor(scrollElement.scrollTop) + scrollElement.clientHeight) >= 150){
@@ -1691,9 +1680,16 @@ const send = async (param)=>{
   const index = chatList.value.length - 1;
   await deepMind(targetValue, targetTime, index,);
 }
-
+const scrollToBottom = renderTaskManager.addTask(() => {
+  const scrollElement = document.getElementsByClassName('scroll')[0];
+  scrollElement.scrollTo({
+    top: scrollElement.scrollHeight,
+    behavior:'auto'
+  });
+  scrollStatus.value = false;
+})
 const throttledSend = throttle(send, 100);
-const debouncedScrollToBottom = debounce(scrollToBottom, 700); 
+const debouncedScrollToBottom = debounce(scrollToBottom, 500); 
 const throttledScrollToBottom = throttle(scrollToBottom, 1500); 
 let applying = false
 async function applysession({id,mode}){
