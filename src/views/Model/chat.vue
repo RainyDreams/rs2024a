@@ -246,7 +246,7 @@
                   </template>
                   <template v-else-if="item.role == 'assistant'">
                     <div class="assistant flex-shrink-0" :data-id="i">
-                      <div class="chatcontent text-sm serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                      <div class="chatcontent text-sm/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <!-- <template > -->
                         <div v-for="(item,i2) in item.renderedContent" :key="i2" v-html="item" class="chat_animate_in"></div>
                         <!-- </template> -->
@@ -489,7 +489,7 @@
                   placement="top-end"
                 >
                   <div 
-                    class="leading-none flex items-center cursor-pointer bg-white border-l border-gray-300 text-slate-500 rounded-r-full pl-2 pr-3"
+                    class="leading-none flex items-center cursor-pointer bg-white border-l border-gray-300 text-stone-500 rounded-r-full pl-2 pr-3"
                     @click="autoScroll=!autoScroll"  
                   >
                     <!-- <div class="mx-auto border-slate-300 rounded-full w-4 h-4 border"></div> -->
