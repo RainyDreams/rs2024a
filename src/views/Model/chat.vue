@@ -53,7 +53,7 @@
                       <!-- </div> -->
                     </touch-ripple>
                   </router-link>
-                  <router-link to="/model/square" class="h-full" v-if="loginStatus">
+                  <router-link to="/model/square" class="h-full">
                     <touch-ripple
                       :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
