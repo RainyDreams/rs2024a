@@ -303,7 +303,7 @@
         </div>
       <!-- </div> -->
     </div>
-    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
         <div class="px-6 py-5 flex justify-between items-center w-full">
           <h2 class="text-xl font-semibold serif-text text-black">上传图片</h2>
@@ -396,15 +396,15 @@
         </div>
       </div>
     </div>
-    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="p-6 bg-white rounded-3xl">
-        <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-stone-500 " style="animation-duration:0.6s !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>上传中
       </div>
     </div>
-    <div :data-show="recordMode" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+    <div :data-show="recordMode" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
         <div class="px-6 py-5 flex justify-between items-center w-full">
           <h2 class="text-xl font-semibold serif-text text-black">录音</h2>
@@ -419,9 +419,9 @@
           <!-- 录音时间显示 -->
           <div
             v-show="isRecording"
-            class="relative mb-4 text-lg font-semibold text-blue-600 animate-pulse"
+            class="relative mb-4 text-lg font-semibold text-stone-600 animate-pulse"
           >
-            <span class="text-transparent bg-clip-text bg-blue-500">
+            <span class="text-transparent bg-clip-text bg-stone-500">
               {{ recordTime }} s
             </span>
           </div>
@@ -431,8 +431,8 @@
             :class="[
               'relative px-6 py-3 flex select-none text-lg font-semibold rounded-md shadow-md transition duration-300 transform',
               isRecording 
-                ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white scale-105' 
-                : 'bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-50'
+                ? 'bg-gradient-to-r from-stone-600 to-stone-500 text-white scale-105' 
+                : 'bg-white text-stone-600 border-2 border-stone-600 hover:bg-stone-50'
             ]"
             aria-label="按住录音"
             tabindex="0"
@@ -463,10 +463,10 @@
               <div v-show="statusText"
                 class="text-base md:text-lg pointer-events-none lg:text-xl text-green-800 w-fit text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
                 <span class=" flex items-center bg-white z-30 px-3 rounded-3xl py-2 border border-gray-200">
-                    <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-stone-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg><span class="active-text text-lg leading-none align-bottom text-blue-500">{{ statusText }}</span>
+                  </svg><span class="active-text text-lg leading-none align-bottom text-stone-500">{{ statusText }}</span>
                 </span>
               </div>
               <div :class="`absolute border transition-all duration-100 bg-white border-gray-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-sm rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
@@ -713,7 +713,7 @@
     </div>
     <audio v-if="audioUrl" :src="audioUrl" controls class="mt- hidden"></audio>
     <div :class="'transition-all h-0 duration-300 ease-linear '+(chatList.length == 0?`max-limit md:h-20 lg:h-32 `:'')"></div>
-    <p class=" text-center text-slate-500 py-1 font-sans leading-none relative z-10" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
+    <p class=" text-center text-stone-500 py-1 font-sans leading-none relative z-10" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
   </div>
 </template>
 <script setup>
