@@ -303,11 +303,11 @@
         </div>
       <!-- </div> -->
     </div>
-    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-end inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
-      <div class="bg-slate-50 rounded-lg shadow-lg max-w-3xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
-        <div class="p-4 flex justify-between items-center w-full">
-          <h2 class="text-lg font-semibold">上传图片</h2>
-          <button v-show="!uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="text-gray-500 hover:text-gray-700">
+    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
+        <div class="px-6 py-5 flex justify-between items-center w-full">
+          <h2 class="text-xl font-semibold serif-text text-black">上传图片</h2>
+          <button v-show="!uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200 hover:bg-opacity-50 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -333,7 +333,7 @@
               <!-- 清除按钮 -->
               <button
                 @click="clearUploadPhoto"
-                class="absolute bottom-2 right-2 bg-red-500 leading-none items-center px-2 py-1 rounded-full text-white opacity-60 flex hover:bg-red-600 transition-colors duration-300"
+                class="absolute top-2 right-2 bg-red-500 leading-none items-center px-2 py-1 rounded-full text-white opacity-60 flex hover:bg-red-600 transition-colors duration-300"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -358,8 +358,9 @@
               <label
                 for="cameraInput"
                 v-show="mobile"
-                class="w-full py-3 px-6 bg-green-500 text-white font-medium rounded-lg cursor-pointer hover:bg-green-600 transition-colors duration-300 text-center"
+                class="w-full py-3 px-6 bg-stone-200 text-gray-800 flex justify-center items-center font-medium rounded-lg cursor-pointer hover:bg-stone-300 transition-colors duration-300 text-center"
               >
+                <camera theme="outline" size="20" fill="currentColor" class="mr-1"/>
                 拍照
               </label>
               <input
@@ -373,8 +374,9 @@
               />
               <label
                 for="galleryInput"
-                class="w-full py-3 px-6 bg-blue-500 text-white font-medium rounded-lg cursor-pointer hover:bg-blue-600 transition-colors duration-300 text-center"
+                class="w-full py-3 px-6 bg-stone-200 text-gray-800 flex justify-center items-center font-medium rounded-lg cursor-pointer hover:bg-stone-300 transition-colors duration-300 text-center"
               >
+                <pic theme="outline" size="20" fill="currentColor" class="mr-1"/>
                 从相册选择
               </label>
               <input
@@ -388,13 +390,13 @@
             </div>
             <!-- 提示信息 -->
             <p v-if="!uploadPhoto.blob" class="text-gray-500 text-sm text-center">
-              请选择一张图片进行上传。
+              请选择一张图片进行上传
             </p>
           </div>
         </div>
       </div>
     </div>
-    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
+    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="p-6 bg-white rounded-3xl">
         <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -402,11 +404,11 @@
         </svg>上传中
       </div>
     </div>
-    <div :data-show="recordMode" class="fixed flex justify-center items-end inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-svh autohidden">
-      <div class="bg-slate-50 rounded-lg shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
-        <div class="p-4 flex justify-between items-center w-full">
-          <h2 class="text-lg font-semibold">录音</h2>
-          <button @click="closeRecordDialog" class="text-gray-500 hover:text-gray-700">
+    <div :data-show="recordMode" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
+        <div class="px-6 py-5 flex justify-between items-center w-full">
+          <h2 class="text-xl font-semibold serif-text text-black">录音</h2>
+          <button @click="closeRecordDialog" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200 hover:bg-opacity-50 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -727,7 +729,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElPopover,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Down,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Thermometer,Info,SmartOptimization,Left,Home,ExperimentOne } from '@icon-park/vue-next';
+import { Camera,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Thermometer,Info,SmartOptimization,Left,Home,ExperimentOne } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -1910,14 +1912,16 @@ onMounted(async ()=>{
   height:100dvh;
 }
 .autohidden{
-  display: none !important;
+  /* display: none !important; */
   visibility: hidden;
-  transition: visibility .5s ease,opacity .5s ease;
+  pointer-events: none;
+  transition: visibility .2s ease,opacity .2s ease;
   opacity: 0;
 }
 .autohidden[data-show="true"]{
   display: flex !important;
   visibility: visible;
+  pointer-events: unset;
   opacity: 1;
   /* transition-delay: 1s; */
 }
