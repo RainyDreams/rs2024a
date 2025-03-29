@@ -518,7 +518,8 @@ a[href]{
         display: inline-block;
       }
       a[href]{
-        color:#3b82f6
+        // color:#3b82f6;
+        color:#a2770a !important;
       }
       @keyframes  loading-shimmer{
         0% {
@@ -538,6 +539,11 @@ a[href]{
       //   font-size: 0.875rem !important;
       // }
       // background-color: #f5f5f5;
+    }
+    strong,b{
+      color:#9a720b !important;
+      font-weight: 600;
+      font-family: "Misans",ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
     code.hljs{
       // --tw-bg-opacity: 1 !important;
@@ -658,8 +664,8 @@ a[href]{
 .chat_animate_in{
   // will-change: opacity, transform;
   opacity: 0;
-  animation: ChatFadeIn 0.8s ease-out forwards;
-  animation-delay: 70ms;
+  animation: ChatFadeIn 1.1s ease-out forwards;
+  animation-delay: 50ms;
 }
 @keyframes ChatFadeIn {
   from {
@@ -674,7 +680,7 @@ a[href]{
 .scroll{
   overflow-y: auto;
   overflow-x: hidden;
-  scroll-behavior: smooth;
+  // scroll-behavior: smooth;
   height: fit-content;
   max-height: 100%;
   flex-shrink: 1;
@@ -711,7 +717,7 @@ a[href]{
     // border:1px solid transparent;
     border-radius: 25px;
     font-size: 0;
-    box-shadow: 0px 2px 5px 1px #94a3b811;
+    box-shadow: 0px 2px 5px 1px #a8a29e11;
     .clickWrapper{
       position: absolute;
       z-index: 0;
@@ -724,14 +730,14 @@ a[href]{
     &._active,&:hover{
       // cursor: pointer;
       // border-color:rgba(144, 77, 245,0.2);
-      // border-color:#94a3b833;
-      // box-shadow: 0px 1px 4px 0px #94a3b822;
+      // border-color:#a8a29e33;
+      // box-shadow: 0px 1px 4px 0px #a8a29e22;
     }
     &:focus-within{
       // background-color: #fffffffc;
       // cursor: inherit;
       // border-radius: 25px;
-      // box-shadow: 0px 1px 4px 0px #94a3b822;
+      // box-shadow: 0px 1px 4px 0px #a8a29e22;
       // // border-color:rgba(144, 77, 245,0.8);
       // border-color:#cbd5e1;
     }

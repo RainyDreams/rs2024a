@@ -1,5 +1,5 @@
 <template>
-  <div class="commonPage bg-slate-50 md:rounded-lg pb-0 h-dvh pt-3" style="display: flex;flex-direction: column;">
+  <div class="commonPage  md:rounded-lg pb-0 h-auto-dvh pt-3" style="display: flex;flex-direction: column;">
     <div id="wechat-tip" v-if="weixinDialogVisible" class="fixed flex top-0 left-0 w-full bg-slate-800 bg-opacity-40 text-white p-4 text-center text-sm  z-40">
       <span class="flex-1 pr-2">您正在使用微信访问本站，建议使用浏览器打开</span>
       <button @click="weixinDialogVisible = false" class="text-white rounded-full h-9 p-2 w-9 flex-shrink-0 bg-slate-900 bg-opacity-10">
@@ -9,16 +9,19 @@
         </svg>
       </button>
     </div>
+    <div class="title text-center w-full text-xs pb-1 truncate px-5" >{{ title }}</div>
+
     <div 
       :class="`scroll active`"
       @scroll.passive="checkScollStatus"
+      @wheel.passive="onWheel"
+      @touchstart.passive="onWheel"
     >
       <!-- <div class=""> -->
-        <div class=" max-w-3xl m-auto" style="margin-bottom: 0;">
+        <div class=" max-w-3xl m-auto px-2" style="margin-bottom: 0;">
           <div class="aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
-              <div class="title text-center w-full text-xs sticky top-0 z-30 bg-slate-50 pb-1 truncate px-5" >{{ title }}</div>
               <div class="system mb-3 md:mb-4 lg:mb-5 block">
                   <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
                     <touch-ripple
@@ -154,9 +157,7 @@
                   <!-- <div v-show="!welcome_loading" class="text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed" v-html="md.render(welcome)"></div> -->
                   <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
                 </div>
-                <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
-                  <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
-                </div>
+               
                 <div v-show="showModelDetail">
                   <div class="min-w-fit w-64 z-10 flex flex-col mt-2 top-10 left-0 bg-white border rounded-xl p-3 duration-100">
                     <div class="text-sm/relaxed mb-2 flex-1">{{ model_info.desc }}</div>
@@ -173,6 +174,9 @@
                     <p class=""><a target="_blank" class="text-blue-500 font-medium" href="https://www.chiziingiin.top/">赤子英金官网</a></p>
                     <div class="w-full text-xs text-slate-700 mt-2">提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。</div>
                   </div>
+                </div>
+                <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
+                  <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
                 </div>
                 <!-- 欢迎 -->
                 <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
@@ -201,7 +205,7 @@
                             <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                           </div>
                         </el-tooltip>
-                        <div class="chatcontent min-h-8 border border-blue-200 break-words w-fit min-w-6 px-4 py-2 rounded-3xl bg-blue-100 text-blue-900 whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
+                        <div class="chatcontent  serif-text min-h-8 border border-gray-200 break-words w-fit min-w-6 px-4 py-2 rounded-l-3xl rounded-tr-3xl rounded-br-xl bg-white text-black whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
                         >
                           <div>{{item.content}}</div>
                           <template v-if="item.photo?.meta">
@@ -242,7 +246,7 @@
                   </template>
                   <template v-else-if="item.role == 'assistant'">
                     <div class="assistant flex-shrink-0" :data-id="i">
-                      <div class="chatcontent text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                      <div class="chatcontent text-sm serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <!-- <template > -->
                         <div v-for="(item,i2) in item.renderedContent" :key="i2" v-html="item" class="chat_animate_in"></div>
                         <!-- </template> -->
@@ -288,7 +292,7 @@
                   </template>
                 </template>
                 <div class="my-5">
-                  <div class="text-slate-700 opacity-85 border-slate-200  border rounded-md cursor-pointer hover:bg-slate-100 px-3 py-1 text-sm/loose lg:text-base/loose my-2" 
+                  <div class="text-gray-900 opacity-85 border-gray-200 text-sm lg:text-base  border serif-text bg-white cursor-pointer transition duration-100 rounded-r-3xl rounded-tl-3xl rounded-bl-xl hover:bg-stone-100 px-3 py-2 my-2" 
                   v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
@@ -443,7 +447,7 @@
           <div class="relative w-full">
             <div :class="`relative flex w-full ml-3 pt-1 pb-1 ease  `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
               <touch-ripple
-                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-700 bg-slate-50`"
+                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-700 bg-stone-50`"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#f1f5f9'"
                 :opacity="0.4"
@@ -456,14 +460,14 @@
               </touch-ripple>
               <div v-show="statusText"
                 class="text-base md:text-lg pointer-events-none lg:text-xl text-green-800 w-fit text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
-                <span class=" flex items-center bg-white z-30 px-3 rounded-3xl py-2 border border-slate-200">
+                <span class=" flex items-center bg-white z-30 px-3 rounded-3xl py-2 border border-gray-200">
                     <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg><span class="active-text text-lg leading-none align-bottom text-blue-500">{{ statusText }}</span>
                 </span>
               </div>
-              <div :class="`absolute border transition-all duration-100 delay-100 bg-white border-slate-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-sm rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
+              <div :class="`absolute border transition-all duration-100 bg-white border-gray-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-sm rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
                 <touch-ripple
                   :class="`touch-ripple w-fit flex-shrink-0 text-sm rounded-l-full items-center px-2 py-2 overflow-hidden select-none bg-white ${(autoScroll)?'text-blue-500':'text-slate-500'}`"
                   :style="{ clipPath: 'none', backgroundColor: '#fff' }"
@@ -483,7 +487,7 @@
                   placement="top-end"
                 >
                   <div 
-                    class="leading-none flex items-center cursor-pointer bg-white border-l border-slate-300 text-slate-500 rounded-r-full pl-2 pr-3"
+                    class="leading-none flex items-center cursor-pointer bg-white border-l border-gray-300 text-slate-500 rounded-r-full pl-2 pr-3"
                     @click="autoScroll=!autoScroll"  
                   >
                     <!-- <div class="mx-auto border-slate-300 rounded-full w-4 h-4 border"></div> -->
@@ -509,7 +513,7 @@
                   </template>
                   <template #reference>
                     <touch-ripple
-                      :class="`touch-ripple nofocus relative overflow-hidden w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                      :class="`touch-ripple nofocus relative overflow-hidden w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                       :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
                       :color="useAnalysis?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
@@ -542,7 +546,7 @@
                   </template>
                   <template #reference>
                     <touch-ripple
-                      :class="`relative touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                      :class="`relative touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                       :style="{ clipPath: 'none', backgroundColor: usePreview?'#3b82f6':'#fff' }"
                       :color="usePreview?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
@@ -572,7 +576,7 @@
                   </template>
                   <template #reference>
                     <touch-ripple
-                      :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                      :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                       :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
                       :color="useInternet?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
@@ -586,7 +590,7 @@
                   </template>
                 </el-popover>
                 <!-- <touch-ripple
-                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                   :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
                   :color="useDraw?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -598,7 +602,7 @@
                   <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple> -->
                 <touch-ripple
-                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                   :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
                   :color="useTask?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -610,7 +614,7 @@
                   <span class="flex items-center align-middle"><list-two class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">多任务<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                   :style="{ clipPath: 'none', backgroundColor: usePhoto?'#3b82f6':'#fff' }"
                   :color="usePhoto?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -622,7 +626,7 @@
                   <span class="flex items-center align-middle"><pic class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">图片</span></span>
                 </touch-ripple>
                 <touch-ripple
-                    :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAudio?'text-blue-600 bg-blue-100 border-blue-500':'border-slate-200 text-slate-700 bg-slate-50')"
+                    :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAudio?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                     :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                     :color="'#bfdbfe'"
                     :opacity="0.4"
@@ -639,7 +643,7 @@
             </div>
           </div>
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="">
-            <div :class="`ainput__wrapper items-stretch border border-slate-200 shadow-none focus-within:shadow-xl focus-within:shadow-slate-200 transition-all duration-500 focus-within:border-slate-300 shadow-slate-100`">
+            <div :class="`ainput__wrapper items-stretch border border-stone-200 shadow-none focus-within:shadow-xl focus-within:shadow-stone-200 transition-all duration-500 focus-within:border-stone-300 shadow-stone-100`">
               <div 
                 class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
                 :data-show="!isRecording" 
@@ -707,7 +711,7 @@
     </div>
     <audio v-if="audioUrl" :src="audioUrl" controls class="mt- hidden"></audio>
     <div :class="'transition-all h-0 duration-300 ease-linear '+(chatList.length == 0?`max-limit md:h-20 lg:h-32 `:'')"></div>
-    <p class=" text-center text-slate-500 py-1 font-sans leading-none" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
+    <p class=" text-center text-slate-500 py-1 font-sans leading-none relative z-10" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
   </div>
 </template>
 <script setup>
@@ -1337,9 +1341,16 @@ const checkScollStatus = debounce(()=>{
     scrollStatus.value=true;
   } else {
     scrollStatus.value=false;
+    if(autoScroll.value && !statusText){
+      autoScroll.value = false;
+    }
   }
 },200)
-
+const onWheel = debounce((event)=>{
+  autoScroll.value = false;
+  // const scrollElement = document.getElementsByClassName('scroll')[0];
+  // scrollElement.
+},100)
 const stop = async (param)=>{
   stopStatus.value=true;
   showStop.value=false;
@@ -1372,7 +1383,7 @@ class RenderTaskQueueManager {
 }
 const instance = getCurrentInstance();
 const renderTaskManager = new RenderTaskQueueManager(instance.proxy);
-
+window.rd = renderTaskManager
 const renderAnalysisTask = (index)=>{
   // chatList.value[index].renderedAnalysis
   // = md.render(chatList.value[index].analysis);
@@ -1382,7 +1393,7 @@ const renderAnalysisTask = (index)=>{
   chatList.value[index].renderedAnalysis = splitHtmlFirstLevelRegex(now)
 }
 const renderContentTask = (index,isStream)=>{
-  console.log(index)
+  // console.log(index)
   // const previous = chatList.value[index].renderedContent;
   const now = md.render(chatList.value[index].content);
   // if(previous){
@@ -1869,13 +1880,21 @@ onMounted(async ()=>{
     let scrollContainer = document.querySelector('.scroll');
     if (newValue) {
       const intervalId = setInterval(() => {
-        const container = scrollContainer;
-        if (container) {
-          container.scrollTop = container.scrollHeight;
-        }
-      }, 600);
+        console.log('run');
+        (renderTaskManager.addTask(()=>{
+          const container = scrollContainer;
+          if (container) {
+            // container.scrollTop = container.scrollHeight;
+            container.scrollTo({
+              top: container.scrollHeight,
+              behavior: 'smooth',
+            });
+          }
+        }))();
+      }, 1200);
       scrollContainer._scrollIntervalId = intervalId;
     } else {
+      console.log('off');
       const intervalId = scrollContainer._scrollIntervalId;
       if (intervalId) {
         clearInterval(intervalId);
@@ -1886,11 +1905,14 @@ onMounted(async ()=>{
 </script>
 
 <style scoped>
-
+.h-auto-dvh{
+  height:100vh;
+  height:100dvh;
+}
 .autohidden{
   display: none !important;
   visibility: hidden;
-  transition: all .2s ease;
+  transition: visibility .5s ease,opacity .5s ease;
   opacity: 0;
 }
 .autohidden[data-show="true"]{

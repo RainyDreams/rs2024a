@@ -112,6 +112,7 @@
               <label for="login_mail" class="block text-gray-600 text-sm mb-1">邮箱</label>
               <input type="email" value="" v-model="form.username" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"  aria-label="邮箱地址输入框" id="login_mail" placeholder="请输入邮箱" autocomplete="email" class="border-2 outline-none transition focus:border-blue-500 border-slate-100 rounded-lg px-3 py-2 w-full mb-4 bg-slate-100">
               <button type="button" @click="nextStep" class="bg-blue-400 hover:bg-blue-500 text-white transition py-2 px-4 rounded-lg text-center text-base/relaxed mb-2 cursor-default w-full">下一步</button>
+              <p class="text-xs text-slate-500 mt-1 w-full text-center">未注册的邮箱将自动注册</p>
             </div>
             <div class="swiper-slide px-1">
               <div v-if="loginMode">
@@ -124,7 +125,6 @@
                   <!-- <a class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg flex-shrink-0 bg-slate-100 border-slate-200">{{ vf_time }}秒后重试</a> -->
                 </div>
                 <p class="w-full text-right mb-3"><a @click="switchLoginMode" class="text-blue-600 text-sm cursor-pointer">使用密码登录</a></p>
-                <p class="text-sm text-slate-600 mb-3 w-full text-center">如果没有账号将自动注册</p>
               </div>
               <div v-else>
                 <label for="login_password" class="block text-gray-600 text-sm mb-1">密码</label>
@@ -200,7 +200,7 @@ const form = reactive({
 });
 const loginForm = ref()
 const loginPage = ref(0);
-const loginMode = ref(0);
+const loginMode = ref(1);
 const swiperRef = ref(null);
 let nextStep,previousStep,switchLoginMode;
 let swiper;
