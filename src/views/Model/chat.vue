@@ -225,20 +225,22 @@
                         </div>
                         
                       </div>
-                      <div class="analysis max-w-full mt-2" v-show="item.status != 'no_analysis' && item.analysis">
-                        <!-- <p v-show="item.status == 'analysis'">正在思考和分析问题...</p> -->
-                        <div 
-                          :class="`_text text-gray-500 text-xs lg:text-sm px-4 py-5  border border-slate-200 bg-white rounded-xl `+(item.status=='analysis'?'active':'')"
-                          v-show="item.show_thought" 
-                        >
-                          <div v-for="(item,i2) in item.renderedAnalysis" :key="i2" v-html="item" class="chat_animate_in"></div>
+                      <div class="analysis w-full mt-2 overflow-hidden serif-text " v-show="item.status != 'no_analysis' && item.analysis">
+                        <p class="serif-text pl-4" v-show="item.show_thought">思考和分析问题</p>
+                        <div class="scroll-y-container relative h-fit overflow-hidden">
+                          <div 
+                            :class="`_text text-gray-500 text-xs lg:text-sm px-4 py-5 overflow-auto max-h-56 md:max-h-80  `+(item.status=='analysis'?'active':'')"
+                            v-show="item.show_thought" 
+                          >
+                            <div v-for="(item,i2) in item.renderedAnalysis" :key="i2" v-html="item" class="chat_animate_in"></div>
+                          </div>
                         </div>
                         <p v-if="item.analysis" class="flex items-center cursor-pointer justify-end">
-                          <span @click="item.show_thought = !item.show_thought" class="py-2 px-3 border sticky bottom-20 border-slate-200 bg-white mt-2 items-center leading-none hover:bg-slate-100  transition-all rounded-lg cursor-pointer flex">
+                          <span @click="item.show_thought = !item.show_thought" class="py-2 px-3 sticky bottom-20 text-gray-800 bg-stone-100 mt-2 items-center  hover:bg-stone-200 text-base border-stone-300 border transition-all rounded-lg cursor-pointer flex">
                             <SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>{{item.show_thought?'收起':'展开'}}思考过程
                           </span>
                           <!-- <Down v-show="!item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
-                          <Up v-show="item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/> --> 
+                          <Up v-show="item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/> -->
                         </p>
                       </div>
                       <!-- </el-watermark> -->
@@ -313,7 +315,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <button v-show="uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="bg-blue-200 text-blue-500 font-bold rounded-md px-4 py-2">
+          <button v-show="uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="bg-stone-200 text-gray-800 transition duration-150 hover:bg-stone-300 font-bold rounded-md px-4 py-2">
             完成
           </button>
         </div>
@@ -396,7 +398,7 @@
         </div>
       </div>
     </div>
-    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="p-6 bg-white rounded-3xl">
         <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-stone-500 " style="animation-duration:0.6s !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -471,7 +473,7 @@
               </div>
               <div :class="`absolute border transition-all duration-100 bg-white border-gray-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-sm rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
                 <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 text-sm rounded-l-full items-center px-2 py-2 overflow-hidden select-none bg-white ${(autoScroll)?'text-blue-500':'text-slate-500'}`"
+                  :class="`touch-ripple w-fit flex-shrink-0 text-sm rounded-l-full items-center px-2 py-2 overflow-hidden select-none bg-white ${(autoScroll)?'text-blue-500':'text-stone-500'}`"
                   :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                   :color="'#f1f5f9'"
                   :opacity="0.4"
@@ -493,7 +495,7 @@
                     @click="autoScroll=!autoScroll"  
                   >
                     <!-- <div class="mx-auto border-slate-300 rounded-full w-4 h-4 border"></div> -->
-                    <check-one theme="filled" size="20" fill="currentColor" :class="`transition  ${autoScroll?'text-blue-500 delay-75':'text-slate-300'}`"/>
+                    <check-one theme="filled" size="20" fill="currentColor" :class="`transition  ${autoScroll?'text-blue-500 delay-75':'text-stone-300'}`"/>
                   </div>
                 </el-tooltip>
               </div>
@@ -503,7 +505,7 @@
                   :width="200"
                   :show-after="300"
                   trigger="hover"
-                  popper-class="rounded-xl shadow-lg shadow-slate-200"
+                  popper-class="rounded-xl shadow-lg shadow-stone-200"
                 >
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
@@ -533,7 +535,7 @@
                   :width="200"
                   :show-after="300"
                   trigger="hover"
-                  popper-class="rounded-xl shadow-lg shadow-slate-200"
+                  popper-class="rounded-xl shadow-lg shadow-stone-200"
                 >
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
@@ -566,7 +568,7 @@
                   :width="200"
                   :show-after="300"
                   trigger="hover"
-                  popper-class="rounded-xl shadow-lg shadow-slate-200"
+                  popper-class="rounded-xl shadow-lg shadow-stone-200"
                 >
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
@@ -1392,7 +1394,8 @@ const renderAnalysisTask = (index)=>{
   const now = md.render(chatList.value[index].analysis);
   // if(previous){
   // const doc = htmlParser.parseFromString(html, 'text/html');
-  chatList.value[index].renderedAnalysis = splitHtmlFirstLevelRegex(now)
+  chatList.value[index].renderedAnalysis = splitHtmlFirstLevelRegex(now);
+  document
 }
 const renderContentTask = (index,isStream)=>{
   // console.log(index)
@@ -1939,7 +1942,7 @@ onMounted(async ()=>{
   display: block;
   flex-shrink: 0;
   z-index: 2;
-  background: linear-gradient(to left, rgba(248, 250, 252,0) 0%, rgba(248, 250, 252,1) 100%);
+  background: linear-gradient(to left, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
   pointer-events: none;
 }
 .scroll-container::after {
@@ -1952,9 +1955,37 @@ onMounted(async ()=>{
   display: block;
   flex-shrink: 0;
   z-index: 2;
-  background: linear-gradient(to right, rgba(248, 250, 252,0) 0%, rgba(248, 250, 252,1) 100%);
+  background: linear-gradient(to right, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
   pointer-events: none;
 }
+.scroll-y-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 37px;
+  display: block;
+  flex-shrink: 0;
+  z-index: 2;
+  background: linear-gradient(to top, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
+  pointer-events: none;
+}
+
+.scroll-y-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  display: block;
+  flex-shrink: 0;
+  z-index: 2;
+  background: linear-gradient(to bottom, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
+  pointer-events: none;
+}
+    
 .max-limit{
   max-height:15%;
 }
