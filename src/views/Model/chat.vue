@@ -283,7 +283,7 @@
                   </template>
                   <template v-else-if="item.role == 'lingben'">
                     <div class="assistant" :data-id="i">
-                      <div class="chatcontent animate_chat text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                      <div class="chatcontent animate_chat serif-text text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <template v-for="(item,i2) in item.renderedContent">
                           <div v-html="item"></div>
                         </template>

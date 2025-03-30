@@ -354,7 +354,7 @@ async function logout(){
             confirmButtonText: '确定',
             showClose:false,
             callback: action => {
-              router.push('/login')
+              router.push('/home')
               // window.location.href = 'https://auth.chiziingiin.top/relogin';
             }
           })
