@@ -1339,7 +1339,7 @@ function qx(){
 }
 const checkScollStatus = debounce(()=>{
   const scrollElement = document.getElementsByClassName('scroll')[0];
-  if(scrollElement.scrollHeight - (Math.floor(scrollElement.scrollTop) + scrollElement.clientHeight) >= 150){
+  if(scrollElement.scrollHeight - (Math.floor(scrollElement.scrollTop) + scrollElement.clientHeight) >= 80){
     scrollStatus.value=true;
   } else {
     scrollStatus.value=false;
