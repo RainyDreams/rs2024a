@@ -225,23 +225,28 @@
                         </div>
                         
                       </div>
-                      <div class="analysis w-full mt-2 overflow-hidden serif-text " v-show="item.status != 'no_analysis' && item.analysis">
-                        <p class="serif-text pl-4" v-show="item.show_thought">思考和分析问题</p>
+                      <div class="analysis w-full mt-2 overflow-hidden serif-text bg-stone-100 border border-stone-300 rounded-xl" v-show="item.status != 'no_analysis' && item.analysis">
+                        <p 
+                          @click="item.show_thought = !item.show_thought"
+                          class="serif-text px-4 flex justify-between py-2 cursor-pointer active:scale-95 scale-100 hover:text-gray-600 text-gray-800 transition duration-200 items-center ">
+                          <span class="text-base flex items-center"><SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>思考和分析问题</span>
+                          <span  class="h-fit flex items-center">
+                            <!-- {{item.show_thought?'收起':'展开'}}思考过程 -->
+                            <Right v-show="!item.show_thought" class="" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
+                            <Down v-show="item.show_thought" class="" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
+                          </span>
+                        </p>
                         <div class="scroll-y-container relative h-fit overflow-hidden">
                           <div 
-                            :class="`_text text-gray-500 text-xs lg:text-sm px-4 py-5 overflow-auto max-h-56 md:max-h-80  `+(item.status=='analysis'?'active':'')"
-                            v-show="item.show_thought" 
+                            :class="[`_text text-gray-500 text-xs lg:text-sm px-4 py-5 transition-all duration-200 `,(item.status=='analysis'?'active':''),item.show_thought?'max-h-56 md:max-h-96 h-full overflow-auto':'max-h-0 h-0 overflow-hidden']"
                           >
                             <div v-for="(item,i2) in item.renderedAnalysis" :key="i2" v-html="item" class="chat_animate_in"></div>
                           </div>
                         </div>
-                        <p v-if="item.analysis" class="flex items-center cursor-pointer justify-end">
-                          <span @click="item.show_thought = !item.show_thought" class="py-2 px-3 sticky bottom-20 text-gray-800 bg-stone-100 mt-2 items-center  hover:bg-stone-200 text-base border-stone-300 border transition-all rounded-lg cursor-pointer flex">
-                            <SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>{{item.show_thought?'收起':'展开'}}思考过程
-                          </span>
-                          <!-- <Down v-show="!item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/>
-                          <Up v-show="item.show_thought" class="rounded-full bg-gray-500 ml-1" theme="outline" size="14" fill="#fff" strokeLinejoin="bevel"/> -->
-                        </p>
+                        <!-- <p v-if="item.analysis" class="flex items-center cursor-pointer justify-end"> -->
+                          
+                          
+                        <!-- </p> -->
                       </div>
                       <!-- </el-watermark> -->
                     </div>
@@ -731,7 +736,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElPopover,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Camera,Up,Copy,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Thermometer,Info,SmartOptimization,Left,Home,ExperimentOne } from '@icon-park/vue-next';
+import { Camera,Up,Copy,Right,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Down,Info,SmartOptimization,Left,Home,ExperimentOne, DownloadFour } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
