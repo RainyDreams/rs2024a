@@ -167,14 +167,6 @@
                     </div>
                   </div>
                 </div>
-                <div v-show="showInfo">
-                  <div class="min-w-fit w-64 z-10 flex flex-col mt-2 left-4 right-4 bg-white border rounded-xl p-3 duration-100">
-                    <p>查看<router-link class="text-blue-500 font-medium" to="/about/log">更新日志</router-link></p>
-                    <p class="">了解<a class="text-blue-500 font-medium" href="https://mp.weixin.qq.com/s/WUJ4EzVP7gBVunauJgQ7PQ">《零本AI：深入思考赋能实际教学》</a></p>
-                    <p class=""><a target="_blank" class="text-blue-500 font-medium" href="https://www.chiziingiin.top/">赤子英金官网</a></p>
-                    <div class="w-full text-xs text-slate-700 mt-2">提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。</div>
-                  </div>
-                </div>
                 <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
                   <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
                 </div>
@@ -205,7 +197,7 @@
                             <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                           </div>
                         </el-tooltip>
-                        <div class="chatcontent  serif-text min-h-8 border border-gray-200 break-words w-fit min-w-6 px-4 py-2 rounded-l-3xl rounded-tr-3xl rounded-br-xl bg-white text-black whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
+                        <div class="chatcontent  serif-text min-h-8 border border-gray-200 break-words w-fit min-w-6 px-4 py-2 rounded-l-3xl rounded-tr-3xl rounded-br-md bg-white text-black whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
                         >
                           <div>{{item.content}}</div>
                           <template v-if="item.photo?.meta">
@@ -238,7 +230,7 @@
                         </p>
                         <div class="scroll-y-container relative h-fit overflow-hidden rounded-b-xl">
                           <div 
-                            :class="[`_text text-gray-500 text-xs lg:text-sm px-4 py-5 transition-all duration-200 `,(item.status=='analysis'?'active':''),item.show_thought?'max-h-56 md:max-h-96 h-full overflow-auto':'max-h-0 h-0 overflow-hidden']"
+                            :class="[`_text text-gray-500 text-xs lg:text-sm px-4 py-5 transition-all duration-300 ease `,(item.status=='analysis'?'active':''),item.show_thought?'max-h-56 md:max-h-96 h-full overflow-auto':'max-h-0 h-0 overflow-hidden']"
                           >
                             <div v-for="(item,i2) in item.renderedAnalysis" :key="i2" v-html="item" class="chat_animate_in"></div>
                           </div>
@@ -299,7 +291,7 @@
                   </template>
                 </template>
                 <div class="my-5">
-                  <div class="text-gray-900 opacity-85 border-gray-200 text-sm lg:text-base  border serif-text bg-white cursor-pointer transition duration-100 rounded-r-3xl rounded-tl-3xl rounded-bl-xl hover:bg-stone-100 px-3 py-2 my-2" 
+                  <div class="text-gray-900 opacity-85 border-gray-200 text-sm lg:text-base  border serif-text bg-white cursor-pointer transition duration-100 rounded-r-3xl rounded-tl-3xl rounded-bl-md hover:bg-stone-100 px-3 py-2 my-2" 
                   v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
@@ -448,6 +440,37 @@
             <span class="leading-none ml-2">{{isRecording?'正在':'开始'}}录音</span>
           </button>
         </div>
+      </div>
+    </div>
+    <div :data-show="showInfo" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden" v-show="showInfo">
+      <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
+        <div class="px-6 py-5 flex justify-between items-center w-full">
+          <h2 class="text-xl font-semibold serif-text text-black">公告信息</h2>
+          <button @click="showInfo = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200 hover:bg-opacity-50 transition duration-200 p-3 rounded-full bg-transparent">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
+          <h2 class="w-full text-lg md:text-3xl text-center mb-2">一切，为了科技平权</h2>
+          <router-link to="/about/log" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
+            <span>查看更新日志</span>
+            <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
+          </router-link>
+          <a target="_blank" href="https://mp.weixin.qq.com/s/WUJ4EzVP7gBVunauJgQ7PQ" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
+            <span>了解《零本AI：深入思考赋能实际教学》</span>
+            <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
+          </a>
+          <a target="_blank" href="https://www.chiziingiin.top/" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
+            <span>赤子英金官网</span>
+            <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
+          </a>
+          <div class="w-full text-sm text-gray-600 mt-4 p-3 bg-gray-200 bg-opacity-70 rounded-md">
+            提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。
+          </div>
+        </div> 
       </div>
     </div>
     <div class="ainput" ref="ainput">
