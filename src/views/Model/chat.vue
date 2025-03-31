@@ -225,18 +225,18 @@
                         </div>
                         
                       </div>
-                      <div class="analysis w-full mt-2 overflow-hidden serif-text bg-stone-100 border border-stone-300 rounded-xl" v-show="item.status != 'no_analysis' && item.analysis">
+                      <div class="analysis w-full mt-2 serif-text bg-stone-100 border border-stone-300 rounded-xl" v-show="item.status != 'no_analysis' && item.analysis">
                         <p 
                           @click="item.show_thought = !item.show_thought"
-                          class="serif-text px-4 flex justify-between py-2 cursor-pointer active:scale-95 scale-100 hover:text-gray-600 text-gray-800 transition duration-200 items-center ">
+                          :class="[`serif-text px-4 flex justify-between py-2 cursor-pointer bg-stone-100 rounded-t-xl top-0 active:text-gray-500 hover:text-gray-600 text-gray-800 transition duration-200 items-center select-none`,item.show_thought?'sticky z-10':''] ">
                           <span class="text-base flex items-center"><SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>思考和分析问题</span>
-                          <span  class="h-fit flex items-center">
+                          <span class="h-fit flex items-center">
                             <!-- {{item.show_thought?'收起':'展开'}}思考过程 -->
                             <Right v-show="!item.show_thought" class="" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
                             <Down v-show="item.show_thought" class="" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
                           </span>
                         </p>
-                        <div class="scroll-y-container relative h-fit overflow-hidden">
+                        <div class="scroll-y-container relative h-fit overflow-hidden rounded-b-xl">
                           <div 
                             :class="[`_text text-gray-500 text-xs lg:text-sm px-4 py-5 transition-all duration-200 `,(item.status=='analysis'?'active':''),item.show_thought?'max-h-56 md:max-h-96 h-full overflow-auto':'max-h-0 h-0 overflow-hidden']"
                           >
@@ -1506,6 +1506,9 @@ async function DeepMindWithAI(opt,count) {
     time: opt.targetTime,
     photo: opt.photo,
     audio: opt.audio,
+    onopen:()=>{
+      autoScroll.value = true;
+    },
     onerror: (source, model) => {
       Auth.analysis('event', 'CHAT-AI-ERROR');
       if(source.message.indexOf('UpstashError')>-1){

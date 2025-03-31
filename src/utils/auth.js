@@ -658,6 +658,7 @@ let Auth = {
         audio:param.audio
       },
       {
+        onopen:param.onopen,
         onmessage:param.onmessage,
         onclose:param.onclose,
         stopStatus:param.stopStatus,
@@ -871,6 +872,12 @@ let Auth = {
         // return;
         throw new Error("会话流传输出现错误");
       }
+      try{
+        (async()=>{
+          if(param.onopen)
+          param.onopen();
+        })()
+      }catch(e){}
       const model = postData.model;
       // // console.log(model)
       const reader = response.body.getReader();
