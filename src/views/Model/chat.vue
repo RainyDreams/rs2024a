@@ -12,7 +12,7 @@
     <div class="title text-center w-full text-xs pb-1 truncate px-5" >{{ title }}</div>
 
     <div 
-      :class="`scroll active`"
+      :class="[`scroll active`,statusText?'will-change-auto':'']"
       @scroll.passive="checkScollStatus"
       @wheel.passive="onWheel"
       @touchstart.passive="onWheel"
@@ -230,7 +230,7 @@
                         </p>
                         <div class="scroll-y-container relative h-fit overflow-hidden rounded-b-xl">
                           <div 
-                            :class="[`_text text-gray-500 text-xs lg:text-sm px-4 py-5 transition-all duration-300 ease `,(item.status=='analysis'?'active':''),item.show_thought?'max-h-56 md:max-h-96 h-full overflow-auto':'max-h-0 h-0 overflow-hidden']"
+                            :class="[`_text text-gray-500 text-xs lg:text-sm px-4 py-5 transition-all duration-300 ease `,(item.status=='analysis'?'active':''),item.show_thought?'max-h-56 md:max-h-96 h-full overflow-auto':'max-h-0 h-0 overflow-hidden',(chatList[i].status=='reply')?'will-change-contents':'']"
                           >
                             <div v-for="(item,i2) in item.renderedAnalysis" :key="i2" v-html="item" class="chat_animate_in"></div>
                           </div>
@@ -245,7 +245,8 @@
                   </template>
                   <template v-else-if="item.role == 'assistant'">
                     <div class="assistant flex-shrink-0" :data-id="i">
-                      <div class="chatcontent text-sm/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                      <div 
+                        :class="[`chatcontent text-sm/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose`,(chatList[i-1].status=='reply')?'will-change-contents':'']" >
                         <!-- <template > -->
                         <div v-for="(item,i2) in item.renderedContent" :key="i2" v-html="item" class="chat_animate_in"></div>
                         <!-- </template> -->
@@ -493,7 +494,7 @@
               <div v-show="statusText"
                 class="text-base md:text-lg pointer-events-none lg:text-xl text-green-800 w-fit text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
                 <span class=" flex items-center bg-white z-30 px-3 rounded-3xl py-2 border border-gray-200">
-                    <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-stone-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-stone-500  will-change-transform" style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg><span class="active-text text-lg leading-none align-bottom text-stone-500">{{ statusText }}</span>
@@ -1957,7 +1958,7 @@ onMounted(async ()=>{
   /* display: none !important; */
   visibility: hidden;
   pointer-events: none;
-  transition: visibility .2s ease,opacity .2s ease;
+  transition: visibility .1s ease,opacity .2s ease;
   opacity: 0;
 }
 .autohidden[data-show="true"]{
