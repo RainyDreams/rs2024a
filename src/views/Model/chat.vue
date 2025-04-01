@@ -221,7 +221,7 @@
                         <p 
                           @click="item.show_thought = !item.show_thought"
                           :class="[`serif-text px-4 flex justify-between py-2 cursor-pointer bg-stone-100 rounded-t-xl top-0 active:text-gray-500 hover:text-gray-600 text-gray-800 transition duration-200 items-center select-none`,item.show_thought?'sticky z-10':''] ">
-                          <span class="text-base flex items-center"><SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>思考和分析问题</span>
+                          <span class="text-base flex items-center"><SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>思考和分析问题 {{ item.time?(item.time+'秒'):'' }}</span>
                           <span class="h-fit flex items-center">
                             <!-- {{item.show_thought?'收起':'展开'}}思考过程 -->
                             <Right v-show="!item.show_thought" class="" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
@@ -1567,12 +1567,18 @@ function handleOnMessage(res, m , opt) {
       chatMessage: (source) => {
         chatList.value[opt.index].content += source;
         renderContent(opt.index);
-        // debouncedScrollToBottom();
       },
       analysisMessage: (source) => {
         chatList.value[opt.index - 1].analysis += source;
         renderAnalysis(opt.index - 1);
-        // debouncedScrollToBottom();
+      },
+      timeMessage: (source, mode) => {
+        if(mode == 'text-analysis'){
+          if(chatList.value[opt.index - 1].tmpTime === undefined){
+            chatList.value[opt.index - 1].tmpTime = 0;
+          }
+          chatList.value[opt.index - 1].tmpTime += source;
+        }
       },
       title:(source)=>{
         title.value = source;
@@ -1585,11 +1591,13 @@ function handleOnMessage(res, m , opt) {
         suggestions.value = source;
       },
       info:(source)=>{
-        console.log(source,opt);
+        // console.log(source,opt);
         if(source.status){
           statusText.value = source.status;
         }
         if(source.info.mode == 'text'){
+          chatList.value[opt.index - 1].show_thought = false;
+          chatList.value[opt.index - 1].time = /*两位小数*/(chatList.value[opt.index - 1].tmpTime/1000).toFixed(2);
           chatList.value[opt.index].model = source.info.version;
         }
       },
