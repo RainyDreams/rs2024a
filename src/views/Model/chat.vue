@@ -455,20 +455,24 @@
           </button>
         </div>
         <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
-          <h2 class="w-full text-lg md:text-3xl text-center mb-2">一切，为了科技平权</h2>
+          <h2 class="w-full text-xl sm:text-2xl md:text-3xl text-center mb-2">一切，为了科技平权</h2>
           <router-link to="/about/log" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
             <span>查看更新日志</span>
             <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </router-link>
+          <router-link to="/about/values" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
+            <span>了解我们的<b class="font-sans">价值观</b></span>
+            <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
+          </router-link>
           <a target="_blank" href="https://mp.weixin.qq.com/s/WUJ4EzVP7gBVunauJgQ7PQ" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
             <span>了解《零本AI：深入思考赋能实际教学》</span>
-            <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
+            <RightSmallUp class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </a>
           <a target="_blank" href="https://www.chiziingiin.top/" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
             <span>赤子英金官网</span>
-            <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
+            <RightSmallUp class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </a>
-          <div class="w-full text-sm text-gray-600 mt-4 p-3 bg-gray-200 bg-opacity-70 rounded-md">
+          <div class="w-full text-sm text-gray-700 mt-4 p-3 bg-gray-200 bg-opacity-70 rounded-md">
             提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。
           </div>
         </div> 
@@ -661,7 +665,7 @@
                 <touch-ripple
                     :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAudio?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                     :style="{ clipPath: 'none', backgroundColor: '#fff' }"
-                    :color="'#bfdbfe'"
+                    :color="'#f1f5f9'"
                     :opacity="0.4"
                     transition="ease"
                     :duration="200"
@@ -760,7 +764,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElPopover,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Camera,Up,Copy,Right,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Down,Info,SmartOptimization,Left,Home,ExperimentOne, DownloadFour } from '@icon-park/vue-next';
+import { Camera,Up,Copy,Right,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Down,Info,SmartOptimization,Left,Home,ExperimentOne, RightSmallUp } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'

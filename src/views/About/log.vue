@@ -1,5 +1,6 @@
 <template>
   <div class="commonPage">
+    <routerBack name="上一页"></routerBack>
     <div class="panel">
       <h1 class="text-2xl mb-2 font-semibold">更新日志</h1>
       <!-- <p class="text-lg mb-4">我们已将代码开源在GitHub，如果你也想参与其中，请提交<a target="_blank" href="https://github.com/RainyDreams/rs2024a/pulls">Pull Request</a></p> -->
@@ -39,6 +40,7 @@
 import { onMounted, ref } from 'vue';
 import { ElPagination,ElSkeleton,ElAvatar,ElButton } from 'element-plus';
 import { Down,Up } from '@icon-park/vue-next';
+import routerBack from '../../components/routerBack.vue';
 import Auth from '../../utils/auth';
 import dayjs from 'dayjs';
 const list = ref()

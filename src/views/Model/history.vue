@@ -1,5 +1,6 @@
 <template>
   <div class="commonPage">
+    <routerBack name="上一页"></routerBack>
     <div class="big_header">
       <!-- <div class="icon"><form-one theme="outline" size="24" fill="currentColor" strokeLinejoin="bevel"/></div> -->
       <div class="title">聊天历史</div>
@@ -15,7 +16,7 @@
         <div class="col-12 col-md-6 col-xl-4 mb-2 md:mb-3" v-for="item in chatList">
           <router-link 
             class="block h-full  text-slate-950 border-b py-4 px-5 border-slate-100 hover:bg-slate-50 transition-all rounded-lg bg-white" 
-            :to="`/chat/${item.sessionID}`"
+            :to="`/chat/?s=${item.sessionID}`"
           >
             <p class="text-base mb-1">{{ item.title }}</p>
             <p class="text-sm text-slate-500">{{ item.formatCreateTime }}</p>
@@ -31,6 +32,7 @@
 import { onActivated, ref } from 'vue';
 import Auth from '../../utils/auth';
 import { dayjs, ElButton,ElEmpty, ElMessage,ElTag,ElAvatar } from 'element-plus';
+import routerBack from '../../components/routerBack.vue';
 import jsCookie from 'js-cookie';
 const chatList = ref([]);
 const loading = ref(true)
