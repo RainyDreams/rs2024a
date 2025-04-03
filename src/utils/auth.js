@@ -707,7 +707,7 @@ let Auth = {
       { sessionID: param.sessionID,
         model:param.model,
         content: param.content,
-        vf:param.vf, 
+        vf:await this.getUserFingerprint(), 
         useAnalysis:param.useAnalysis,
         useInternet:param.useInternet,
         useTask:param.useTask,
