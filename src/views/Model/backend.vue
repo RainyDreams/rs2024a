@@ -68,12 +68,9 @@
               </div>
             </div>
           </div>
-          
-
         </div>
       </div>
     </div>
-
     <div v-if="chatListDialogVisible"
       class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-ss">
       <div class="bg-slate-50 rounded-lg shadow-lg max-w-2xl overflow-y-auto w-full h-full">
@@ -98,7 +95,14 @@
               <p><strong>创建时间:</strong> {{ dayjs(sessionInfo.createTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
               <p><strong>最后聊天时间:</strong> {{ dayjs(sessionInfo.lastTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
               <p><strong>过期时间:</strong> {{ dayjs(sessionInfo.expirationTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
-              <p><strong>vf:</strong> {{ sessionInfo.vf.join(', ') }}</p>
+              <p><strong>vf:</strong> 
+                <ul>
+                  <li v-for="(x, i) in sessionInfo.vf" :key="i" @click="viewVfDetails(x)" class="text-blue-500 cursor-pointer hover:underline">
+                    {{ x }}
+                  </li>
+                </ul>
+              </p>
+              <p><strong>id:</strong> {{ sessionInfo.id }}</p>
               <p><strong>pt:</strong> {{ sessionInfo.pt }}</p>
             </div>
             <!-- 显示具体的聊天内容 -->
@@ -128,6 +132,46 @@
         </div>
       </div>
     </div>
+
+    <!-- VF 详细信息弹窗 -->
+    <div v-if="vfDialogVisible"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-ss">
+      <div class="bg-slate-50 rounded-lg shadow-lg max-w-2xl overflow-y-auto w-full h-full">
+        <div class="p-4 flex justify-between items-center sticky top-0 bg-slate-50">
+          <h2 class="text-lg font-semibold">VF 详情</h2>
+          <button @click="vfDialogVisible = false" class="text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="p-4">
+          <div v-if="vfDetails.length > 0">
+            <div v-for="(vf, index) in vfDetails" :key="index" class="mb-4">
+              <p><strong>用户:</strong> {{ vf.user.join(', ') }}</p>
+              <p><strong>指纹:</strong> {{ vf.fingerprint }}</p>
+              <p><strong>时间:</strong> {{ vf.time }}</p>
+              <p><strong>信息:</strong></p>
+              <ul>
+                <li v-for="(value, key) in vf.info" :key="key">{{ key }}: {{ value }}</li>
+              </ul>
+              <p><strong>任务:</strong></p>
+              <ul>
+                <li v-for="(task, taskIndex) in vf.tasks" :key="taskIndex">
+                  <p><strong>时间:</strong> {{ dayjs(task.time).format('YYYY-MM-DD HH:mm:ss') }}</p>
+                  <ul>
+                    <li v-for="(value, key) in task" :key="key">{{ key }}: {{ value }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div v-else>
+            <p>暂无 VF 信息</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -151,13 +195,17 @@ const loadingChatList = ref(false);
 const sessionInfo = ref({});
 const selectedUser = ref(null);
 
+// 新增 VF 相关变量
+const vfDialogVisible = ref(false); // 控制 VF 弹窗的显示状态
+const vfDetails = ref([]); // 存储 VF 详细信息
+
 onActivated(async () => {
   list.value = list.value.concat((await Auth.dangerViewGuest()).content || []);
 });
 
 const getChatHistory = async (item) => {
   try {
-    chatSessions.value = []
+    chatSessions.value = [];
     dialogVisible.value = true;
     loadingChatSessions.value = true;
     selectedUser.value = {
@@ -165,11 +213,11 @@ const getChatHistory = async (item) => {
       profile: JSON.parse(item.profile)
     };
     const response = await Auth.getAiChatHistory(JSON.stringify({ user: item.id }));
-    if (response.code ==='ok' && response.content) {
+    if (response.code === 'ok' && response.content) {
       chatSessions.value = (response.content || []);
-      selectedUser.value.hide=true;
+      selectedUser.value.hide = true;
     } else {
-      chatSessions.value = []
+      chatSessions.value = [];
       console.error("获取SessionID失败:", response);
     }
   } catch (error) {
@@ -178,6 +226,7 @@ const getChatHistory = async (item) => {
     loadingChatSessions.value = false;
   }
 };
+
 function dataURLtoBlob(dataURL) {
   const matches = dataURL.match(/^data:(.+);base64,(.+)$/);
   if (!matches || matches.length !== 3) {
@@ -193,30 +242,31 @@ function dataURLtoBlob(dataURL) {
   }
   return new Blob([uint8Array], { type: mimeType });
 }
+
 const openChatListDialog = async (session) => {
   try {
-    sessionInfo.value = {}
-    chatList.value=[]
+    sessionInfo.value = {};
+    chatList.value = [];
     chatListDialogVisible.value = true; // 显示聊天详情弹窗
     loadingChatList.value = true;
     const sessionResponse = await Auth.getAIChatList({ sessionID: session.sessionID });
-    if (sessionResponse.status ==='sus') {
+    if (sessionResponse.status === 'sus') {
       chatList.value = sessionResponse.content.map((e) => {
-        if(e.photo){
-          if(e.photo.meta){
-            e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
+        if (e.photo) {
+          if (e.photo.meta) {
+            e.photo.blob = URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
           }
         }
-        if(e.audio){
-          if(e.audio.meta){
-            e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
+        if (e.audio) {
+          if (e.audio.meta) {
+            e.audio.blob = URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
           }
         }
         return e;
       });
-
       // 存储聊天会话的基本信息
       sessionInfo.value = {
+        id: session.sessionID,
         createTime: session.createTime,
         title: session.title,
         lastTime: sessionResponse.lastTime,
@@ -233,12 +283,38 @@ const openChatListDialog = async (session) => {
     loadingChatList.value = false;
   }
 };
+
+// 查询 VF 详细信息的方法
+const viewVfDetails = async (vfKey) => {
+  try {
+    vfDetails.value = []; // 清空之前的 VF 信息
+    vfDialogVisible.value = true; // 显示弹窗
+    const response = await fetch('/api/danger/viewVf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: vfKey }),
+    });
+    const data = await response.json();
+    if (data.content) {
+      vfDetails.value = data.content.map((item) => ({
+        user: item.user,
+        fingerprint: item.fingerprint,
+        time: dayjs(item.time).format('YYYY-MM-DD HH:mm:ss'),
+        info: JSON.parse(item.info),
+        tasks: JSON.parse(item.tasks).sort((a, b) => new Date(b.time) - new Date(a.time)),
+      }));
+    } else {
+      console.error("获取 VF 信息失败:", data);
+    }
+  } catch (error) {
+    console.error("Error fetching VF details:", error);
+  }
+};
 </script>
 
-
 <style>
-
-.h-ss{
+.h-ss {
   height: 100vh;
   height: 100svh;
-}</style>
+}
+</style>

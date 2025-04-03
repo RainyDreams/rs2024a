@@ -210,7 +210,10 @@ let Auth = {
   userLogin:async function userLogin(param) {
     const vf = await this.getUserFingerprint();
     Auth.analysis("event", 'userLogin')
-    return this.basicAuth("/api/login", JSON.stringify({...param,vf}))
+    return this.basicAuth("/api/login", JSON.stringify({...param,vf:{
+      key:vf,
+      info:await this.getDeviceInfo()
+    }}))
   },
   userVerify:async function userVerify(param) {
     const vf = await this.getUserFingerprint();
@@ -301,6 +304,62 @@ let Auth = {
     }catch(err){}
     return t
   },
+  getDeviceInfo:async function getDeviceInfo() {
+    const ua = navigator.userAgent;
+    const device = {
+        deviceType: /Mobi|Android|iPhone|iPad|iPod/i.test(ua)? 'Mobile' : 'Desktop',
+        os: /Windows/i.test(ua)? 'Windows' :
+            /Macintosh/i.test(ua)? 'Mac OS' :
+            /Linux/i.test(ua)? 'Linux' :
+            /Android/i.test(ua)? 'Android' :
+            /iPhone|iPad|iPod/i.test(ua)? 'iOS' : 'Unknown',
+        browser: /Chrome/i.test(ua)? 'Chrome' :
+            /Firefox/i.test(ua)? 'Firefox' :
+            /Safari/i.test(ua)? 'Safari' :
+            /MSIE|Trident/i.test(ua)? 'Internet Explorer' :
+            /Opera|OPR/i.test(ua)? 'Opera' : 'Unknown',
+        screen: {
+            width: window.screen.width,
+            height: window.screen.height,
+            pixelRatio: window.devicePixelRatio || 'Unknown'
+        },
+        memory: navigator.deviceMemory || 'Unknown',
+        hardwareConcurrency: navigator.hardwareConcurrency || 'Unknown',
+        language: navigator.language || navigator.userLanguage,
+        touchSupport: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+        colorDepth: window.screen.colorDepth,
+        online: navigator.onLine,
+        batteryLevel: 'Unknown',
+        isCharging: 'Unknown',
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        deviceOrientation: window.screen.orientation? window.screen.orientation.type : 'Unknown',
+        mediaDevices: 'mediaDevices' in navigator? [] : 'Not supported'
+    };
+
+    if ('getBattery' in navigator) {
+        try {
+            const battery = await navigator.getBattery();
+            device.batteryLevel = battery.level;
+            device.isCharging = battery.charging;
+        } catch (error) {
+            console.error('获取电池信息时出错:', error);
+        }
+    }
+
+    if (device.mediaDevices!== 'Not supported') {
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            device.mediaDevices = devices.map(device => ({
+                kind: device.kind,
+                label: device.label
+            }));
+        } catch (error) {
+            console.error('获取媒体设备信息时出错:', error);
+        }
+    }
+
+    return device;
+  },
   getPrtoken: async function getPrtoken(mode) {
     // // console.log(Cookies.get("czigauth"));
     let userAuth = sessionStorage.getItem("userInfo");
@@ -314,7 +373,7 @@ let Auth = {
 
     } else if (Cookies.get("czigauth") == 'AlreadyAuthenticated') {
       return { status: "exist", content: Cookies.get("czigauth") };
-    } else if (!Cookies.get("czigauth") && !userAuthStatus && !userAuth?.AlreadyAuthenticated){
+    } else {
       return { status: "notExist", content: Cookies.get("czigauth") };
     }
     Auth.analysis("event", 'getPrtoken')
@@ -799,6 +858,12 @@ let Auth = {
       return [];
     }
   },
+  sendDeviceInfo:async function(){
+    return await this.basicAuth('/api/device', JSON.stringify({
+      key:vf,
+      info:await this.getDeviceInfo()
+    }));
+  },
   decodeStream:function(meta,opt){
     const decode = JSON.parse(meta);
     // console.log(decode,opt)
@@ -854,6 +919,8 @@ let Auth = {
       opt.preview(decode.config)
     } else if (decode.mode == 'alert'){
       opt.alert(decode.content)
+    } else if (decode.mode == 'device'){
+      opt.device()
     }
     return '???'
   },
@@ -938,6 +1005,7 @@ let Auth = {
     Auth.analysis("event", 'getUserFingerprint')
     const fp = await FingerprintJS.load();
     const result = await fp.get();
+    // console.log(result)
     const visitorId = result.visitorId;
     Auth.analysis("set", 'Fingerprint',result.visitorId);
     return visitorId;

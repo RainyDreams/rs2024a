@@ -347,6 +347,7 @@ emitter.on('toggleSidebar',()=>{
 emitter.on('applyForLogin',(fn=async()=>{})=>{
   LoginThread.add(async ()=>{
     let prStatus = await Auth.getPrtoken();
+    console.log(prStatus)
     if(prStatus.status == 'sus'){
       await fn();
       LoginThread.solve();

@@ -1672,6 +1672,11 @@ function handleOnMessage(res, m , opt) {
         }catch(e){
           console.log(e);
         }
+      },
+      device:()=>{
+        try{
+          Auth.sendDeviceInfo();
+        }catch(e){}
       }
     });
   }catch(e){
