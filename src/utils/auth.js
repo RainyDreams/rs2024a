@@ -632,7 +632,7 @@ let Auth = {
       sessionID: param.sessionID,
       mode: param.mode,
       model: param.model,
-      vf:param.vf
+      vf:await this.getUserFingerprint(), 
     }));
   },
   setAIChatResponse: async function setAIChatResponse(param){
@@ -674,7 +674,7 @@ let Auth = {
     await this.getPrtoken();
     const res = await this.basicAuth(
       "/api/ai/send",
-      JSON.stringify({ content: JSON.stringify(list), vf: param.fingerprint })
+      JSON.stringify({ content: JSON.stringify(list), vf: await this.getUserFingerprint(),  })
     );
     if (res.status === "sus") {
       await this.getStreamText('/api/ai/stream_anlysis', { content: JSON.stringify(list),}, {
