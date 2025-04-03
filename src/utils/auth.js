@@ -208,13 +208,14 @@ let Auth = {
     return this.basicAuth("/api/reg", JSON.stringify(param))
   },
   userLogin:async function userLogin(param) {
-    await this.getUserFingerprint();
+    const vf = await this.getUserFingerprint();
     Auth.analysis("event", 'userLogin')
-    return this.basicAuth("/api/login", JSON.stringify(param))
+    return this.basicAuth("/api/login", JSON.stringify({...param,vf}))
   },
   userVerify:async function userVerify(param) {
+    const vf = await this.getUserFingerprint();
     Auth.analysis("event", 'userVerify')
-    return this.basicAuth("/api/verify", JSON.stringify(param))
+    return this.basicAuth("/api/verify", JSON.stringify({...param,vf}))
   },
   getBasicInfoStatus:false,
   getBasicInfo:/*asyncThrottle(*/async function getBasicInfo({task}){

@@ -1192,6 +1192,7 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
   // 使用默认的渲染逻辑
   return self.renderToken(tokens, idx, options);
 };
+const ggbRenderList = ref({})
 md.renderer.rules.fence = function(tokens, idx, options, env, self) {
   var token = tokens[idx];
   var info = token.info.trim().split(/\s+/);
@@ -1213,6 +1214,25 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
     </span>
     <img src=""/>
 </div>`
+  } else if (langName.toLowerCase()=='math') {
+    let formula = token.content;
+    let ggbid = getRadomString(8);
+    let width = Math.floor(document.querySelector('#ai_chatList').clientWidth);
+    let height = Math.floor(width*4/3);
+    const params = {
+      appName: 'graphing',
+      width: width,
+      height: height,
+      showToolBar: false,
+      showAlgebraInput: false, 
+      showMenuBar: false 
+    };
+    // Auth.chatTaskThread.
+    ggbRenderList.value[ggbid] = {
+      id:ggbid,
+      formula
+    }
+    return `<div id="g${ggbid}" class="ggb-applet h-[${height}px] w-[${width}px]"></div>`
   } else if (hljs.getLanguage(langName)) {
     try {
       highlightedCode = hljs.highlight(token.content, { language: langName }).value;
@@ -1669,16 +1689,26 @@ async function handleOnClose(error,model,opt) {
     if (!error) {  }
   } else {
     if (!error) {
-      
-      // if(model == 'line-1'){
-      //   // animateMode.value = false;
-      //   setTimeout(()=>{
-      //     animateMode.value = false;
-      //     contentRendered.value=[]
-      //   },10)
-      // }
       await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index-1])
-      await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index])
+      await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index]);
+      function fn(obj){
+        const applet = new window.GGBApplet(params, true);
+        applet.inject('g'+obj.id);
+        applet.getAPI().then(api => {
+          api.evalCommand(obj.formula);
+        });
+      }
+      (async()=>{
+        try{
+          const keys = Object.keys(ggbRenderList.value);
+          while (keys.length > 0) {
+              const key = keys.shift();
+              const obj = ggbRenderList.value[key];
+              fn(obj);
+              delete ggbRenderList.value[key];
+          }
+        }catch(e){}
+      })()
     }
   }
 }
@@ -1853,6 +1883,21 @@ async function applysession({id,mode}){
           renderContent(i)
         }
       })
+      function fn(obj){
+        const applet = new window.GGBApplet(params, true);
+        applet.inject('g'+obj.id);
+        applet.getAPI().then(api => {
+          api.evalCommand(obj.formula);
+        });
+      }
+      (async()=>{
+        try{
+          while (ggbRenderList.value.length > 0) {
+            const obj = ggbRenderList.value.shift();
+            fn(obj);
+          }
+        }catch(e){}
+      })()
         setTimeout(()=>{
           scrollToBottom()
         },50)
