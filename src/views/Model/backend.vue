@@ -297,7 +297,7 @@ const viewVfDetails = async (vfKey) => {
     const data = await response.json();
     if (data.content) {
       vfDetails.value = data.content.map((item) => ({
-        user: item.user,
+        user: JSON.parse(item.user),
         fingerprint: item.fingerprint,
         time: dayjs(item.time).format('YYYY-MM-DD HH:mm:ss'),
         info: JSON.parse(item.info),
