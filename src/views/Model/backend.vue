@@ -96,7 +96,7 @@
               <p><strong>最后聊天时间:</strong> {{ dayjs(sessionInfo.lastTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
               <p><strong>过期时间:</strong> {{ dayjs(sessionInfo.expirationTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
               <p><strong>vf:</strong> 
-                <ul>
+                <ul class="list-disc pl-4">
                   <li v-for="(x, i) in sessionInfo.vf" :key="i" @click="viewVfDetails(x)" class="text-blue-500 cursor-pointer hover:underline">
                     {{ x }}
                   </li>
@@ -152,14 +152,14 @@
               <p><strong>指纹:</strong> {{ vf.fingerprint }}</p>
               <p><strong>时间:</strong> {{ vf.time }}</p>
               <p><strong>信息:</strong></p>
-              <ul>
+              <ul class="list-disc pl-4">
                 <li v-for="(value, key) in vf.info" :key="key">{{ key }}: {{ value }}</li>
               </ul>
               <p><strong>任务:</strong></p>
-              <ul>
-                <li v-for="(task, taskIndex) in vf.tasks" :key="taskIndex">
+              <ul class="list-disc pl-4">
+                <li v-for="(task, taskIndex) in vf.tasks" class="border-b" :key="taskIndex">
                   <p><strong>时间:</strong> {{ dayjs(task.time).format('YYYY-MM-DD HH:mm:ss') }}</p>
-                  <ul>
+                  <ul class="list-disc pl-4">
                     <li v-for="(value, key) in task" :key="key">{{ key }}: {{ value }}</li>
                   </ul>
                 </li>
