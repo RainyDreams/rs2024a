@@ -860,7 +860,7 @@ let Auth = {
   },
   sendDeviceInfo:async function(){
     return await this.basicAuth('/api/device', JSON.stringify({
-      key:vf,
+      key:await this.getUserFingerprint(),
       info:await this.getDeviceInfo()
     }));
   },
@@ -1002,7 +1002,7 @@ let Auth = {
     return this.basicAuth("/api/danger/viewAIGuest");
   },
   getUserFingerprint:async function getUserFingerprint() {
-    Auth.analysis("event", 'getUserFingerprint')
+    // Auth.analysis("event", 'getUserFingerprint')
     const fp = await FingerprintJS.load();
     const result = await fp.get();
     // console.log(result)
