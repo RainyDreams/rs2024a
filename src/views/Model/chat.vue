@@ -443,7 +443,7 @@
         </div>
       </div>
     </div>
-    <div :data-show="showInfo" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden" v-show="showInfo">
+    <div :data-show="showInfo" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
         <div class="px-6 py-5 flex justify-between items-center w-full">
           <h2 class="text-xl font-semibold serif-text text-black">公告信息</h2>
@@ -476,6 +476,22 @@
             提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。
           </div>
         </div> 
+      </div>
+    </div>
+    <div :data-show="showGGB" class="fixed overflow-hidden flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="bg-stone-50 rounded-3xl max-h-full shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
+        <div class="px-6 py-5 flex justify-between items-center w-full">
+          <h2 class="text-xl font-semibold serif-text text-black">函数图像</h2>
+          <button @click="showGGB = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200 hover:bg-opacity-50 transition duration-200 p-3 rounded-full bg-transparent">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
+          <div id="GGBshow"></div>
+        </div>
       </div>
     </div>
     <div class="ainput" ref="ainput">
@@ -770,6 +786,7 @@ import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
 const showModelDetail = ref(false)
 const showInfo = ref(false)
+const showGGB = ref(false);
 const contentRendered = ref([])
 const animateMode = ref(false)
 const cameraInput = ref(null);
@@ -1215,24 +1232,19 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
     <img src=""/>
 </div>`
   } else if (langName.toLowerCase()=='math') {
-    let formula = token.content;
+    let formula = token.content.replace(/\n/g, '');
     let ggbid = getRadomString(8);
-    let width = Math.floor(document.querySelector('#ai_chatList').clientWidth);
-    let height = Math.floor(width*4/3);
-    const params = {
-      appName: 'graphing',
-      width: width,
-      height: height,
-      showToolBar: false,
-      showAlgebraInput: false, 
-      showMenuBar: false 
-    };
-    // Auth.chatTaskThread.
-    ggbRenderList.value[ggbid] = {
-      id:ggbid,
-      formula
-    }
-    return `<div id="g${ggbid}" class="ggb-applet h-[${height}px] w-[${width}px]"></div>`
+    return `<div id="g${ggbid}" class="ggb-applet text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl">
+      <div class="flex justify-between items-center">
+        <span>图像预览</span>
+        <span class="i-icon i-icon-right"><svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M19 12L31 24L19 36" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="bevel"></path></svg></span>
+      </div>
+      <div class="inner border-t">
+        <p>${formula}</p>
+      </div>
+    </div>`;
+
+    return `<div  class="ggb-applet">${formula}</div>`
   } else if (hljs.getLanguage(langName)) {
     try {
       highlightedCode = hljs.highlight(token.content, { language: langName }).value;
@@ -1428,11 +1440,12 @@ class RenderTaskQueueManager {
   }
   runNextTask() {
         if (this.taskQueue.length > 0) {
+          let that = this;
             const task = this.taskQueue.shift();
             task();
-            this.vm.$nextTick(() => {
-                if (this.taskQueue.length > 0) {
-                    this.runNextTask();
+            nextTick(() => {
+                if (that.taskQueue.length > 0) {
+                    that.runNextTask();
                 }
             });
         }
@@ -1683,6 +1696,24 @@ function handleOnMessage(res, m , opt) {
     console.log(e)
   }
 }
+let ggbApi;
+const renderGGB = renderTaskManager.addTask((list=[])=>{
+  list.forEach((element) => {
+    element.addEventListener('click', () => {
+      showGGB.value = true;
+      ggbApi.reset();
+      ggbApi.evalCommand(element.querySelector('.inner').innerText)
+    })
+    console.log(element)
+    // applet.onAppletLoad(function () {
+    //       // 执行绘制函数图像的命令
+    //       ggbApplet.evalCommand('f(x)=x^2');
+    //   });
+    // applet.getAPI().then(api => {
+    //   api.evalCommand(element.innerText);
+    // });
+  });
+})
 async function handleOnClose(error,model,opt) {
   stopStatus.value = false;
   showStop.value = false;
@@ -1696,24 +1727,8 @@ async function handleOnClose(error,model,opt) {
     if (!error) {
       await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index-1])
       await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index]);
-      function fn(obj){
-        const applet = new window.GGBApplet(params, true);
-        applet.inject('g'+obj.id);
-        applet.getAPI().then(api => {
-          api.evalCommand(obj.formula);
-        });
-      }
-      (async()=>{
-        try{
-          const keys = Object.keys(ggbRenderList.value);
-          while (keys.length > 0) {
-              const key = keys.shift();
-              const obj = ggbRenderList.value[key];
-              fn(obj);
-              delete ggbRenderList.value[key];
-          }
-        }catch(e){}
-      })()
+      const elements = document.querySelectorAll(`#ai_chatList > div:nth-child(${opt.index}) .ggb-applet`);
+      renderGGB(elements);
     }
   }
 }
@@ -1787,137 +1802,61 @@ const throttledSend = throttle(send, 100);
 const debouncedScrollToBottom = debounce(scrollToBottom, 500); 
 const throttledScrollToBottom = throttle(scrollToBottom, 1500); 
 let applying = false
-async function applysession({id,mode}){
-  
-  if(sessionID.value){
-    let tmp = 0;
-    chatList.value = JSON.parse(localStorage.getItem('chat_'+sessionID.value) || '[]');
-    chatList.value.forEach((e,i)=>{
-      if(e.role == 'user'){
-        e.status = e.analysis?'analysised':'no_analysis';
-        e.show_thought = false;
-        if(e.photo){
-          if(e.photo.meta){
-            e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
-          }
-        }
-        if(e.audio){
-          if(e.audio.meta){
-            e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
-          } else {
-            e.audio.blob=null;
-          }
-        }
-        if(e.analysis){
-          renderAnalysis(i);
-        }
-        if(i == 0){
-          e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
-        } else {
-          e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
-          tmp=i;
-        }
-      } else {
-        renderContent(i)
-      }
-    })
-    debouncedScrollToBottom()
-    loading.value = false;
-    welcome_loading.value = false;
-    Auth.chatTaskThread.add(async ()=>{
-      const getList = (await Auth.getAIChatList({sessionID:sessionID.value,mode,model:model.value,vf:fingerprint.value}))
-      if(getList.needDeviceInfo){
-        Auth.sendDeviceInfo();
-      }
-      // Auth.chatTaskThread.add(async ()=>{
-        chatList.value = getList.content;
-        welcome.value = getList.welcome;
-        model_info.value = {
-          ...model_info.value,
-          name:getList.model.name,
-          desc:getList.model.desc,
-          createuser:getList.model.createuser,
-        };
-        title.value = getList.title || title.value;
-        gtag('event', 'page_view', {
-          'page_title': title.value,
-        });
-        try{
-          localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
-        }catch(e){
-          localStorage.clear()
-        }
-        chatList.value.forEach((e,i)=>{
-          if(e.role == 'user'){
-            if(e.analysis){
-              renderAnalysis(i);
-            }
-            if(i == 0){
-              e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
-            } else {
-              e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
-              tmp=i;
-            }
-          } else {
-            renderContent(i)
-          }
-        })
-        chatList.value.forEach((e,i)=>{
-        if(e.role == 'user'){
-          e.status = e.analysis?'analysised':'no_analysis';
-          e.show_thought = false;
-          if(e.photo){
-            if(e.photo.meta){
-              e.photo.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
-            }
-          }
-          if(e.audio){
-            if(e.audio.meta){
-              e.audio.blob=URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
-            } else {
-              e.audio.blob=null;
-            }
-          }
-          if(e.analysis){
-            renderAnalysis(i);
-          }
-          if(i == 0){
-            e.formatSendTime = dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
-          } else {
-            e.formatSendTime = (chatList.value[tmp].sendTime-e.sendTime>(30*60*1000))?dayjs(targetTime).format('YYYY-MM-DD HH:mm:ss'):'';
-            tmp=i;
-          }
-        } else {
-          renderContent(i)
-        }
-      })
-      function fn(obj){
-        const applet = new window.GGBApplet(params, true);
-        applet.inject('g'+obj.id);
-        applet.getAPI().then(api => {
-          api.evalCommand(obj.formula);
-        });
-      }
-      (async()=>{
-        try{
-          while (ggbRenderList.value.length > 0) {
-            const obj = ggbRenderList.value.shift();
-            fn(obj);
-          }
-        }catch(e){}
-      })()
-        setTimeout(()=>{
-          scrollToBottom()
-        },50)
-        model_info.value.createUser = (await Auth.getUserInfoByID({id:model_info.value.createuser}));
-      // })
-    })
-  } else {
-    loading.value = false;
+async function applysession({ id, mode }) {
+  if (!sessionID.value) {
+    loading.value = welcome_loading.value = false;
     placeholder.value = '你好👋';
-    welcome_loading.value = false;
+    return applying = false;
   }
-  applying = false;
+
+  const processChatList = (list) => list.forEach((e, i) => {
+    if (e.role === 'user') {
+      e.status = e.analysis ? 'analysised' : 'no_analysis';
+      e.show_thought = false;
+      if (e.photo?.meta) e.photo.blob = URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
+      if (e.audio?.meta) e.audio.blob = URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
+
+      if (e.analysis) renderAnalysis(i);
+      e.formatSendTime = i === 0 || list[i - 1].sendTime - e.sendTime > 30 * 60 * 1000
+        ? dayjs(e.sendTime).format('YYYY-MM-DD HH:mm:ss')
+        : '';
+    } else {
+      renderContent(i);
+    }
+  });
+
+  try {
+    chatList.value = JSON.parse(localStorage.getItem(`chat_${sessionID.value}`) || '[]');
+    processChatList(chatList.value);
+
+    debouncedScrollToBottom();
+    loading.value = welcome_loading.value = false;
+
+    await Auth.chatTaskThread.add(async () => {
+      const getList = await Auth.getAIChatList({ sessionID: sessionID.value, mode, model: model.value, vf: fingerprint.value });
+      if (getList.needDeviceInfo) Auth.sendDeviceInfo();
+      
+      chatList.value = getList.content;
+      welcome.value = getList.welcome;
+      model_info.value = { ...model_info.value, ...getList.model };
+      title.value = getList.title || title.value;
+
+      gtag('event', 'page_view', { page_title: title.value });
+      localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
+
+      processChatList(chatList.value);
+      nextTick(()=>{
+        renderGGB(document.querySelectorAll('.ggb-applet'));
+      })
+      setTimeout(scrollToBottom, 50);
+
+      model_info.value.createUser = await Auth.getUserInfoByID({ id: model_info.value.createuser });
+    });
+  } catch (error) {
+    console.error('Error applying session:', error);
+  } finally {
+    applying = false;
+  }
 }
 async function applynew(){
   if(applying) return;
@@ -2002,7 +1941,22 @@ onMounted(async ()=>{
         clearInterval(intervalId);
       }
     }
-  })
+  });
+  let width = Math.floor(document.querySelector('#ai_chatList').clientWidth);
+  let height = Math.floor(width*3/3);
+  const params = {
+    appName: 'graphing',
+    width: width,
+    height: height,
+    showToolBar: false,
+    showAlgebraInput: false, 
+    showMenuBar: false ,
+    appletOnLoad(s) {
+      ggbApi = s;
+    }
+  };
+  const applet = new window.GGBApplet(params, true);
+  applet.inject('GGBshow')
 })
 </script>
 
