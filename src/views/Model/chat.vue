@@ -1233,7 +1233,7 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
     <img src=""/>
 </div>`
   } else if (langName.toLowerCase()=='math') {
-    let formula = token.content;
+    let formula = token.content.replace(new RegExp('\\\\n','g'), '\n').replace(new RegExp('\\n\\n','g'), '\n');
     let ggbid = getRadomString(8);
     return `<div id="g${ggbid}" class="ggb-applet text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl">
       <div class="flex justify-between items-center">
