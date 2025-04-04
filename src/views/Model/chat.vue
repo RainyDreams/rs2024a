@@ -1440,15 +1440,15 @@ class RenderTaskQueueManager {
     };
   }
 
-  async executeNextTask() {
+  executeNextTask() {
     if (this.taskQueue.length > 0 &&!this.isExecuting) {
       this.isExecuting = true;
       const task = this.taskQueue.shift();
       task();
-      await nextTick();
-      // console.log('DOM 更新完成，执行下一个任务');
-      this.isExecuting = false;
-      this.executeNextTask();
+      nextTick(()=>{
+        this.isExecuting = false;
+        this.executeNextTask();
+      });
     }
   }
 }
@@ -1468,12 +1468,15 @@ const renderContentTask = (index,isStream)=>{
   // console.log(index)
   // const previous = chatList.value[index].renderedContent;
   const now = md.render(chatList.value[index].content);
-  // if(previous){
-  // const doc = htmlParser.parseFromString(html, 'text/html');
-  chatList.value[index].renderedContent = splitHtmlFirstLevelRegex(now)
-  setTimeout(()=>{
-    task_();
-  },500)
+  chatList.value[index].renderedContent = splitHtmlFirstLevelRegex(now);
+  // console.log(document.querySelectorAll('.ggb-applet'))
+  // nextTick(()=>{
+  // console.log(document.querySelectorAll('.ggb-applet'))
+
+  // });
+  // setTimeout(()=>{
+  //   task_();
+  // },500)
 }
 
 const renderContent = renderTaskManager.addTask(renderContentTask);
@@ -1698,14 +1701,17 @@ function handleOnMessage(res, m , opt) {
   }
 }
 let ggbApi;
-const renderGGB = (list=[])=>{
-  list.forEach((element) => {
+const renderGGB = renderTaskManager.addTask((list)=>{
+  let l = list
+  if(typeof list == 'function') l = list();
+  l.forEach((element) => {
     element.addEventListener('click', () => {
       showGGB.value = true;
       ggbApi.reset();
       ggbApi.evalCommand(element.querySelector('.inner').innerText)
     })
-    console.log(element)
+    console.log(element);
+
     // applet.onAppletLoad(function () {
     //       // 执行绘制函数图像的命令
     //       ggbApplet.evalCommand('f(x)=x^2');
@@ -1714,7 +1720,7 @@ const renderGGB = (list=[])=>{
     //   api.evalCommand(element.innerText);
     // });
   });
-}
+})
 async function handleOnClose(error,model,opt) {
   stopStatus.value = false;
   showStop.value = false;
@@ -1728,8 +1734,8 @@ async function handleOnClose(error,model,opt) {
     if (!error) {
       await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index-1])
       await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index]);
-      const elements = document.querySelectorAll(`#ai_chatList > div:nth-child(${opt.index}) .ggb-applet`);
       nextTick(()=>{
+        const elements = document.querySelectorAll(`#ai_chatList > div:nth-child(${opt.index}) .ggb-applet`);
         renderGGB(elements);
       })
     }
@@ -1830,7 +1836,7 @@ async function applysession({ id, mode }) {
 
   try {
     chatList.value = JSON.parse(localStorage.getItem(`chat_${sessionID.value}`) || '[]');
-    processChatList(chatList.value);
+    // processChatList(chatList.value);
 
     debouncedScrollToBottom();
     loading.value = welcome_loading.value = false;
@@ -1848,9 +1854,12 @@ async function applysession({ id, mode }) {
       localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
 
       processChatList(chatList.value);
-      nextTick(()=>{
-        renderGGB(document.querySelectorAll('.ggb-applet'));
-      })
+      console.log(document.querySelector('.ggb-applet')?.id)
+
+      // nextTick(()=?>);
+      // console.log(document.querySelector('.ggb-applet').id)
+      renderGGB(()=>{return document.querySelectorAll('.ggb-applet')});
+      // console.log(document.querySelector('.ggb-applet'))
       setTimeout(scrollToBottom, 50);
 
       model_info.value.createUser = await Auth.getUserInfoByID({ id: model_info.value.createuser });
