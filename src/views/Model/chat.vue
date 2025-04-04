@@ -248,8 +248,11 @@
                       <div 
                         :class="[`chatcontent text-sm/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose`,(chatList[i-1].status=='reply')?'will-change-contents':'']" >
                         <!-- <template > -->
-                        <div v-for="(item,i2) in item.renderedContent" :key="i2" v-html="item" class="chat_animate_in"></div>
+                        <div v-for="(g,i2) in item.renderedContent" :key="i2" v-html="g" class="chat_animate_in"></div>
                         <!-- </template> -->
+                        <div v-show="!item.content">
+                          <el-skeleton animated :rows="3" />
+                        </div>
                       </div>
                       <div class="flex">
                         <el-tooltip
@@ -282,7 +285,7 @@
                     </div>
                   </template>
                   <template v-else-if="item.role == 'lingben'">
-                    <div class="assistant" :data-id="i">
+                    <div class="assistant flex-shrink-0" :data-id="i">
                       <div class="chatcontent animate_chat serif-text text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <template v-for="(item,i2) in item.renderedContent">
                           <div v-html="item"></div>
@@ -479,7 +482,7 @@
       </div>
     </div>
     <div :data-show="showGGB" class="fixed overflow-hidden flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
-      <div class="bg-stone-50 rounded-3xl max-h-full shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
+      <div class="bg-stone-50 rounded-3xl h-full shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
         <div class="px-6 py-5 flex justify-between items-center w-full">
           <h2 class="text-xl font-semibold serif-text text-black">函数图像</h2>
           <button @click="showGGB = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200 hover:bg-opacity-50 transition duration-200 p-3 rounded-full bg-transparent">
@@ -490,7 +493,7 @@
           </button>
         </div>
         <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
-          <div id="GGBshow"></div>
+          <div id="GGBshow" class="w-full h-full"></div>
         </div>
       </div>
     </div>
@@ -778,7 +781,7 @@ import hljs from 'highlight.js';
 import { onActivated, onMounted, ref,reactive, watch, nextTick,getCurrentInstance } from "vue"
 import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
-import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElPopover,ElTooltip,ElSwitch,ElSelect,ElOption, CASCADER_PANEL_INJECTION_KEY, ElMessageBox, dayjs } from "element-plus"; 
+import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElPopover,ElTooltip,ElSwitch,ElSelect,ElSkeleton, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
 import { Camera,Up,Copy,Right,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Down,Info,SmartOptimization,Left,Home,ExperimentOne, RightSmallUp } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
@@ -787,8 +790,6 @@ import 'vue-touch-ripple/style.css'
 const showModelDetail = ref(false)
 const showInfo = ref(false)
 const showGGB = ref(false);
-const contentRendered = ref([])
-const animateMode = ref(false)
 const cameraInput = ref(null);
 const galleryInput = ref(null)
 const uploadPhotoDialogVisible = ref(false);
@@ -1734,10 +1735,10 @@ async function handleOnClose(error,model,opt) {
     if (!error) {
       await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index-1])
       await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index]);
-      nextTick(()=>{
-        const elements = document.querySelectorAll(`#ai_chatList > div:nth-child(${opt.index}) .ggb-applet`);
-        renderGGB(elements);
-      })
+      // nextTick(()=>{
+        // const elements = ;
+        renderGGB(()=>{return document.querySelectorAll(`.ggb-applet`)});
+      // })
     }
   }
 }
@@ -1954,8 +1955,8 @@ onMounted(async ()=>{
       }
     }
   });
-  let width = Math.floor(document.querySelector('#ai_chatList').clientWidth);
-  let height = Math.floor(width*3/3);
+  let width = Math.floor(document.querySelector('#GGBshow').clientWidth);
+  let height = Math.floor(document.querySelector('#GGBshow').clientHeight);
   const params = {
     appName: 'graphing',
     width: width,
@@ -1963,6 +1964,8 @@ onMounted(async ()=>{
     showToolBar: false,
     showAlgebraInput: false, 
     showMenuBar: false ,
+    "showResetIcon": false,
+
     appletOnLoad(s) {
       ggbApi = s;
     }
