@@ -30,7 +30,7 @@
         <div class="p-4 overflow-y-auto flex-1">
           <!-- 新增：显示用户完整信息 -->
           <div v-if="selectedUser" class="">
-            <div class="columns-1 md:columns-2  gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-2  gap-3">
               <div class="bg-white p-4 rounded-xl shadow-md shadow-slate-100 mb-4 max-w-sm mx-auto">
                 <div class="flex items-center mb-4">
                   <img :src="selectedUser.profile.avatar" alt=""

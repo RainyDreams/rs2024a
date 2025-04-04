@@ -1826,6 +1826,9 @@ async function applysession({id,mode}){
     welcome_loading.value = false;
     Auth.chatTaskThread.add(async ()=>{
       const getList = (await Auth.getAIChatList({sessionID:sessionID.value,mode,model:model.value,vf:fingerprint.value}))
+      if(getList.needDeviceInfo){
+        Auth.sendDeviceInfo();
+      }
       // Auth.chatTaskThread.add(async ()=>{
         chatList.value = getList.content;
         welcome.value = getList.welcome;
@@ -1956,7 +1959,7 @@ onMounted(async ()=>{
   }
   if(mode == 'new'){
     applying = true;
-    fingerprint.value = await Auth.getUserFingerprint();
+    // fingerprint.value = await Auth.getUserFingerprint();
     loading.value = false;
     placeholder.value = '你好👋';
     model_info.value = default_model;
