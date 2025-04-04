@@ -1240,7 +1240,7 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
         <span>图像预览</span>
         <span class="i-icon i-icon-right"><svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M19 12L31 24L19 36" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="bevel"></path></svg></span>
       </div>
-      <div class="inner border-t truncate text-sm text-gray-600">
+      <div class="inner border-t mt-2 pt-3 truncate text-sm border-stone-300 text-gray-600 console-text">
         <p>${formula}</p>
       </div>
     </div>`;
