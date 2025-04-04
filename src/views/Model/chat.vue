@@ -1698,7 +1698,7 @@ function handleOnMessage(res, m , opt) {
   }
 }
 let ggbApi;
-const renderGGB = renderTaskManager.addTask((list=[])=>{
+const renderGGB = (list=[])=>{
   list.forEach((element) => {
     element.addEventListener('click', () => {
       showGGB.value = true;
@@ -1714,7 +1714,7 @@ const renderGGB = renderTaskManager.addTask((list=[])=>{
     //   api.evalCommand(element.innerText);
     // });
   });
-})
+}
 async function handleOnClose(error,model,opt) {
   stopStatus.value = false;
   showStop.value = false;
