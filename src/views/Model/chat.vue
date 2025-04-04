@@ -1965,9 +1965,11 @@ onMounted(async ()=>{
     showAlgebraInput: false, 
     showMenuBar: false ,
     "showResetIcon": false,
+    "showLogo": false,
 
     appletOnLoad(s) {
       ggbApi = s;
+      document.querySelector('#GGBshow .avNameLogo').remove()
     }
   };
   const applet = new window.GGBApplet(params, true);
