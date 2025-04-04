@@ -1233,7 +1233,7 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
     <img src=""/>
 </div>`
   } else if (langName.toLowerCase()=='math') {
-    let formula = token.content.replace(/\n/g, '');
+    let formula = token.content;
     let ggbid = getRadomString(8);
     return `<div id="g${ggbid}" class="ggb-applet text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl">
       <div class="flex justify-between items-center">
@@ -1241,7 +1241,7 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
         <span class="i-icon i-icon-right"><svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M19 12L31 24L19 36" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="bevel"></path></svg></span>
       </div>
       <div class="inner border-t mt-2 pt-3 truncate text-sm border-stone-300 text-gray-600 console-text">
-        <p>${formula}</p>
+        <pre>${formula}</pre>
       </div>
     </div>`;
 
@@ -1728,7 +1728,7 @@ async function handleOnClose(error,model,opt) {
   loading.value = false;
   autoScroll.value=false;
   placeholder.value = '还有什么想聊的';
-  document.getElementById('input_chat_ai').focus();
+  // document.getElementById('input_chat_ai').focus();
   if (!chatList.value[opt.index].content) {
     if (!error) {  }
   } else {
