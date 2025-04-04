@@ -1427,29 +1427,30 @@ const stop = async (param)=>{
 }
 const htmlParser = new DOMParser();
 class RenderTaskQueueManager {
-  constructor(vm) {
-    this.vm = vm;
+  constructor() {
     this.taskQueue = [];
+    this.isExecuting = false;
   }
+
   addTask(task) {
     return (...args) => {
-          const taskWrapper = () => task(...args);
-          this.taskQueue.push(taskWrapper);
-          this.runNextTask();
-      };
+        const taskWrapper = () => task(...args);
+        this.taskQueue.push(taskWrapper);
+        this.executeNextTask();
+    };
   }
-  runNextTask() {
-        if (this.taskQueue.length > 0) {
-          let that = this;
-            const task = this.taskQueue.shift();
-            task();
-            nextTick(() => {
-                if (that.taskQueue.length > 0) {
-                    that.runNextTask();
-                }
-            });
-        }
+
+  async executeNextTask() {
+    if (this.taskQueue.length > 0 &&!this.isExecuting) {
+      this.isExecuting = true;
+      const task = this.taskQueue.shift();
+      task();
+      await nextTick();
+      // console.log('DOM 更新完成，执行下一个任务');
+      this.isExecuting = false;
+      this.executeNextTask();
     }
+  }
 }
 const instance = getCurrentInstance();
 const renderTaskManager = new RenderTaskQueueManager(instance.proxy);
@@ -1728,7 +1729,9 @@ async function handleOnClose(error,model,opt) {
       await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index-1])
       await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index]);
       const elements = document.querySelectorAll(`#ai_chatList > div:nth-child(${opt.index}) .ggb-applet`);
-      renderGGB(elements);
+      nextTick(()=>{
+        renderGGB(elements);
+      })
     }
   }
 }
