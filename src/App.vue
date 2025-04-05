@@ -94,11 +94,11 @@
   </div>
 
   <div
-    :class="['fixed inset-0 z-50 flex items-center overflow-y-auto overflow-x-hidden bg-gray-800 bg-opacity-50 px-2 py-10 transition-all duration-200 ease-out',showLoginModel?'opacity-100 visible ':' opacity-0 invisible pointer-events-none']">
+    :class="['fixed inset-0 z-50 flex items-center overflow-y-auto overflow-x-hidden bg-gray-800/50 px-2 py-10 transition-all duration-200 ease-out',showLoginModel?'opacity-100 visible ':' opacity-0 invisible pointer-events-none']">
     <div
       :class="['bg-white mx-auto p-8 rounded-3xl h-fit relative shadow-lg shadow-gray-500 shadow- min-w-48 w-full max-w-96 transition-all duration-300 ease-out timefn',showLoginModel?'scale-100':'scale-95']">
       <button @click="close"
-        class="absolute text-gray-400 transition right-2 top-2 hover:bg-slate-200 bg-slate-50 hover:bg-opacity-50 rounded-full flex items-center justify-center w-10 h-10 hover:text-gray-700">
+        class="absolute text-gray-400 transition right-2 top-2 hover:bg-slate-200/50 bg-slate-50 rounded-full flex items-center justify-center w-10 h-10 hover:text-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
@@ -120,9 +120,9 @@
                 <div class="flex mb-2">
                   <input type="text" v-model="form.password" id="login_password" autocomplete="off" placeholder="请输入验证码" maxlength="6" value="" class="console-text outline-none border-2 focus:border-blue-500 transition border-slate-100 rounded-lg px-3 py-2 w-full bg-slate-100">
                   <input type="text" v-model="form.verify" id="login_verify"  class="hidden">
-                  <a @click="sendVerifyCode" v-if="!verifyLoading" class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg flex-shrink-0 bg-slate-100 border-slate-200">发送验证码</a>
-                  <a v-if="verifyLoading" class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg flex-shrink-0 bg-slate-100 border-slate-200">{{ verifyWait }}秒后重试</a>
-                  <!-- <a class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg flex-shrink-0 bg-slate-100 border-slate-200">{{ vf_time }}秒后重试</a> -->
+                  <a @click="sendVerifyCode" v-if="!verifyLoading" class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg shrink-0 bg-slate-100 border-slate-200">发送验证码</a>
+                  <a v-if="verifyLoading" class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg shrink-0 bg-slate-100 border-slate-200">{{ verifyWait }}秒后重试</a>
+                  <!-- <a class="border-2 ml-2 text-slate-600 text-sm px-2 flex items-center cursor-pointer hover:border-blue-500 transition rounded-lg shrink-0 bg-slate-100 border-slate-200">{{ vf_time }}秒后重试</a> -->
                 </div>
                 <p class="w-full text-right mb-3"><a @click="switchLoginMode" class="text-blue-600 text-sm cursor-pointer">使用密码登录</a></p>
               </div>

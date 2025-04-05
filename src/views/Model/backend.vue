@@ -16,7 +16,7 @@
       <div class="text-sm text-gray-500 w-full text-center">© 2024-{{ new Date().getFullYear() }} <a href="https://github.com/RainyDreams" target="_blank" class="text-blue-500 hover:underline">零本智协项目组</a>. All rights reserved.</div>
     </div>
     <div v-if="dialogVisible"
-      class="fixed flex justify-center inset-0 bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-ss">
+      class="fixed flex justify-center inset-0 bg-black/50 z-50 w-screen px-4 pt-16 pb-4 h-ss">
       <div class="bg-slate-50 rounded-lg shadow-lg max-w-3xl h-full w-full overflow-hidden pb-4 flex flex-col">
         <div class="p-4 flex justify-between items-center w-full">
           <h2 class="text-lg font-semibold">聊天记录</h2>
@@ -72,7 +72,7 @@
       </div>
     </div>
     <div v-if="chatListDialogVisible"
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-ss">
+      class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 w-screen px-4 pt-16 pb-4 h-ss">
       <div class="bg-slate-50 rounded-lg shadow-lg max-w-2xl overflow-y-auto w-full h-full">
         <div class="p-4 flex justify-between items-center sticky top-0 bg-slate-50">
           <h2 class="text-lg font-semibold ">聊天详情</h2>
@@ -135,7 +135,7 @@
 
     <!-- VF 详细信息弹窗 -->
     <div v-if="vfDialogVisible"
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-screen px-4 pt-16 pb-4 h-ss">
+      class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 w-screen px-4 pt-16 pb-4 h-ss">
       <div class="bg-slate-50 rounded-lg shadow-lg max-w-2xl overflow-y-auto w-full h-full">
         <div class="p-4 flex justify-between items-center sticky top-0 bg-slate-50">
           <h2 class="text-lg font-semibold">VF 详情</h2>

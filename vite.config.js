@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import legacy from '@vitejs/plugin-legacy'
+import tailwindcss from '@tailwindcss/vite'
 export default defineConfig((mode) => {
   return {
     server: {
@@ -18,6 +19,7 @@ export default defineConfig((mode) => {
     // base:'./',
     plugins: [
       vue(),
+      tailwindcss(),
       // legacy({
       //   targets: ['>0.3%, edge>=79, firefox>=67, chrome>=64, safari>=12, chromeAndroid>=64, iOS>=12'],
       // }),

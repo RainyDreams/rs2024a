@@ -1,8 +1,8 @@
 <template>
   <div class="commonPage  md:rounded-lg pb-0 h-auto-dvh pt-3" style="display: flex;flex-direction: column;">
-    <div id="wechat-tip" v-if="weixinDialogVisible" class="fixed flex top-0 left-0 w-full bg-slate-800 bg-opacity-40 text-white p-4 text-center text-sm  z-40">
+    <div id="wechat-tip" v-if="weixinDialogVisible" class="fixed flex top-0 left-0 w-full bg-slate-800/40 text-white p-4 text-center text-sm  z-40">
       <span class="flex-1 pr-2">您正在使用微信访问本站，建议使用浏览器打开</span>
-      <button @click="weixinDialogVisible = false" class="text-white rounded-full h-9 p-2 w-9 flex-shrink-0 bg-slate-900 bg-opacity-10">
+      <button @click="weixinDialogVisible = false" class="text-white rounded-full h-9 p-2 w-9 shrink-0 bg-slate-900/10">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -23,22 +23,22 @@
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="system mb-3 md:mb-4 lg:mb-5 block">
-                  <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
-                    <touch-ripple
-                      :class="`flex touch-ripple  h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full pr-2 pl-3 py-1 overflow-hidden select-none border `"
-                      :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#bfdbfe'"
-                      :opacity="0.4"
-                      transition="ease-out"
-                      :duration="200"
-                      :keep-last-ripple="false"
-                      @click="router.go(-2)"
-                    >
-                      <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                      <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                      <left  theme="outline" size="18" fill="#4e81fc"/>
-                      <!-- </div> -->
-                    </touch-ripple>
+                <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
+                  <touch-ripple
+                    :class="`flex touch-ripple  h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full pr-2 pl-3 py-1 overflow-hidden select-none border `"
+                    :style="{ clipPath: 'none', backgroundColor:'#fff' }"
+                    :color="'#bfdbfe'"
+                    :opacity="0.4"
+                    transition="ease-out"
+                    :duration="200"
+                    :keep-last-ripple="false"
+                    @click="router.go(-2)"
+                  >
+                    <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
+                    <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
+                    <left  theme="outline" size="18" fill="#4e81fc"/>
+                    <!-- </div> -->
+                  </touch-ripple>
                   <!-- </router-link> -->
                   <router-link to="/home" class="h-full">
                     <touch-ripple
@@ -157,7 +157,6 @@
                   <!-- <div v-show="!welcome_loading" class="text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed" v-html="md.render(welcome)"></div> -->
                   <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
                 </div>
-               
                 <div v-show="showModelDetail">
                   <div class="min-w-fit w-64 z-10 flex flex-col mt-2 top-10 left-0 bg-white border rounded-xl p-3 duration-100">
                     <div class="text-sm/relaxed mb-2 flex-1">{{ model_info.desc }}</div>
@@ -170,10 +169,23 @@
                 <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
                   <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
                 </div>
-                <!-- 欢迎 -->
-                <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
+              </div>
+               
+              
+              <!-- 欢迎 -->
+              <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
                   <div :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full `">
-                    <h2 v-if="!welcome_loading" :class="`serif-text text-center w-full text-3xl animate__animated md:text-4xl lg:text-5xl font-bold `+((chatList.length==0 && !welcome_loading)?'animate__fadeInDown':'animate__fadeOutUp')">你好！来聊点什么吧</h2>
+                    <div >
+                      <h2 :class="`serif-text text-center w-full justify-center flex text-3xl animate__animated md:text-4xl lg:text-5xl font-bold `+((chatList.length==0 && !welcome_loading)?'':'')">
+                        <span class="mr-1">我可以</span>
+                        <div class="swiper overflow-hidden mx-0" ref="swiperRef2" >
+                          <div class="swiper-wrapper">
+                            <div class="swiper-slide transition-all">聊新闻</div>
+                            <div class="swiper-slide transition-all">做网站</div>
+                            <div class="swiper-slide transition-all">画函数</div>
+                          </div>
+                        </div>
+                      </h2>
                     <!-- <h2 :class="`text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold animate__animated `+((chatList.length==0 && welcome_loading)?'animate__fadeInUp':'animate__fadeOutDown')">正在建立连接</h2> -->
                   </div>                
                 </div>
@@ -181,7 +193,7 @@
               <div class="chatList" style="min-height: 0px;" id="ai_chatList">
                 <template v-for="(item,i) in chatList" class="chatList" :key="i">
                   <template  v-if="item.role == 'user'">
-                    <div class="user flex-shrink-0" :data-id="i">
+                    <div class="user shrink-0" :data-id="i">
                       <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                       <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
                       <div class="flex items-end group">
@@ -244,7 +256,7 @@
                     </div>
                   </template>
                   <template v-else-if="item.role == 'assistant'">
-                    <div class="assistant flex-shrink-0" :data-id="i">
+                    <div class="assistant shrink-0" :data-id="i">
                       <div 
                         :class="[`chatcontent text-sm/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose`,(chatList[i-1].status=='reply')?'will-change-contents':'']" >
                         <!-- <template > -->
@@ -285,7 +297,7 @@
                     </div>
                   </template>
                   <template v-else-if="item.role == 'lingben'">
-                    <div class="assistant flex-shrink-0" :data-id="i">
+                    <div class="assistant shrink-0" :data-id="i">
                       <div class="chatcontent animate_chat serif-text text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
                         <template v-for="(item,i2) in item.renderedContent">
                           <div v-html="item"></div>
@@ -306,11 +318,11 @@
         </div>
       <!-- </div> -->
     </div>
-    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
         <div class="px-6 py-5 flex justify-between items-center w-full">
           <h2 class="text-xl font-semibold serif-text text-black">上传图片</h2>
-          <button v-show="!uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200 hover:bg-opacity-50 transition duration-200 p-3 rounded-full bg-transparent">
+          <button v-show="!uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -399,7 +411,7 @@
         </div>
       </div>
     </div>
-    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-black/30 z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="p-6 bg-white rounded-3xl">
         <svg v-if="uploadPhotoDialogLoading" class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-stone-500 " style="animation-duration:0.6s !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -407,11 +419,11 @@
         </svg>上传中
       </div>
     </div>
-    <div :data-show="recordMode" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+    <div :data-show="recordMode" class="fixed flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
         <div class="px-6 py-5 flex justify-between items-center w-full">
           <h2 class="text-xl font-semibold serif-text text-black">录音</h2>
-          <button @click="closeRecordDialog" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200 hover:bg-opacity-50 transition duration-200 p-3 rounded-full bg-transparent">
+          <button @click="closeRecordDialog" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -434,7 +446,7 @@
             :class="[
               'relative px-6 py-3 flex select-none text-lg font-semibold rounded-md shadow-md transition duration-300 transform',
               isRecording 
-                ? 'bg-gradient-to-r from-stone-600 to-stone-500 text-white scale-105' 
+                ? 'bg-linear-to-r from-stone-600 to-stone-500 text-white scale-105' 
                 : 'bg-white text-stone-600 border-2 border-stone-600 hover:bg-stone-50'
             ]"
             aria-label="按住录音"
@@ -446,11 +458,11 @@
         </div>
       </div>
     </div>
-    <div :data-show="showInfo" class="fixed flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
-      <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
+    <div :data-show="showInfo" class="fixed flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="bg-stone-50 rounded-3xl max-h-full shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
         <div class="px-6 py-5 flex justify-between items-center w-full">
           <h2 class="text-xl font-semibold serif-text text-black">公告信息</h2>
-          <button @click="showInfo = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200 hover:bg-opacity-50 transition duration-200 p-3 rounded-full bg-transparent">
+          <button @click="showInfo = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -475,17 +487,17 @@
             <span>赤子英金官网</span>
             <RightSmallUp class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </a>
-          <div class="w-full text-sm text-gray-700 mt-4 p-3 bg-gray-200 bg-opacity-70 rounded-md">
+          <div class="w-full text-sm text-gray-700 mt-4 p-3 bg-gray-200/70 rounded-md">
             提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。
           </div>
         </div> 
       </div>
     </div>
-    <div :data-show="showGGB" class="fixed overflow-hidden flex justify-center items-center inset-0 bg-black bg-opacity-30 backdrop-blur z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+    <div :data-show="showGGB" class="fixed overflow-hidden flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="bg-stone-50 rounded-3xl h-full shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
         <div class="px-6 py-5 flex justify-between items-center w-full">
           <h2 class="text-xl font-semibold serif-text text-black">函数图像</h2>
-          <button @click="showGGB = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200 hover:bg-opacity-50 transition duration-200 p-3 rounded-full bg-transparent">
+          <button @click="showGGB = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -503,7 +515,7 @@
           <div class="relative w-full">
             <div :class="`relative flex w-full ml-3 pt-1 pb-1 ease  `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
               <touch-ripple
-                :class="`touch-ripple w-fit flex-shrink-0 mr-1 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-700 bg-stone-50`"
+                :class="`touch-ripple w-fit shrink-0 mr-1 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-700 bg-stone-50`"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#f1f5f9'"
                 :opacity="0.4"
@@ -523,9 +535,9 @@
                   </svg><span class="active-text text-lg leading-none align-bottom text-stone-500">{{ statusText }}</span>
                 </span>
               </div>
-              <div :class="`absolute border transition-all duration-100 bg-white border-gray-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-sm rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
+              <div :class="`absolute border transition-all duration-100 bg-white border-gray-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-xs rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
                 <touch-ripple
-                  :class="`touch-ripple w-fit flex-shrink-0 text-sm rounded-l-full items-center px-2 py-2 overflow-hidden select-none bg-white ${(autoScroll)?'text-blue-500':'text-stone-500'}`"
+                  :class="`touch-ripple w-fit shrink-0 text-sm rounded-l-full items-center px-2 py-2 overflow-hidden select-none bg-white ${(autoScroll)?'text-blue-500':'text-stone-500'}`"
                   :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                   :color="'#f1f5f9'"
                   :opacity="0.4"
@@ -569,7 +581,7 @@
                   </template>
                   <template #reference>
                     <touch-ripple
-                      :class="`touch-ripple nofocus relative overflow-hidden w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                      :class="`touch-ripple nofocus relative overflow-hidden w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                       :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
                       :color="useAnalysis?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
@@ -602,7 +614,7 @@
                   </template>
                   <template #reference>
                     <touch-ripple
-                      :class="`relative touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                      :class="`relative touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                       :style="{ clipPath: 'none', backgroundColor: usePreview?'#3b82f6':'#fff' }"
                       :color="usePreview?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
@@ -632,7 +644,7 @@
                   </template>
                   <template #reference>
                     <touch-ripple
-                      :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                      :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                       :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
                       :color="useInternet?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
@@ -646,7 +658,7 @@
                   </template>
                 </el-popover>
                 <!-- <touch-ripple
-                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                  :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                   :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
                   :color="useDraw?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -658,7 +670,7 @@
                   <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple> -->
                 <touch-ripple
-                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                  :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                   :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
                   :color="useTask?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -670,7 +682,7 @@
                   <span class="flex items-center align-middle"><list-two class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">多任务<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                  :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                   :style="{ clipPath: 'none', backgroundColor: usePhoto?'#3b82f6':'#fff' }"
                   :color="usePhoto?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -682,7 +694,7 @@
                   <span class="flex items-center align-middle"><pic class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">图片</span></span>
                 </touch-ripple>
                 <touch-ripple
-                    :class="`touch-ripple nofocus w-fit flex-shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAudio?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                    :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAudio?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                     :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                     :color="'#f1f5f9'"
                     :opacity="0.4"
@@ -694,7 +706,7 @@
                   >
                     <span class="flex items-center align-middle"><Acoustic theme="outline" size="16" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/><span class="h-fit leading-none ml-1">音频</span></span>
                 </touch-ripple>
-                <div class="h-full w-5 flex-shrink-0"></div>
+                <div class="h-full w-5 shrink-0"></div>
               </div>
             </div>
           </div>
@@ -778,7 +790,7 @@ import math, { use } from 'markdown-it-texmath';
 import Katex from 'katex';
 import hljs from 'highlight.js';
 // import 'highlight.js/styles/github.min.css'; // 如果要使用浅色 GitHub 主题
-import { onActivated, onMounted, ref,reactive, watch, nextTick,getCurrentInstance } from "vue"
+import { onActivated, onMounted, ref,computed, watch, nextTick,getCurrentInstance } from "vue"
 import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElPopover,ElTooltip,ElSwitch,ElSelect,ElSkeleton, ElMessageBox, dayjs } from "element-plus"; 
@@ -787,6 +799,10 @@ import { Camera,Up,Copy,Right,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,Arrow
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
+import Swiper from 'swiper';
+import { Autoplay } from 'swiper/modules';
+Swiper.use([Autoplay]);
+const swiperRef2 = ref(null);
 const showModelDetail = ref(false)
 const showInfo = ref(false)
 const showGGB = ref(false);
@@ -797,8 +813,6 @@ const uploadPhoto = ref({})
 const uploadPhotoDialogLoading = ref(false)
 const usePhoto = ref(false);
 const weixinDialogVisible = ref(false);
-
-//audio
 const isRecording = ref(false);
 const mediaRecorder = ref(null);
 const mediaRecoderStream = ref(null);
@@ -808,6 +822,48 @@ const useAudio = ref(false);
 const uploadAudio = ref({});
 const recordMode = ref(false);
 const recordTime = ref(0);
+const route = useRoute();
+const router = useRouter();
+const chatList = ref([]);
+const input = ref("");
+const placeholder = ref("你好👋");
+const loading = ref(true);
+const ainput = ref();
+const now = ref(0);
+const fingerprint = ref("");
+const welcome = ref('');
+const welcome_loading = ref(true);
+const sessionID = ref();
+const stopStatus = ref(false);
+const useAnalysis = ref(false);
+const useInternet = ref(false);
+const useTask = ref(false);
+const useDraw = ref(false);
+const usePreview = ref(false);
+const show_menu = ref(true)
+const showStop = ref(false);
+const title = ref('无标题');
+const statusText = ref('');
+const suggestions = ref([]);
+const loginStatus = ref(false);
+const model = ref('');
+const default_model = {
+  img:'/logo_sm.webp',
+  name:'默认模型',
+  desc:'零本智协AI大模型',
+  createUser:{
+    nickname:'零本智协团队',
+    avatar:'/logo_sm.webp'
+  },
+  createuser:''
+}
+const model_info = ref(default_model)
+const analysis_line = ref('line-1')
+const chat_line = ref('line-1')
+const sendActive = ref(false);
+const scrollStatus = ref(false);
+const isFirstVisit = ref(false);
+const autoScroll = ref(false);
 const toggleRecording = async ()=>{
   if(isRecording.value){
     stopRecording();
@@ -1276,51 +1332,6 @@ md.use(math,{
   errorClass: 'error',
   katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
 });
-
-/* 主要渲染部分结束 */
-const route = useRoute();
-const router = useRouter();
-const chatList = ref([]);
-const input = ref("");
-const placeholder = ref("你好👋");
-const loading = ref(true);
-const ainput = ref();
-const now = ref(0);
-const fingerprint = ref("");
-const welcome = ref('');
-const welcome_loading = ref(true);
-const sessionID = ref();
-const stopStatus = ref(false);
-const useAnalysis = ref(false);
-const useInternet = ref(false);
-const useTask = ref(false);
-const useDraw = ref(false);
-const usePreview = ref(false);
-const show_menu = ref(true)
-const showStop = ref(false);
-const title = ref('无标题');
-const statusText = ref('');
-const suggestions = ref([]);
-const loginStatus = ref(false);
-const model = ref('');
-const default_model = {
-  img:'/logo_sm.webp',
-  name:'默认模型',
-  desc:'零本智协AI大模型',
-  createUser:{
-    nickname:'零本智协团队',
-    avatar:'/logo_sm.webp'
-  },
-  createuser:''
-}
-const model_info = ref(default_model)
-const analysis_line = ref('line-1')
-const chat_line = ref('line-1')
-const sendActive = ref(false);
-const scrollStatus = ref(false);
-const isFirstVisit = ref(false);
-const autoScroll = ref(false);
-
 const openUploadPhotoDialog =()=>{
   uploadPhotoDialogVisible.value = true;
 }
@@ -1396,7 +1407,6 @@ nextTick(()=>{
   }
 
 })
-  
 const hasVisited = localStorage.getItem('hasVisited');
 if (!hasVisited) {
   isFirstVisit.value = true;
@@ -1455,7 +1465,6 @@ class RenderTaskQueueManager {
 }
 const instance = getCurrentInstance();
 const renderTaskManager = new RenderTaskQueueManager(instance.proxy);
-window.rd = renderTaskManager
 const renderAnalysisTask = (index)=>{
   // chatList.value[index].renderedAnalysis
   // = md.render(chatList.value[index].analysis);
@@ -1479,11 +1488,8 @@ const renderContentTask = (index,isStream)=>{
   //   task_();
   // },500)
 }
-
 const renderContent = renderTaskManager.addTask(renderContentTask);
 const renderAnalysis = renderTaskManager.addTask(renderAnalysisTask);
-
-
 const task_ = async()=>{
   document.querySelectorAll('div[lingben-draw]').forEach(e=>{
     const code = e.children[0].innerText;
@@ -1883,8 +1889,22 @@ async function applynew(){
   // const res = await applysession({id:'',mode:'new'});
   debouncedScrollToBottom();
 }
-
 onMounted(async ()=>{
+  let swiper = new Swiper(swiperRef2.value, {
+    autoHeight:true,
+    direction: 'vertical',
+    allowTouchMove: false,
+    slidesPerView:"auto",
+    loop: true,
+    autoplay: {
+      delay: 2500,
+    },
+    observer: true,
+    observeParents: true,
+    speed: 500,
+    slideActiveClass:'opacity-100',
+    slideBlankClass:'opacity-0'
+  });
   emitter.on('updateLoginInfo',async ()=>{
     let prStatus = await Auth.getPrtoken();
     if(prStatus.status == 'sus' || prStatus.status == 'exist'){
@@ -2008,7 +2028,7 @@ onMounted(async ()=>{
   width: 6px;
   height: 100%;
   display: block;
-  flex-shrink: 0;
+  shrink: 0;
   z-index: 2;
   background: linear-gradient(to left, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
   pointer-events: none;
@@ -2021,7 +2041,7 @@ onMounted(async ()=>{
   width: 50px;
   height: 100%;
   display: block;
-  flex-shrink: 0;
+  shrink: 0;
   z-index: 2;
   background: linear-gradient(to right, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
   pointer-events: none;
@@ -2034,7 +2054,7 @@ onMounted(async ()=>{
   width: 100%;
   height: 37px;
   display: block;
-  flex-shrink: 0;
+  shrink: 0;
   z-index: 2;
   background: linear-gradient(to top, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
   pointer-events: none;
@@ -2048,7 +2068,7 @@ onMounted(async ()=>{
   width: 100%;
   height: 50px;
   display: block;
-  flex-shrink: 0;
+  shrink: 0;
   z-index: 2;
   background: linear-gradient(to bottom, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
   pointer-events: none;
