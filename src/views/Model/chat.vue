@@ -262,9 +262,10 @@
                         <!-- <template > -->
                         <div v-for="(g,i2) in item.renderedContent" :key="i2" v-html="g" class="chat_animate_in"></div>
                         <!-- </template> -->
-                        <div v-show="!item.content">
-                          <el-skeleton animated :rows="3" />
-                        </div>
+                        
+                      </div>
+                      <div class="w-full" v-show="item.renderedContent?.length == 0 || !item.renderedContent">
+                        <el-skeleton class="w-full" animated :rows="1" />
                       </div>
                       <div class="flex">
                         <el-tooltip
@@ -1880,14 +1881,28 @@ async function applysession({ id, mode }) {
 async function applynew(){
   if(applying) return;
   await stop();
+  applying = true;
   Auth.chatTaskThread.clear();
   stopStatus.value=false;
   showStop.value=false;
   loading.value=false;
   statusText.value='';
-  router.push('/?model='+model.value);
-  // const res = await applysession({id:'',mode:'new'});
+  sessionID.value = '';
+  suggestions.value = [];
+  router.push('/chat/?model='+model.value);
+  chatList.value = [];
+  model.value='';
+  useAnalysis.value=false;
+  usePhoto.value=false;
+  useAudio.value=false;
+  useDraw.value=false;
+  useInternet.value=false;
+  usePreview.value=false;
+  useTask.value=false;
+  uploadPhoto.value={};
+  uploadAudio.value={};
   debouncedScrollToBottom();
+  applying = false;
 }
 onMounted(async ()=>{
   let swiper = new Swiper(swiperRef2.value, {
@@ -2076,5 +2091,10 @@ onMounted(async ()=>{
     
 .max-limit{
   max-height:15%;
+}
+
+.el-skeleton{
+  --el-skeleton-color:#f5f5f4;
+  --el-skeleton-to-color:#e7e5e4
 }
 </style>

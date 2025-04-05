@@ -60,7 +60,7 @@
         <el-config-provider :locale="zhCn">
           <router-view v-slot="{ Component }">
             <!-- <transition :duration="{ enter: 400000, leave:0 }" enter-active-class="animate__animated animate__fadeInRight"> -->
-            <keep-alive :max="3">
+            <keep-alive :max="3" >
               <component :is="Component" />
             </keep-alive>
             <!-- </transition> -->
@@ -204,6 +204,12 @@ const loginMode = ref(1);
 const swiperRef = ref(null);
 let nextStep,previousStep,switchLoginMode;
 let swiper;
+const cacheKey = ref(0);
+
+const clearCache = () => {
+  cacheKey.value++;
+};
+emitter.on('clearCache',clearCache)
 onMounted(async ()=>{
   setTimeout(()=>{
     if(document.querySelector('#loading-container')){
