@@ -1,5 +1,6 @@
 <template>
     <div class=" w-full bg-paper px-6 py-12 relative min-h-svh">
+      <routerBack name="上一页"></routerBack>
       <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 text-center mb-16 md:mb-20 tracking-wide">
         我们的价值观
       </h2>
@@ -34,10 +35,8 @@
     </div>
 </template>
 
-<script>
-export default {
-  name: 'ValuesPage',
-}
+<script setup>
+import routerBack from '../../components/routerBack.vue';
 </script>
 
 <style scoped>

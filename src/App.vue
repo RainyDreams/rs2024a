@@ -60,7 +60,7 @@
         <el-config-provider :locale="zhCn">
           <router-view v-slot="{ Component }">
             <!-- <transition :duration="{ enter: 400000, leave:0 }" enter-active-class="animate__animated animate__fadeInRight"> -->
-            <keep-alive :max="1">
+            <keep-alive :max="3">
               <component :is="Component" />
             </keep-alive>
             <!-- </transition> -->
