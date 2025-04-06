@@ -713,7 +713,7 @@ let Auth = {
         useTask:param.useTask,
         useDraw:param.useDraw,
         usePreview:param.usePreview,
-        time:(dayjs().format('YYYY年MM月DD日') )+new Date().toTimeString(),
+        time:(dayjs().format('YYYY年MM月DD日 ddd') )+new Date().toTimeString(),
         photo:param.photo,
         audio:param.audio
       },

@@ -196,22 +196,12 @@
                     <div class="user shrink-0" :data-id="i">
                       <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
                       <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
-                      <div class="flex items-end group">
-                        <el-tooltip
-                          class="box-item opacity-0 group-hover:opacity-100"
-                          effect="dark"
-                          content="复制"
-                          placement="bottom-start"
+                      <div class="flex items-end group w-full justify-end">
+                        <div
+                          @click="selectAndCopy(item.content)"
+                          class="chatcontent serif-text min-h-8 border border-gray-200 break-words w-fit min-w-6 px-4 py-2 rounded-l-3xl rounded-tr-3xl rounded-br-md bg-white text-black whitespace-pre-wrap text-sm/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
                         >
-                          <div 
-                            @click="copyText(item.content)"
-                            class="p-2 hover:bg-slate-100 border-transparent mb-1 opacity-50 hover:opacity-100 hover:border-slate-200 border h-[35px] mr-2 w-[35px] transition-all rounded-md cursor-pointer">
-                            <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
-                          </div>
-                        </el-tooltip>
-                        <div class="chatcontent  serif-text min-h-8 border border-gray-200 break-words w-fit min-w-6 px-4 py-2 rounded-l-3xl rounded-tr-3xl rounded-br-md bg-white text-black whitespace-pre-wrap text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
-                        >
-                          <div>{{item.content}}</div>
+                          <div class="">{{item.content}}</div>
                           <template v-if="item.photo?.meta">
                             <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="item.photo.blob" alt="[图片]隐私保护已删除"></div>
                           </template>
@@ -264,7 +254,7 @@
                         <!-- </template> -->
                         
                       </div>
-                      <div class="w-full" v-show="item.renderedContent?.length == 0 || !item.renderedContent">
+                      <div class="w-full max-w-96" v-show="item.renderedContent?.length == 0 || !item.renderedContent">
                         <el-skeleton class="w-full" animated :rows="1" />
                       </div>
                       <div class="flex">
@@ -276,7 +266,7 @@
                         >
                           <div 
                             @click="copyText(item.content)"
-                            class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer mr-1">
+                            class="p-2 hover:bg-stone-100 border-transparent hover:border-stone-200 border transition-all rounded-md cursor-pointer mr-1">
                             <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                           </div>
                         </el-tooltip>
@@ -288,7 +278,7 @@
                         >
                           <div 
                             @click="copyHtml(i)"
-                            class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer mr-1">
+                            class="p-2 hover:bg-stone-100 border-transparent hover:border-stone-200 border transition-all rounded-md cursor-pointer mr-1">
                             <DocDetail theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                           </div>
                         </el-tooltip> 
@@ -1150,28 +1140,6 @@ async function resizeImage(file) {
 function login(){
   emitter.emit('login',{re:true})
 }
-function renderStatus(status) {
-  switch (status) {
-    case 'sending':
-      return '发送中';
-    case 'searching':
-      return '搜索中';
-    case 'wait':
-      return '即将完成';
-    case 'analysising':
-      return '分析问题';
-    case 'thinking':
-      return '思考问题';
-    case 'try':
-      return '深入思考';
-    case 'summary':
-      return '批判总结';
-    case 'reply':
-      return '综合回复';
-    default:
-      return '';
-  }
-}
 function analysisBtn() {
   useAnalysis.value=!useAnalysis.value;
   if(useAnalysis.value){
@@ -1195,15 +1163,6 @@ function previewBtn(){
     useDraw.value=false;
     useTask.value=false;
     // useAnalysis.value=true;
-  }
-}
-function drawBtn(){
-  useDraw.value=!useDraw.value;
-  if(useDraw.value){
-    useAnalysis.value=false;
-    useTask.value=false;
-    usePreview.value=false;
-    useInternet.value=false;
   }
 }
 function internetBtn(){
@@ -1267,7 +1226,6 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
   // 使用默认的渲染逻辑
   return self.renderToken(tokens, idx, options);
 };
-const ggbRenderList = ref({})
 md.renderer.rules.fence = function(tokens, idx, options, env, self) {
   var token = tokens[idx];
   var info = token.info.trim().split(/\s+/);
@@ -1336,6 +1294,16 @@ md.use(math,{
 const openUploadPhotoDialog =()=>{
   uploadPhotoDialogVisible.value = true;
 }
+function isMobile() {
+  const userAgent = navigator.userAgent;
+  const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+  return mobileRegex.test(userAgent);
+}
+function isWeChatBrowser() {
+  const ua = navigator.userAgent.toLowerCase();
+  return /micromessenger/.test(ua);
+}
+const mobile = isMobile();
 function copyText(text){
   Auth.copyText(text.trim(),()=>{
     ElMessage.success("复制成功")
@@ -1351,16 +1319,21 @@ function copyHtml(i){
     ElMessage.error("复制失败")
   })
 }
-function isMobile() {
-  const userAgent = navigator.userAgent;
-  const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-  return mobileRegex.test(userAgent);
+function selectAndCopy(text){
+if(mobile){
+  const range = document.createRange();
+  range.selectNodeContents(event.target);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  Auth.copyText(text.trim(),()=>{
+    ElMessage.success("复制成功")
+  },()=>{
+    ElMessage.error("复制失败")
+  })
 }
-function isWeChatBrowser() {
-  const ua = navigator.userAgent.toLowerCase();
-  return /micromessenger/.test(ua);
 }
-const mobile = isMobile();
+
 const handleEnter = async (event) => {
   if (event.shiftKey || mobile) {
     input.value = document.getElementById('input_chat_ai').value
@@ -1735,6 +1708,7 @@ async function handleOnClose(error,model,opt) {
   loading.value = false;
   autoScroll.value=false;
   placeholder.value = '还有什么想聊的';
+  statusText.value = '';
   // document.getElementById('input_chat_ai').focus();
   if (!chatList.value[opt.index].content) {
     if (!error) {  }
@@ -2097,4 +2071,11 @@ onMounted(async ()=>{
   --el-skeleton-color:#f5f5f4;
   --el-skeleton-to-color:#e7e5e4
 }
+.chatcontent>div:last-child{
+  margin-bottom: 4px;
+}
+.chatcontent>div:first-child{
+  margin-bottom: 0 !important;
+}
+
 </style>
