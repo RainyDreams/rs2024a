@@ -870,7 +870,11 @@ let Auth = {
     if(decode.time){
       opt.timeMessage(decode.time,decode.mode)
     }
-    if(decode.mode == 'text'){
+    if(decode.status == 'error'){
+      if(decode.code == 8){
+
+      }
+    } else if(decode.mode == 'text'){
       opt.chatMessage(decode.text)
       return decode.text;
     } else if (decode.mode == 'text-analysis') {
@@ -924,7 +928,7 @@ let Auth = {
     }
     return '???'
   },
-  getStreamText:async function getStreamText(url,postData,param) {
+  getStreamText:async function getStreamText(url,postData,param,again) {
     Auth.analysis("event", 'getStreamText')
     try{
       await this.getPrtoken();
@@ -938,10 +942,19 @@ let Auth = {
       };
       const response = await fetch(url, postOptions);
       if (response.status != 200) {
-        if(param.onerror) param.onerror(new Error(await response.text()));
+        if(response.status == 400){
+          if(!again){
+            await this.getPrtoken('force');
+            return await this.getStreamText(url,postData,param,1);
+          } else {
+            throw new Error("鉴权错误");
+          }
+        } else {
+          // if(param.onerror) param.onerror(new Error(await response.text()));
+          throw new Error("会话传输出现错误");
+        }
         // defaultFailed(response.statusText,3)
         // return;
-        throw new Error("会话流传输出现错误");
       }
       try{
         (async()=>{
