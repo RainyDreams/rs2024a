@@ -180,12 +180,12 @@
                         <span class="mr-1">我可以</span>
                         <div class="swiper overflow-hidden mx-0" ref="swiperRef2" >
                           <div class="swiper-wrapper">
-                            <div class="swiper-slide transition-all">知天下</div>
-                            <div class="swiper-slide transition-all">深思考</div>
-                            <div class="swiper-slide transition-all">做网站</div>
-                            <div class="swiper-slide transition-all">写文案</div>
-                            <div class="swiper-slide transition-all">画函数</div>
-                            <div class="swiper-slide transition-all">多任务</div>
+                            <div class="swiper-slide transition-all duration-500">知天下</div>
+                            <div class="swiper-slide transition-all duration-500">深思考</div>
+                            <div class="swiper-slide transition-all duration-500">做网站</div>
+                            <div class="swiper-slide transition-all duration-500">写文案</div>
+                            <div class="swiper-slide transition-all duration-500">画函数</div>
+                            <div class="swiper-slide transition-all duration-500">多任务</div>
                           </div>
                         </div>
                       </h2>
@@ -1895,8 +1895,8 @@ onMounted(async ()=>{
     observeParents: true,
     speed: 500,
     slideActiveClass:'opacity-100',
-    slideNextClass:'opacity-40',
-    slidePrevClass:'opacity-40'
+    slideNextClass:'opacity-0',
+    slidePrevClass:'opacity-0'
   });
   emitter.on('updateLoginInfo',async ()=>{
     let prStatus = await Auth.getPrtoken();
