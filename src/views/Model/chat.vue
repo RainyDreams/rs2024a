@@ -180,9 +180,12 @@
                         <span class="mr-1">我可以</span>
                         <div class="swiper overflow-hidden mx-0" ref="swiperRef2" >
                           <div class="swiper-wrapper">
-                            <div class="swiper-slide transition-all">聊新闻</div>
+                            <div class="swiper-slide transition-all">知天下</div>
+                            <div class="swiper-slide transition-all">深思考</div>
                             <div class="swiper-slide transition-all">做网站</div>
+                            <div class="swiper-slide transition-all">写文案</div>
                             <div class="swiper-slide transition-all">画函数</div>
+                            <div class="swiper-slide transition-all">多任务</div>
                           </div>
                         </div>
                       </h2>
@@ -1886,13 +1889,14 @@ onMounted(async ()=>{
     slidesPerView:"auto",
     loop: true,
     autoplay: {
-      delay: 2500,
+      delay: 1700,
     },
     observer: true,
     observeParents: true,
     speed: 500,
     slideActiveClass:'opacity-100',
-    slideBlankClass:'opacity-0'
+    slideNextClass:'opacity-40',
+    slidePrevClass:'opacity-40'
   });
   emitter.on('updateLoginInfo',async ()=>{
     let prStatus = await Auth.getPrtoken();
