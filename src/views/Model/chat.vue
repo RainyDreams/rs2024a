@@ -1836,8 +1836,9 @@ async function applysession({ id, mode }) {
       title.value = getList.title || title.value;
 
       gtag('event', 'page_view', { page_title: title.value });
-      localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
-
+      try {
+        localStorage.setItem(`chat_${sessionID.value}`, JSON.stringify(getList.content));
+      } catch(e) {}
       processChatList(chatList.value);
       console.log(document.querySelector('.ggb-applet')?.id)
 
