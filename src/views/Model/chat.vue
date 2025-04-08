@@ -1186,7 +1186,6 @@ function copyCode(codeId) {
 window.copyCode = copyCode;
 
 const md = new markdownIt({
-  typographer: true, // 使用高级的打字排版
   html: false,
   linkify: true,
   highlight: function (str, lang) {
