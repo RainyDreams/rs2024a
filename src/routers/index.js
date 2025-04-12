@@ -93,7 +93,7 @@ const router = createRouter({
       { path: "info", name: "AboutInfo", component: AboutInfo,meta:{title:'软件信息',nologin:true} },
       { path: "news", name: "AboutNews", component: AboutNews,meta:{title:'新闻',nologin:true} },
       { path: "progress", name: "AboutProgress", component: AboutProgress,meta:{title:'创作历程',nologin:true} },
-      { path: "log", name: "AboutLog", component: AboutLog,meta:{title:'更新日志',nologin:true} },
+      { path: "log", name: "AboutLog", component: AboutLog,meta:{title:'更新日志',nologin:true,hide:['tabbar','sidebar'] } },
       { path: "values", name: "AboutValues", component: AboutValues,meta:{title:'价值观',nologin:true,hide:['tabbar','sidebar']} }
     ] },
     {path: "/status/", name:"Status", children:[

@@ -1990,11 +1990,13 @@ onMounted(async ()=>{
 })
 </script>
 
-<style scoped>
+<style>
 .h-auto-dvh{
   height:100vh;
   height:100dvh;
-}
+}</style>
+<style scoped>
+
 .autohidden{
   /* display: none !important; */
   visibility: hidden;
