@@ -464,7 +464,10 @@
           </button>
         </div>
         <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
-          <h2 class="w-full text-xl sm:text-2xl md:text-3xl text-center mb-2">一切，为了科技平权</h2>
+          <h2 class="w-full text-xl sm:text-2xl md:text-3xl text-center mb-4">Attention Is All You Need</h2>
+          <div class="w-full text-sm text-gray-700 mb-2 p-3 bg-gray-200/70 rounded-md">
+            最近我们遇到了服务商问题，可能响应速度有所减缓，请谅解。
+          </div>
           <router-link to="/about/log" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
             <span>查看更新日志</span>
             <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
