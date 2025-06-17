@@ -169,6 +169,7 @@
                 <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
                   <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
                 </div>
+                <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">免费服务器性能调度有限，回复若延迟，见谅。我们在努力解决</div>
               </div>
                
               
