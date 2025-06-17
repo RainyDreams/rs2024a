@@ -169,7 +169,7 @@
                 <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
                   <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
                 </div>
-                <div class="text-xs text-slate-600 w-full text-center mt-4 lg:mt-8 opacity-80">免费服务器性能调度有限，回复略有延迟，要求准确回复需要开启下方“思考”功能，如果是lingben-dragon回复问题那么就是无阉割版，其他模型均为阉割版，见谅。请留给我们进步的空间，问题反馈请联系组长。</div>
+                <div class="text-xs/snug text-slate-600 w-full text-center mt-4 lg:mt-8 opacity-80">谢谢大家的热情！由于免费服务器性能调度有限，回复略有延迟，要求准确回复需要开启下方“思考”功能，如果是lingben-dragon回复问题那么就是无阉割版，其他模型均为阉割版，见谅。请留给我们进步的空间，问题反馈请联系组长</div>
                 <!-- <div class="text-sm text-slate-600 w-full text-center mt-2 lg:mt-8 opacity-80"></div> -->
               </div>
                
