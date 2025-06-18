@@ -7,7 +7,7 @@
     <section class="list" v-show="!loading">
       <article
         class=" md:flex last:border-0 border-b border-stone-300 py-4" v-for="(item, i) in list" :tabindex="i">
-        <p class="opacity-80 text-xs md:text-sm mb-2">{{ item.formatDate }}</p>
+        <p class="opacity-80 text-xs md:text-sm mb-2 shrink-0">{{ item.formatDate }}</p>
         <div class="md:pl-6 serif-text">
           <p class="mt-1 mb-1 text-slate-500">
             <a :href="item.user_url" target="_blank">
