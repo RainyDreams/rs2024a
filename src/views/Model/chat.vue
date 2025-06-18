@@ -467,8 +467,8 @@
         </div>
         <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
           <h2 class="w-full text-xl sm:text-2xl md:text-3xl text-center mb-4">Attention Is All You Need</h2>
-          <div class="w-full text-sm text-gray-700 mb-2 p-3 bg-gray-200/70 rounded-md">
-            最近我们遇到了服务商问题，可能响应速度有所减缓，请谅解。
+          <div class="w-full text-sm text-gray-700 mb-2 p-3 bg-gray-200/70 rounded-md text-center">
+            赤峰二中2023级12班「零本智协」研学小组荣誉出品
           </div>
           <router-link to="/about/log" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
             <span>查看更新日志</span>
@@ -486,7 +486,7 @@
             <span>赤子英金官网</span>
             <RightSmallUp class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </a>
-          <div class="w-full text-sm text-gray-700 mt-4 p-3 bg-gray-200/70 rounded-md">
+          <div class="w-full text-sm text-gray-700 mt-2 p-3 bg-gray-200/70 rounded-md">
             提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。
           </div>
         </div> 
