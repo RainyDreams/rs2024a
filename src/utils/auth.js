@@ -808,6 +808,7 @@ let Auth = {
       localStorage.setItem(`chat_${sessionID}`, JSON.stringify(userRecordsInDB));
       console.log('聊天记录存储成功');
     } catch (error) {
+      localStorage.clear()
       console.error('存储聊天记录时出错:', error);
     }
   },
