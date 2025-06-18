@@ -2,7 +2,7 @@
 <div class="max-w-3xl m-auto px-5 pt-6">
   <routerBack name="上一页"></routerBack>
   <div class="">
-    <!-- <p class="text-lg mb-4">我们已将代码开源在GitHub，如果你也想参与其中，请提交<a target="_blank" href="https://github.com/RainyDreams/rs2024a/pulls">Pull Request</a></p> -->
+    <p class="text-lg mb-4">我们已将代码开源在GitHub，如果你也想参与其中，请提交<a target="_blank" href="https://github.com/RainyDreams/rs2024a/pulls">Pull Request</a>代码</p>
     <el-skeleton :rows="5" animated v-show="loading"></el-skeleton>
     <section class="list" v-show="!loading">
       <article
