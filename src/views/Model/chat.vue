@@ -521,7 +521,7 @@
         </div>
         <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
           <div id="DRAWshow" class="w-full h-full">
-            <img :src="drawUrl" class="w-full h-full object-contain" alt="">
+            <img :src="drawUrl" class="w-full min-h-full object-contain" alt="">
           </div>
         </div>
       </div>
