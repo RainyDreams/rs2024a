@@ -508,6 +508,24 @@
         </div>
       </div>
     </div>
+    <div :data-show="showDraw" class="fixed overflow-hidden flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="bg-stone-50 rounded-3xl h-full shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
+        <div class="px-6 py-5 flex justify-between items-center w-full">
+          <h2 class="text-xl font-semibold serif-text text-black">图像</h2>
+          <button @click="showDraw = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
+          <div id="DRAWshow" class="w-full h-full">
+            <img :src="drawUrl" class="w-full h-full object-contain" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="ainput" ref="ainput">
       <div class="">
         <div class="max-w-3xl m-auto">
@@ -656,18 +674,37 @@
                     </touch-ripple>
                   </template>
                 </el-popover>
-                <!-- <touch-ripple
-                  :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
-                  :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
-                  :color="useDraw?'#dbeafe':'#f1f5f9'"
-                  :opacity="0.4"
-                  transition="ease-out"
-                  :keep-last-ripple="false"
-                  :duration="200"
-                  @start="drawBtn"
+                <el-popover
+                  placement="top-start"
+                  :width="200"
+                  :show-after="300"
+                  trigger="hover"
+                  popper-class="rounded-xl shadow-lg shadow-stone-200"
                 >
-                  <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图<span class="text-[10px] ml-[2px]">测试</span></span></span>
-                </touch-ripple> -->
+                  <template #default>
+                    <div class="flex flex-col items-start justify-start">
+                      <div class="text-base text-slate-700 mb-1 align-bottom font-semibold serif-text">绘图</div>
+                      <div class="text-xs text-slate-600 leading-relaxed serif-text">
+                        该功能可以绘制专业的图像
+                      </div>
+                    </div>
+                  </template>
+                  <template #reference>
+                    <touch-ripple
+                      :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                      :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
+                      :color="useDraw?'#dbeafe':'#f1f5f9'"
+                      :opacity="0.4"
+                      transition="ease-out"
+                      :keep-last-ripple="false"
+                      :duration="200"
+                      @start="drawBtn"
+                    >
+                      <span class="flex items-center align-middle"><platte class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">绘图</span></span>
+                    </touch-ripple>
+                  </template>
+                </el-popover>
+                
                 <touch-ripple
                   :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                   :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
@@ -794,7 +831,7 @@ import Auth from "../../utils/auth";
 import { throttle,functionCallPlugin, getRadomString, debounce } from '../../utils/helpers'
 import { ElInput,ElButton,ElMessage,ElAvatar,ElWatermark,ElPopover,ElTooltip,ElSwitch,ElSelect,ElSkeleton, ElMessageBox, dayjs } from "element-plus"; 
 import { useRoute, useRouter, RouterLink } from 'vue-router';
-import { Camera,Up,Copy,Right,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Down,Info,SmartOptimization,Left,Home,ExperimentOne, RightSmallUp } from '@icon-park/vue-next';
+import { Camera,Up,Copy,Right,DocDetail,PauseOne,ListTwo,Acoustic,CheckOne,ArrowDown,Pic,Plus,Avatar,PreviewOpen,History,Earth,Down,Info,SmartOptimization,Left,Home,ExperimentOne, RightSmallUp,Platte } from '@icon-park/vue-next';
 import { emitter } from '../../utils/emitter';
 import { TouchRipple } from 'vue-touch-ripple'
 import 'vue-touch-ripple/style.css'
@@ -805,6 +842,8 @@ const swiperRef2 = ref(null);
 const showModelDetail = ref(false)
 const showInfo = ref(false)
 const showGGB = ref(false);
+const showDraw = ref(false);
+const drawUrl = ref(false);
 const cameraInput = ref(null);
 const galleryInput = ref(null)
 const uploadPhotoDialogVisible = ref(false);
@@ -1176,7 +1215,14 @@ function previewBtn(){
 function internetBtn(){
   useInternet.value=!useInternet.value;
   if(useInternet.value){
-    useDraw.value=false;
+    // useDraw.value=false;
+  }
+}
+function drawBtn(){
+  useDraw.value=!useDraw.value;
+  if(useDraw.value){
+    usePreview.value=false;
+    useTask.value=false;
   }
 }
 function copyCode(codeId) {
@@ -1243,17 +1289,18 @@ md.renderer.rules.fence = function(tokens, idx, options, env, self) {
     const code = token.content;
     // console.log(code)
     // highlightedCode = md.render(token.content);
+    let drawid = getRadomString(8);
+
     return `
-<div lingben-draw>
-    <pre class="hidden">${code}</pre>
-    <span class="flex w-fit items-center bg-slate-50 z-30 mb-2 px-3 rounded-3xl py-2 border border-slate-200">
-        <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-blue-500 " style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg><span class="active-text text-lg leading-none align-bottom">等待中...</span>
-    </span>
-    <img src=""/>
-</div>`
+    <div id="d${drawid}" class="draw-applet text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl">
+      <div class="flex justify-between items-center">
+        <span>图像预览</span>
+        <span class="i-icon i-icon-right"><svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M19 12L31 24L19 36" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="bevel"></path></svg></span>
+      </div>
+      <div class="inner border-t mt-2 pt-3 truncate text-sm border-stone-300 text-gray-600 console-text hidden">
+        <pre>${code}</pre>
+      </div>
+    </div>`
   } else if (langName.toLowerCase()=='math') {
     let formula = token.content.replace(new RegExp('\\\\n','g'), '\n').replace(new RegExp('\\n\\n','g'), '\n');
     let ggbid = getRadomString(8);
@@ -1473,28 +1520,7 @@ const renderContent = renderTaskManager.addTask(renderContentTask);
 const renderAnalysis = renderTaskManager.addTask(renderAnalysisTask);
 const task_ = async()=>{
   document.querySelectorAll('div[lingben-draw]').forEach(e=>{
-    const code = e.children[0].innerText;
-    // console.dir(e.children);
-    const safeEval = (code) => {
-      return new Function(`"use strict";\n\n${code}`)();
-    };
-    let fn = async ()=>{
-      try{
-        const canvas = safeEval(code);
-        // console.log(canvas);
-        let before = e.children[2].src;
-        if(before){
-          URL.revokeObjectURL(before);
-        }
-        const dataurl = canvas.toDataURL('image/png',1);
-        let blob=URL.createObjectURL(dataURLtoBlob(`data:image/png;base64,${dataurl}`));
-        e.children[2].src = blob;
-        e.children[2].className='czig-draw rounded-md shadow-md shadow-slate-100 max-h-[400px]';
-        e.children[1].classList.remove('flex');
-        e.children[1].classList.add('hidden');
-      }catch(e){}
-    };
-    fn();
+    
   });
 }
 function splitHtmlFirstLevelRegex(htmlStr) { const doc = htmlParser.parseFromString(htmlStr, 'text/html');
@@ -1698,15 +1724,34 @@ const renderGGB = renderTaskManager.addTask((list)=>{
       ggbApi.reset();
       ggbApi.evalCommand(element.querySelector('.inner').innerText)
     })
-    console.log(element);
-
-    // applet.onAppletLoad(function () {
-    //       // 执行绘制函数图像的命令
-    //       ggbApplet.evalCommand('f(x)=x^2');
-    //   });
-    // applet.getAPI().then(api => {
-    //   api.evalCommand(element.innerText);
-    // });
+    // console.log(element);
+  });
+})
+const renderDraw = renderTaskManager.addTask((list)=>{
+  let l = list
+  if(typeof list == 'function') l = list();
+  l.forEach((element) => {
+    const code = element.querySelector('.inner').innerText;
+    // console.dir(e.children);
+    const safeEval = (code) => {
+      return new Function(`"use strict";\n\n${code}`)();
+    };
+    let fn = async ()=>{
+      try{
+        const canvas = safeEval(code);
+        let before = drawUrl.value;
+        if(before){
+          URL.revokeObjectURL(before);
+        }
+        const dataurl = canvas.toDataURL('image/png',1);
+        let blob=URL.createObjectURL(dataURLtoBlob(`data:image/png;base64,${dataurl}`));
+        drawUrl.value = blob;
+        showDraw.value = true;
+      }catch(e){
+        console.error(e)
+      }
+    };
+    element.addEventListener('click',fn)
   });
 })
 async function handleOnClose(error,model,opt) {
@@ -1725,7 +1770,8 @@ async function handleOnClose(error,model,opt) {
       await Auth.saveChatRecords(sessionID.value, chatList.value[opt.index]);
       // nextTick(()=>{
         // const elements = ;
-        renderGGB(()=>{return document.querySelectorAll(`.ggb-applet`)});
+      renderGGB(()=>{return document.querySelectorAll(`.ggb-applet`)});
+      renderDraw(()=>{return document.querySelectorAll(`.draw-applet`)})
       // })
     }
   }
