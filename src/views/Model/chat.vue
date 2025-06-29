@@ -1895,6 +1895,8 @@ async function applysession({ id, mode }) {
       // nextTick(()=?>);
       // console.log(document.querySelector('.ggb-applet').id)
       renderGGB(()=>{return document.querySelectorAll('.ggb-applet')});
+      renderDraw(()=>{return document.querySelectorAll(`.draw-applet`)})
+
       // console.log(document.querySelector('.ggb-applet'))
       setTimeout(scrollToBottom, 50);
 
