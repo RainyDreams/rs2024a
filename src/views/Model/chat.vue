@@ -253,7 +253,7 @@
                   <template v-else-if="item.role == 'assistant'">
                     <div class="assistant shrink-0" :data-id="i">
                       <div 
-                        :class="[`chatcontent text-sm/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose`,(chatList[i-1].status=='reply')?'will-change-contents':'']" >
+                        :class="[`chatcontent text-sm/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/snug xl:text-lg/relaxed`,(chatList[i-1].status=='reply')?'will-change-contents':'']" >
                         <!-- <template > -->
                         <div v-for="(g,i2) in item.renderedContent" :key="i2" v-html="g" class="chat_animate_in"></div>
                         <!-- </template> -->
@@ -1722,7 +1722,11 @@ const renderGGB = renderTaskManager.addTask((list)=>{
     element.addEventListener('click', () => {
       showGGB.value = true;
       ggbApi.reset();
-      ggbApi.evalCommand(element.querySelector('.inner').innerText)
+      element.querySelector('.inner').innerText.split('\n').forEach((element, index) => {
+        if(element){
+          ggbApi.evalCommand(element);
+        }
+      });
     })
     // console.log(element);
   });
@@ -2032,9 +2036,9 @@ onMounted(async ()=>{
     showMenuBar: false ,
     "showResetIcon": false,
     "showLogo": false,
-
     appletOnLoad(s) {
       ggbApi = s;
+      window.ggbapi = ggbApi;
       document.querySelector('#GGBshow .avNameLogo').remove()
     }
   };

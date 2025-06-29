@@ -863,6 +863,10 @@ a[href]{
 }
 .katex {
   font-size: 1.3em !important;
+  font-family:  KaTeX_Math, Times New Roman;
+  *{
+    font-family: KaTeX_Math, Times New Roman,serif !important
+  }
 }
 
 .el-avatar{
