@@ -640,7 +640,9 @@
                       :duration="200"
                       @start="previewBtn"
                     >
-                      <span class="flex items-center align-middle"><PreviewOpen class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">预览<span class="text-[10px] ml-[2px]">测试</span></span></span>
+                      <span class="flex items-center align-middle"><PreviewOpen class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">预览
+                        <!-- <span class="text-[10px] ml-[2px]">测试</span> -->
+                      </span></span>
                     </touch-ripple>
                   </template>
                 </el-popover>
@@ -683,9 +685,12 @@
                 >
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
-                      <div class="text-base text-slate-700 mb-1 align-bottom font-semibold serif-text">绘图</div>
+                      <div class="text-base text-slate-700 mb-1 align-bottom font-semibold flex items-center">
+                        <span class="serif-text">绘图</span>
+                        <experiment-one theme="outline" class="text-blue-500 inline-block ml-1" size="16" fill="currentColor" :strokeWidth="4"/>
+                      </div>
                       <div class="text-xs text-slate-600 leading-relaxed serif-text">
-                        该功能可以绘制专业的图像
+                        该功能可以绘制专业的物理、化学的等平面图像
                       </div>
                     </div>
                   </template>
