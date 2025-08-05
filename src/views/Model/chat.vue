@@ -1729,7 +1729,7 @@ const renderGGB = renderTaskManager.addTask((list)=>{
       ggbApi.reset();
       element.querySelector('.inner').innerText.split('\n').forEach((element, index) => {
         if(element){
-          ggbApi.evalCommand(element);
+          ggbApi.evalLaTex(element);
         }
       });
     })
@@ -2033,7 +2033,6 @@ onMounted(async ()=>{
   let width = Math.floor(document.querySelector('#GGBshow').clientWidth);
   let height = Math.floor(document.querySelector('#GGBshow').clientHeight);
   const params = {
-    appName: 'graphing',
     width: width,
     height: height,
     showToolBar: false,
