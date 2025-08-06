@@ -2061,6 +2061,9 @@ onMounted(async ()=>{
 .h-auto-dvh{
   height:100vh;
   height:100dvh;
+}
+.h-auto-dvh:focus-within{
+  height:100vh;
 }</style>
 <style scoped>
 
