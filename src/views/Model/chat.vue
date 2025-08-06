@@ -169,7 +169,7 @@
                 <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
                   <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
                 </div>
-                <div class="text-xs/snug text-slate-600 w-full text-center mt-4 lg:mt-8 opacity-80">谢谢大家的热情！由于免费服务器性能调度有限，回复略有延迟，要求准确回复需要开启下方“思考”功能，如果是lingben-dragon回复问题那么就是无阉割版，其他模型均为阉割版，见谅。请留给我们进步的空间，问题反馈请联系组长</div>
+                <!-- <div class="text-xs/snug text-slate-600 w-full text-center mt-4 lg:mt-8 opacity-80"></div> -->
                 <!-- <div class="text-sm text-slate-600 w-full text-center mt-2 lg:mt-8 opacity-80"></div> -->
               </div>
                
@@ -467,15 +467,15 @@
         </div>
         <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
           <h2 class="w-full text-xl sm:text-2xl md:text-3xl text-center mb-4">Attention Is All You Need</h2>
+          
           <div class="w-full text-sm text-gray-700 mb-2 p-3 bg-gray-200/70 rounded-md text-center">
             赤峰二中2023级12班「零本智协」研学小组荣誉出品
           </div>
+          <div class="w-full text-sm text-gray-700 mb-2 p-3 ">
+            谢谢大家的热情！由于免费服务器性能调度有限，回复略有延迟，要求准确回复需要开启下方“思考”功能，如果是lingben-dragon回复问题那么就是无阉割版，其他模型均为阉割版，见谅。请留给我们进步的空间，问题反馈请联系组长
+          </div>
           <router-link to="/about/log" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
             <span>查看更新日志</span>
-            <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
-          </router-link>
-          <router-link to="/about/values" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
-            <span>了解我们的<b class="font-sans">价值观</b></span>
             <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </router-link>
           <a target="_blank" href="https://mp.weixin.qq.com/s/WUJ4EzVP7gBVunauJgQ7PQ" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
@@ -521,7 +521,9 @@
         </div>
         <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
           <div id="DRAWshow" class="w-full h-full">
-            <img :src="drawUrl" class="w-full min-h-full object-contain" alt="">
+            <a :href="drawUrl" class="block w-full min-h-full" download="零本生成的图像.png">
+              <img :src="drawUrl"  class="w-full min-h-full object-contain cursor-pointer hover:border-gray-600 transition border-gray-300 border-dashed border" alt="">
+            </a>
           </div>
         </div>
       </div>
@@ -1900,12 +1902,16 @@ async function applysession({ id, mode }) {
       } catch(e) {}
       processChatList(chatList.value);
       console.log(document.querySelector('.ggb-applet')?.id)
+      console.log(document.querySelector('.draw-applet')?.id)
 
       // nextTick(()=?>);
       // console.log(document.querySelector('.ggb-applet').id)
-      renderGGB(()=>{return document.querySelectorAll('.ggb-applet')});
-      renderDraw(()=>{return document.querySelectorAll(`.draw-applet`)})
-
+      // setTimeout(()=>{ 
+        // nextTick(()=>{
+        renderGGB(()=>{return document.querySelectorAll(`.ggb-applet`)});
+        renderDraw(()=>{return document.querySelectorAll(`.draw-applet`)})
+      // })
+      // },1000)
       // console.log(document.querySelector('.ggb-applet'))
       setTimeout(scrollToBottom, 50);
 
@@ -2043,7 +2049,7 @@ onMounted(async ()=>{
     appletOnLoad(s) {
       ggbApi = s;
       window.ggbapi = ggbApi;
-      document.querySelector('#GGBshow .avNameLogo').remove()
+      document.querySelector('#GGBshow .avNameLogo')?.remove()
     }
   };
   const applet = new window.GGBApplet(params, true);
