@@ -554,7 +554,7 @@
                   </svg><span class="active-text text-lg leading-none align-bottom text-stone-500">{{ statusText }}</span>
                 </span>
               </div>
-              <div :class="`absolute border transition-all duration-100 bg-white border-gray-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-xs rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
+              <div :class="`absolute border transition-all duration-100 bg-white border-gray-300 bottom-12 mx-auto right-6 w-fit flex items-stretch md:shadow-xs rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
                 <touch-ripple
                   :class="`touch-ripple w-fit shrink-0 text-sm rounded-l-full items-center md:px-2 md:py-2 px-1 py-1 overflow-hidden select-none bg-white ${(autoScroll)?'text-blue-500':'text-stone-500'}`"
                   :style="{ clipPath: 'none', backgroundColor: '#fff' }"
@@ -2062,8 +2062,8 @@ onMounted(async ()=>{
   height:100vh;
   height:100dvh;
 }
-.h-auto-dvh:focus-within{
-  height:100vh;
+.h-auto-dvh:focus-within .vh-hidden{
+  
 }</style>
 <style scoped>
 
