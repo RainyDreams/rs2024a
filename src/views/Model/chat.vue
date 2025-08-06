@@ -511,7 +511,7 @@
     <div :data-show="showDraw" class="fixed overflow-hidden flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
       <div class="bg-stone-50 rounded-3xl h-full shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
         <div class="px-6 py-5 flex justify-between items-center w-full">
-          <h2 class="text-xl font-semibold serif-text text-black">由零本代码生成的图像</h2>
+          <h2 class="text-xl font-semibold serif-text text-black">由零本AI通过代码生成的图像</h2>
           <button @click="showDraw = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
