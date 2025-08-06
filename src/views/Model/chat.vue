@@ -821,8 +821,8 @@
       </div>
     </div>
     <audio v-if="audioUrl" :src="audioUrl" controls class="mt- hidden"></audio>
-    <div :class="'transition-all h-0 duration-300 ease-linear '+(chatList.length == 0?`max-limit md:h-20 lg:h-32 `:'')"></div>
-    <p class=" text-center text-stone-500 py-1 font-sans leading-none relative z-10" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
+    <div :class="'transition-all h-0 duration-300 ease-linear '+(chatList.length == 0?`max-limit h-6 md:h-20 lg:h-32 `:'')"></div>
+    <p class=" text-center text-stone-400 py-1 font-sans leading-none relative z-10" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
   </div>
 </template>
 <script setup>
