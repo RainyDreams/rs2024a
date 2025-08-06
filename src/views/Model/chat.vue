@@ -754,7 +754,7 @@
             </div>
           </div>
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="">
-            <div :class="`ainput__wrapper items-stretch border border-stone-200 shadow-none focus-within:shadow-xl focus-within:shadow-stone-200 transition-all duration-500 focus-within:border-stone-300 shadow-stone-100`">
+            <div :class="`ainput__wrapper items-stretch border border-stone-200 shadow-none md:focus-within:shadow-xl focus-within:shadow-stone-200 transition-all duration-500 focus-within:border-stone-300 shadow-stone-100`">
               <div 
                 class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
                 :data-show="!isRecording" 
