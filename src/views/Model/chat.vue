@@ -1,5 +1,5 @@
 <template>
-  <div class="commonPage  md:rounded-lg pb-0 h-auto-dvh pt-3" style="display: flex;flex-direction: column;">
+  <div class="commonPage  md:rounded-lg pb-0 h-auto-dvh pt-2 md:pt-3" style="display: flex;flex-direction: column;">
     <div id="wechat-tip" v-if="weixinDialogVisible" class="fixed flex top-0 left-0 w-full bg-slate-800/40 text-white p-4 text-center text-sm  z-40">
       <span class="flex-1 pr-2">您正在使用微信访问本站，建议使用浏览器打开</span>
       <button @click="weixinDialogVisible = false" class="text-white rounded-full h-9 p-2 w-9 shrink-0 bg-slate-900/10">
@@ -18,14 +18,14 @@
       @touchstart.passive="onWheel"
     >
       <!-- <div class=""> -->
-        <div class=" max-w-3xl m-auto px-2" style="margin-bottom: 0;">
+        <div class=" max-w-3xl m-auto md:px-2" style="margin-bottom: 0;">
           <div class="aichat">
             <el-watermark :font="{color:'rgba(0, 0, 0, 0.001)'}" :gap="[0,0]" :rotate="-12"
               :content="['零本智协大模型 生成内容仅供参考', sessionID,fingerprint]">
               <div class="system mb-3 md:mb-4 lg:mb-5 block">
                 <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
                   <touch-ripple
-                    :class="`flex touch-ripple  h-8  mt-2  items-center w-fit cursor-pointer text-sm rounded-l-full pr-2 pl-3 py-1 overflow-hidden select-none border `"
+                    :class="`flex touch-ripple  h-7 md:h-8  mt-2  items-center w-fit cursor-pointer text-xs md:text-sm rounded-l-full pr-1 pl-2 md:pr-2 md:pl-3 py-1 overflow-hidden select-none border `"
                     :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                     :color="'#bfdbfe'"
                     :opacity="0.4"
@@ -36,13 +36,13 @@
                   >
                     <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                     <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                    <left  theme="outline" size="18" fill="#4e81fc"/>
+                    <left  theme="outline" class="md:scale-100 scale-90" size="18" fill="#4e81fc"/>
                     <!-- </div> -->
                   </touch-ripple>
                   <!-- </router-link> -->
                   <router-link to="/home" class="h-full">
                     <touch-ripple
-                      :class="`flex touch-ripple h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-sm rounded-r-full pl-2 pr-3 py-1 overflow-hidden select-none border text-slate-950`"
+                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-xs md:text-sm rounded-r-full md:pl-2 md:pr-3 pl-1 pr-2 py-1 overflow-hidden select-none border text-slate-950`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                       :color="'#bfdbfe'"
                       :opacity="0.4"
@@ -52,13 +52,13 @@
                     >
                       <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                       <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                      <home  theme="outline" size="18" fill="#4e81fc"/>
+                      <home  theme="outline" class="md:scale-100 scale-90" size="18" fill="#4e81fc"/>
                       <!-- </div> -->
                     </touch-ripple>
                   </router-link>
                   <router-link to="/model/square" class="h-full">
                     <touch-ripple
-                      :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
+                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border text-slate-950`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                       :color="'#bfdbfe'"
                       :opacity="0.4"
@@ -68,14 +68,14 @@
                     >
                       <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                       <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                      <SmartOptimization theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
-                      <div class="text-base leading-none" style="color:rgb(18,30,60);">模型库</div>
+                      <SmartOptimization theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#4e81fc"/>
+                      <div class="text-sm md:text-base leading-none" style="color:rgb(18,30,60);">模型库</div>
                       <!-- </div> -->
                     </touch-ripple>
                   </router-link>
                   <router-link to="/model/history" class="h-full"  v-if="loginStatus" >
                     <touch-ripple
-                      :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
+                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border text-slate-950`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                       :color="'#bfdbfe'"
                       :opacity="0.4"
@@ -85,13 +85,13 @@
                     >
                       <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                       <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                      <history  theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
-                      <div class="text-base leading-none" style="color:rgb(18,30,60);">聊天历史</div>
+                      <history  theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#4e81fc"/>
+                      <div class="text-sm md:text-base leading-none" style="color:rgb(18,30,60);">聊天历史</div>
                       <!-- </div> -->
                     </touch-ripple>
                   </router-link>
                   <touch-ripple
-                    :class="`flex touch-ripple nofocus h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-slate-950':'text-slate-950')"
+                    :class="`flex touch-ripple nofocus h-7 md:h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-slate-950':'text-slate-950')"
                     :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#4e81fc44':'#fff' }"
                     :color="showModelDetail?'#fff':'#bfdbfe'"
                     :opacity="0.4"
@@ -101,12 +101,12 @@
                     @click="showModelDetail=!showModelDetail"
                   >
                     <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                    <img alt="头像" :src="model_info.img" class="mr-1 w-4 h-4 rounded-full" />
-                    <div class="text-base leading-none">{{ model_info.name || "获取中" }}</div>
+                    <img alt="头像" :src="model_info.img" class="mr-1 w-4 h-4 rounded-full md:scale-100 scale-90" />
+                    <div class="text-sm md:text-base leading-none">{{ model_info.name || "获取中" }}</div>
                     <!-- </div> -->
                   </touch-ripple>
                   <touch-ripple
-                    :class="`flex touch-ripple nofocus h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-slate-950':'text-slate-950')"
+                    :class="`flex touch-ripple nofocus h-7 md:h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-slate-950':'text-slate-950')"
                     :style="{ clipPath: 'none', backgroundColor: showInfo?'#ffedd5':'#fff' }"
                     :color="showInfo?'#f7deb7':'#f7deb7'"
                     :opacity="0.4"
@@ -116,13 +116,13 @@
                     @click="showInfo=!showInfo"
                   >
                     <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                      <info theme="outline" class="mr-1" size="18" fill="#ff9d00"/>
-                      <div class="text-base leading-none">公告</div>
+                      <info theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#ff9d00"/>
+                      <div class="text-sm md:text-base leading-none">公告</div>
                     <!-- </div> -->
                   </touch-ripple>
                   <!-- <router-link to="/quant" class="h-full" >
                     <touch-ripple
-                      :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border `"
+                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border `"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                       :color="'#f206'"
                       :opacity="0.4"
@@ -131,13 +131,13 @@
                       :keep-last-ripple="true"
                     >
                       <fire theme="outline" class="mr-1" size="18" fill="#f20"/>
-                      <div class="text-base leading-none" style="color:#f20">零本量化</div>
+                      <div class="text-sm md:text-base leading-none" style="color:#f20">零本量化</div>
                     </touch-ripple>
                   </router-link> -->
                   <!-- <router-link :to="`/login?url=%2Fchat%2F%3Fs%3D${sessionID}`" class="h-full" v-if="!loginStatus" > -->
                   <touch-ripple
                     v-if="!loginStatus"
-                    :class="`flex touch-ripple h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-sm rounded-full px-3 py-1 overflow-hidden select-none border text-slate-950`"
+                    :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border text-slate-950`"
                     :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                     :color="'#bfdbfe'"
                     :opacity="0.4"
@@ -148,8 +148,8 @@
                   >
                     <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                     <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                    <avatar theme="outline" class="mr-1" size="18" fill="#4e81fc"/>
-                    <div class="text-base leading-none" style="color:rgb(18,30,60);">登录</div>
+                    <avatar theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#4e81fc"/>
+                    <div class="text-sm md:text-base leading-none" style="color:rgb(18,30,60);">登录</div>
                     <!-- </div> -->
                   </touch-ripple>
                   <!-- </router-link> -->
@@ -167,7 +167,7 @@
                   </div>
                 </div>
                 <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
-                  <div class="text-sm text-slate-800 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
+                  <div class="text-xs md:text-sm text-slate-500 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
                 </div>
                 <!-- <div class="text-xs/snug text-slate-600 w-full text-center mt-4 lg:mt-8 opacity-80"></div> -->
                 <!-- <div class="text-sm text-slate-600 w-full text-center mt-2 lg:mt-8 opacity-80"></div> -->
@@ -204,7 +204,7 @@
                       <div class="flex items-end group w-full justify-end">
                         <div
                           @click="selectAndCopy(item.content)"
-                          class="chatcontent serif-text min-h-8 border border-gray-200 break-words w-fit min-w-6 px-4 py-2 rounded-l-3xl rounded-tr-3xl rounded-br-md bg-white text-black whitespace-pre-wrap text-sm/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
+                          class="chatcontent min-h-8 border border-gray-200 break-words w-fit min-w-6 px-4 py-2 rounded-l-3xl rounded-tr-3xl rounded-br-md bg-white text-stone-800 whitespace-pre-wrap text-base/snug sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
                         >
                           <div class="">{{item.content}}</div>
                           <template v-if="item.photo?.meta">
@@ -253,7 +253,7 @@
                   <template v-else-if="item.role == 'assistant'">
                     <div class="assistant shrink-0" :data-id="i">
                       <div 
-                        :class="[`chatcontent text-sm/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/snug xl:text-lg/relaxed`,(chatList[i-1].status=='reply')?'will-change-contents':'']" >
+                        :class="[`chatcontent text-base/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/snug xl:text-lg/relaxed`,(chatList[i-1].status=='reply')?'will-change-contents':'']" >
                         <!-- <template > -->
                         <div v-for="(g,i2) in item.renderedContent" :key="i2" v-html="g" class="chat_animate_in"></div>
                         <!-- </template> -->
@@ -302,8 +302,8 @@
                     </div>
                   </template>
                 </template>
-                <div class="my-5">
-                  <div class="text-gray-900 opacity-85 border-gray-200 text-sm lg:text-base  border serif-text bg-white cursor-pointer transition duration-100 rounded-r-3xl rounded-tl-3xl rounded-bl-md hover:bg-stone-100 px-3 py-2 my-2" 
+                <div class="my-3 md:my-5">
+                  <div class="text-stone-500 font-sans text-xs/loose md:text-sm lg:text-base bg-stone-200/50 cursor-pointer opacity-90 transition duration-100 rounded-md hover:bg-stone-100/70 md:px-3 md:py-2 md:my-2 px-2 py-1 my-1" 
                   v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
@@ -556,7 +556,7 @@
               </div>
               <div :class="`absolute border transition-all duration-100 bg-white border-gray-300 bottom-12 mx-auto right-6 w-fit flex items-stretch shadow-xs rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
                 <touch-ripple
-                  :class="`touch-ripple w-fit shrink-0 text-sm rounded-l-full items-center px-2 py-2 overflow-hidden select-none bg-white ${(autoScroll)?'text-blue-500':'text-stone-500'}`"
+                  :class="`touch-ripple w-fit shrink-0 text-sm rounded-l-full items-center md:px-2 md:py-2 px-1 py-1 overflow-hidden select-none bg-white ${(autoScroll)?'text-blue-500':'text-stone-500'}`"
                   :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                   :color="'#f1f5f9'"
                   :opacity="0.4"
@@ -565,7 +565,7 @@
                   :keep-last-ripple="false"
                   @click="scrollToBottom"
                 >
-                  <span class="flex pl-1 items-center align-middle"><arrow-down class="h-fit w-fit" theme="outline" size="16"  fill="currentColor"/></span>
+                  <span class="flex pl-1 items-center align-middle"><arrow-down class="h-fit w-fit md:scale-100 scale-90" theme="outline" size="16"  fill="currentColor"/></span>
                 </touch-ripple>
                 <el-tooltip
                   class="box-item"
@@ -574,11 +574,11 @@
                   placement="top-end"
                 >
                   <div 
-                    class="leading-none flex items-center cursor-pointer bg-white border-l border-gray-300 text-stone-500 rounded-r-full pl-2 pr-3"
+                    class="leading-none flex items-center cursor-pointer bg-white border-l border-gray-300 text-stone-500 rounded-r-full pl-1 pr-2 md:pl-2 md:pr-3"
                     @click="autoScroll=!autoScroll"  
                   >
                     <!-- <div class="mx-auto border-slate-300 rounded-full w-4 h-4 border"></div> -->
-                    <check-one theme="filled" size="20" fill="currentColor" :class="`transition  ${autoScroll?'text-blue-500 delay-75':'text-stone-300'}`"/>
+                    <check-one theme="filled" size="20" fill="currentColor" :class="`transition md:scale-100 scale-90  ${autoScroll?'text-blue-500 delay-75':'text-stone-300'}`"/>
                   </div>
                 </el-tooltip>
               </div>
@@ -1731,7 +1731,7 @@ const renderGGB = renderTaskManager.addTask((list)=>{
       ggbApi.reset();
       element.querySelector('.inner').innerText.split('\n').forEach((element, index) => {
         if(element){
-          ggbApi.evalLaTex(element);
+          ggbApi.evalCommand(element);
         }
       });
     })
