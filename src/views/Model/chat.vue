@@ -521,7 +521,7 @@
         </div>
         <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
           <div id="DRAWshow" class="w-full h-full">
-            <a :href="drawUrl" class="block w-full min-h-full" download="零本生成的图像.png">
+            <a :href="drawUrl" class="block w-full min-h-full" :download="`${dayjs().format('YYYYMMDDHHmmss')}_${sessionID.slice(0,6)}.png`">
               <img :src="drawUrl"  class="w-full min-h-full object-contain cursor-pointer hover:border-gray-600 transition border-gray-300 border-dashed border" alt="">
             </a>
           </div>
