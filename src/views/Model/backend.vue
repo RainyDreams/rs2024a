@@ -112,6 +112,11 @@
                 <p class="font-semibold">{{ message.role === 'user'? '用户' : 'AI' }}<span class="ml-1 font-normal"
                     v-if="message.role === 'user'">{{ dayjs(message.sendTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
                 </p>
+                <template v-if="message?.model_list">
+                  <ul>
+                    <li v-for="(k,m) in message.model_list">name: {{ k.model }} {{ k.time }} {{ k.mode }}</li>
+                  </ul>
+                </template>
                 <p>{{ message.content }}</p>
                 <template v-if="message.photo?.blob">
                   <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="message.photo.blob" alt="[图片]隐私保护已删除"></div>
