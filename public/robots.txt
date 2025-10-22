@@ -1,3 +1,4 @@
 User-agent: *
 Disallow: /chat/*
+Disallow: /q/*
 Allow: /

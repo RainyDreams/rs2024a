@@ -41,7 +41,7 @@ import LoginNeeded from '../views/Status/LoginNeeded.vue';
 import LoginAlready from '../views/Status/LoginAlready.vue';
 import JoinTeamApplication from '../views/Status/JoinTeamApplication.vue';
 import JoinProcess from '../views/Status/JoinProcess.vue';
-
+import ToolsQ from '../views/Tools/q.vue'
 import TestIndex from '../views/Test/index.vue';
 import Error404 from '../views/Errors/404.vue';
 
@@ -108,6 +108,7 @@ const router = createRouter({
     { path: "/login-already", name: "LoginAlready", component: LoginAlready,meta:{hide:['sidebar'],title:'已登录'}},
     { path: "/settings/", name: "Settings", component: SettingsIndex,meta:{title:'创建项目'},title:'设置'},
     { path: "/test/", name: "Test", component: TestIndex,meta:{title:'测试页面',nologin:true} },
+    { path: "/q/", name: "Q", component: ToolsQ,meta:{title:'错误页面',nologin:true,hide:['tabbar','sidebar']} },
     
     { path: "/:catchAll(.*)", name: "NotFound", component: Error404,meta:{title:'404 NOT FOUND',hide:['sidebar'],nologin:true} },
   ]
