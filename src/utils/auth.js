@@ -876,8 +876,8 @@ let Auth = {
 
       }
     } else if(decode.mode == 'text'){
-      if(decode.text)
-      opt.chatMessage(decode.text)
+      // if(decode.text)
+      opt.chatMessage(decode.text || '')
       return decode.text;
     } else if (decode.mode == 'text-analysis') {
       opt.analysisMessage(decode.text)
