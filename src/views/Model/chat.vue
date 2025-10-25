@@ -1615,7 +1615,7 @@ async function DeepMindWithAI(opt,count) {
       if(source.message.indexOf('UpstashError')>-1){
         source='文件体积过大'
       }
-      chatList.value[opt.index].content += '\n\n[服务器繁忙]\n\n'+source;
+      chatList.value[opt.index].content += '\n\n# **这不是你的错，而是我的问题**\n\n'+source;
       renderContent(opt.index);
     },
     onmessage: (source, model) => {
