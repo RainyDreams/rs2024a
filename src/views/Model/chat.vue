@@ -303,7 +303,7 @@
                   </template>
                 </template>
                 <div class="my-3 md:my-5">
-                  <div class="text-stone-500 font-sans text-xs/loose md:text-sm lg:text-base bg-stone-200/50 cursor-pointer opacity-90 transition duration-100 rounded-md hover:bg-stone-100/70 md:px-3 md:py-2 md:my-2 px-2 py-1 my-1" 
+                  <div class="text-stone-500 font-sans text-xs/loose bg-stone-200/50 cursor-pointer opacity-90 transition duration-100 rounded-md hover:bg-stone-100/70 px-2 py-1 my-1" 
                   v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
