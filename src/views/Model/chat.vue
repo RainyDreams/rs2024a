@@ -301,6 +301,21 @@
                       </div>
                     </div>
                   </template>
+                  <template v-else-if="item.role == 'model-tips' ">
+                    <!--  -->
+                    <div class="assistant shrink-0" :data-id="i">
+                      <div class="" >
+                        <!-- <template v-for="(item,i2) in item.renderedContent"> -->
+                          <div class="p-3 flex items-center mb-4 text-sm text-yellow-800 bg-yellow-100 rounded-lg dark:bg-yellow-900 dark:text-yellow-300" role="alert">
+                            <!-- <span class="font-medium">警告！</span> 此操作不可逆。 -->
+                            <Info theme="outline" class="h-fit w-fit" style="font-size:0px" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
+                            <span class="ml-2 font-sans">{{ item.content }}</span>
+                          </div>
+                          <!-- <div class="h-full "></div> -->
+                        <!-- </template> -->
+                      </div>
+                    </div>
+                  </template>
                 </template>
                 <div class="my-3 md:my-5">
                   <div class="text-stone-500 font-sans text-xs/loose bg-stone-200/50 cursor-pointer opacity-90 transition duration-100 rounded-md hover:bg-stone-100/70 px-2 py-1 my-1" 
