@@ -1650,6 +1650,13 @@ function handleOnMessage(res, m , opt) {
         chatList.value[opt.index - 1].analysis += source;
         renderAnalysis(opt.index - 1);
       },
+      systemMessage: (source) => {
+        chatList.value.push({
+          role:source.role || 'system',
+          content: source.text || source.content,
+        });
+        renderContent(opt.index);
+      },
       timeMessage: (source, mode) => {
         if(mode == 'text-analysis'){
           if(chatList.value[opt.index - 1].tmpTime === undefined){
