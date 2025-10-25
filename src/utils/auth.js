@@ -955,7 +955,7 @@ let Auth = {
           }
         } else {
           // if(param.onerror) param.onerror(new Error(await response.text()));
-          throw new Error("会话传输出现错误");
+          throw new Error("会话传输出现错误\n\n# 这不是你的错，而是我的问题\n\n由于成本，我们只能使用免费服务器，您当前可能遭遇了服务器宕机/限制等问题，可以尝试刷新页面重试操作。");
         }
         // defaultFailed(response.statusText,3)
         // return;
