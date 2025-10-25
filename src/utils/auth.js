@@ -928,7 +928,7 @@ let Auth = {
     } else if (decode.mode == 'device'){
       opt.device()
     } else if (decode.mode == 'system'){
-      opt.system(decode)
+      opt.systemMessage(decode)
     }
     return '???'
   },
