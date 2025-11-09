@@ -713,7 +713,7 @@
                   </template>
                   <template #reference>
                     <touch-ripple
-                      :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                      :class="`touch-ripple w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                       :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
                       :color="useDraw?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
@@ -728,7 +728,7 @@
                 </el-popover>
                 
                 <touch-ripple
-                  :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                  :class="`touch-ripple w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
                   :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
                   :color="useTask?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
@@ -1365,7 +1365,7 @@ md.use(math,{
   blockClass: 'katex-block',
   inlineClass: 'katex-inline',
   errorClass: 'error',
-  katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
+  // katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
 });
 const openUploadPhotoDialog =()=>{
   uploadPhotoDialogVisible.value = true;
