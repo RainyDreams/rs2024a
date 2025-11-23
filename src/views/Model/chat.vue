@@ -497,8 +497,8 @@
             <span>了解《零本AI：深入思考赋能实际教学》</span>
             <RightSmallUp class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </a>
-          <a target="_blank" href="https://www.chiziingiin.top/" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
-            <span>赤子英金官网</span>
+          <a target="_blank" href="https://status.lingben.top/" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
+            <span>零本智协服务状态</span>
             <RightSmallUp class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </a>
           <div class="w-full text-sm text-gray-700 mt-2 p-3 bg-gray-200/70 rounded-md">
