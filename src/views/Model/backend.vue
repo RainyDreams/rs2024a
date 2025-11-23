@@ -256,7 +256,7 @@
                      
                      <div class="mb-1 px-1 flex items-center gap-2 text-[11px] text-[#747775]">
                         <span class="font-medium">{{ message.role === 'user'? 'You' : 'Assistant' }}</span>
-                        <span>{{ dayjs(message.sendTime).format('HH:mm:ss') }}</span>
+                        <span>{{ dayjs(message.sendTime).format('MM-DD HH:mm:ss') }}</span>
                      </div>
 
                      <div :class="[
@@ -276,7 +276,7 @@
                         </div>
 
                         <!-- 恢复：模型调试信息 (Model Info) -->
-                        <div v-if="message?.model_list" class="mt-3 pt-2 border-t border-dashed text-[10px] font-mono opacity-70"
+                        <div v-if="message?.model_list" class="mt-3 pt-2 border-t border-dashed text-[14px] font-mono opacity-70"
                              :class="message.role === 'user' ? 'border-white/20' : 'border-[#1F1F1F]/10'">
                            <div class="flex flex-wrap gap-x-3 gap-y-1">
                               <span v-for="(k,m) in message.model_list" :key="m">
@@ -339,7 +339,7 @@
                    <div v-if="vf.tasks && vf.tasks.length" class="space-y-2">
                       <p class="text-[10px] font-bold text-[#747775] uppercase">Tasks</p>
                       <div v-for="(task, ti) in vf.tasks" :key="ti" class="bg-blue-50 p-2 rounded-lg text-xs border border-blue-100">
-                         <div class="text-blue-800 font-mono mb-1 text-[10px]">{{ dayjs(task.time).format('HH:mm:ss.SSS') }}</div>
+                         <div class="text-blue-800 font-mono mb-1 text-[10px]">{{ dayjs(task.time).format('YYYY-MM-DD HH:mm:ss') }}</div>
                          <ul class="list-disc pl-4 text-[#444746]">
                             <li v-for="(tv, tk) in task" :key="tk" v-show="tk!=='time'"><span class="opacity-70">{{tk}}:</span> {{tv}}</li>
                          </ul>
