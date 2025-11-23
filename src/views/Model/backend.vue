@@ -1,340 +1,277 @@
 <template>
-  <!-- 全局背景：使用 Material 3 推荐的 Surface Container Low 颜色 -->
-  <div class="p-4 sm:p-8 bg-[#F0F4F8] min-h-screen font-sans text-slate-700">
+  <!-- 全局背景：Material 3 Surface -->
+  <div class="p-4 sm:p-8 bg-[#F2F6FC] min-h-screen font-sans text-[#1F1F1F]">
     
     <div class="max-w-[1800px] mx-auto">
-      <!-- 顶部标题栏 -->
-      <header class="mb-8 pl-1">
-        <h1 class="text-3xl sm:text-4xl text-[#1b1b1f] font-normal tracking-tight">会话管理后台</h1>
-        <p class="text-sm text-slate-500 mt-2 font-medium">Dashboard & Session Analytics</p>
+      <!-- 顶部大标题：Google Sans 风格 -->
+      <header class="mb-8 px-2 py-4">
+        <h1 class="text-3xl sm:text-4xl font-normal tracking-tight text-[#1F1F1F]">会话管理后台</h1>
+        <p class="text-sm text-[#444746] mt-2 font-medium flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-green-500"></span>
+          Dashboard & Analytics
+        </p>
       </header>
 
-      <!-- 列表区域：带骨架屏加载动画 -->
-      <div v-if="loadingList" class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-        <div v-for="n in 8" :key="n" class="bg-white p-6 rounded-[24px] border border-transparent shadow-sm h-40 animate-pulse">
-          <div class="h-6 bg-slate-200 rounded w-1/3 mb-4"></div>
-          <div class="h-4 bg-slate-200 rounded w-1/2 mb-2"></div>
-          <div class="h-4 bg-slate-100 rounded w-3/4"></div>
-        </div>
+      <!-- 列表区域：骨架屏与卡片 -->
+      <div v-if="loadingList" class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        <div v-for="n in 8" :key="n" class="bg-white p-6 rounded-[24px] h-40 animate-pulse shadow-sm"></div>
       </div>
 
-      <div v-else class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      <div v-else class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         <div v-for="item in list" :key="item.id" 
-          class="group relative bg-white p-6 rounded-[24px] border border-white shadow-sm transition-all duration-300 cursor-pointer
-                 hover:shadow-xl hover:border-blue-100 hover:-translate-y-1 hover:z-10" 
+          class="group relative bg-white p-6 rounded-[24px] shadow-sm border border-transparent transition-all duration-300
+                 hover:shadow-md hover:bg-[#EEF2F9] cursor-pointer active:scale-[0.98]" 
           @click="getChatHistory(item)">
           
-          <!-- 状态指示点 -->
-          <div class="absolute top-6 right-6 w-3 h-3 rounded-full bg-green-400 border-2 border-white shadow-sm"></div>
-
           <div class="flex flex-col h-full justify-between">
             <div>
-              <!-- 昵称：防止过长挤压，使用 truncate -->
-              <div class="text-xl font-medium text-[#1b1b1f] mb-1 pr-6 truncate" :title="item.nickname">
-                {{ item.nickname }}
+              <div class="flex justify-between items-start">
+                <div class="text-lg font-medium text-[#1F1F1F] pr-4 truncate max-w-[80%]" :title="item.nickname">
+                  {{ item.nickname }}
+                </div>
+                <!-- 访客/用户 徽标 -->
+                <span v-if="item.id === '__guest__'" class="bg-orange-100 text-orange-700 text-[10px] px-2 py-0.5 rounded-full font-bold tracking-wider">GUEST</span>
+                <span v-else class="bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded-full font-bold tracking-wider">USER</span>
               </div>
-              <!-- 用户名 -->
-              <div class="text-sm text-slate-500 font-medium flex items-center gap-1">
-                <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md text-xs">USER</span>
-                <span class="truncate">{{ item.username }}</span>
-              </div>
+              <div class="text-sm text-[#444746] mt-1 truncate">{{ item.username }}</div>
             </div>
             
-            <!-- 底部元数据：增加间距，防止挤在一起 -->
-            <div class="mt-5 pt-4 border-t border-slate-50 space-y-2">
-              <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="font-medium">ID</span>
-                <span class="font-mono truncate max-w-[60%] text-right">{{ item.id }}</span>
+            <div class="mt-4 pt-4 border-t border-[#E1E3E1] flex flex-col gap-1.5">
+              <div class="flex items-center justify-between text-xs text-[#747775]">
+                <span>ID</span>
+                <span class="font-mono truncate max-w-[100px] bg-[#F2F2F2] px-1.5 rounded">{{ item.id }}</span>
               </div>
-              <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="font-medium">Created</span>
-                <span>{{ dayjs(JSON.parse(item.profile).createTime).format('YY/MM/DD HH:mm') }}</span>
+              <div class="flex items-center justify-between text-xs text-[#747775]">
+                <span>Created</span>
+                <span>{{ dayjs(JSON.parse(item.profile).createTime).format('YY/MM/DD') }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- 版权信息 -->
-      <div class="mt-12 mb-6 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/50 rounded-full text-xs text-slate-400 border border-slate-100">
-          <span>© 2024-{{ new Date().getFullYear() }}</span>
-          <a href="https://github.com/RainyDreams" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">零本智协项目组</a>
-          <span>All rights reserved.</span>
-        </div>
+      
+       <!-- 版权信息 -->
+      <div class="mt-12 mb-8 text-center">
+        <span class="text-xs text-[#747775] bg-white/60 px-4 py-2 rounded-full">© 2024 零本智协 · All rights reserved.</span>
       </div>
     </div>
 
-    <!-- 弹窗 1: 会话历史列表 -->
-    <div v-if="dialogVisible" class="fixed inset-0 flex items-center justify-center z-50 p-4 sm:p-6">
-      <!-- 背景遮罩 -->
-      <div class="absolute inset-0 bg-[#1b1b1f]/60 backdrop-blur-sm transition-opacity" @click="dialogVisible = false"></div>
+    <!-- 弹窗 1: 会话档案 (深度优化移动端高度) -->
+    <div v-if="dialogVisible" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+      <!-- 遮罩 -->
+      <div class="absolute inset-0 bg-[#1F1F1F]/40 backdrop-blur-sm transition-opacity" @click="dialogVisible = false"></div>
       
-      <!-- 弹窗主体：圆角更大，限制最大宽度 -->
-      <div class="bg-[#FDFDFD] w-full max-w-5xl h-[85vh] rounded-[32px] shadow-2xl flex flex-col overflow-hidden relative z-10 animate-in fade-in zoom-in-95 duration-200">
+      <!-- 弹窗容器：手机端全屏(h-[100dvh])，桌面端居中(h-[85vh]) -->
+      <div class="bg-[#FDFDFD] w-full sm:max-w-5xl h-[100dvh] sm:h-[85vh] 
+                  rounded-t-[28px] sm:rounded-[28px] shadow-2xl flex flex-col overflow-hidden relative z-10 
+                  animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-10 duration-300">
         
-        <!-- 头部 -->
-        <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-20">
-          <div>
-            <h2 class="text-2xl font-normal text-[#1b1b1f]">会话档案</h2>
-            <p class="text-sm text-slate-500 mt-0.5" v-if="selectedUser">查看 <span class="font-medium text-slate-800">{{ selectedUser.nickname }}</span> 的所有记录</p>
+        <!-- 顶部导航栏 -->
+        <div class="px-4 sm:px-6 py-4 border-b border-[#E1E3E1] flex justify-between items-center bg-white shrink-0">
+          <div class="flex flex-col">
+            <h2 class="text-xl font-normal text-[#1F1F1F]">会话档案</h2>
+             <!-- 移动端简略显示用户名 -->
+            <p class="text-xs text-[#444746] sm:hidden mt-0.5">用户: {{ selectedUser?.nickname }}</p>
           </div>
-          <button @click="dialogVisible = false" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 transition-colors text-slate-600">
+          <button @click="dialogVisible = false" class="w-10 h-10 flex items-center justify-center rounded-full bg-[#F2F2F2] hover:bg-[#E1E1E1] text-[#444746] transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        <!-- 内容区：Grid 布局分割左右 -->
-        <div class="flex-1 overflow-hidden">
-          <div class="h-full grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
-            
-            <!-- 左侧：用户信息 (固定宽度/比例) -->
-            <div class="lg:col-span-4 xl:col-span-3 p-6 overflow-y-auto bg-white">
-              <div v-if="selectedUser" class="flex flex-col items-center text-center">
-                <div class="relative mb-4 group">
-                  <img :src="selectedUser.profile.avatar" class="w-28 h-28 object-cover rounded-full border-4 border-slate-50 shadow-md bg-slate-100" />
-                </div>
-                <h2 class="text-xl font-medium text-[#1b1b1f] mb-1">{{ selectedUser.nickname }}</h2>
-                <p class="text-sm text-slate-500 mb-6 break-all">{{ selectedUser.username }}</p>
-
-                <!-- 信息卡片 -->
-                <div class="w-full bg-slate-50 rounded-2xl p-4 text-left space-y-3 border border-slate-100">
-                  <div class="flex flex-col">
-                    <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">User ID</span>
-                    <span class="text-xs text-slate-700 font-mono break-all">{{ selectedUser.id }}</span>
-                  </div>
-                   <div class="flex flex-col">
-                    <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Registered</span>
-                    <span class="text-sm text-slate-700">{{ dayjs(selectedUser.profile.createTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
-                  </div>
-                  <div class="flex flex-col">
-                    <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Identity</span>
-                    <span class="text-sm text-slate-700 flex items-center gap-2">
-                      <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                      {{ selectedUser.profile.identityType }}
-                    </span>
-                  </div>
-                </div>
+        <!-- 内容布局：Flex Col on Mobile, Grid on Desktop -->
+        <div class="flex-1 overflow-hidden flex flex-col lg:flex-row">
+          
+          <!-- 侧边栏：用户信息 -->
+          <!-- 桌面端显示完整侧边栏，移动端隐藏（节省垂直空间） -->
+          <div class="hidden lg:block lg:w-80 xl:w-96 bg-white border-r border-[#E1E3E1] p-6 overflow-y-auto shrink-0">
+             <div v-if="selectedUser" class="flex flex-col items-center text-center">
+                <img :src="selectedUser.profile.avatar" class="w-24 h-24 rounded-full mb-4 bg-[#F2F2F2] object-cover border-4 border-white shadow-sm" />
+                <h3 class="text-lg font-medium text-[#1F1F1F]">{{ selectedUser.nickname }}</h3>
+                <p class="text-sm text-[#444746] mb-6 break-all">{{ selectedUser.username }}</p>
                 
-                <!-- 创建信息 -->
-                 <div class="w-full mt-4 bg-white border border-slate-200 rounded-2xl p-4 text-left">
-                    <p class="text-sm font-medium text-slate-700 mb-2">Meta Info</p>
-                    <p class="text-xs text-slate-500 whitespace-pre-line leading-relaxed">{{ selectedUser.profile.createInfo }}</p>
-                 </div>
-              </div>
+                <!-- 桌面端详细信息 -->
+                <div class="w-full space-y-3 text-left bg-[#F8F9FA] p-4 rounded-2xl">
+                   <div class="text-xs">
+                      <p class="font-medium text-[#1F1F1F] mb-1">User ID</p>
+                      <p class="font-mono text-[#747775] break-all">{{ selectedUser.id }}</p>
+                   </div>
+                   <div class="text-xs">
+                      <p class="font-medium text-[#1F1F1F] mb-1">Identity</p>
+                      <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded-md">{{ selectedUser.profile.identityType }}</span>
+                   </div>
+                   <div class="text-xs">
+                      <p class="font-medium text-[#1F1F1F] mb-1">Meta</p>
+                      <p class="text-[#747775] whitespace-pre-line">{{ selectedUser.profile.createInfo }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+
+          <!-- 移动端用户信息摘要 (可折叠，默认折叠以节省高度) -->
+          <!-- 仅在 mobile 显示 -->
+          <div class="lg:hidden bg-white px-4 py-3 border-b border-[#E1E3E1] shrink-0 flex items-center justify-between">
+             <div class="flex items-center gap-3">
+                <img :src="selectedUser?.profile.avatar" class="w-10 h-10 rounded-full bg-[#F2F2F2] object-cover" />
+                <div>
+                   <div class="text-sm font-medium text-[#1F1F1F]">{{ selectedUser?.nickname }}</div>
+                   <div class="text-xs text-[#747775]">{{ selectedUser?.id === '__guest__' ? 'Guest Access' : 'Registered User' }}</div>
+                </div>
+             </div>
+             <!-- 可以在这里加一个 toggle 按钮展开详细信息，为了简洁暂时省略 -->
+          </div>
+
+          <!-- 主内容区：会话列表 -->
+          <!-- 关键：使用 flex-1 和 overflow-y-auto 确保只有这个区域滚动，且占满剩余高度 -->
+          <div class="flex-1 flex flex-col bg-[#F2F6FC] overflow-hidden h-full w-full">
+            
+            <!-- 过滤器工具栏 -->
+            <div class="px-4 sm:px-6 py-3 bg-[#F2F6FC] flex justify-between items-center shrink-0">
+              <span class="text-xs sm:text-sm font-medium text-[#444746]">{{ chatSessions.length }} 个历史会话</span>
+              <button v-if="!loadingChatSessions" @click="selectedUser.hide=!selectedUser.hide" 
+                class="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition-colors border"
+                :class="selectedUser.hide ? 'bg-[#D3E3FD] text-[#041E49] border-transparent' : 'bg-white text-[#444746] border-[#747775]'">
+                <svg v-if="selectedUser.hide" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                {{selectedUser.hide ? '已隐藏空会话' : '显示所有会话'}}
+              </button>
             </div>
 
-            <!-- 右侧：会话列表 -->
-            <div class="lg:col-span-8 xl:col-span-9 bg-[#F8F9FA] flex flex-col h-full overflow-hidden">
-              <!-- 工具栏 -->
-              <div class="px-6 py-3 bg-white border-b border-slate-100 flex justify-between items-center shadow-sm z-10">
-                <span class="text-sm font-medium text-slate-500">共找到 {{ chatSessions.length }} 个会话</span>
-                <button v-if="!loadingChatSessions" @click="selectedUser.hide=!selectedUser.hide" 
-                  class="text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-full transition-colors flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full" :class="selectedUser.hide ? 'bg-slate-400' : 'bg-blue-500'"></span>
-                  {{selectedUser.hide ? '显示空会话' : '隐藏空会话'}}
-                </button>
-              </div>
+            <!-- 滚动列表 -->
+            <div class="flex-1 overflow-y-auto px-4 sm:px-6 pb-20 sm:pb-6 custom-scrollbar">
+               <div v-if="loadingChatSessions" class="flex flex-col items-center justify-center h-40">
+                  <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+               </div>
 
-              <!-- 列表内容区 -->
-              <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                <!-- Loading 状态 -->
-                <div v-if="loadingChatSessions" class="space-y-4">
-                  <div v-for="i in 4" :key="i" class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm animate-pulse flex flex-col gap-3">
-                    <div class="h-5 bg-slate-200 rounded w-1/3"></div>
-                    <div class="flex gap-4">
-                      <div class="h-3 bg-slate-100 rounded w-20"></div>
-                      <div class="h-3 bg-slate-100 rounded w-20"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 数据列表 -->
-                <div v-else-if="chatSessions.length > 0" class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                   <template v-for="session in chatSessions" :key="session.sessionID">
-                      <div v-show="!selectedUser.hide || session.title!='无标题'"
-                          class="group bg-white p-5 rounded-[20px] border border-slate-200 shadow-sm cursor-pointer transition-all
-                                 hover:shadow-md hover:border-blue-400 hover:ring-1 hover:ring-blue-400 active:scale-[0.99]"
-                          @click="openChatListDialog(session)">
-                        <div class="flex justify-between items-start mb-3">
-                          <p class="text-base font-semibold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors">
-                            {{ session.title || '无标题会话' }}
-                          </p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
-                          <span class="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded-md">
-                             🕒 {{ dayjs(session.createTime).format('MM-DD HH:mm') }}
-                          </span>
-                          <span class="flex items-center gap-1 text-slate-400">
-                             ⏳ 过期: {{ dayjs(session.expirationTime).format('MM-DD') }}
-                          </span>
+               <div v-else-if="chatSessions.length > 0" class="grid grid-cols-1 xl:grid-cols-2 gap-3">
+                  <template v-for="session in chatSessions" :key="session.sessionID">
+                    <div v-show="!selectedUser.hide || session.title!='无标题'"
+                         class="bg-white p-4 rounded-[16px] border border-transparent shadow-sm active:scale-[0.99] transition-all cursor-pointer
+                                hover:shadow hover:bg-blue-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                         @click="openChatListDialog(session)">
+                      
+                      <div class="min-w-0 flex-1">
+                        <h4 class="text-base font-medium text-[#1F1F1F] truncate mb-1">{{ session.title || '无标题会话' }}</h4>
+                        <div class="flex items-center gap-2 text-xs text-[#747775]">
+                           <span class="bg-[#F2F2F2] px-2 py-0.5 rounded-md truncate max-w-[120px] font-mono">{{ session.sessionID.slice(0,8) }}...</span>
                         </div>
                       </div>
-                   </template>
-                </div>
 
-                <!-- 空状态 -->
-                <div v-else class="flex flex-col items-center justify-center h-full text-slate-400">
-                  <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 text-2xl">📂</div>
-                  <p>暂无聊天记录</p>
-                </div>
-              </div>
+                      <div class="flex items-center justify-between sm:justify-end gap-4 text-xs text-[#747775] font-medium border-t sm:border-t-0 pt-3 sm:pt-0 border-[#E1E3E1]">
+                        <span>{{ dayjs(session.createTime).format('MM/DD HH:mm') }}</span>
+                        <svg class="w-4 h-4 text-[#C4C7C5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      </div>
+                    </div>
+                  </template>
+               </div>
+
+               <div v-else class="flex flex-col items-center justify-center h-64 text-[#8E918F]">
+                  <svg class="w-12 h-12 mb-2 opacity-20" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
+                  <p>暂无会话记录</p>
+               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 弹窗 2: 聊天详情 -->
-    <div v-if="chatListDialogVisible" class="fixed inset-0 flex items-center justify-center z-50 p-0 sm:p-4">
-       <div class="absolute inset-0 bg-[#1b1b1f]/60 backdrop-blur-sm transition-opacity" @click="chatListDialogVisible = false"></div>
+    <!-- 弹窗 2: 聊天详情 (同样的全屏优化) -->
+    <div v-if="chatListDialogVisible" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+      <div class="absolute inset-0 bg-[#1F1F1F]/40 backdrop-blur-sm transition-opacity" @click="chatListDialogVisible = false"></div>
 
-       <div class="bg-white w-full sm:max-w-4xl h-full sm:h-[92vh] sm:rounded-[28px] shadow-2xl flex flex-col overflow-hidden relative z-10 animate-in slide-in-from-bottom-10 fade-in duration-200">
-          
-          <!-- Header -->
-          <div class="px-6 py-4 border-b border-slate-100 bg-white/90 backdrop-blur z-20 flex justify-between items-center">
-            <div class="min-w-0">
-              <h2 class="text-lg font-semibold text-[#1b1b1f] truncate">{{ sessionInfo.title || 'Chat Details' }}</h2>
-              <div class="flex flex-wrap gap-2 mt-1 text-xs text-slate-500">
-                 <span class="px-2 py-0.5 bg-slate-100 rounded-md">PT: {{ sessionInfo.pt }}</span>
-                 <span>{{ dayjs(sessionInfo.createTime).format('YYYY-MM-DD HH:mm') }}</span>
-              </div>
-            </div>
-            <button @click="chatListDialogVisible = false" class="ml-4 w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600">
-               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
-            </button>
+      <div class="bg-[#FDFDFD] w-full sm:max-w-4xl h-[100dvh] sm:h-[90vh] 
+                  rounded-t-[28px] sm:rounded-[28px] shadow-2xl flex flex-col overflow-hidden relative z-10
+                  animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-10 duration-300">
+        
+        <!-- Header -->
+        <div class="px-4 py-3 border-b border-[#E1E3E1] bg-white flex items-center gap-3 shrink-0">
+          <button @click="chatListDialogVisible = false" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#F2F2F2] text-[#444746]">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          </button>
+          <div class="min-w-0 flex-1">
+             <h2 class="text-lg font-normal text-[#1F1F1F] truncate">{{ sessionInfo.title || '对话详情' }}</h2>
+             <div class="text-xs text-[#747775] flex items-center gap-2">
+               <span>{{ dayjs(sessionInfo.createTime).format('YYYY-MM-DD HH:mm') }}</span>
+               <span v-if="sessionInfo.pt" class="bg-[#F2F2F2] px-1.5 rounded text-[10px]">PT: {{ sessionInfo.pt }}</span>
+             </div>
           </div>
+        </div>
 
-          <!-- 聊天内容滚动区 -->
-          <div class="flex-1 overflow-y-auto bg-[#F2F4F7] p-4 sm:p-8 custom-scrollbar relative">
-             
-             <!-- Loading Spinner -->
-             <div v-if="loadingChatList" class="absolute inset-0 flex flex-col items-center justify-center bg-white/60 z-10">
-               <div class="w-10 h-10 border-[3px] border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
-               <p class="mt-3 text-sm text-slate-500 font-medium">Loading messages...</p>
-             </div>
+        <!-- 聊天内容区 -->
+        <div class="flex-1 overflow-y-auto bg-[#EEF2F9] p-4 custom-scrollbar">
+           <div v-if="loadingChatList" class="flex justify-center py-10">
+             <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+           </div>
 
-             <!-- 会话元信息卡片 -->
-             <div v-if="!loadingChatList && chatList.length > 0" class="mx-auto max-w-2xl mb-8 text-center">
-                <div class="inline-block bg-white/80 border border-blue-100 rounded-xl p-3 text-xs text-slate-500 shadow-sm backdrop-blur-sm">
-                   <div class="flex justify-center gap-4 mb-2">
-                      <span>ID: {{ sessionInfo.id }}</span>
-                      <span>Last: {{ dayjs(sessionInfo.lastTime).format('MM-DD HH:mm') }}</span>
-                   </div>
-                   <div v-if="sessionInfo.vf && sessionInfo.vf.length" class="flex flex-wrap justify-center items-center gap-1">
-                      <span>VF Traces:</span>
-                      <span v-for="(x, i) in sessionInfo.vf" :key="i" @click="viewVfDetails(x)" 
-                        class="cursor-pointer text-blue-600 hover:underline bg-blue-50 px-1.5 rounded border border-blue-100">
-                        {{ x }}
-                      </span>
+           <div v-else class="space-y-6 max-w-3xl mx-auto pb-10">
+              <!-- Info Card -->
+              <div class="text-center mb-6">
+                 <span class="text-[10px] text-[#747775] bg-[#E1E3E1]/50 px-3 py-1 rounded-full">Session ID: {{ sessionInfo.id }}</span>
+                 <div v-if="sessionInfo.vf?.length" class="mt-2 flex justify-center gap-2 flex-wrap">
+                    <span v-for="(x, i) in sessionInfo.vf" :key="i" @click="viewVfDetails(x)" 
+                          class="cursor-pointer text-[10px] text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-md hover:bg-blue-100">
+                      Trace: {{ x }}
+                    </span>
+                 </div>
+              </div>
+
+              <div v-for="(message, index) in chatList" :key="index" 
+                   class="flex flex-col w-full"
+                   :class="message.role === 'user' ? 'items-end' : 'items-start'">
+                
+                <div :class="[
+                  'max-w-[92%] sm:max-w-[80%] px-4 py-3 text-[15px] leading-relaxed shadow-sm relative',
+                  message.role === 'user' 
+                    ? 'bg-[#0B57D0] text-white rounded-[20px] rounded-tr-[4px]' 
+                    : 'bg-white text-[#1F1F1F] rounded-[20px] rounded-tl-[4px]'
+                ]">
+                   <div class="whitespace-pre-wrap break-words">{{ message.content }}</div>
+                   
+                   <!-- 多媒体 -->
+                   <div v-if="message.photo?.blob" class="mt-2"><img :src="message.photo.blob" class="rounded-lg max-h-64 object-cover" /></div>
+                   <div v-if="message.audio?.blob" class="mt-2"><audio :src="message.audio.blob" controls class="h-8 w-full max-w-[200px]"></audio></div>
+
+                   <!-- 模型信息 -->
+                   <div v-if="message?.model_list" class="mt-2 pt-2 border-t border-dashed text-[10px] font-mono opacity-60"
+                        :class="message.role === 'user' ? 'border-white/20' : 'border-black/10'">
+                      <span v-for="(k,m) in message.model_list" :key="m" class="mr-2">{{ k.model }} ({{ k.time }}ms)</span>
                    </div>
                 </div>
-             </div>
+                
+                <span class="text-[10px] text-[#8E918F] mt-1 px-2">
+                   {{ message.role === 'user' ? 'You' : 'AI' }} · {{ dayjs(message.sendTime).format('HH:mm') }}
+                </span>
 
-             <!-- 消息流 -->
-             <div v-if="chatList.length > 0" class="space-y-6 max-w-3xl mx-auto">
-                <div v-for="(message, index) in chatList" :key="index" 
-                     class="flex flex-col"
-                     :class="message.role === 'user' ? 'items-end' : 'items-start'">
-                  
-                  <!-- 头像/角色名 -->
-                  <div class="mb-1 px-2 text-[11px] text-slate-400 font-medium flex gap-2 items-center">
-                    <span>{{ message.role === 'user'? 'User' : 'AI Assistant' }}</span>
-                    <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-                    <span>{{ dayjs(message.sendTime).format('HH:mm:ss') }}</span>
-                  </div>
-
-                  <!-- 气泡 -->
-                  <div :class="[
-                    'max-w-[90%] sm:max-w-[85%] px-5 py-3 shadow-sm text-[15px] leading-7 relative break-words',
-                    message.role === 'user' 
-                      ? 'bg-blue-600 text-white rounded-[24px] rounded-tr-sm' 
-                      : 'bg-white text-slate-800 border border-slate-200/60 rounded-[24px] rounded-tl-sm'
-                  ]">
-                    <!-- 文本内容 -->
-                    <div class="whitespace-pre-wrap font-normal tracking-wide">{{ message.content }}</div>
-
-                    <!-- 多媒体内容 -->
-                    <div v-if="message.photo?.blob" class="mt-3 -mx-1">
-                       <img class="rounded-xl border border-black/10 max-h-80 object-contain bg-black/5" :src="message.photo.blob" alt="Photo" />
-                    </div>
-                    <div v-if="message.audio?.blob" class="mt-3 p-2 bg-black/5 rounded-xl">
-                       <audio class="w-full h-8" controls :src="message.audio.blob"></audio>
-                    </div>
-
-                    <!-- 模型调试信息 (折叠在底部，避免挤压) -->
-                    <div v-if="message?.model_list" class="mt-3 pt-2 border-t border-dashed opacity-70" 
-                         :class="message.role === 'user' ? 'border-white/30 text-blue-100' : 'border-slate-200 text-slate-400'">
-                       <div class="flex flex-wrap gap-2 text-[10px] font-mono">
-                          <span v-for="(k,m) in message.model_list" :key="m" class="bg-black/5 px-1.5 rounded">
-                            {{ k.model }} ({{ k.time }}ms)
-                          </span>
-                       </div>
-                    </div>
-                  </div>
-
-                  <!-- AI 分析框 -->
-                  <div v-if="message.role === 'user' && message.analysis" class="mt-2 mr-1 max-w-[80%] self-end animate-in fade-in slide-in-from-top-2">
-                     <div class="bg-amber-50 border border-amber-100 text-amber-800 text-xs p-3 rounded-xl shadow-sm flex gap-2 items-start">
-                        <span class="text-lg leading-none">⚡</span>
-                        <div class="leading-relaxed">{{ message.analysis }}</div>
-                     </div>
-                  </div>
-
+                 <!-- 分析框 -->
+                <div v-if="message.role === 'user' && message.analysis" class="max-w-[90%] mt-1 mr-2 bg-[#FFD8E4]/40 border border-[#FFD8E4] p-3 rounded-xl text-xs text-[#5C1D32] flex gap-2">
+                   <span>⚡</span><div>{{ message.analysis }}</div>
                 </div>
-             </div>
+              </div>
+           </div>
+        </div>
+      </div>
+    </div>
 
-             <div v-else-if="!loadingChatList" class="text-center py-20 opacity-50">
-                <p>暂无对话记录</p>
+    <!-- VF Sidebar -->
+    <div v-if="vfDialogVisible" class="fixed inset-0 z-[60] flex justify-end">
+       <div class="absolute inset-0 bg-[#1F1F1F]/40 backdrop-blur-sm" @click="vfDialogVisible = false"></div>
+       <div class="bg-white w-full max-w-md h-full shadow-xl relative z-10 flex flex-col animate-in slide-in-from-right duration-300">
+          <div class="p-4 border-b flex justify-between items-center bg-[#F8F9FA]">
+             <h3 class="font-medium">Fingerprint Details</h3>
+             <button @click="vfDialogVisible = false" class="p-2 hover:bg-gray-200 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+          </div>
+          <div class="flex-1 overflow-y-auto p-4">
+             <div v-for="(vf, index) in vfDetails" :key="index" class="mb-6 pl-4 border-l-2 border-blue-500">
+                <div class="text-xs font-mono bg-[#1F1F1F] text-white p-2 rounded mb-2 break-all">{{ vf.fingerprint }}</div>
+                <div class="text-sm text-gray-600 mb-2">{{ vf.time }}</div>
+                <div class="bg-[#F2F6FC] p-3 rounded-lg text-xs space-y-1">
+                   <div v-for="(v, k) in vf.info" :key="k" class="flex justify-between"><span class="text-gray-500">{{k}}:</span> <span class="font-medium">{{v}}</span></div>
+                </div>
              </div>
           </div>
        </div>
     </div>
 
-    <!-- 弹窗 3: VF 详情 (Sidebar Style) -->
-    <div v-if="vfDialogVisible" class="fixed inset-0 z-[60] flex justify-end">
-      <div class="absolute inset-0 bg-[#1b1b1f]/30 backdrop-blur-[1px] transition-opacity" @click="vfDialogVisible = false"></div>
-      
-      <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300 relative z-10">
-         <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-            <h2 class="font-semibold text-slate-800">VF Fingerprint Detail</h2>
-            <button @click="vfDialogVisible = false" class="text-slate-400 hover:text-slate-700"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-         </div>
-         
-         <div class="flex-1 overflow-y-auto p-5 bg-white">
-            <div v-if="vfDetails.length" class="space-y-6">
-              <div v-for="(vf, index) in vfDetails" :key="index" class="relative pl-4 border-l-2 border-blue-200">
-                 <div class="absolute -left-[9px] top-0 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-sm"></div>
-                 
-                 <div class="mb-2">
-                    <p class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">Fingerprint</p>
-                    <code class="block bg-slate-800 text-slate-200 text-[10px] p-2 rounded break-all font-mono">{{ vf.fingerprint }}</code>
-                 </div>
-                 
-                 <div class="mb-3">
-                    <p class="text-xs font-bold text-slate-500 uppercase mb-1">Time</p>
-                    <p class="text-sm text-slate-800">{{ vf.time }}</p>
-                 </div>
-
-                 <div class="space-y-2">
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
-                       <p class="text-xs font-semibold mb-2 text-slate-700 border-b pb-1">System Info</p>
-                       <ul class="space-y-1">
-                         <li v-for="(value, key) in vf.info" :key="key" class="text-xs grid grid-cols-[80px_1fr] gap-2">
-                           <span class="text-slate-400 text-right truncate">{{ key }}:</span>
-                           <span class="text-slate-800 truncate font-medium" :title="value">{{ value }}</span>
-                         </li>
-                       </ul>
-                    </div>
-                 </div>
-              </div>
-            </div>
-            <div v-else class="text-center text-slate-400 mt-10">No Trace Found</div>
-         </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -343,9 +280,21 @@ import { onActivated, ref } from 'vue';
 import Auth from '../../utils/auth';
 import dayjs from 'dayjs';
 
-// 状态变量
-const list = ref([]);
-const loadingList = ref(true); // 新增：列表加载状态
+// Guest 常量定义
+const guestItem = {
+  id: "__guest__",
+  username: "__guest__",
+  nickname: "未登录访客",
+  profile: JSON.stringify({
+    createTime: new Date(),
+    identityType: 'Guest',
+    avatar: 'https://www.gstatic.com/images/branding/product/1x/avatar_square_blue_512dp.png', // Google 默认头像风格
+    createInfo: 'Default system guest account'
+  })
+};
+
+const list = ref([guestItem]);
+const loadingList = ref(true);
 const dialogVisible = ref(false);
 const chatSessions = ref([]);
 const chatList = ref([]);
@@ -358,27 +307,15 @@ const vfDialogVisible = ref(false);
 const vfDetails = ref([]);
 
 onActivated(async () => {
-  loadingList.value = true; // 开始加载
+  loadingList.value = true;
   try {
-    // 模拟网络延迟，让骨架屏展示一会 (可选，实际可移除 setTimeout)
-    // await new Promise(r => setTimeout(r, 500)); 
-    
     const res = await Auth.dangerViewGuest();
-    list.value = res.content || [];
-    
-    // 如果列表为空，添加默认访客数据
-    if (list.value.length === 0) {
-       list.value = [{
-        id: "__guest__",
-        username: "__guest__",
-        nickname: "未登录访客",
-        profile: JSON.stringify({ createTime: new Date(), identityType: 'Guest', createInfo: 'Default Guest Account' })
-      }];
-    }
+    // 合并 guest 和 API 数据
+    list.value = [guestItem, ...(res.content || [])];
   } catch (e) {
-    console.error(e);
+    list.value = [guestItem];
   } finally {
-    loadingList.value = false; // 结束加载
+    loadingList.value = false;
   }
 });
 
@@ -388,26 +325,17 @@ const getChatHistory = async (item) => {
     dialogVisible.value = true;
     loadingChatSessions.value = true;
     
-    // 确保 profile 是对象
     let profileObj = {};
-    try {
-        profileObj = typeof item.profile === 'string' ? JSON.parse(item.profile) : item.profile;
-    } catch(e) { profileObj = {} }
+    try { profileObj = typeof item.profile === 'string' ? JSON.parse(item.profile) : item.profile; } catch(e) {}
+    // 给没有头像的用户一个默认头像
+    if(!profileObj.avatar) profileObj.avatar = `https://ui-avatars.com/api/?name=${item.nickname}&background=random`;
 
-    selectedUser.value = {
-      ...item,
-      profile: profileObj,
-      hide: true
-    };
+    selectedUser.value = { ...item, profile: profileObj, hide: true };
     
     const response = await Auth.getAiChatHistory(JSON.stringify({ user: item.id }));
-    if (response.code === 'ok' && response.content) {
-      chatSessions.value = (response.content || []);
-    } else {
-      chatSessions.value = [];
-    }
+    chatSessions.value = (response.code === 'ok' && response.content) ? response.content : [];
   } catch (error) {
-    console.error("Error:", error);
+    console.error(error);
   } finally {
     loadingChatSessions.value = false;
   }
@@ -416,13 +344,7 @@ const getChatHistory = async (item) => {
 function dataURLtoBlob(dataURL) {
   const matches = dataURL.match(/^data:(.+);base64,(.+)$/);
   if (!matches || matches.length !== 3) throw new Error("Invalid data URL");
-  const mimeType = matches[1];
-  const binaryString = atob(matches[2]);
-  const uint8Array = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
-    uint8Array[i] = binaryString.charCodeAt(i);
-  }
-  return new Blob([uint8Array], { type: mimeType });
+  return new Blob([Uint8Array.from(atob(matches[2]), c => c.charCodeAt(0))], { type: matches[1] });
 }
 
 const openChatListDialog = async (session) => {
@@ -432,80 +354,61 @@ const openChatListDialog = async (session) => {
     chatListDialogVisible.value = true;
     loadingChatList.value = true;
     
-    const sessionResponse = await Auth.getAIChatList({ sessionID: session.sessionID });
-    
-    if (sessionResponse.status === 'sus') {
-      chatList.value = sessionResponse.content.map((e) => {
+    const res = await Auth.getAIChatList({ sessionID: session.sessionID });
+    if (res.status === 'sus') {
+      chatList.value = res.content.map((e) => {
         if (e.photo?.meta) e.photo.blob = URL.createObjectURL(dataURLtoBlob(`data:${e.photo.type};base64,${e.photo.meta}`));
         if (e.audio?.meta) e.audio.blob = URL.createObjectURL(dataURLtoBlob(`data:${e.audio.type};base64,${e.audio.meta}`));
         return e;
       });
-      
       sessionInfo.value = {
         id: session.sessionID,
         createTime: session.createTime,
         title: session.title,
-        lastTime: sessionResponse.lastTime,
-        expirationTime: session.expirationTime,
-        vf: sessionResponse.vf || [],
-        pt: sessionResponse.pt || ''
+        lastTime: res.lastTime,
+        vf: res.vf || [],
+        pt: res.pt || ''
       };
     }
-  } catch (error) {
-    console.error("Error:", error);
   } finally {
     loadingChatList.value = false;
   }
 };
 
 const viewVfDetails = async (vfKey) => {
-  try {
-    vfDetails.value = [];
+    // ... 保持原有的 VF 逻辑 ...
+    vfDetails.value = []; 
     vfDialogVisible.value = true;
-    const response = await fetch('/api/danger/viewVf', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ key: vfKey }),
-    });
-    const data = await response.json();
-    if (data.content) {
-      vfDetails.value = data.content.map((item) => ({
-        user: JSON.parse(item.user),
-        fingerprint: item.fingerprint,
-        time: dayjs(item.time).format('YYYY-MM-DD HH:mm:ss'),
-        info: JSON.parse(item.info),
-        tasks: JSON.parse(item.tasks || '[]').sort((a, b) => new Date(b.time) - new Date(a.time)),
-      }));
-    }
-  } catch (error) {
-    console.error("VF Error:", error);
-  }
+    try {
+        const response = await fetch('/api/danger/viewVf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: vfKey }),
+        });
+        const data = await response.json();
+        if (data.content) {
+            vfDetails.value = data.content.map(item => ({
+                fingerprint: item.fingerprint,
+                time: dayjs(item.time).format('YYYY-MM-DD HH:mm:ss'),
+                info: JSON.parse(item.info),
+                user: JSON.parse(item.user)
+            }));
+        }
+    } catch (e) { console.error(e) }
 };
 </script>
 
 <style scoped>
-/* 定义细滚动条，适应长列表 */
+/* 隐藏 Webkit 滚动条，但保留功能，或使用极简滚动条 */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #C4C7C5;
+  border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #CBD5E1;
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #94A3B8;
-}
-
-/* 动画工具类 */
-.fade-in {
-  animation: fadeIn 0.2s ease-out forwards;
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 </style>
