@@ -1,15 +1,16 @@
 <template>
-  <div class="commonPage  md:rounded-lg pb-0 h-auto-dvh pt-2 md:pt-3" style="display: flex;flex-direction: column;">
-    <div id="wechat-tip" v-if="weixinDialogVisible" class="fixed flex top-0 left-0 w-full bg-slate-800/40 text-white p-4 text-center text-sm  z-40">
+  <div class="commonPage md:rounded-lg pb-0 h-auto-dvh pt-2 md:pt-3" style="display: flex;flex-direction: column;">
+    <!-- 顶部提示：颜色变更为柔和的云灰色 -->
+    <div id="wechat-tip" v-if="weixinDialogVisible" class="fixed flex top-0 left-0 w-full bg-slate-400/90 text-white p-4 text-center text-sm z-40 backdrop-blur-md">
       <span class="flex-1 pr-2">您正在使用微信访问本站，建议使用浏览器打开</span>
-      <button @click="weixinDialogVisible = false" class="text-white rounded-full h-9 p-2 w-9 shrink-0 bg-slate-900/10">
+      <button @click="weixinDialogVisible = false" class="text-white rounded-full h-9 p-2 w-9 shrink-0 bg-white/20">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
     </div>
-    <div class="title text-center w-full text-xs pb-1 truncate px-5" >{{ title }}</div>
+    <div class="title text-center w-full text-xs pb-1 truncate px-5 text-slate-400" >{{ title }}</div>
 
     <div 
       :class="[`scroll active`,statusText?'will-change-scroll':'']"
@@ -25,163 +26,126 @@
               <div class="system mb-3 md:mb-4 lg:mb-5 block">
                 <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
                   <touch-ripple
-                    :class="`flex touch-ripple  h-7 md:h-8  mt-2  items-center w-fit cursor-pointer text-xs md:text-sm rounded-l-full pr-1 pl-2 md:pr-2 md:pl-3 py-1 overflow-hidden select-none border `"
+                    :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center w-fit cursor-pointer text-xs md:text-sm rounded-l-full pr-1 pl-2 md:pr-2 md:pl-3 py-1 overflow-hidden select-none border border-slate-200`"
                     :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                    :color="'#bfdbfe'"
+                    :color="'#e2e8f0'"
                     :opacity="0.4"
                     transition="ease-out"
                     :duration="200"
                     :keep-last-ripple="false"
                     @click="router.go(-2)"
                   >
-                    <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                    <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                    <left  theme="outline" class="md:scale-100 scale-90" size="18" fill="#4e81fc"/>
-                    <!-- </div> -->
+                    <!-- 主题色替换：#4e81fc -> #8faecf (云水蓝) -->
+                    <left  theme="outline" class="md:scale-100 scale-90" size="18" fill="#8faecf"/>
                   </touch-ripple>
-                  <!-- </router-link> -->
                   <router-link to="/home" class="h-full">
                     <touch-ripple
-                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-xs md:text-sm rounded-r-full md:pl-2 md:pr-3 pl-1 pr-2 py-1 overflow-hidden select-none border text-slate-950`"
+                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-xs md:text-sm rounded-r-full md:pl-2 md:pr-3 pl-1 pr-2 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#bfdbfe'"
+                      :color="'#e2e8f0'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
                       :keep-last-ripple="false"
                     >
-                      <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                      <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                      <home  theme="outline" class="md:scale-100 scale-90" size="18" fill="#4e81fc"/>
-                      <!-- </div> -->
+                      <home  theme="outline" class="md:scale-100 scale-90" size="18" fill="#8faecf"/>
                     </touch-ripple>
                   </router-link>
                   <router-link to="/model/square" class="h-full">
                     <touch-ripple
-                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border text-slate-950`"
+                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#bfdbfe'"
+                      :color="'#e2e8f0'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
                       :keep-last-ripple="false"
                     >
-                      <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                      <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                      <SmartOptimization theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#4e81fc"/>
-                      <div class="text-sm md:text-base leading-none" style="color:rgb(18,30,60);">模型库</div>
-                      <!-- </div> -->
+                      <SmartOptimization theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#8faecf"/>
+                      <div class="text-sm md:text-base leading-none" style="color:rgb(80,90,110);">模型库</div>
                     </touch-ripple>
                   </router-link>
                   <router-link to="/model/history" class="h-full"  v-if="loginStatus" >
                     <touch-ripple
-                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border text-slate-950`"
+                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#bfdbfe'"
+                      :color="'#e2e8f0'"
                       :opacity="0.4"
                       transition="ease-out"
                       :duration="200"
                       :keep-last-ripple="false"
                     >
-                      <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                      <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                      <history  theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#4e81fc"/>
-                      <div class="text-sm md:text-base leading-none" style="color:rgb(18,30,60);">聊天历史</div>
-                      <!-- </div> -->
+                      <history  theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#8faecf"/>
+                      <div class="text-sm md:text-base leading-none" style="color:rgb(80,90,110);">聊天历史</div>
                     </touch-ripple>
                   </router-link>
                   <touch-ripple
-                    :class="`flex touch-ripple nofocus h-7 md:h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border `+(showModelDetail?'text-slate-950':'text-slate-950')"
-                    :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#4e81fc44':'#fff' }"
-                    :color="showModelDetail?'#fff':'#bfdbfe'"
+                    :class="`flex touch-ripple nofocus h-7 md:h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 `+(showModelDetail?'text-slate-700':'text-slate-700')"
+                    :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#8faecf22':'#fff' }"
+                    :color="showModelDetail?'#fff':'#e2e8f0'"
                     :opacity="0.4"
                     transition="ease-out"
                     :duration="200"
                     :keep-last-ripple="false"
                     @click="showModelDetail=!showModelDetail"
                   >
-                    <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
                     <img alt="头像" :src="model_info.img" class="mr-1 w-4 h-4 rounded-full md:scale-100 scale-90" />
                     <div class="text-sm md:text-base leading-none">{{ model_info.name || "获取中" }}</div>
-                    <!-- </div> -->
                   </touch-ripple>
                   <touch-ripple
-                    :class="`flex touch-ripple nofocus h-7 md:h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border `+(showInfo?'text-slate-950':'text-slate-950')"
-                    :style="{ clipPath: 'none', backgroundColor: showInfo?'#ffedd5':'#fff' }"
-                    :color="showInfo?'#f7deb7':'#f7deb7'"
+                    :class="`flex touch-ripple nofocus h-7 md:h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 `+(showInfo?'text-slate-700':'text-slate-700')"
+                    :style="{ clipPath: 'none', backgroundColor: showInfo?'#fff7ed':'#fff' }"
+                    :color="showInfo?'#fed7aa':'#fed7aa'"
                     :opacity="0.4"
                     transition="ease-out"
                     :duration="200"
                     :keep-last-ripple="false"
                     @click="showInfo=!showInfo"
                   >
-                    <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                      <info theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#ff9d00"/>
+                      <!-- 信息图标颜色微调为柔和的沙色 -->
+                      <info theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#d4b483"/>
                       <div class="text-sm md:text-base leading-none">公告</div>
-                    <!-- </div> -->
                   </touch-ripple>
-                  <!-- <router-link to="/quant" class="h-full" >
-                    <touch-ripple
-                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border `"
-                      :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                      :color="'#f206'"
-                      :opacity="0.4"
-                      transition="ease-out"
-                      :duration="200"
-                      :keep-last-ripple="true"
-                    >
-                      <fire theme="outline" class="mr-1" size="18" fill="#f20"/>
-                      <div class="text-sm md:text-base leading-none" style="color:#f20">零本量化</div>
-                    </touch-ripple>
-                  </router-link> -->
-                  <!-- <router-link :to="`/login?url=%2Fchat%2F%3Fs%3D${sessionID}`" class="h-full" v-if="!loginStatus" > -->
+                  
                   <touch-ripple
                     v-if="!loginStatus"
-                    :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border text-slate-950`"
+                    :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
                     :style="{ clipPath: 'none', backgroundColor:'#fff' }"
-                    :color="'#bfdbfe'"
+                    :color="'#e2e8f0'"
                     :opacity="0.4"
                     transition="ease-out"
                     :duration="200"
                     :keep-last-ripple="false"
                     @click="login()"
                   >
-                    <!-- <div class="flex items-center w-fit bg-white border rounded-full py-1 px-3 overflow-hidden cursor-default hover:bg-slate-50 transition"> -->
-                    <!-- <img alt="主页" src="/logo.webp" class="mr-1 w-4 h-4 rounded-full" /> -->
-                    <avatar theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#4e81fc"/>
-                    <div class="text-sm md:text-base leading-none" style="color:rgb(18,30,60);">登录</div>
-                    <!-- </div> -->
+                    <avatar theme="outline" class="mr-1 md:scale-100 scale-90" size="18" fill="#8faecf"/>
+                    <div class="text-sm md:text-base leading-none" style="color:rgb(80,90,110);">登录</div>
                   </touch-ripple>
-                  <!-- </router-link> -->
                   
-                  <!-- <div v-show="!welcome_loading" class="text-base/relaxed sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed" v-html="md.render(welcome)"></div> -->
-                  <!-- <p><router-link to="/model/history">聊天历史</router-link></p> -->
                 </div>
                 <div v-show="showModelDetail">
-                  <div class="min-w-fit w-64 z-10 flex flex-col mt-2 top-10 left-0 bg-white border rounded-xl p-3 duration-100">
-                    <div class="text-sm/relaxed mb-2 flex-1">{{ model_info.desc }}</div>
-                    <div class="flex items-center opacity-80 text-xs">
+                  <div class="min-w-fit w-64 z-10 flex flex-col mt-2 top-10 left-0 bg-white border border-slate-100 rounded-xl p-3 duration-100 shadow-sm shadow-slate-100">
+                    <div class="text-sm/relaxed mb-2 flex-1 text-slate-600">{{ model_info.desc }}</div>
+                    <div class="flex items-center opacity-80 text-xs text-slate-500">
                       <el-avatar alt="头像" :src="model_info.createUser.avatar" class="mr-1" :size="18" />
                       <div class="username">{{ model_info.createUser.nickname }}</div>
                     </div>
                   </div>
                 </div>
                 <div v-if="!welcome_loading && !loginStatus && chatList.length!=0" class="w-full">
-                  <div class="text-xs md:text-sm text-slate-500 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
+                  <div class="text-xs md:text-sm text-slate-400 w-full text-center mt-4 lg:mt-8 opacity-80">未登录，正在以访客身份对话，对话不会被保留</div>
                 </div>
-                <!-- <div class="text-xs/snug text-slate-600 w-full text-center mt-4 lg:mt-8 opacity-80"></div> -->
-                <!-- <div class="text-sm text-slate-600 w-full text-center mt-2 lg:mt-8 opacity-80"></div> -->
               </div>
                
               
-              <!-- 欢迎 -->
+              <!-- 欢迎 - 颜色微调为更深的灰色，减少黑色的压迫感 -->
               <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
                   <div :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full `">
                     <div >
-                      <h2 :class="`serif-text text-center w-full justify-center flex text-3xl animate__animated md:text-4xl lg:text-5xl font-bold `+((chatList.length==0 && !welcome_loading)?'':'')">
+                      <h2 :class="`serif-text text-center w-full justify-center flex text-3xl animate__animated md:text-4xl lg:text-5xl font-bold text-slate-700 `+((chatList.length==0 && !welcome_loading)?'':'')">
                         <span class="mr-1">我可以</span>
                         <div class="swiper overflow-hidden mx-0" ref="swiperRef2" >
-                          <div class="swiper-wrapper">
+                          <div class="swiper-wrapper text-slate-600">
                             <div class="swiper-slide transition-all duration-500">知天下</div>
                             <div class="swiper-slide transition-all duration-500">深思考</div>
                             <div class="swiper-slide transition-all duration-500">做网站</div>
@@ -191,7 +155,6 @@
                           </div>
                         </div>
                       </h2>
-                    <!-- <h2 :class="`text-center w-full text-3xl md:text-4xl lg:text-5xl font-bold animate__animated `+((chatList.length==0 && welcome_loading)?'animate__fadeInUp':'animate__fadeOutDown')">正在建立连接</h2> -->
                   </div>                
                 </div>
               </div>
@@ -199,16 +162,15 @@
                 <template v-for="(item,i) in chatList" class="chatList" :key="i">
                   <template  v-if="item.role == 'user'">
                     <div class="user shrink-0" :data-id="i">
-                      <!-- <el-avatar class="h-6 w-6 md:h-10 md:w-10" alt="头像">你</el-avatar> -->
-                      <div class="text-xs text-slate-800 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
+                      <div class="text-xs text-slate-400 w-full text-center mb-2 opacity-50">{{ item.formatSendTime }}</div>
                       <div class="flex items-end group w-full justify-end">
                         <div
                           @click="selectAndCopy(item.content)"
-                          class="chatcontent min-h-8 border border-gray-200 break-words w-fit min-w-6 px-4 py-2 rounded-l-3xl rounded-tr-3xl rounded-br-md bg-white text-stone-800 whitespace-pre-wrap text-base/snug sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md"
+                          class="chatcontent min-h-8 border border-slate-100 break-words w-fit min-w-6 px-4 py-2 rounded-l-3xl rounded-tr-3xl rounded-br-md bg-white text-slate-700 whitespace-pre-wrap text-base/snug sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed max-w-full lg:max-w-md shadow-sm shadow-slate-100"
                         >
                           <div class="">{{item.content}}</div>
                           <template v-if="item.photo?.meta">
-                            <div class="py-2"><img class="max-w-full rounded-2xl text-slate-400 text-sm" :src="item.photo.blob" alt="[图片]隐私保护已删除"></div>
+                            <div class="py-2"><img class="max-w-full rounded-2xl text-slate-300 text-sm" :src="item.photo.blob" alt="[图片]隐私保护已删除"></div>
                           </template>
                           <template v-if="item.audio?.blob && item.audio?.meta">
                             <div class="py-2"><audio class="max-w-full" controls :src="item.audio.blob" ></audio></div>
@@ -224,36 +186,31 @@
                         </div>
                         
                       </div>
-                      <div class="analysis w-full mt-2 serif-text bg-stone-100 border border-stone-300 rounded-xl" v-show="item.status != 'no_analysis' && item.analysis">
+                      <!-- 思考分析框：背景色调淡，边框变浅 -->
+                      <div class="analysis w-full mt-2 serif-text bg-slate-50 border border-slate-200 rounded-xl" v-show="item.status != 'no_analysis' && item.analysis">
                         <p 
                           @click="item.show_thought = !item.show_thought"
-                          :class="[`serif-text px-4 flex justify-between py-2 cursor-pointer bg-stone-100 rounded-t-xl top-0 active:text-gray-500 hover:text-gray-600 text-gray-800 transition duration-200 items-center select-none`,item.show_thought?'sticky z-10':''] ">
+                          :class="[`serif-text px-4 flex justify-between py-2 cursor-pointer bg-slate-50 rounded-t-xl top-0 active:text-slate-500 hover:text-slate-600 text-slate-700 transition duration-200 items-center select-none`,item.show_thought?'sticky z-10':''] ">
                           <span class="text-base flex items-center"><SmartOptimization class="h-fit w-fit mr-1" theme="outline" size="16" fill="currentColor"/>思考和分析问题 {{ item.time?(item.time+'秒'):'' }}</span>
                           <span class="h-fit flex items-center">
-                            <!-- {{item.show_thought?'收起':'展开'}}思考过程 -->
                             <Right v-show="!item.show_thought" class="" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
                             <Down v-show="item.show_thought" class="" theme="outline" size="20" fill="currentColor" strokeLinejoin="bevel"/>
                           </span>
                         </p>
                         <div class="scroll-y-container relative h-fit overflow-hidden rounded-b-xl">
                           <div 
-                            :class="[`_text text-gray-500 text-xs lg:text-sm px-4 py-5 transition-all duration-300 ease `,(item.status=='analysis'?'active':''),item.show_thought?'max-h-56 md:max-h-96 h-full overflow-auto':'max-h-0 h-0 overflow-hidden',(chatList[i].status=='reply')?'will-change-contents':'']"
+                            :class="[`_text text-slate-500 text-xs lg:text-sm px-4 py-5 transition-all duration-300 ease `,(item.status=='analysis'?'active':''),item.show_thought?'max-h-56 md:max-h-96 h-full overflow-auto':'max-h-0 h-0 overflow-hidden',(chatList[i].status=='reply')?'will-change-contents':'']"
                           >
                             <div v-for="(item,i2) in item.renderedAnalysis" :key="i2" v-html="item" class="chat_animate_in"></div>
                           </div>
                         </div>
-                        <!-- <p v-if="item.analysis" class="flex items-center cursor-pointer justify-end"> -->
-                          
-                          
-                        <!-- </p> -->
                       </div>
-                      <!-- </el-watermark> -->
                     </div>
                   </template>
                   <template v-else-if="item.role == 'assistant'">
                     <div class="assistant shrink-0" :data-id="i">
                       <div 
-                        :class="[`chatcontent text-base/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/snug xl:text-lg/relaxed`,(chatList[i-1].status=='reply')?'will-change-contents':'']" >
+                        :class="[`chatcontent text-base/relaxed serif-text mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/snug xl:text-lg/relaxed text-slate-800`,(chatList[i-1].status=='reply')?'will-change-contents':'']" >
                         <!-- <template > -->
                         <div v-for="(g,i2) in item.renderedContent" :key="i2" v-html="g" class="chat_animate_in"></div>
                         <!-- </template> -->
@@ -271,7 +228,7 @@
                         >
                           <div 
                             @click="copyText(item.content)"
-                            class="p-2 hover:bg-stone-100 border-transparent hover:border-stone-200 border transition-all rounded-md cursor-pointer mr-1">
+                            class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer mr-1 text-slate-400">
                             <Copy theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                           </div>
                         </el-tooltip>
@@ -283,18 +240,17 @@
                         >
                           <div 
                             @click="copyHtml(i)"
-                            class="p-2 hover:bg-stone-100 border-transparent hover:border-stone-200 border transition-all rounded-md cursor-pointer mr-1">
+                            class="p-2 hover:bg-slate-100 border-transparent hover:border-slate-200 border transition-all rounded-md cursor-pointer mr-1 text-slate-400">
                             <DocDetail theme="outline" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                           </div>
                         </el-tooltip> 
                         <div v-if="item.model" class="flex leading-none items-center text-slate-400 text-xs">{{ item.model }}模型回复</div>
                       </div>
-                      <!-- </el-watermark> -->
                     </div>
                   </template>
                   <template v-else-if="item.role == 'lingben'">
                     <div class="assistant shrink-0" :data-id="i">
-                      <div class="chatcontent animate_chat serif-text text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose" >
+                      <div class="chatcontent animate_chat serif-text text-sm mt-4 px-2 sm:text-base/relaxed md:text-base/relaxed lg:text-lg/relaxed xl:text-lg/loose text-slate-800" >
                         <template v-for="(item,i2) in item.renderedContent">
                           <div v-html="item"></div>
                         </template>
@@ -305,20 +261,17 @@
                     <!--  -->
                     <div class="assistant shrink-0" :data-id="i">
                       <div class="" >
-                        <!-- <template v-for="(item,i2) in item.renderedContent"> -->
-                          <div class="p-3 flex items-center mb-4 text-sm text-yellow-800 bg-yellow-100 rounded-lg dark:bg-yellow-900 dark:text-yellow-300" role="alert">
-                            <!-- <span class="font-medium">警告！</span> 此操作不可逆。 -->
+                        <!-- 警告框颜色微调为更柔和的橙色 -->
+                          <div class="p-3 flex items-center mb-4 text-sm text-orange-800 bg-orange-50 rounded-lg dark:bg-orange-900 dark:text-orange-300" role="alert">
                             <Info theme="outline" class="h-fit w-fit" style="font-size:0px" size="16" fill="#0007" :strokewidth="5" strokeLinejoin="bevel"/>
                             <span class="ml-2 font-sans">{{ item.content }}</span>
                           </div>
-                          <!-- <div class="h-full "></div> -->
-                        <!-- </template> -->
                       </div>
                     </div>
                   </template>
                 </template>
                 <div class="my-3 md:my-5">
-                  <div class="text-stone-500 font-sans text-xs/loose bg-stone-200/50 cursor-pointer opacity-90 transition duration-100 rounded-md hover:bg-stone-100/70 px-2 py-1 my-1" 
+                  <div class="text-slate-500 font-sans text-xs/loose bg-slate-100 cursor-pointer opacity-90 transition duration-100 rounded-md hover:bg-white border border-transparent hover:border-slate-200 px-2 py-1 my-1" 
                   v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
@@ -329,26 +282,25 @@
         </div>
       <!-- </div> -->
     </div>
-    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
-      <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
+    <!-- 弹窗遮罩颜色调整 -->
+    <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-center inset-0 bg-slate-900/20 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="bg-white rounded-3xl shadow-xl shadow-slate-200 max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
         <div class="px-6 py-5 flex justify-between items-center w-full">
-          <h2 class="text-xl font-semibold serif-text text-black">上传图片</h2>
-          <button v-show="!uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
+          <h2 class="text-xl font-semibold serif-text text-slate-800">上传图片</h2>
+          <button v-show="!uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <button v-show="uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="bg-stone-200 text-gray-800 transition duration-150 hover:bg-stone-300 font-bold rounded-md px-4 py-2">
+          <button v-show="uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="bg-slate-200 text-slate-700 transition duration-150 hover:bg-slate-300 font-bold rounded-md px-4 py-2">
             完成
           </button>
         </div>
         <div class="p-4 overflow-y-auto flex-1 flex flex-col">
-          <!-- 提示区域 -->
-          <div v-if="uploadPhoto.blob" class="py-4 px-4 bg-green-100 max-w-md w-full mx-auto font-bold text-green-700 rounded-md text-lg text-center mb-4">
+          <div v-if="uploadPhoto.blob" class="py-4 px-4 bg-emerald-50 max-w-md w-full mx-auto font-bold text-emerald-600 rounded-md text-lg text-center mb-4">
             <p>上传成功</p>
           </div>
-          <!-- 文件上传区域 -->
           <div class="flex flex-col items-center justify-center space-y-4 w-full">
             <div v-if="uploadPhoto.blob" class="relative w-full max-w-md mb-4">
               <img
@@ -356,10 +308,9 @@
                 alt="上传的图片"
                 class="w-full h-auto rounded-lg shadow-lg shadow-slate-200 object-cover transition-transform hover:scale-105 duration-500"
               />
-              <!-- 清除按钮 -->
               <button
                 @click="clearUploadPhoto"
-                class="absolute top-2 right-2 bg-red-500 leading-none items-center px-2 py-1 rounded-full text-white opacity-60 flex hover:bg-red-600 transition-colors duration-300"
+                class="absolute top-2 right-2 bg-red-400 leading-none items-center px-2 py-1 rounded-full text-white opacity-60 flex hover:bg-red-500 transition-colors duration-300"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -378,13 +329,11 @@
                 清除图片
               </button>
             </div>
-            <!-- 自定义文件上传按钮 -->
             <div :data-show="!uploadPhoto.blob" class="autohidden lg:mt-6 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 w-full max-w-md">
-              <!-- 拍照按钮 -->
               <label
                 for="cameraInput"
                 v-show="mobile"
-                class="w-full py-3 px-6 bg-stone-200 text-gray-800 flex justify-center items-center font-medium rounded-lg cursor-pointer hover:bg-stone-300 transition-colors duration-300 text-center"
+                class="w-full py-3 px-6 bg-slate-100 text-slate-700 flex justify-center items-center font-medium rounded-lg cursor-pointer hover:bg-slate-200 transition-colors duration-300 text-center"
               >
                 <camera theme="outline" size="20" fill="currentColor" class="mr-1"/>
                 拍照
@@ -400,7 +349,7 @@
               />
               <label
                 for="galleryInput"
-                class="w-full py-3 px-6 bg-stone-200 text-gray-800 flex justify-center items-center font-medium rounded-lg cursor-pointer hover:bg-stone-300 transition-colors duration-300 text-center"
+                class="w-full py-3 px-6 bg-slate-100 text-slate-700 flex justify-center items-center font-medium rounded-lg cursor-pointer hover:bg-slate-200 transition-colors duration-300 text-center"
               >
                 <pic theme="outline" size="20" fill="currentColor" class="mr-1"/>
                 从相册选择
@@ -414,27 +363,26 @@
                 class="hidden"
               />
             </div>
-            <!-- 提示信息 -->
-            <p v-if="!uploadPhoto.blob" class="text-gray-500 text-sm text-center">
+            <p v-if="!uploadPhoto.blob" class="text-slate-400 text-sm text-center">
               请选择一张图片进行上传
             </p>
           </div>
         </div>
       </div>
     </div>
-    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-black/30 z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
-      <div class="p-6 bg-white rounded-3xl">
-        <svg v-if="uploadPhotoDialogLoading" class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-stone-500 " style="animation-duration:0.6s !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <div :data-show="uploadPhotoDialogLoading" class="fixed flex justify-center items-center inset-0 bg-slate-900/20 z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="p-6 bg-white rounded-3xl shadow-lg">
+        <svg v-if="uploadPhotoDialogLoading" class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-slate-500 " style="animation-duration:0.6s !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>上传中
       </div>
     </div>
-    <div :data-show="recordMode" class="fixed flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
-      <div class="bg-stone-50 rounded-3xl shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
+    <div :data-show="recordMode" class="fixed flex justify-center items-center inset-0 bg-slate-900/20 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="bg-white rounded-3xl shadow-xl max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
         <div class="px-6 py-5 flex justify-between items-center w-full">
-          <h2 class="text-xl font-semibold serif-text text-black">录音</h2>
-          <button @click="closeRecordDialog" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
+          <h2 class="text-xl font-semibold serif-text text-slate-800">录音</h2>
+          <button @click="closeRecordDialog" class="text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -442,12 +390,11 @@
           </button>
         </div>
         <div class="p-4 overflow-y-auto flex-1 flex flex-col items-center justify-center">
-          <!-- 录音时间显示 -->
           <div
             v-show="isRecording"
-            class="relative mb-4 text-lg font-semibold text-stone-600 animate-pulse"
+            class="relative mb-4 text-lg font-semibold text-slate-600 animate-pulse"
           >
-            <span class="text-transparent bg-clip-text bg-stone-500">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-slate-600 to-slate-400">
               {{ recordTime }} s
             </span>
           </div>
@@ -457,8 +404,8 @@
             :class="[
               'relative px-6 py-3 flex select-none text-lg font-semibold rounded-md shadow-md transition duration-300 transform',
               isRecording 
-                ? 'bg-linear-to-r from-stone-600 to-stone-500 text-white scale-105' 
-                : 'bg-white text-stone-600 border-2 border-stone-600 hover:bg-stone-50'
+                ? 'bg-gradient-to-r from-slate-500 to-slate-400 text-white scale-105' 
+                : 'bg-white text-slate-600 border-2 border-slate-400 hover:bg-slate-50'
             ]"
             aria-label="按住录音"
             tabindex="0"
@@ -469,75 +416,75 @@
         </div>
       </div>
     </div>
-    <div :data-show="showInfo" class="fixed flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
-      <div class="bg-stone-50 rounded-3xl max-h-full shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
+    <div :data-show="showInfo" class="fixed flex justify-center items-center inset-0 bg-slate-900/20 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="bg-white rounded-3xl max-h-full shadow-xl max-w-xl w-full overflow-hidden pb-4 flex flex-col">
         <div class="px-6 py-5 flex justify-between items-center w-full">
-          <h2 class="text-xl font-semibold serif-text text-black">公告信息</h2>
-          <button @click="showInfo = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
+          <h2 class="text-xl font-semibold serif-text text-slate-800">公告信息</h2>
+          <button @click="showInfo = false" class="text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-        <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
+        <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-slate-700 flex flex-col space-y-4 transition duration-300 transform">
           <h2 class="w-full text-xl sm:text-2xl md:text-3xl text-center mb-4">Attention Is All You Need</h2>
           
-          <div class="w-full text-sm text-gray-700 mb-2 p-3 bg-gray-200/70 rounded-md text-center">
+          <div class="w-full text-sm text-slate-600 mb-2 p-3 bg-slate-100 rounded-md text-center">
             赤峰二中2023级12班「零本智协」研学小组荣誉出品
           </div>
-          <div class="w-full text-sm text-gray-700 mb-2 p-3 ">
+          <div class="w-full text-sm text-slate-600 mb-2 p-3 ">
             谢谢大家的热情！由于免费服务器性能调度有限，回复略有延迟，要求准确回复需要开启下方“思考”功能，如果是lingben-dragon回复问题那么就是无阉割版，其他模型均为阉割版，见谅。请留给我们进步的空间，问题反馈请联系组长
           </div>
-          <router-link to="/about/log" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
+          <router-link to="/about/log" class="text-lg text-slate-800 w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 transition duration-200 border border-slate-200 rounded-xl flex justify-between items-center">
             <span>查看更新日志</span>
             <Right class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </router-link>
-          <a target="_blank" href="https://mp.weixin.qq.com/s/WUJ4EzVP7gBVunauJgQ7PQ" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
+          <a target="_blank" href="https://mp.weixin.qq.com/s/WUJ4EzVP7gBVunauJgQ7PQ" class="text-lg text-slate-800 w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 transition duration-200 border border-slate-200 rounded-xl flex justify-between items-center">
             <span>了解《零本AI：深入思考赋能实际教学》</span>
             <RightSmallUp class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </a>
-          <a target="_blank" href="https://status.lingben.top/" class="text-lg text-black  w-full px-4 py-3 bg-stone-100 hover:bg-stone-200 transition duration-200 border border-stone-300 rounded-xl flex justify-between items-center">
+          <a target="_blank" href="https://status.lingben.top/" class="text-lg text-slate-800 w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 transition duration-200 border border-slate-200 rounded-xl flex justify-between items-center">
             <span>零本智协服务状态</span>
             <RightSmallUp class="" theme="outline" size="22" fill="currentColor" strokeLinejoin="bevel"/>
           </a>
-          <div class="w-full text-sm text-gray-700 mt-2 p-3 bg-gray-200/70 rounded-md">
+          <div class="w-full text-sm text-slate-500 mt-2 p-3 bg-slate-100/70 rounded-md">
             提示：由于服务器成本原因，对大模型所有用户限制如下 每分钟不超过15次，每天不超过1000次提问。
           </div>
         </div> 
       </div>
     </div>
-    <div :data-show="showGGB" class="fixed overflow-hidden flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
-      <div class="bg-stone-50 rounded-3xl h-full shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
+    <div :data-show="showGGB" class="fixed overflow-hidden flex justify-center items-center inset-0 bg-slate-900/20 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="bg-white rounded-3xl h-full shadow-xl max-w-xl w-full overflow-hidden pb-4 flex flex-col">
         <div class="px-6 py-5 flex justify-between items-center w-full">
-          <h2 class="text-xl font-semibold serif-text text-black">函数图像</h2>
-          <button @click="showGGB = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
+          <h2 class="text-xl font-semibold serif-text text-slate-800">函数图像</h2>
+          <button @click="showGGB = false" class="text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-        <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
+        <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-slate-800 flex flex-col space-y-4 transition duration-300 transform">
           <div id="GGBshow" class="w-full h-full"></div>
         </div>
       </div>
     </div>
-    <div :data-show="showDraw" class="fixed overflow-hidden flex justify-center items-center inset-0 bg-black/30 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
-      <div class="bg-stone-50 rounded-3xl h-full shadow-lg max-w-xl w-full overflow-hidden pb-4 flex flex-col">
+    <div :data-show="showDraw" class="fixed overflow-hidden flex justify-center items-center inset-0 bg-slate-900/20 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
+      <div class="bg-white rounded-3xl h-full shadow-xl max-w-xl w-full overflow-hidden pb-4 flex flex-col">
         <div class="px-6 py-5 flex justify-between items-center w-full">
-          <h2 class="text-xl font-semibold serif-text text-black">由零本AI通过代码生成的图像</h2>
-          <button @click="showDraw = false" class="text-gray-500 hover:text-gray-700 hover:bg-stone-200/50 transition duration-200 p-3 rounded-full bg-transparent">
+          <h2 class="text-xl font-semibold serif-text text-slate-800">由零本AI通过代码生成的图像</h2>
+          <button @click="showDraw = false" class="text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition duration-200 p-3 rounded-full bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-        <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-black flex flex-col space-y-4 transition duration-300 transform">
+        <div class="pb-6 px-6 overflow-y-auto flex-1 serif-text text-slate-800 flex flex-col space-y-4 transition duration-300 transform">
           <div id="DRAWshow" class="w-full h-full">
             <a :href="drawUrl" class="block w-full min-h-full" :download="`${dayjs().format('YYYYMMDDHHmmss')}_${sessionID?.slice(0,6)}.png`">
-              <img :src="drawUrl"  class="w-full min-h-full object-contain cursor-pointer hover:border-gray-600 transition border-gray-300 border-dashed border" alt="">
+              <img :src="drawUrl"  class="w-full min-h-full object-contain cursor-pointer hover:border-slate-500 transition border-slate-300 border-dashed border" alt="">
             </a>
           </div>
         </div>
@@ -549,7 +496,7 @@
           <div class="relative w-full">
             <div :class="`relative flex w-full ml-3 pt-1 pb-1 ease  `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
               <touch-ripple
-                :class="`touch-ripple w-fit shrink-0 mr-1 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-700 bg-stone-50`"
+                :class="`touch-ripple w-fit shrink-0 mr-1 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-600 bg-slate-50`"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#f1f5f9'"
                 :opacity="0.4"
@@ -561,17 +508,17 @@
                 <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
               </touch-ripple>
               <div v-show="statusText"
-                class="text-base opacity-70 md:text-lg pointer-events-none lg:text-xl text-green-800 w-fit text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
-                <span class=" flex items-center bg-white z-30 px-3 rounded-3xl py-2 border border-gray-200">
-                    <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-stone-500  will-change-transform" style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                class="text-base opacity-70 md:text-lg pointer-events-none lg:text-xl text-emerald-700 w-fit text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
+                <span class=" flex items-center bg-white z-30 px-3 rounded-3xl py-2 border border-slate-200">
+                    <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-slate-400  will-change-transform" style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg><span class="active-text text-lg leading-none align-bottom text-stone-500">{{ statusText }}</span>
+                  </svg><span class="active-text text-lg leading-none align-bottom text-slate-500">{{ statusText }}</span>
                 </span>
               </div>
-              <div :class="`absolute border transition-all duration-100 bg-white border-gray-300 bottom-12 mx-auto right-6 w-fit flex items-stretch md:shadow-xs rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
+              <div :class="`absolute border transition-all duration-100 bg-white border-slate-200 bottom-12 mx-auto right-6 w-fit flex items-stretch md:shadow-xs rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
                 <touch-ripple
-                  :class="`touch-ripple w-fit shrink-0 text-sm rounded-l-full items-center md:px-2 md:py-2 px-1 py-1 overflow-hidden select-none bg-white ${(autoScroll)?'text-blue-500':'text-stone-500'}`"
+                  :class="`touch-ripple w-fit shrink-0 text-sm rounded-l-full items-center md:px-2 md:py-2 px-1 py-1 overflow-hidden select-none bg-white ${(autoScroll)?'text-[#8faecf]':'text-slate-400'}`"
                   :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                   :color="'#f1f5f9'"
                   :opacity="0.4"
@@ -589,11 +536,11 @@
                   placement="top-end"
                 >
                   <div 
-                    class="leading-none flex items-center cursor-pointer bg-white border-l border-gray-300 text-stone-500 rounded-r-full pl-1 pr-2 md:pl-2 md:pr-3"
+                    class="leading-none flex items-center cursor-pointer bg-white border-l border-slate-200 text-slate-400 rounded-r-full pl-1 pr-2 md:pl-2 md:pr-3"
                     @click="autoScroll=!autoScroll"  
                   >
                     <!-- <div class="mx-auto border-slate-300 rounded-full w-4 h-4 border"></div> -->
-                    <check-one theme="filled" size="20" fill="currentColor" :class="`transition md:scale-100 scale-90  ${autoScroll?'text-blue-500 delay-75':'text-stone-300'}`"/>
+                    <check-one theme="filled" size="20" fill="currentColor" :class="`transition md:scale-100 scale-90  ${autoScroll?'text-[#8faecf] delay-75':'text-slate-300'}`"/>
                   </div>
                 </el-tooltip>
               </div>
@@ -603,7 +550,7 @@
                   :width="200"
                   :show-after="300"
                   trigger="hover"
-                  popper-class="rounded-xl shadow-lg shadow-stone-200"
+                  popper-class="rounded-xl shadow-lg shadow-slate-200"
                 >
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
@@ -614,9 +561,10 @@
                     </div>
                   </template>
                   <template #reference>
+                    <!-- 按钮状态颜色：选中态改为柔和蓝灰色 -->
                     <touch-ripple
-                      :class="`touch-ripple nofocus relative overflow-hidden w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(useAnalysis?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
-                      :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#3b82f6':'#fff' }"
+                      :class="`touch-ripple nofocus relative overflow-hidden w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(useAnalysis?'text-[#648bb3] bg-slate-100 border-[#8faecf]':'border-slate-200 text-slate-600 bg-white')"
+                      :style="{ clipPath: 'none', backgroundColor: useAnalysis?'#eff6ff':'#fff' }"
                       :color="useAnalysis?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
                       transition="ease-out"
@@ -633,13 +581,13 @@
                   :width="200"
                   :show-after="300"
                   trigger="hover"
-                  popper-class="rounded-xl shadow-lg shadow-stone-200"
+                  popper-class="rounded-xl shadow-lg shadow-slate-200"
                 >
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
                       <div class="text-base text-slate-700 mb-1 align-bottom font-semibold flex items-center">
                         <span class="serif-text">预览模式</span>
-                        <experiment-one theme="outline" class="text-blue-500 inline-block ml-1" size="16" fill="currentColor" :strokeWidth="4"/>
+                        <experiment-one theme="outline" class="text-[#8faecf] inline-block ml-1" size="16" fill="currentColor" :strokeWidth="4"/>
                       </div>
                       <div class="text-xs text-slate-600 leading-relaxed serif-text">
                         该功能可以根据你的需求通过分析、设计、编程等构建一个可以预览使用的网页应用程序
@@ -648,8 +596,8 @@
                   </template>
                   <template #reference>
                     <touch-ripple
-                      :class="`relative touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
-                      :style="{ clipPath: 'none', backgroundColor: usePreview?'#3b82f6':'#fff' }"
+                      :class="`relative touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 select-none border `+(usePreview?'text-[#648bb3] bg-slate-100 border-[#8faecf]':'border-slate-200 text-slate-600 bg-white')"
+                      :style="{ clipPath: 'none', backgroundColor: usePreview?'#eff6ff':'#fff' }"
                       :color="usePreview?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
                       transition="ease-out"
@@ -668,7 +616,7 @@
                   :width="200"
                   :show-after="300"
                   trigger="hover"
-                  popper-class="rounded-xl shadow-lg shadow-stone-200"
+                  popper-class="rounded-xl shadow-lg shadow-slate-200"
                 >
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
@@ -680,8 +628,8 @@
                   </template>
                   <template #reference>
                     <touch-ripple
-                      :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
-                      :style="{ clipPath: 'none', backgroundColor: useInternet?'#3b82f6':'#fff' }"
+                      :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useInternet?'text-[#648bb3] bg-slate-100 border-[#8faecf]':'border-slate-200 text-slate-600 bg-white')"
+                      :style="{ clipPath: 'none', backgroundColor: useInternet?'#eff6ff':'#fff' }"
                       :color="useInternet?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
                       transition="ease-out"
@@ -698,13 +646,13 @@
                   :width="200"
                   :show-after="300"
                   trigger="hover"
-                  popper-class="rounded-xl shadow-lg shadow-stone-200"
+                  popper-class="rounded-xl shadow-lg shadow-slate-200"
                 >
                   <template #default>
                     <div class="flex flex-col items-start justify-start">
                       <div class="text-base text-slate-700 mb-1 align-bottom font-semibold flex items-center">
                         <span class="serif-text">绘图</span>
-                        <experiment-one theme="outline" class="text-blue-500 inline-block ml-1" size="16" fill="currentColor" :strokeWidth="4"/>
+                        <experiment-one theme="outline" class="text-[#8faecf] inline-block ml-1" size="16" fill="currentColor" :strokeWidth="4"/>
                       </div>
                       <div class="text-xs text-slate-600 leading-relaxed serif-text">
                         该功能可以绘制专业的物理、化学的等平面图像
@@ -713,8 +661,8 @@
                   </template>
                   <template #reference>
                     <touch-ripple
-                      :class="`touch-ripple w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
-                      :style="{ clipPath: 'none', backgroundColor: useDraw?'#3b82f6':'#fff' }"
+                      :class="`touch-ripple w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useDraw?'text-[#648bb3] bg-slate-100 border-[#8faecf]':'border-slate-200 text-slate-600 bg-white')"
+                      :style="{ clipPath: 'none', backgroundColor: useDraw?'#eff6ff':'#fff' }"
                       :color="useDraw?'#dbeafe':'#f1f5f9'"
                       :opacity="0.4"
                       transition="ease-out"
@@ -728,8 +676,8 @@
                 </el-popover>
                 
                 <touch-ripple
-                  :class="`touch-ripple w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
-                  :style="{ clipPath: 'none', backgroundColor: useTask?'#3b82f6':'#fff' }"
+                  :class="`touch-ripple w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useTask?'text-[#648bb3] bg-slate-100 border-[#8faecf]':'border-slate-200 text-slate-600 bg-white')"
+                  :style="{ clipPath: 'none', backgroundColor: useTask?'#eff6ff':'#fff' }"
                   :color="useTask?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
                   transition="ease-out"
@@ -740,8 +688,8 @@
                   <span class="flex items-center align-middle"><list-two class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">多任务<span class="text-[10px] ml-[2px]">测试</span></span></span>
                 </touch-ripple>
                 <touch-ripple
-                  :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
-                  :style="{ clipPath: 'none', backgroundColor: usePhoto?'#3b82f6':'#fff' }"
+                  :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(usePhoto?'text-[#648bb3] bg-slate-100 border-[#8faecf]':'border-slate-200 text-slate-600 bg-white')"
+                  :style="{ clipPath: 'none', backgroundColor: usePhoto?'#eff6ff':'#fff' }"
                   :color="usePhoto?'#dbeafe':'#f1f5f9'"
                   :opacity="0.4"
                   transition="ease-out"
@@ -752,7 +700,7 @@
                   <span class="flex items-center align-middle"><pic class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/><span class="h-fit leading-none ml-1">图片</span></span>
                 </touch-ripple>
                 <touch-ripple
-                    :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAudio?'text-blue-600 bg-blue-100 border-blue-500':'border-gray-200 text-gray-700 bg-stone-50')"
+                    :class="`touch-ripple nofocus w-fit shrink-0 mr-2 cursor-pointer text-sm rounded-lg items-center px-3 py-2 overflow-hidden select-none border `+(useAudio?'text-[#648bb3] bg-slate-100 border-[#8faecf]':'border-slate-200 text-slate-600 bg-white')"
                     :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                     :color="'#f1f5f9'"
                     :opacity="0.4"
@@ -769,7 +717,7 @@
             </div>
           </div>
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="">
-            <div :class="`ainput__wrapper items-stretch border border-stone-200 shadow-none md:focus-within:shadow-xl focus-within:shadow-stone-200 transition-all duration-500 focus-within:border-stone-300 shadow-stone-100`">
+            <div :class="`ainput__wrapper items-stretch border border-slate-200 shadow-none md:focus-within:shadow-xl focus-within:shadow-slate-100 transition-all duration-500 focus-within:border-slate-300 shadow-slate-100`">
               <div 
                 class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
                 :data-show="!isRecording" 
@@ -777,7 +725,7 @@
                 style="height:var(--inputContainerHeight);--inputContainerHeight:64px;">
                 ><textarea
                   id="input_chat_ai"
-                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-72 md:max-h-80 min-h-16"
+                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-72 md:max-h-80 min-h-16 text-slate-700 placeholder-slate-400"
                   type="textarea"
                   resize="none" 
                   size="large" 
@@ -790,23 +738,12 @@
                   style="resize:none;min-height: 32px;height:var(--inputContainerHeight);"
               ></textarea></div>
               <div :class="`flex flex-col justify-between items-center`">
-                <span class="text-xs text-right opacity-50 text-slate-800 py-2" v-show="(now>=99)">{{ now }}</span>
+                <span class="text-xs text-right opacity-50 text-slate-500 py-2" v-show="(now>=99)">{{ now }}</span>
                 <div :class="`_number flex-1`">
-                  <!-- <touch-ripple
-                    :class="`touch-ripple items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden transition select-none flex `+((show_menu)?'bg-blue-100 text-blue-500':'bg-slate-100 text-slate-500')"
-                    :style="{ clipPath: 'none', backgroundColor: '#fff' }"
-                    :color="'#f1f5f9'"
-                    :opacity="0.4"
-                    transition="ease-out"
-                    :duration="200"
-                    :keep-last-ripple="false"
-                    @start="show_menu=!show_menu"
-                  >
-                    <component  :is="ApplicationMenu" :class="`cursor-pointer transition w-fit h-fit `" theme="outline" size="18" fill="currentColor"/>
-                  </touch-ripple> -->
+                  <!-- 发送按钮：变更为云上舞白主题色 #8faecf -->
                   <touch-ripple
-                    :class="`touch-ripple items-center justify-center h-8 w-8  mr-1 cursor-pointer transition rounded-full overflow-hidden select-none `+(showStop?'hidden ':'flex ')+(sendActive?'text-white bg-blue-500':' bg-slate-100 text-slate-500')"
-                    :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
+                    :class="`touch-ripple items-center justify-center h-8 w-8  mr-1 cursor-pointer transition rounded-full overflow-hidden select-none `+(showStop?'hidden ':'flex ')+(sendActive?'text-white bg-[#8faecf]':' bg-slate-100 text-slate-400')"
+                    :style="{ clipPath: 'none', backgroundColor: '#8faecf' }"
                     :color="'#fff'"
                     :opacity="0.4"
                     transition="ease"
@@ -817,8 +754,8 @@
                     <up theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/>
                   </touch-ripple>
                   <touch-ripple
-                    :class="`touch-ripple nofocus text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-blue-500 `+(showStop?'flex':'hidden')"
-                    :style="{ clipPath: 'none', backgroundColor: '#3b82f6' }"
+                    :class="`touch-ripple nofocus text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-[#8faecf] `+(showStop?'flex':'hidden')"
+                    :style="{ clipPath: 'none', backgroundColor: '#8faecf' }"
                     :color="'#fff'"
                     :opacity="0.4"
                     transition="ease"
@@ -837,7 +774,7 @@
     </div>
     <audio v-if="audioUrl" :src="audioUrl" controls class="mt- hidden"></audio>
     <div :class="'transition-all h-0 duration-300 ease-linear '+(chatList.length == 0?`max-limit h-6 md:h-20 lg:h-32 `:'')"></div>
-    <p class=" text-center text-stone-400 py-1 font-sans leading-none relative z-10" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
+    <p class=" text-center text-slate-300 py-1 font-sans leading-none relative z-10" style="font-size: 10px;">内容由零本 LinkBrain AI 生成，请仔细甄别</p>
   </div>
 </template>
 <script setup>
