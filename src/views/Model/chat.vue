@@ -271,7 +271,7 @@
                   </template>
                 </template>
                 <div class="my-3 md:my-5">
-                  <div class="text-slate-500 font-sans text-xs/loose bg-slate-100 cursor-pointer opacity-90 transition duration-100 rounded-md hover:bg-white border border-transparent hover:border-slate-200 px-2 py-1 my-1" 
+                  <div class="text-gray-500 font-sans text-xs/loose bg-gray-100 cursor-pointer opacity-90 transition duration-100 rounded-md hover:bg-white border border-transparent hover:border-slate-200 px-2 py-1 my-1" 
                   v-for="(item) in suggestions" @click="ask(item)">
                     {{ item }}
                   </div>
@@ -2080,7 +2080,7 @@ onMounted(async ()=>{
   display: block;
   shrink: 0;
   z-index: 2;
-  background: linear-gradient(to top, rgba(249, 248, 246,0) 0%, rgba(255, 255, 255,255) 100%);
+  background: linear-gradient(to top, rgba(249, 248, 246,0) 0%, rgba(248, 250, 252,255) 100%);
   pointer-events: none;
 }
 
@@ -2094,7 +2094,7 @@ onMounted(async ()=>{
   display: block;
   shrink: 0;
   z-index: 2;
-  background: linear-gradient(to bottom, rgba(249, 248, 246,0) 0%, rgba(255, 255, 255,255) 100%);
+  background: linear-gradient(to bottom, rgba(249, 248, 246,0) 0%, rgba(248, 250, 252,255) 100%);
   pointer-events: none;
 }
     
