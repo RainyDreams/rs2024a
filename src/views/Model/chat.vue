@@ -26,7 +26,7 @@
               <div class="system mb-3 md:mb-4 lg:mb-5 block">
                 <div class="flex items-stretch flex-wrap" style="font-size:14px;width:100%; ">
                   <touch-ripple
-                    :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center w-fit cursor-pointer text-xs md:text-sm rounded-l-full pr-1 pl-2 md:pr-2 md:pl-3 py-1 overflow-hidden select-none border border-slate-200`"
+                    :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center w-fit cursor-pointer text-xs md:text-sm rounded-l-lg pr-1 pl-1 md:pr-2 md:pl-2 py-1 overflow-hidden select-none border border-slate-200`"
                     :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                     :color="'#e2e8f0'"
                     :opacity="0.4"
@@ -36,11 +36,11 @@
                     @click="router.go(-2)"
                   >
                     <!-- 主题色替换：#4e81fc -> #8faecf (云水蓝) -->
-                    <left  theme="outline" class="md:scale-100 scale-90" size="18" fill="#8faecf"/>
+                    <Left  theme="outline" class="md:scale-100 scale-90" size="18" fill="#8faecf"/>
                   </touch-ripple>
                   <router-link to="/home" class="h-full">
                     <touch-ripple
-                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-xs md:text-sm rounded-r-full md:pl-2 md:pr-3 pl-1 pr-2 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
+                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center mr-1 border-l-0 w-fit cursor-pointer text-xs md:text-sm rounded-r-lg md:pl-2 md:pr-2 pl-1 pr-1 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                       :color="'#e2e8f0'"
                       :opacity="0.4"
@@ -53,7 +53,7 @@
                   </router-link>
                   <router-link to="/model/square" class="h-full">
                     <touch-ripple
-                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
+                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-lg px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                       :color="'#e2e8f0'"
                       :opacity="0.4"
@@ -67,7 +67,7 @@
                   </router-link>
                   <router-link to="/model/history" class="h-full"  v-if="loginStatus" >
                     <touch-ripple
-                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
+                      :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-lg px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
                       :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                       :color="'#e2e8f0'"
                       :opacity="0.4"
@@ -80,7 +80,7 @@
                     </touch-ripple>
                   </router-link>
                   <touch-ripple
-                    :class="`flex touch-ripple nofocus h-7 md:h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 `+(showModelDetail?'text-slate-700':'text-slate-700')"
+                    :class="`flex touch-ripple nofocus h-7 md:h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-xs md:text-sm rounded-lg px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 `+(showModelDetail?'text-slate-700':'text-slate-700')"
                     :style="{ clipPath: 'none', backgroundColor: showModelDetail?'#8faecf22':'#fff' }"
                     :color="showModelDetail?'#fff':'#e2e8f0'"
                     :opacity="0.4"
@@ -93,7 +93,7 @@
                     <div class="text-sm md:text-base leading-none">{{ model_info.name || "获取中" }}</div>
                   </touch-ripple>
                   <touch-ripple
-                    :class="`flex touch-ripple nofocus h-7 md:h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 `+(showInfo?'text-slate-700':'text-slate-700')"
+                    :class="`flex touch-ripple nofocus h-7 md:h-8  mt-2  items-center w-fit mr-1 cursor-pointer text-xs md:text-sm rounded-lg px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 `+(showInfo?'text-slate-700':'text-slate-700')"
                     :style="{ clipPath: 'none', backgroundColor: showInfo?'#fff7ed':'#fff' }"
                     :color="showInfo?'#fed7aa':'#fed7aa'"
                     :opacity="0.4"
@@ -109,7 +109,7 @@
                   
                   <touch-ripple
                     v-if="!loginStatus"
-                    :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-full px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
+                    :class="`flex touch-ripple h-7 md:h-8  mt-2  items-center text-center mr-1  w-fit cursor-pointer text-xs md:text-sm rounded-lg px-2 md:px-3 py-1 overflow-hidden select-none border border-slate-200 text-slate-700`"
                     :style="{ clipPath: 'none', backgroundColor:'#fff' }"
                     :color="'#e2e8f0'"
                     :opacity="0.4"
@@ -142,10 +142,10 @@
               <div :class="`duration-1000 trasition-all overflow-hidden w-full `+(chatList.length!=0?'max-h-0':'max-h-96')">
                   <div :class="`chat_welcome mt-14 sm:mt-18 md:mt-24 xl:mt-30 w-full `">
                     <div >
-                      <h2 :class="`serif-text text-center w-full justify-center flex text-3xl animate__animated md:text-4xl lg:text-5xl font-bold text-slate-700 `+((chatList.length==0 && !welcome_loading)?'':'')">
+                      <h2 :class="`serif-text text-center w-full justify-center flex text-3xl animate__animated md:text-4xl lg:text-5xl font-bold text-gray-800 `+((chatList.length==0 && !welcome_loading)?'':'')">
                         <span class="mr-1">我可以</span>
                         <div class="swiper overflow-hidden mx-0" ref="swiperRef2" >
-                          <div class="swiper-wrapper text-slate-600">
+                          <div class="swiper-wrapper text-gray-800">
                             <div class="swiper-slide transition-all duration-500">知天下</div>
                             <div class="swiper-slide transition-all duration-500">深思考</div>
                             <div class="swiper-slide transition-all duration-500">做网站</div>
@@ -284,7 +284,7 @@
     </div>
     <!-- 弹窗遮罩颜色调整 -->
     <div :data-show="uploadPhotoDialogVisible" class="fixed flex justify-center items-center inset-0 bg-slate-900/20 backdrop-blur-sm z-50 w-screen px-4 pt-4 pb-8 h-svh autohidden">
-      <div class="bg-white rounded-3xl shadow-xl shadow-slate-200 max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
+      <div class="bg-white rounded-3xl shadow-xl  max-w-xl w-full overflow-hidden pb-4 flex flex-col max-h-[320px] min-h-64">
         <div class="px-6 py-5 flex justify-between items-center w-full">
           <h2 class="text-xl font-semibold serif-text text-slate-800">上传图片</h2>
           <button v-show="!uploadPhoto.blob" @click="uploadPhotoDialogVisible = false" class="text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition duration-200 p-3 rounded-full bg-transparent">
@@ -496,7 +496,7 @@
           <div class="relative w-full">
             <div :class="`relative flex w-full ml-3 pt-1 pb-1 ease  `+(show_menu?'bottom-0 opacity-100 relative':'opacity-0')" style="position:absolute;bottom:-25px;transition: bottom 0.35s,opacity 0.3s;left:0;">
               <touch-ripple
-                :class="`touch-ripple w-fit shrink-0 mr-1 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-600 bg-slate-50`"
+                :class="`touch-ripple w-fit shrink-0 mr-1 cursor-pointer text-sm rounded-lg items-center px-2 py-2 overflow-hidden select-none border text-slate-600`"
                 :style="{ clipPath: 'none', backgroundColor: '#fff' }"
                 :color="'#f1f5f9'"
                 :opacity="0.4"
@@ -508,12 +508,12 @@
                 <span class="flex items-center align-middle"><plus class="h-fit w-fit" theme="outline" size="16" fill="currentColor"/></span>
               </touch-ripple>
               <div v-show="statusText"
-                class="text-base opacity-70 md:text-lg pointer-events-none lg:text-xl text-emerald-700 w-fit text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
+                class="text-base opacity-70 md:text-lg pointer-events-none lg:text-xl text-gray-700 w-fit text-left font-bold absolute bottom-10 left-2 pb-0 mt-1 mb-2">
                 <span class=" flex items-center bg-white z-30 px-3 rounded-3xl py-2 border border-slate-200">
-                    <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-slate-400  will-change-transform" style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg class="animate-spin inline-block ml-1 mr-2 h-5 w-5 text-gray-400  will-change-transform" style="animation-duration:0.6s !important;animation-timing-function: cubic-bezier(0.32, 0.59, 0.69, 0.46) !important;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg><span class="active-text text-lg leading-none align-bottom text-slate-500">{{ statusText }}</span>
+                  </svg><span class="active-text text-lg leading-none align-bottom text-gray-500">{{ statusText }}</span>
                 </span>
               </div>
               <div :class="`absolute border transition-all duration-100 bg-white border-slate-200 bottom-12 mx-auto right-6 w-fit flex items-stretch md:shadow-xs rounded-full z-10 shadow-slate-100 ${(scrollStatus || autoScroll)?'opacity-100 visible':'opacity-0 invisible'}`">
@@ -717,7 +717,7 @@
             </div>
           </div>
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="">
-            <div :class="`ainput__wrapper items-stretch border border-slate-200 shadow-none md:focus-within:shadow-xl focus-within:shadow-slate-100 transition-all duration-500 focus-within:border-slate-300 shadow-slate-100`">
+            <div :class="`ainput__wrapper items-stretch border border-slate-200 shadow-none md:focus-within:shadow-xl focus-within:shadow-gray-100 transition-all duration-500 focus-within:border-gray-200 shadow-gray-100`">
               <div 
                 class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
                 :data-show="!isRecording" 
@@ -738,12 +738,12 @@
                   style="resize:none;min-height: 32px;height:var(--inputContainerHeight);"
               ></textarea></div>
               <div :class="`flex flex-col justify-between items-center`">
-                <span class="text-xs text-right opacity-50 text-slate-500 py-2" v-show="(now>=99)">{{ now }}</span>
+                <span class="text-xs text-right opacity-50 text-white  py-2" v-show="(now>=99)">{{ now }}</span>
                 <div :class="`_number flex-1`">
                   <!-- 发送按钮：变更为云上舞白主题色 #8faecf -->
                   <touch-ripple
-                    :class="`touch-ripple items-center justify-center h-8 w-8  mr-1 cursor-pointer transition rounded-full overflow-hidden select-none `+(showStop?'hidden ':'flex ')+(sendActive?'text-white bg-[#8faecf]':' bg-slate-100 text-slate-400')"
-                    :style="{ clipPath: 'none', backgroundColor: '#8faecf' }"
+                    :class="`touch-ripple items-center justify-center h-8 w-8  mr-1 cursor-pointer transition rounded-full overflow-hidden select-none `+(showStop?'hidden ':'flex ')+(sendActive?'text-white bg-black':' bg-black text-white')"
+                    :style="{ clipPath: 'none', backgroundColor: '#000' }"
                     :color="'#fff'"
                     :opacity="0.4"
                     transition="ease"
@@ -755,7 +755,7 @@
                   </touch-ripple>
                   <touch-ripple
                     :class="`touch-ripple nofocus text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-[#8faecf] `+(showStop?'flex':'hidden')"
-                    :style="{ clipPath: 'none', backgroundColor: '#8faecf' }"
+                    :style="{ clipPath: 'none', backgroundColor: '#000' }"
                     :color="'#fff'"
                     :opacity="0.4"
                     transition="ease"
@@ -2054,7 +2054,7 @@ onMounted(async ()=>{
   display: block;
   shrink: 0;
   z-index: 2;
-  background: linear-gradient(to left, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
+  background: linear-gradient(to left, rgba(249, 248, 246,0) 0%, rgba(255, 255, 255,255) 100%);
   pointer-events: none;
 }
 .scroll-container::after {
@@ -2067,7 +2067,7 @@ onMounted(async ()=>{
   display: block;
   shrink: 0;
   z-index: 2;
-  background: linear-gradient(to right, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
+  background: linear-gradient(to right, rgba(249, 248, 246,0) 0%, rgba(255, 255, 255,255) 100%);
   pointer-events: none;
 }
 .scroll-y-container::before {
@@ -2080,7 +2080,7 @@ onMounted(async ()=>{
   display: block;
   shrink: 0;
   z-index: 2;
-  background: linear-gradient(to top, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
+  background: linear-gradient(to top, rgba(249, 248, 246,0) 0%, rgba(255, 255, 255,255) 100%);
   pointer-events: none;
 }
 
@@ -2094,7 +2094,7 @@ onMounted(async ()=>{
   display: block;
   shrink: 0;
   z-index: 2;
-  background: linear-gradient(to bottom, rgba(249, 248, 246,0) 0%, rgba(249, 248, 246,255) 100%);
+  background: linear-gradient(to bottom, rgba(249, 248, 246,0) 0%, rgba(255, 255, 255,255) 100%);
   pointer-events: none;
 }
     
