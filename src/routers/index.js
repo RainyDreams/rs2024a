@@ -1,51 +1,64 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { emitter } from '../utils/emitter';
-import HomeIndex from '../views/Home/index.vue';
-import HomeBlock from '../views/Home/block.vue';
-import SettingsIndex from '../views/Settings/index.vue';
-import ProjectsCreate from '../views/Projects/create.vue';
-import ProjectsDashboard from '../views/Projects/dashboard.vue';
-import ProjectsList from '../views/Projects/list.vue';
-import ProjectsTodo from '../views/Projects/todo.vue';
-import ProjectsItemCreate from '../views/Projects/createItem.vue';
-import ProjectsItemCreate_workflow from '../views/Projects/create/workflow.vue';
-import ProjectsDetail from '../views/Projects/detail.vue';
-import Projects_Workflow from '../views/Projects/workflow/index.vue';
-import Projects_Discussion from '../views/Projects/discussion/index.vue';
-import TeamCreate from '../views/Team/create.vue';
-import TeamList from '../views/Team/list.vue';
-import TeamDetail from '../views/Team/detail.vue';
-import TeamSettings from '../views/Team/settings.vue';
-import TeamInvite from '../views/Team/invite.vue';
-import UserIndex from '../views/User/index.vue';
-import UserLogin from '../views/User/login.vue';
-import UserRegister from '../views/User/register.vue';
-import UserSettings from '../views/User/settings.vue';
-import AboutInfo from '../views/About/info.vue';
-import AboutNews from '../views/About/news.vue';
-import AboutProgress from '../views/About/progress.vue';
-import AboutLog from '../views/About/log.vue';
-import AboutValues from '../views/About/values.vue';
-import ModelSquare from '../views/Model/square.vue';
-// import Model from '../views/Model/model.vue';
+// 1️⃣ 仍旧是普通 import 的组件（不变）
 import ModelChat from '../views/Model/chat.vue';
-import ModelQuant from '../views/Model/quant.vue';
-import ModelWelcome from '../views/Model/welcome.vue';
-import ModelTest from '../views/Model/test.vue';
-import ModelAnlysis from '../views/Model/anlysis.vue';
-import ModelHistory from '../views/Model/history.vue';
-import ModelStatus from '../views/Model/status.vue';
-import Notification from '../views/Notification/index.vue';
-import LoginSuccess from '../views/Status/LoginSuccess.vue';
-import LoginNeeded from '../views/Status/LoginNeeded.vue';
-import LoginAlready from '../views/Status/LoginAlready.vue';
-import JoinTeamApplication from '../views/Status/JoinTeamApplication.vue';
-import JoinProcess from '../views/Status/JoinProcess.vue';
-import ToolsQ from '../views/Tools/q.vue'
-import TestIndex from '../views/Test/index.vue';
-import Error404 from '../views/Errors/404.vue';
+import ModelSquare from '../views/Model/square.vue';
 
-import backend from '../views/Model/backend.vue';
+// 2️⃣ 其它所有组件改为动态 import
+const HomeIndex = () => import('../views/Home/index.vue');
+const HomeBlock = () => import('../views/Home/block.vue');
+const SettingsIndex = () => import('../views/Settings/index.vue');
+
+const ProjectsCreate          = () => import('../views/Projects/create.vue');
+const ProjectsDashboard       = () => import('../views/Projects/dashboard.vue');
+const ProjectsList            = () => import('../views/Projects/list.vue');
+const ProjectsTodo            = () => import('../views/Projects/todo.vue');
+const ProjectsItemCreate      = () => import('../views/Projects/createItem.vue');
+const ProjectsItemCreate_workflow = () => import('../views/Projects/create/workflow.vue');
+const ProjectsDetail          = () => import('../views/Projects/detail.vue');
+const Projects_Workflow       = () => import('../views/Projects/workflow/index.vue');
+const Projects_Discussion     = () => import('../views/Projects/discussion/index.vue');
+
+const TeamCreate   = () => import('../views/Team/create.vue');
+const TeamList     = () => import('../views/Team/list.vue');
+const TeamDetail   = () => import('../views/Team/detail.vue');
+const TeamSettings = () => import('../views/Team/settings.vue');
+const TeamInvite   = () => import('../views/Team/invite.vue');
+
+const UserIndex      = () => import('../views/User/index.vue');
+const UserLogin      = () => import('../views/User/login.vue');
+const UserRegister   = () => import('../views/User/register.vue');
+const UserSettings   = () => import('../views/User/settings.vue');
+
+const AboutInfo      = () => import('../views/About/info.vue');
+const AboutNews      = () => import('../views/About/news.vue');
+const AboutProgress  = () => import('../views/About/progress.vue');
+const AboutLog       = () => import('../views/About/log.vue');
+const AboutValues    = () => import('../views/About/values.vue');
+
+const ModelQuant      = () => import('../views/Model/quant.vue');
+const ModelWelcome    = () => import('../views/Model/welcome.vue');
+const ModelTest       = () => import('../views/Model/test.vue');
+const ModelAnlysis    = () => import('../views/Model/anlysis.vue');
+const ModelHistory    = () => import('../views/Model/history.vue');
+const ModelStatus     = () => import('../views/Model/status.vue');
+const ModelSquare     = () => import('../views/Model/square.vue');   // 这里其实就不是懒加载，保留原样
+
+const Notification = () => import('../views/Notification/index.vue');
+
+const LoginSuccess              = () => import('../views/Status/LoginSuccess.vue');
+const LoginNeeded                = () => import('../views/Status/LoginNeeded.vue');
+const LoginAlready               = () => import('../views/Status/LoginAlready.vue');
+const JoinTeamApplication        = () => import('../views/Status/JoinTeamApplication.vue');
+const JoinProcess                = () => import('../views/Status/JoinProcess.vue');
+
+const ToolsQ      = () => import('../views/Tools/q.vue');
+
+const TestIndex   = () => import('../views/Test/index.vue');
+const Error404    = () => import('../views/Errors/404.vue');
+
+const backend = () => import('../views/Model/backend.vue');
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
