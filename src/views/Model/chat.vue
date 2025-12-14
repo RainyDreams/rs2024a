@@ -719,7 +719,7 @@
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="">
             <div :class="`ainput__wrapper items-stretch shadow-layered transition-all duration-500 `">
               <div 
-                class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
+                class="textarea _input flex-1 leading-none transition-all max-h-72 bg-gray-50 md:max-h-80 min-h-8"
                 :data-show="!isRecording" 
                 id="input_chat_ai_div"
                 style="height:var(--inputContainerHeight);--inputContainerHeight:32px;">
