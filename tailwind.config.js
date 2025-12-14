@@ -8,6 +8,10 @@ export default {
   important:true,
   theme: {
     extend: {
+      boxShadow: {
+        // 自定义名，比如 'layered'
+        layered: '0px 4px 4px 0px var(--tw-shadow-color, var(--shadow-color-1, #0000000a)), 0px 0px 1px 0px var(--tw-shadow-color, var(--shadow-color-2, #0000009e))',
+      },
       colors: {
         'orange':{
           '100': '#fffdfa',

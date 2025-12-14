@@ -717,15 +717,15 @@
             </div>
           </div>
           <div :class="` `+(show_menu?'rounded-b-[25px] delay-200':'rounded-[25px]')" style="">
-            <div :class="`ainput__wrapper items-stretch border border-slate-200 shadow-none md:focus-within:shadow-xl focus-within:shadow-gray-100 transition-all duration-500 focus-within:border-gray-200 shadow-gray-100`">
+            <div :class="`ainput__wrapper items-stretch shadow-layered transition-all duration-500 `">
               <div 
                 class="textarea _input flex-1 leading-none transition-all max-h-72 md:max-h-80 min-h-8"
                 :data-show="!isRecording" 
                 id="input_chat_ai_div"
-                style="height:var(--inputContainerHeight);--inputContainerHeight:64px;">
+                style="height:var(--inputContainerHeight);--inputContainerHeight:32px;">
                 ><textarea
                   id="input_chat_ai"
-                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-72 md:max-h-80 min-h-16 text-slate-700 placeholder-slate-400"
+                  class="textarea__inner w-full text-base/6 py-1 font-medium max-h-72 md:max-h-80 min-h-8 text-slate-700 placeholder-slate-400"
                   type="textarea"
                   resize="none" 
                   size="large" 
@@ -754,7 +754,7 @@
                     <up theme="outline" size="18" fill="currentColor" :strokeWidth="5" strokeLinejoin="bevel"/>
                   </touch-ripple>
                   <touch-ripple
-                    :class="`touch-ripple nofocus text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-[#8faecf] `+(showStop?'flex':'hidden')"
+                    :class="`touch-ripple nofocus text-white items-center justify-center h-8 w-8  mr-1 cursor-pointer rounded-full overflow-hidden select-none border border-[#000] `+(showStop?'flex':'hidden')"
                     :style="{ clipPath: 'none', backgroundColor: '#000' }"
                     :color="'#fff'"
                     :opacity="0.4"
@@ -1370,7 +1370,7 @@ function ask(q){
 async function setInputHeight(){
   const textarea = document.getElementById('input_chat_ai')
   const textareaCssContainer = document.getElementById('input_chat_ai_div')
-  textareaCssContainer.style.setProperty('--inputContainerHeight', '64px');
+  textareaCssContainer.style.setProperty('--inputContainerHeight', '32px');
   const scrollHeight = textarea.scrollHeight;
   // console.log(scrollHeight);
   textareaCssContainer.style.setProperty('--inputContainerHeight', scrollHeight+'px');
@@ -1785,7 +1785,7 @@ const send = async (param)=>{
   now.value = 0;
   suggestions.value = [];
   const textareaCssContainer = document.getElementById('input_chat_ai_div')
-  textareaCssContainer.style.setProperty('--inputContainerHeight', '64px');
+  textareaCssContainer.style.setProperty('--inputContainerHeight', '32px');
   // document.getElementById('input_chat_ai').style.height = document.getElementById('input_chat_ai').scrollHeight+'px'
   loading.value = true;
   document.getElementById('input_chat_ai').focus();
@@ -2045,7 +2045,7 @@ onMounted(async ()=>{
   height:0;
 }
 .scroll-container::before {
-  content: '';
+  /*content: '';*/
   position: absolute;
   top: 0;
   left: 37px;
