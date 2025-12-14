@@ -42,7 +42,6 @@ const ModelTest       = () => import('../views/Model/test.vue');
 const ModelAnlysis    = () => import('../views/Model/anlysis.vue');
 const ModelHistory    = () => import('../views/Model/history.vue');
 const ModelStatus     = () => import('../views/Model/status.vue');
-const ModelSquare     = () => import('../views/Model/square.vue');   // 这里其实就不是懒加载，保留原样
 
 const Notification = () => import('../views/Notification/index.vue');
 
